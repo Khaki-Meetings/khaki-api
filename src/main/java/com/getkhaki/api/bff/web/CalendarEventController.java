@@ -1,21 +1,22 @@
 package com.getkhaki.api.bff.web;
 
+import com.getkhaki.api.bff.domain.models.CalendarEventDm;
 import com.getkhaki.api.bff.web.models.CalendarEventDto;
 import com.getkhaki.api.bff.domain.services.CalendarEventService;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RequestMapping("/calendar-events")
 @RestController
 public class CalendarEventController {
     private final CalendarEventService calendarEventService;
+    private final ModelMapper modelMapper;
 
     @Autowired
-    public CalendarEventController(CalendarEventService calendarEventService) {
+    public CalendarEventController(CalendarEventService calendarEventService, ModelMapper modelMapper) {
         this.calendarEventService = calendarEventService;
+        this.modelMapper = modelMapper;
     }
 
     @GetMapping
@@ -24,7 +25,9 @@ public class CalendarEventController {
     }
 
     @PostMapping
-    public CalendarEventDto createEvent() {
-        return CalendarEventDto.builder().build();
+    public CalendarEventDto createEvent(@RequestBody CalendarEventDto calendarEventDto) {
+        CalendarEventDm calendarEventDm = modelMapper.map(calendarEventDto, CalendarEventDm.class);
+        CalendarEventDm calendarEventDmReturn = calendarEventService.createEvent(calendarEventDm);
+        return modelMapper.map(calendarEventDmReturn, CalendarEventDto.class);
     }
 }

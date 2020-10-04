@@ -1,16 +1,19 @@
 package com.getkhaki.api.bff.web.models;
 
-import lombok.Builder;
+
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDateTime;
 
 @Getter
 @Setter
-@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 public class CalendarEventDto {
-    private String id;
-    private LocalDateTime created;
-    private String summary;
+    String id;
+    String summary;
+    LocalDateTime created;
 }
