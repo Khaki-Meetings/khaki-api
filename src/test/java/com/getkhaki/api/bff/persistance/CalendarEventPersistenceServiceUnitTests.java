@@ -36,21 +36,21 @@ public class CalendarEventPersistenceServiceUnitTests {
                 .setCreated(LocalDateTime.now())
                 .setSummary("Before the motor laws");
         CalendarEventDao calendarEventDaoMapped = new CalendarEventDao()
-                .created(calendarEventDmInput.getCreated())
-                .summary(calendarEventDmInput.getSummary());
+                .setCreated(calendarEventDmInput.getCreated())
+                .setSummary(calendarEventDmInput.getSummary());
         when(modelMapper.map(calendarEventDmInput, CalendarEventDao.class)).thenReturn(calendarEventDaoMapped);
 
         CalendarEventDao calendarEventDaoSaved = new CalendarEventDao()
-                .id(UUID.randomUUID())
-                .created(calendarEventDmInput.getCreated())
-                .summary(calendarEventDmInput.getSummary());
+                .setId(UUID.randomUUID())
+                .setCreated(calendarEventDmInput.getCreated())
+                .setSummary(calendarEventDmInput.getSummary());
 
         when(calendarEventRepository.save(calendarEventDaoMapped)).thenReturn(calendarEventDaoSaved);
 
         CalendarEventDm calendarEventDmMapped = new CalendarEventDm()
-                .setId(calendarEventDaoSaved.id())
-                .setCreated(calendarEventDaoSaved.created())
-                .setSummary(calendarEventDaoSaved.summary());
+                .setId(calendarEventDaoSaved.getId())
+                .setCreated(calendarEventDaoSaved.getCreated())
+                .setSummary(calendarEventDaoSaved.getSummary());
 
         when(modelMapper.map(calendarEventDaoSaved, CalendarEventDm.class)).thenReturn(calendarEventDmMapped);
 

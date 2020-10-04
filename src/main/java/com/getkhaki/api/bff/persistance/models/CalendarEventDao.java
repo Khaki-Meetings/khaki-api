@@ -15,7 +15,7 @@ import java.util.UUID;
 @Data
 @Entity
 @NoArgsConstructor
-@Accessors(fluent = true)
+@Accessors(chain = true)
 public class CalendarEventDao {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
