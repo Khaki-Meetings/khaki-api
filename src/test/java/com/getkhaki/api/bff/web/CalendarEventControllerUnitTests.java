@@ -8,6 +8,7 @@ import org.junit.jupiter.api.Test;
 import org.modelmapper.ModelMapper;
 
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
@@ -34,23 +35,23 @@ public class CalendarEventControllerUnitTests {
         calendarEventDtoInput.setCreated(now);
 
         CalendarEventDm calendarEventDmMapped = new CalendarEventDm();
-        calendarEventDmMapped.setCreated(calendarEventDtoInput.getCreated());
-        calendarEventDmMapped.setSummary(calendarEventDtoInput.getSummary());
+        calendarEventDmMapped.created(calendarEventDtoInput.getCreated());
+        calendarEventDmMapped.summary(calendarEventDtoInput.getSummary());
 
         when(modelMapper.map(calendarEventDtoInput, CalendarEventDm.class)).thenReturn(calendarEventDmMapped);
 
-        String id = "2112";
+        UUID id = UUID.randomUUID();
         CalendarEventDm calendarEventDmMockedResponse = new CalendarEventDm(
                 id,
-                calendarEventDmMapped.getSummary(),
-                calendarEventDmMapped.getCreated()
+                calendarEventDmMapped.summary(),
+                calendarEventDmMapped.created()
         );
         when(calendarEventService.createEvent(calendarEventDmMapped)).thenReturn(calendarEventDmMockedResponse);
 
         CalendarEventDto calendarEventDtoMockedResponse = new CalendarEventDto(
                 id,
-                calendarEventDmMockedResponse.getSummary(),
-                calendarEventDmMockedResponse.getCreated()
+                calendarEventDmMockedResponse.summary(),
+                calendarEventDmMockedResponse.created()
         );
 
         when(modelMapper.map(calendarEventDmMockedResponse, CalendarEventDto.class)).thenReturn(calendarEventDtoMockedResponse);

@@ -6,6 +6,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
@@ -24,22 +25,22 @@ public class CalenderEventServiceUnitTests {
     @Test
     public void test() {
         CalendarEventDm calendarEventDmInput = new CalendarEventDm();
-        calendarEventDmInput.setSummary("kid gloves");
-        calendarEventDmInput.setCreated(LocalDateTime.now());
+        calendarEventDmInput.summary("kid gloves");
+        calendarEventDmInput.created(LocalDateTime.now());
 
-        String id = "1001001";
+        UUID id = UUID.randomUUID();
         CalendarEventDm calendarEventDmResponse = new CalendarEventDm(
                 id,
-                calendarEventDmInput.getSummary(),
-                calendarEventDmInput.getCreated()
+                calendarEventDmInput.summary(),
+                calendarEventDmInput.created()
         );
 
         when(calendarEventPersistence.createEvent(calendarEventDmInput)).thenReturn(calendarEventDmResponse);
 
         CalendarEventDm ret = underTest.createEvent(calendarEventDmInput);
         assertThat(ret).isNotNull();
-        assertThat(ret.getId()).isEqualTo(id);
-        assertThat(ret.getSummary()).isEqualTo(calendarEventDmResponse.getSummary());
-        assertThat(ret.getCreated()).isEqualTo(calendarEventDmResponse.getCreated());
+        assertThat(ret.id()).isEqualTo(id);
+        assertThat(ret.summary()).isEqualTo(calendarEventDmResponse.summary());
+        assertThat(ret.created()).isEqualTo(calendarEventDmResponse.created());
     }
 }
