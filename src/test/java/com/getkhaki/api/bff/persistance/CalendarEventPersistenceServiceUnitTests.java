@@ -33,32 +33,32 @@ public class CalendarEventPersistenceServiceUnitTests {
     @Test
     public void test() {
         CalendarEventDm calendarEventDmInput = new CalendarEventDm()
-                .created(LocalDateTime.now())
-                .summary("Before the motor laws");
+                .setCreated(LocalDateTime.now())
+                .setSummary("Before the motor laws");
         CalendarEventDao calendarEventDaoMapped = new CalendarEventDao()
-                .created(calendarEventDmInput.created())
-                .summary(calendarEventDmInput.summary());
+                .created(calendarEventDmInput.getCreated())
+                .summary(calendarEventDmInput.getSummary());
         when(modelMapper.map(calendarEventDmInput, CalendarEventDao.class)).thenReturn(calendarEventDaoMapped);
 
         CalendarEventDao calendarEventDaoSaved = new CalendarEventDao()
                 .id(UUID.randomUUID())
-                .created(calendarEventDmInput.created())
-                .summary(calendarEventDmInput.summary());
+                .created(calendarEventDmInput.getCreated())
+                .summary(calendarEventDmInput.getSummary());
 
         when(calendarEventRepository.save(calendarEventDaoMapped)).thenReturn(calendarEventDaoSaved);
 
         CalendarEventDm calendarEventDmMapped = new CalendarEventDm()
-                .id(calendarEventDaoSaved.id())
-                .created(calendarEventDaoSaved.created())
-                .summary(calendarEventDaoSaved.summary());
+                .setId(calendarEventDaoSaved.id())
+                .setCreated(calendarEventDaoSaved.created())
+                .setSummary(calendarEventDaoSaved.summary());
 
         when(modelMapper.map(calendarEventDaoSaved, CalendarEventDm.class)).thenReturn(calendarEventDmMapped);
 
         CalendarEventDm ret = underTest.createEvent(calendarEventDmInput);
 
         assertThat(ret).isNotNull();
-        assertThat(ret.id()).isEqualTo(calendarEventDmMapped.id());
-        assertThat(ret.summary()).isEqualTo(calendarEventDmMapped.summary());
-        assertThat(ret.created()).isEqualTo(calendarEventDmMapped.created());
+        assertThat(ret.getId()).isEqualTo(calendarEventDmMapped.getId());
+        assertThat(ret.getSummary()).isEqualTo(calendarEventDmMapped.getSummary());
+        assertThat(ret.getCreated()).isEqualTo(calendarEventDmMapped.getCreated());
     }
 }

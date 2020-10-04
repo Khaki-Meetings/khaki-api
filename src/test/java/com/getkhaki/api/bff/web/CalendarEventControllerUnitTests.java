@@ -35,23 +35,23 @@ public class CalendarEventControllerUnitTests {
         calendarEventDtoInput.setCreated(now);
 
         CalendarEventDm calendarEventDmMapped = new CalendarEventDm();
-        calendarEventDmMapped.created(calendarEventDtoInput.getCreated());
-        calendarEventDmMapped.summary(calendarEventDtoInput.getSummary());
+        calendarEventDmMapped.setCreated(calendarEventDtoInput.getCreated());
+        calendarEventDmMapped.setSummary(calendarEventDtoInput.getSummary());
 
         when(modelMapper.map(calendarEventDtoInput, CalendarEventDm.class)).thenReturn(calendarEventDmMapped);
 
         UUID id = UUID.randomUUID();
         CalendarEventDm calendarEventDmMockedResponse = new CalendarEventDm(
                 id,
-                calendarEventDmMapped.summary(),
-                calendarEventDmMapped.created()
+                calendarEventDmMapped.getSummary(),
+                calendarEventDmMapped.getCreated()
         );
         when(calendarEventService.createEvent(calendarEventDmMapped)).thenReturn(calendarEventDmMockedResponse);
 
         CalendarEventDto calendarEventDtoMockedResponse = new CalendarEventDto(
                 id,
-                calendarEventDmMockedResponse.summary(),
-                calendarEventDmMockedResponse.created()
+                calendarEventDmMockedResponse.getSummary(),
+                calendarEventDmMockedResponse.getCreated()
         );
 
         when(modelMapper.map(calendarEventDmMockedResponse, CalendarEventDto.class)).thenReturn(calendarEventDtoMockedResponse);

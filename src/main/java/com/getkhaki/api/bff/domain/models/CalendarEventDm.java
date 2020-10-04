@@ -13,7 +13,7 @@ import java.util.UUID;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@Accessors(fluent = true)
+@Accessors(chain = true)
 public class CalendarEventDm {
     UUID id;
     String summary;
