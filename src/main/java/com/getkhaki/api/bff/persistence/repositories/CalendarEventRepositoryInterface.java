@@ -1,6 +1,6 @@
-package com.getkhaki.api.bff.persistance.repositories;
+package com.getkhaki.api.bff.persistence.repositories;
 
-import com.getkhaki.api.bff.persistance.models.CalendarEventDao;
+import com.getkhaki.api.bff.persistence.models.CalendarEventDao;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

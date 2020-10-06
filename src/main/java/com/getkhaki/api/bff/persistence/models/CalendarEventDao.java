@@ -1,4 +1,4 @@
-package com.getkhaki.api.bff.persistance.models;
+package com.getkhaki.api.bff.persistence.models;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;

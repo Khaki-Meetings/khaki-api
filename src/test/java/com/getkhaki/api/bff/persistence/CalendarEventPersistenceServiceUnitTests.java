@@ -1,8 +1,8 @@
-package com.getkhaki.api.bff.persistance;
+package com.getkhaki.api.bff.persistence;
 
 import com.getkhaki.api.bff.domain.models.CalendarEventDm;
-import com.getkhaki.api.bff.persistance.models.CalendarEventDao;
-import com.getkhaki.api.bff.persistance.repositories.CalendarEventRepositoryInterface;
+import com.getkhaki.api.bff.persistence.models.CalendarEventDao;
+import com.getkhaki.api.bff.persistence.repositories.CalendarEventRepositoryInterface;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

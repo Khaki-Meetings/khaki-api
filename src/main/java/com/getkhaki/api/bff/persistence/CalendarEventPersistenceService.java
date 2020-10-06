@@ -1,9 +1,9 @@
-package com.getkhaki.api.bff.persistance;
+package com.getkhaki.api.bff.persistence;
 
 import com.getkhaki.api.bff.domain.models.CalendarEventDm;
 import com.getkhaki.api.bff.domain.persistence.CalendarEventPersistenceInterface;
-import com.getkhaki.api.bff.persistance.models.CalendarEventDao;
-import com.getkhaki.api.bff.persistance.repositories.CalendarEventRepositoryInterface;
+import com.getkhaki.api.bff.persistence.models.CalendarEventDao;
+import com.getkhaki.api.bff.persistence.repositories.CalendarEventRepositoryInterface;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
