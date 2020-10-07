@@ -8,9 +8,6 @@ plugins {
 group 'com.getkhaki'
 version '1.0-SNAPSHOT'
 
-Properties liquibaseProps = new Properties()
-liquibaseProps.load(new FileInputStream("src/main/resources/liquibase.properties"))
-
 Properties applicationProps = new Properties()
 applicationProps.load(new FileInputStream("src/main/resources/application.properties"))
 
@@ -51,13 +48,11 @@ diffChangeLog.dependsOn assemble
 liquibase {
     activities {
         main {
-            changeLogFile liquibaseProps.getProperty("liquibase.changelog.path")
-            referenceUrl liquibaseProps.getProperty("liquibase.changelog.referenceUrl")
-            //url "hibernate:spring:" + liquibaseProps.getProperty('liquibase.domain.package') + "?dialect=" + applicationProps.getProperty('spring.jpa.properties.hibernate.dialect')
-            url liquibaseProps.getProperty("liquibase.changelog.referenceUrl")
+            changeLogFile applicationProps.getProperty("spring.liquibase.change-log")
+            referenceUrl applicationProps.getProperty("spring.liquibase.referenceUrl")
+            url applicationProps.getProperty("spring.datasource.url")
             username applicationProps.getProperty("spring.datasource.username")
             password applicationProps.getProperty("spring.datasource.password")
-            referenceDriver "liquibase.ext.hibernate.database.connection.HibernateDriver"
         }
     }
 }

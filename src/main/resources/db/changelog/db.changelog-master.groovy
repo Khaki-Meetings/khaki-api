@@ -1,9 +1,9 @@
 package db.changelog
 
 databaseChangeLog {
-  changeSet(id: '''1601945434293-1''', author: '''lord_baine (generated)''') {
+  changeSet(id: '''1602029682505-1''', author: '''lord_baine (generated)''') {
     createTable(tableName: '''CalendarEventDao''') {
-      column(name: '''id''', type: '''BLOB''') {
+      column(name: '''id''', type: '''UUID''') {
         constraints(nullable: false, primaryKey: true, primaryKeyName: '''CalendarEventDaoPK''')
       }
       column(name: '''created''', type: '''timestamp''')
