@@ -21,23 +21,31 @@ dependencies {
     liquibaseRuntime 'org.liquibase:liquibase-groovy-dsl:3.0.0'
     liquibaseRuntime 'org.springframework.boot:spring-boot-starter-data-jpa'
     liquibaseRuntime 'org.liquibase.ext:liquibase-hibernate5:4.1.0'
+    liquibaseRuntime 'org.mariadb.jdbc:mariadb-java-client:2.7.0'
     liquibaseRuntime 'com.h2database:h2:1.4.200'
-    implementation 'com.h2database:h2:1.4.200'
-    implementation 'com.h2database:h2:1.4.200'
     liquibaseRuntime sourceSets.main.output
+
+    implementation 'org.liquibase:liquibase-core:4.1.0'
+    implementation 'org.liquibase:liquibase-groovy-dsl:3.0.0'
+    implementation 'com.h2database:h2:1.4.200'
     implementation('org.springframework.boot:spring-boot-starter-web')
     implementation('org.springframework.boot:spring-boot-starter-data-jpa')
-    implementation('org.modelmapper:modelmapper:2.+')
     implementation('org.modelmapper.extensions:modelmapper-spring:2.+')
-    compile group: 'mysql', name: 'mysql-connector-java', version: '8.0.21'
+    implementation 'org.mariadb.jdbc:mariadb-java-client:2.7.0'
+    implementation('org.modelmapper:modelmapper:2.+')
+
+    testImplementation "org.mockito:mockito-core:2.+"
+    testImplementation("org.assertj:assertj-core:3.17.2")
     testImplementation('org.springframework.boot:spring-boot-starter-test') {
         exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
     }
-    testImplementation "org.mockito:mockito-core:2.+"
-    testImplementation("org.assertj:assertj-core:3.17.2")
+
+    compile group: 'mysql', name: 'mysql-connector-java', version: '8.0.21'
+
     compileOnly 'org.projectlombok:lombok:1.18.12'
-    annotationProcessor 'org.projectlombok:lombok:1.18.12'
     testCompileOnly 'org.projectlombok:lombok:1.18.12'
+
+    annotationProcessor 'org.projectlombok:lombok:1.18.12'
     testAnnotationProcessor 'org.projectlombok:lombok:1.18.12'
 }
 
@@ -52,7 +60,7 @@ liquibase {
     activities {
         main {
             changeLogFile applicationProps.getProperty("spring.liquibase.change-log")
-            referenceUrl applicationProps.getProperty("spring.liquibase.referenceUrl")
+            referenceUrl applicationProps.getProperty("liquibase.referenceUrl")
             url applicationProps.getProperty("spring.datasource.url")
             username applicationProps.getProperty("spring.datasource.username")
             password applicationProps.getProperty("spring.datasource.password")
