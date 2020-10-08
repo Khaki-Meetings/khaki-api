@@ -1,6 +1,5 @@
 package com.getkhaki.api.bff.web.models;
 
-
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -17,6 +16,10 @@ import java.util.UUID;
 @Accessors(chain = true)
 public class CalendarEventDto {
     UUID id;
+
+    String googleCalendarId;
+
     String summary;
+
     LocalDateTime created;
 }

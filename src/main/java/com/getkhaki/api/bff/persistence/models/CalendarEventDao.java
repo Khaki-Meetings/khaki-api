@@ -20,8 +20,13 @@ public class CalendarEventDao {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     UUID id;
+
+    @NonNull
+    String googleCalendarId;
+
     @NonNull
     String summary;
+
     @NonNull
     LocalDateTime created;
 }

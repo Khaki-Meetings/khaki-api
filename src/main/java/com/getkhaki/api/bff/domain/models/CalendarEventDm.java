@@ -16,6 +16,10 @@ import java.util.UUID;
 @Accessors(chain = true)
 public class CalendarEventDm {
     UUID id;
+
+    String googleCalendarId;
+
     String summary;
+
     LocalDateTime created;
 }

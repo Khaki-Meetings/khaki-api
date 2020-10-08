@@ -15,6 +15,7 @@ public class DmToDaoMapperIntegrationTests extends BaseModelMapperIntegrationTes
     public void calendarEvent() {
         CalendarEventDm calendarEventDm = new CalendarEventDm()
                 .setId(UUID.randomUUID())
+                .setGoogleCalendarId("12345")
                 .setSummary("cignus")
                 .setCreated(LocalDateTime.now());
 
