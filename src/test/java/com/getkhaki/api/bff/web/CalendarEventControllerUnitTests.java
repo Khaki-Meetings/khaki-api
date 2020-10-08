@@ -44,6 +44,7 @@ public class CalendarEventControllerUnitTests {
         CalendarEventDm calendarEventDmMockedResponse = new CalendarEventDm(
                 id,
                 calendarEventDmMapped.getSummary(),
+                calendarEventDmMapped.getGoogleCalendarId(),
                 calendarEventDmMapped.getCreated()
         );
         when(calendarEventService.createEvent(calendarEventDmMapped)).thenReturn(calendarEventDmMockedResponse);
@@ -51,6 +52,7 @@ public class CalendarEventControllerUnitTests {
         CalendarEventDto calendarEventDtoMockedResponse = new CalendarEventDto(
                 id,
                 calendarEventDmMockedResponse.getSummary(),
+                calendarEventDmMockedResponse.getGoogleCalendarId(),
                 calendarEventDmMockedResponse.getCreated()
         );
 

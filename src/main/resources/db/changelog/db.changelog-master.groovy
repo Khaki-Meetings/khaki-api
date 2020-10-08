@@ -7,6 +7,7 @@ databaseChangeLog {
         constraints(nullable: false, primaryKey: true, primaryKeyName: '''CalendarEventDaoPK''')
       }
       column(name: '''created''', type: '''timestamp''')
+      column(name: '''googleCalendarId''', type: '''VARCHAR(255)''')
       column(name: '''summary''', type: '''VARCHAR(255)''')
     }
   }

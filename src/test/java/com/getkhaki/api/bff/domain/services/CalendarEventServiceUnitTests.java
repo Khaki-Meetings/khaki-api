@@ -32,6 +32,7 @@ public class CalendarEventServiceUnitTests {
         CalendarEventDm calendarEventDmResponse = new CalendarEventDm(
                 id,
                 calendarEventDmInput.getSummary(),
+                calendarEventDmInput.getGoogleCalendarId(),
                 calendarEventDmInput.getCreated()
         );
 
