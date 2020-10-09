@@ -55,7 +55,7 @@ test {
 
 diff.dependsOn assemble
 diffChangeLog.dependsOn assemble
-println("url: " + System.getenv("JDBC_DATABASE_URL"))
+
 liquibase {
     activities {
         main {
