@@ -40,7 +40,7 @@ dependencies {
         exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
     }
 
-    compile group: 'mysql', name: 'mysql-connector-java', version: '8.0.21'
+    implementation group: 'mysql', name: 'mysql-connector-java', version: '8.0.21'
 
     compileOnly 'org.projectlombok:lombok:1.18.12'
     testCompileOnly 'org.projectlombok:lombok:1.18.12'
@@ -55,15 +55,15 @@ test {
 
 diff.dependsOn assemble
 diffChangeLog.dependsOn assemble
-
+println("url: " + System.getenv("JDBC_DATABASE_URL"))
 liquibase {
     activities {
         main {
-            changeLogFile applicationProps.getProperty("spring.liquibase.change-log")
-            referenceUrl applicationProps.getProperty("liquibase.referenceUrl")
-            url applicationProps.getProperty("spring.datasource.url")
-            username applicationProps.getProperty("spring.datasource.username")
-            password applicationProps.getProperty("spring.datasource.password")
+            changeLogFile "src/main/resources/db/changelog/db.changelog-master.groovy"
+            referenceUrl "hibernate:spring:com.getkhaki.api.bff.persistence.models?dialect=" + System.getenv("SPRING_JPA_DATABASE_PLATFORM") + "&hibernate.implicit_naming_strategy=org.springframework.boot.orm.jpa.hibernate.SpringImplicitNamingStrategy&hibernate.physical_naming_strategy=org.springframework.boot.orm.jpa.hibernate.SpringPhysicalNamingStrategy"
+            url System.getenv("JDBC_DATABASE_URL")
+            username System.getenv("JDBC_DATABASE_USERNAME")
+            password System.getenv("JDBC_DATABASE_PASSWORD")
         }
     }
 }
