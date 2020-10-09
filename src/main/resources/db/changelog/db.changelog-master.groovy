@@ -1,14 +1,13 @@
-package db.changelog
-
 databaseChangeLog {
-  changeSet(id: '''1602029682505-1''', author: '''lord_baine (generated)''') {
-    createTable(tableName: '''CalendarEventDao''') {
-      column(name: '''id''', type: '''UUID''') {
-        constraints(nullable: false, primaryKey: true, primaryKeyName: '''CalendarEventDaoPK''')
+  changeSet(id: '''1602208412343-1''', author: '''jacob (generated)''') {
+    createTable(tableName: '''calendar_event_dao''') {
+      column(name: '''id''', type: '''BINARY(255)''') {
+        constraints(nullable: false, primaryKey: true, primaryKeyName: '''calendar_event_daoPK''')
       }
-      column(name: '''created''', type: '''timestamp''')
-      column(name: '''googleCalendarId''', type: '''VARCHAR(255)''')
+      column(name: '''created''', type: '''datetime''')
+      column(name: '''google_calendar_id''', type: '''VARCHAR(255)''')
       column(name: '''summary''', type: '''VARCHAR(255)''')
     }
   }
+
 }
