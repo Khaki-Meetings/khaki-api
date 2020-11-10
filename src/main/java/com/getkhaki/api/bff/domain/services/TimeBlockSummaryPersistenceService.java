@@ -15,12 +15,12 @@ import java.util.List;
 public class TimeBlockSummaryPersistenceService implements TimeBlockSummaryPersistenceInterface {
     private final ModelMapper modelMapper;
 
-    public TimeBlockSummaryPersistenceService(ModelMapper modelMapper) {
+    public TimeBlockSummaryPersistenceService(ModelMapper modelMapper,TimeBlockSummaryRepositoryInterface timeBlockSummaryRepositoryInterface) {
         this.modelMapper = modelMapper;
+        this.timeBlockSummaryRepositoryInterface=timeBlockSummaryRepositoryInterface;
     }
 
-    @Autowired
-    TimeBlockSummaryRepositoryInterface timeBlockSummaryRepositoryInterface;
+    private TimeBlockSummaryRepositoryInterface timeBlockSummaryRepositoryInterface;
 
     @Override
     public TimeBlockSummaryDm getTimeBlockSummary(ZonedDateTime start, ZonedDateTime end) {

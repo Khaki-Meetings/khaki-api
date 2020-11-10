@@ -16,7 +16,7 @@ import static org.mockito.Mockito.when;
 
 public class StatisticsServicesUnitTests {
 
-    private StatisticsService statisticsService;
+    private StatisticsService underTest;
     private DepartmentStatisticsPersistenceService departmentStatisticsPersistenceService;
     private OrganizersStatisticsPersistenceService organizersStatisticsPersistenceService;
     private  TimeBlockSummaryPersistenceService timeBlockSummaryPersistenceService;
@@ -26,7 +26,7 @@ public class StatisticsServicesUnitTests {
         departmentStatisticsPersistenceService = mock(DepartmentStatisticsPersistenceService.class);
         organizersStatisticsPersistenceService = mock(OrganizersStatisticsPersistenceService.class);
         timeBlockSummaryPersistenceService = mock(TimeBlockSummaryPersistenceService.class);
-        statisticsService = new StatisticsService(departmentStatisticsPersistenceService,organizersStatisticsPersistenceService,timeBlockSummaryPersistenceService);
+        underTest = new StatisticsService(departmentStatisticsPersistenceService,organizersStatisticsPersistenceService,timeBlockSummaryPersistenceService);
     }
 
     @Test
@@ -52,22 +52,22 @@ public class StatisticsServicesUnitTests {
 
 
 
-        OrganizersStatisticsDm organizersStatisticsResponse = statisticsService.getOrganizerStatistics(emailDm.getEmail());
+        OrganizersStatisticsDm organizersStatisticsResponse = underTest.getOrganizerStatistics(emailDm.getEmail());
         assertThat(organizersStatisticsResponse).isNotNull();
 
         //------------------------------------------------------
 
-        TimeBlockSummaryDm timeBlockSummaryResponseDto = statisticsService.getTimeBlockSummary(startTest,endTest);
+        TimeBlockSummaryDm timeBlockSummaryResponseDto = underTest.getTimeBlockSummary(startTest,endTest);
         assertThat(timeBlockSummaryResponseDto).isNotNull();
 
         //-------------------------------------------------------
 
-        List<DepartmentStatisticsDm> departmentStatisticsResponseDmList = (List<DepartmentStatisticsDm>) statisticsService.getPerDepartmentStatistics(startTest,endTest);
+        DepartmentStatisticsDm departmentStatisticsResponseDmList = underTest.getPerDepartmentStatistics(startTest,endTest);
         assertThat(departmentStatisticsResponseDmList).isNotNull();
 
         //--------------------------------------------------------
 
-        TrailingStatisticsDm trailingStatisticsResponseDm = (TrailingStatisticsDm) statisticsService.getTrailingStatistics(startTest,endTest, IntervalEnumDao.Interval1);
+        List<TimeBlockSummaryDm> trailingStatisticsResponseDm =  underTest.getTrailingStatistics(startTest,endTest, IntervalEnumDao.Interval1);
         assertThat(trailingStatisticsResponseDm).isNotNull();
 
 

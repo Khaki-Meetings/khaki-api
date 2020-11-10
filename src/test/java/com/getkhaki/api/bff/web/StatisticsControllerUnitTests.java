@@ -15,14 +15,14 @@ import static org.mockito.Mockito.mock;
 public class StatisticsControllerUnitTests {
     private StatisticsController statisticsController;
 
-    private StatisticsService statisticsService;
+    private StatisticsService underTest;
     private ModelMapper modelMapper;
 
     @BeforeEach
     public void setup() {
-        statisticsService = mock(StatisticsService.class);
+        underTest = mock(StatisticsService.class);
         modelMapper = mock(ModelMapper.class);
-        statisticsController = new StatisticsController(this.statisticsService, this.modelMapper);
+        statisticsController = new StatisticsController(this.underTest, this.modelMapper);
     }
 
     @Test

@@ -16,12 +16,12 @@ public class DepartmentStatisticsPersistenceService implements DepartmentStatist
 
     private final ModelMapper modelMapper;
 
-    public DepartmentStatisticsPersistenceService(ModelMapper modelMapper) {
+    public DepartmentStatisticsPersistenceService(ModelMapper modelMapper,DepartmentStatisticsRepositoryInterface departmentStatisticsRepositoryInterface) {
         this.modelMapper = modelMapper;
+        this.departmentStatisticsRepositoryInterface=departmentStatisticsRepositoryInterface;
     }
 
-    @Autowired
-    DepartmentStatisticsRepositoryInterface departmentStatisticsRepositoryInterface;
+    private DepartmentStatisticsRepositoryInterface departmentStatisticsRepositoryInterface;
 
     @Override
     public DepartmentStatisticsDm getPerDepartmentStatistics(ZonedDateTime start, ZonedDateTime end) {
