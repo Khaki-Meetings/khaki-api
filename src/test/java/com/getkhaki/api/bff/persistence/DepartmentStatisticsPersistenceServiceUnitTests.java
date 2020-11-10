@@ -1,4 +1,4 @@
-package com.getkhaki.api.bff.domain.services;
+package com.getkhaki.api.bff.persistence;
 
 public class DepartmentStatisticsPersistenceServiceUnitTests {
 }

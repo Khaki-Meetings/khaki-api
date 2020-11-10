@@ -1,7 +1,9 @@
 package com.getkhaki.api.bff.domain.services;
 
 import com.getkhaki.api.bff.domain.models.DepartmentStatisticsDm;
+import com.getkhaki.api.bff.domain.models.OrganizersStatisticsDm;
 import com.getkhaki.api.bff.domain.persistence.DepartmentStatisticsPersistenceInterface;
+import com.getkhaki.api.bff.persistence.repositories.DepartmentStatisticsRepositoryInterface;
 import com.getkhaki.api.bff.persistence.repositories.TimeBlockSummaryRepositoryInterface;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,11 +21,10 @@ public class DepartmentStatisticsPersistenceService implements DepartmentStatist
     }
 
     @Autowired
-    TimeBlockSummaryRepositoryInterface timeBlockSummaryRepositoryInterface;
-
+    DepartmentStatisticsRepositoryInterface departmentStatisticsRepositoryInterface;
 
     @Override
     public DepartmentStatisticsDm getPerDepartmentStatistics(ZonedDateTime start, ZonedDateTime end) {
-        return null;
+        return modelMapper.map( departmentStatisticsRepositoryInterface.findDepartmentStatisticsInRange(start,end), DepartmentStatisticsDm.class);
     }
 }

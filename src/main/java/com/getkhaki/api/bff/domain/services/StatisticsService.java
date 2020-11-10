@@ -6,8 +6,7 @@ import com.getkhaki.api.bff.domain.models.TimeBlockSummaryDm;
 import com.getkhaki.api.bff.domain.persistence.DepartmentStatisticsPersistenceInterface;
 import com.getkhaki.api.bff.domain.persistence.OrganizersStatisticsPersistenceInterface;
 import com.getkhaki.api.bff.domain.persistence.TimeBlockSummaryPersistenceInterface;
-import com.getkhaki.api.bff.persistence.models.IntervalEnumDto;
-import org.modelmapper.ModelMapper;
+import com.getkhaki.api.bff.persistence.models.IntervalEnumDao;
 import org.springframework.stereotype.Service;
 
 import java.time.ZonedDateTime;
@@ -19,13 +18,11 @@ public class StatisticsService implements OrganizersStatisticsPersistenceInterfa
     private DepartmentStatisticsPersistenceService departmentStatisticsPersistenceService;
     private OrganizersStatisticsPersistenceService organizersStatisticsPersistenceService;
     private  TimeBlockSummaryPersistenceService timeBlockSummaryPersistenceService;
-    private final ModelMapper modelMapper;
 
-    public StatisticsService(ModelMapper modelMapper) {
-        this.modelMapper = modelMapper;
-        this.departmentStatisticsPersistenceService=new DepartmentStatisticsPersistenceService(this.modelMapper);
-        this.organizersStatisticsPersistenceService=new OrganizersStatisticsPersistenceService(this.modelMapper);
-        this.timeBlockSummaryPersistenceService=new TimeBlockSummaryPersistenceService(this.modelMapper);
+    public StatisticsService(DepartmentStatisticsPersistenceService departmentStatisticsPersistenceService,OrganizersStatisticsPersistenceService organizersStatisticsPersistenceService,TimeBlockSummaryPersistenceService timeBlockSummaryPersistenceService) {
+        this.departmentStatisticsPersistenceService=departmentStatisticsPersistenceService;
+        this.organizersStatisticsPersistenceService=organizersStatisticsPersistenceService;
+        this.timeBlockSummaryPersistenceService=timeBlockSummaryPersistenceService;
     }
 
 
@@ -46,7 +43,7 @@ public class StatisticsService implements OrganizersStatisticsPersistenceInterfa
     }
 
     @Override
-    public List<TimeBlockSummaryDm> getTrailingStatistics(ZonedDateTime start, ZonedDateTime end, IntervalEnumDto interval) {
+    public List<TimeBlockSummaryDm> getTrailingStatistics(ZonedDateTime start, ZonedDateTime end, IntervalEnumDao interval) {
         return this.timeBlockSummaryPersistenceService.getTrailingStatistics(start,end,interval);
     }
 

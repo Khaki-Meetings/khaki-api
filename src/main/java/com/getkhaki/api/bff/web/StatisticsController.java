@@ -46,7 +46,7 @@ public class StatisticsController {
     }
 
     @GetMapping("/trailing")
-    public TrailingStatisticsDao getTrailingStatistics(@PathVariable(name="start") ZonedDateTime start, @PathVariable(name="end") ZonedDateTime end, @PathVariable(name="interval") IntervalEnumDto interval) {
+    public TrailingStatisticsDao getTrailingStatistics(@PathVariable(name="start") ZonedDateTime start, @PathVariable(name="end") ZonedDateTime end, @PathVariable(name="interval") IntervalEnumDao interval) {
 
         return modelMapper.map(statisticsService.getTrailingStatistics(start,end,interval), TrailingStatisticsDao.class);
     }

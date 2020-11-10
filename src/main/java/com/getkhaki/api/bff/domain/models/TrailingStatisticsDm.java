@@ -1,4 +1,4 @@
-package com.getkhaki.api.bff.persistence.models;
+package com.getkhaki.api.bff.domain.models;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -16,7 +16,7 @@ import java.util.UUID;
 @NoArgsConstructor
 @AllArgsConstructor
 @Accessors(chain = true)
-public class TrailingStatisticsDao {
+public class TrailingStatisticsDm {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     UUID id;
