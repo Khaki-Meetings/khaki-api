@@ -1,4 +1,4 @@
 package com.getkhaki.api.bff.domain.services;
 
-public class StatisticsServicesTests {
+public class StatisticsServicesUnitTests {
 }
