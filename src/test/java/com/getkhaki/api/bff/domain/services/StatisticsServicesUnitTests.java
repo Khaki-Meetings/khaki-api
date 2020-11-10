@@ -30,7 +30,23 @@ public class StatisticsServicesUnitTests {
     }
 
     @Test
-    public void test() {
+    public void getOrganizerStatistics() {
+
+
+        EmailDm emailDm=new EmailDm("test",new DomainTypeDm("mail"));
+
+        UUID id = UUID.randomUUID();
+        OrganizersStatisticsDm organizersStatisticsDm = new OrganizersStatisticsDm(id,emailDm,1,1,1);
+        when(organizersStatisticsPersistenceService.getOrganizerStatistics(emailDm.getEmail())).thenReturn(organizersStatisticsDm);
+
+        OrganizersStatisticsDm organizersStatisticsResponse = underTest.getOrganizerStatistics(emailDm.getEmail());
+        assertThat(organizersStatisticsResponse).isNotNull();
+
+    }
+
+
+    @Test
+    public void getTimeBlockSummary() {
 
 
         EmailDm emailDm=new EmailDm("test",new DomainTypeDm("mail"));
@@ -38,40 +54,45 @@ public class StatisticsServicesUnitTests {
         ZonedDateTime endTest = ZonedDateTime.now();
 
         UUID id = UUID.randomUUID();
-        OrganizersStatisticsDm organizersStatisticsDm = new OrganizersStatisticsDm(id,emailDm,1,1,1);
         TimeBlockSummaryDm timeBlockSummaryDm=new TimeBlockSummaryDm(id,IntervalEnumDao.Interval1,1,1,1,1);
-        DepartmentStatisticsDm departmentStatisticsDm=new DepartmentStatisticsDm(id,"department",1,1,1,1);
-        List<TimeBlockSummaryDm> trailingListDm= Lists.list(timeBlockSummaryDm);
 
 
-        when(organizersStatisticsPersistenceService.getOrganizerStatistics(emailDm.getEmail())).thenReturn(organizersStatisticsDm);
         when(timeBlockSummaryPersistenceService.getTimeBlockSummary(startTest,endTest)).thenReturn(timeBlockSummaryDm);
-        when(timeBlockSummaryPersistenceService.getTrailingStatistics(startTest,endTest,IntervalEnumDao.Interval1)).thenReturn(trailingListDm);
-        when(departmentStatisticsPersistenceService.getPerDepartmentStatistics(startTest,endTest)).thenReturn(departmentStatisticsDm);
-
-
-
-
-        OrganizersStatisticsDm organizersStatisticsResponse = underTest.getOrganizerStatistics(emailDm.getEmail());
-        assertThat(organizersStatisticsResponse).isNotNull();
-
-        //------------------------------------------------------
 
         TimeBlockSummaryDm timeBlockSummaryResponseDto = underTest.getTimeBlockSummary(startTest,endTest);
         assertThat(timeBlockSummaryResponseDto).isNotNull();
 
-        //-------------------------------------------------------
 
+    }
+
+    @Test
+    public void getPerDepartmentStatistics() {
+
+
+        ZonedDateTime startTest = ZonedDateTime.parse("2019-03-27T10:15:30");
+        ZonedDateTime endTest = ZonedDateTime.now();
+        UUID id = UUID.randomUUID();
+        DepartmentStatisticsDm departmentStatisticsDm=new DepartmentStatisticsDm(id,"department",1,1,1,1);
+        when(departmentStatisticsPersistenceService.getPerDepartmentStatistics(startTest,endTest)).thenReturn(departmentStatisticsDm);
         DepartmentStatisticsDm departmentStatisticsResponseDmList = underTest.getPerDepartmentStatistics(startTest,endTest);
         assertThat(departmentStatisticsResponseDmList).isNotNull();
 
-        //--------------------------------------------------------
 
+    }
+
+    @Test
+    public void test() {
+        ZonedDateTime startTest = ZonedDateTime.parse("2019-03-27T10:15:30");
+        ZonedDateTime endTest = ZonedDateTime.now();
+        UUID id = UUID.randomUUID();
+        TimeBlockSummaryDm timeBlockSummaryDm=new TimeBlockSummaryDm(id,IntervalEnumDao.Interval1,1,1,1,1);
+        List<TimeBlockSummaryDm> trailingListDm= Lists.list(timeBlockSummaryDm);
+        when(timeBlockSummaryPersistenceService.getTimeBlockSummary(startTest,endTest)).thenReturn(timeBlockSummaryDm);
+        when(timeBlockSummaryPersistenceService.getTrailingStatistics(startTest,endTest,IntervalEnumDao.Interval1)).thenReturn(trailingListDm);
         List<TimeBlockSummaryDm> trailingStatisticsResponseDm =  underTest.getTrailingStatistics(startTest,endTest, IntervalEnumDao.Interval1);
         assertThat(trailingStatisticsResponseDm).isNotNull();
 
 
     }
-
 
 }

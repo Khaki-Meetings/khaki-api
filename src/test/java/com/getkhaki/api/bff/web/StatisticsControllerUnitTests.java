@@ -26,7 +26,7 @@ public class StatisticsControllerUnitTests {
     }
 
     @Test
-    public void test() {
+    public void getOrganizersStatistics() {
 
 
         ZonedDateTime startTest = ZonedDateTime.parse("2019-03-27T10:15:30");
@@ -35,26 +35,12 @@ public class StatisticsControllerUnitTests {
         OrganizersStatisticsDao organizersStatisticsResponseDto = statisticsController.getOrganizersStatistics(startTest,endTest);
         assertThat(organizersStatisticsResponseDto).isNotNull();
 
-        //------------------------------------------------------
-
-        TimeBlockSummaryDao timeBlockSummaryResponseDto = statisticsController.getTimeBlockSummary(startTest,endTest);
-        assertThat(timeBlockSummaryResponseDto).isNotNull();
-
-        //-------------------------------------------------------
-
-        List<DepartmentStatisticsDao> departmentStatisticsResponseDtoList = statisticsController.getPerDepartmentStatistics(startTest,endTest);
-        assertThat(departmentStatisticsResponseDtoList).isNotNull();
-
-        //--------------------------------------------------------
-
-        TrailingStatisticsDao trailingStatisticsResponseDto = statisticsController.getTrailingStatistics(startTest,endTest, IntervalEnumDao.Interval1);
-        assertThat(trailingStatisticsResponseDto).isNotNull();
 
 
     }
 
 
-   /* @Test
+    @Test
     public void getTimeBlockSummary() {
 
 
@@ -71,13 +57,12 @@ public class StatisticsControllerUnitTests {
     @Test
     public void getPerDepartmentStatistics() {
 
-
         ZonedDateTime startTest = ZonedDateTime.parse("2019-03-27T10:15:30");
         ZonedDateTime endTest = ZonedDateTime.now();
 
+
         List<DepartmentStatisticsDao> departmentStatisticsResponseDtoList = statisticsController.getPerDepartmentStatistics(startTest,endTest);
         assertThat(departmentStatisticsResponseDtoList).isNotNull();
-
 
     }
 
@@ -85,13 +70,14 @@ public class StatisticsControllerUnitTests {
     @Test
     public void getTrailingStatistics() {
 
-
         ZonedDateTime startTest = ZonedDateTime.parse("2019-03-27T10:15:30");
         ZonedDateTime endTest = ZonedDateTime.now();
 
-        TrailingStatisticsDao trailingStatisticsResponseDto = statisticsController.getTrailingStatistics(startTest,endTest, IntervalEnumDto.Interval1);
+
+
+        TrailingStatisticsDao trailingStatisticsResponseDto = statisticsController.getTrailingStatistics(startTest,endTest, IntervalEnumDao.Interval1);
         assertThat(trailingStatisticsResponseDto).isNotNull();
 
 
-    }*/
+    }
 }
