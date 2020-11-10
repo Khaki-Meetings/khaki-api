@@ -1,9 +1,7 @@
 package com.getkhaki.api.bff.web;
 
-import com.getkhaki.api.bff.domain.services.CalendarEventService;
 import com.getkhaki.api.bff.domain.services.StatisticsService;
 import com.getkhaki.api.bff.persistence.models.*;
-import com.getkhaki.api.bff.web.models.CalendarEventDto;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -12,7 +10,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.time.ZonedDateTime;
-import java.util.ArrayList;
 import java.util.List;
 
 @RequestMapping("/statistics")
@@ -30,28 +27,28 @@ public class StatisticsController {
 
 
     @GetMapping("/organizer")
-    public OrganizersStatisticsResponseDto getOrganizersStatistics(@PathVariable(name="start") ZonedDateTime start, @PathVariable(name="end") ZonedDateTime end) {
+    public OrganizersStatisticsDao getOrganizersStatistics(@PathVariable(name="start") ZonedDateTime start, @PathVariable(name="end") ZonedDateTime end) {
 
-        return modelMapper.map(statisticsService.getOrganizerStatistics("connected-user-mail"), OrganizersStatisticsResponseDto.class);
+        return modelMapper.map(statisticsService.getOrganizerStatistics("connected-user-mail"), OrganizersStatisticsDao.class);
     }
 
 
     @GetMapping("/summary")
-    public TimeBlockSummaryResponseDto getTimeBlockSummary(@PathVariable(name="start") ZonedDateTime start, @PathVariable(name="end") ZonedDateTime end) {
+    public TimeBlockSummaryDao getTimeBlockSummary(@PathVariable(name="start") ZonedDateTime start, @PathVariable(name="end") ZonedDateTime end) {
 
-        return modelMapper.map(statisticsService.getTimeBlockSummary(start,end), TimeBlockSummaryResponseDto.class);
+        return modelMapper.map(statisticsService.getTimeBlockSummary(start,end), TimeBlockSummaryDao.class);
     }
 
     @GetMapping("/department")
-    public List<DepartmentStatisticsResponseDto> getPerDepartmentStatistics(@PathVariable(name="start") ZonedDateTime start, @PathVariable(name="end") ZonedDateTime end) {
+    public List<DepartmentStatisticsDao> getPerDepartmentStatistics(@PathVariable(name="start") ZonedDateTime start, @PathVariable(name="end") ZonedDateTime end) {
 
         return modelMapper.map(statisticsService.getPerDepartmentStatistics(start,end), List.class);
     }
 
     @GetMapping("/trailing")
-    public TrailingStatisticsResponseDto getTrailingStatistics(@PathVariable(name="start") ZonedDateTime start, @PathVariable(name="end") ZonedDateTime end,@PathVariable(name="interval") IntervalEnumDto interval) {
+    public TrailingStatisticsDao getTrailingStatistics(@PathVariable(name="start") ZonedDateTime start, @PathVariable(name="end") ZonedDateTime end, @PathVariable(name="interval") IntervalEnumDto interval) {
 
-        return modelMapper.map(statisticsService.getTrailingStatistics(start,end,interval), TrailingStatisticsResponseDto.class);
+        return modelMapper.map(statisticsService.getTrailingStatistics(start,end,interval), TrailingStatisticsDao.class);
     }
 
 

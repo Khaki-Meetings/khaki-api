@@ -10,11 +10,12 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import java.util.UUID;
 
+
 @Data
 @Entity
 @NoArgsConstructor
 @Accessors(chain = true)
-public class TimeBlockSummaryResponseDto {
+public class DepartmentStatisticsDao {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     UUID id;
