@@ -1,5 +1,6 @@
 package com.getkhaki.api.bff.domain.models;
 
+import com.getkhaki.api.bff.persistence.models.IntervalEnumDto;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
@@ -16,8 +17,10 @@ public class TimeBlockSummaryDm {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     UUID id;
-    @Temporal(TemporalType.TIMESTAMP)
-    ZonedDateTime start;
-    @Temporal(TemporalType.TIMESTAMP)
-    ZonedDateTime end;
+    @Enumerated(EnumType.STRING)
+    IntervalEnumDto interval;
+    long totalTime;
+    long totalCost;
+    long averageCost;
+    long meetingCount;
 }

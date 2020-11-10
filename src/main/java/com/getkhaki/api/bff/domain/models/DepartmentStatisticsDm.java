@@ -16,8 +16,9 @@ public class DepartmentStatisticsDm {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     UUID id;
-    @Temporal(TemporalType.TIMESTAMP)
-    ZonedDateTime start;
-    @Temporal(TemporalType.TIMESTAMP)
-    ZonedDateTime end;
+    String department;
+    long meetingCount;
+    long totalHours;
+    long totalCost;
+    long averageCost;
 }

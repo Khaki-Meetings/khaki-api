@@ -6,63 +6,49 @@ import com.getkhaki.api.bff.domain.models.TimeBlockSummaryDm;
 import com.getkhaki.api.bff.domain.persistence.DepartmentStatisticsPersistenceInterface;
 import com.getkhaki.api.bff.domain.persistence.OrganizersStatisticsPersistenceInterface;
 import com.getkhaki.api.bff.domain.persistence.TimeBlockSummaryPersistenceInterface;
-import com.getkhaki.api.bff.persistence.models.*;
+import com.getkhaki.api.bff.persistence.models.IntervalEnumDto;
+import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 
 import java.time.ZonedDateTime;
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
 public class StatisticsService implements OrganizersStatisticsPersistenceInterface, TimeBlockSummaryPersistenceInterface, DepartmentStatisticsPersistenceInterface {
+
+    private DepartmentStatisticsPersistenceService departmentStatisticsPersistenceService;
+    private OrganizersStatisticsPersistenceService organizersStatisticsPersistenceService;
+    private  TimeBlockSummaryPersistenceService timeBlockSummaryPersistenceService;
+    private final ModelMapper modelMapper;
+
+    public StatisticsService(ModelMapper modelMapper) {
+        this.modelMapper = modelMapper;
+        this.departmentStatisticsPersistenceService=new DepartmentStatisticsPersistenceService(this.modelMapper);
+        this.organizersStatisticsPersistenceService=new OrganizersStatisticsPersistenceService(this.modelMapper);
+        this.timeBlockSummaryPersistenceService=new TimeBlockSummaryPersistenceService(this.modelMapper);
+    }
+
+
     @Override
     public DepartmentStatisticsDm getPerDepartmentStatistics(ZonedDateTime start, ZonedDateTime end) {
-        return new  DepartmentStatisticsDm();
+        return this.departmentStatisticsPersistenceService.getPerDepartmentStatistics(start,end);
 
     }
 
     @Override
     public OrganizersStatisticsDm getOrganizerStatistics(String email) {
-        return new OrganizersStatisticsDm();
+        return this.organizersStatisticsPersistenceService.getOrganizerStatistics(email);
     }
 
     @Override
     public TimeBlockSummaryDm getTimeBlockSummary(ZonedDateTime start, ZonedDateTime end) {
-        return new TimeBlockSummaryDm();
+        return this.timeBlockSummaryPersistenceService.getTimeBlockSummary(start,end);
     }
 
     @Override
     public List<TimeBlockSummaryDm> getTrailingStatistics(ZonedDateTime start, ZonedDateTime end, IntervalEnumDto interval) {
-        List<TimeBlockSummaryDm> list=new ArrayList<>();
-        return list;
+        return this.timeBlockSummaryPersistenceService.getTrailingStatistics(start,end,interval);
     }
 
 
-/*
-    public OrganizersStatisticsResponseDto getOrganizersStatistics(ZonedDateTime start, ZonedDateTime end) {
-
-        return modelMapper.map(new  OrganizersStatisticsResponseDto(), OrganizersStatisticsResponseDto.class);
-    }
-
-
-    @GetMapping("/summary")
-    public TimeBlockSummaryResponseDto getTimeBlockSummary(ZonedDateTime start, ZonedDateTime end) {
-
-        return modelMapper.map(new  TimeBlockSummaryResponseDto(), TimeBlockSummaryResponseDto.class);
-    }
-
-    @GetMapping("/department")
-    public List<DepartmentStatisticsResponseDto> getPerDepartmentStatistics(ZonedDateTime start, ZonedDateTime end) {
-
-        List<DepartmentStatisticsResponseDto> list=new ArrayList<>();
-        return modelMapper.map(list, List.class);
-    }
-
-    @GetMapping("/trailing")
-    public TrailingStatisticsResponseDto getTrailingStatistics(ZonedDateTime start, ZonedDateTime end) {
-
-        return modelMapper.map(new  TrailingStatisticsResponseDto(), TrailingStatisticsResponseDto.class);
-    }*/
 }
