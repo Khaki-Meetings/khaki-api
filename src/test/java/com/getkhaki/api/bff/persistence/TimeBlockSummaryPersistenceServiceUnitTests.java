@@ -39,7 +39,27 @@ public class TimeBlockSummaryPersistenceServiceUnitTests {
     }
 
     @Test
-    public void test() {
+    public void findTimeBlockSummaryInRange() {
+
+        ZonedDateTime startTest = ZonedDateTime.parse("2019-03-27T10:15:30");
+        ZonedDateTime endTest = ZonedDateTime.now();
+        UUID id = UUID.randomUUID();
+        TimeBlockSummaryDm timeBlockSummaryDm = new TimeBlockSummaryDm(id, IntervalEnumDao.Interval1,1,1,1,1);
+        TimeBlockSummaryDao timeBlockSummaryDao = new TimeBlockSummaryDao(timeBlockSummaryDm.getId(),timeBlockSummaryDm.getInterval(),timeBlockSummaryDm.getTotalTime(),timeBlockSummaryDm.getTotalCost(),timeBlockSummaryDm.getAverageCost(),timeBlockSummaryDm.getMeetingCount());
+
+        when(modelMapper.map(timeBlockSummaryDm, TimeBlockSummaryDao.class)).thenReturn(timeBlockSummaryDao);
+        when(timeBlockSummaryRepositoryInterface.findTimeBlockSummaryInRange(startTest,endTest)).thenReturn(timeBlockSummaryDao);
+
+
+        TimeBlockSummaryDm ret = underTest.getTimeBlockSummary(startTest,endTest);
+        assertThat(ret).isNotNull();
+
+    }
+
+
+
+    @Test
+    public void getTrailingStatistics() {
 
         ZonedDateTime startTest = ZonedDateTime.parse("2019-03-27T10:15:30");
         ZonedDateTime endTest = ZonedDateTime.now();
@@ -51,10 +71,6 @@ public class TimeBlockSummaryPersistenceServiceUnitTests {
         when(modelMapper.map(timeBlockSummaryDm, TimeBlockSummaryDao.class)).thenReturn(timeBlockSummaryDao);
         when(timeBlockSummaryRepositoryInterface.findTimeBlockSummaryInRange(startTest,endTest)).thenReturn(timeBlockSummaryDao);
         when(timeBlockSummaryRepositoryInterface.findTimeBlockSummaryInRangeWithInterval(startTest,endTest,IntervalEnumDao.Interval1)).thenReturn(timeBlockListDm);
-
-
-        TimeBlockSummaryDm ret = underTest.getTimeBlockSummary(startTest,endTest);
-        assertThat(ret).isNotNull();
 
         List<TimeBlockSummaryDm> ret2 = underTest.getTrailingStatistics(startTest,endTest,IntervalEnumDao.Interval1);
         assertThat(ret2).isNotNull();
