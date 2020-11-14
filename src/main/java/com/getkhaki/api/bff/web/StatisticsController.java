@@ -30,13 +30,14 @@ public class StatisticsController {
         this.modelMapper = modelMapper;
     }
 
-    @GetMapping("/organizer")
+    @GetMapping("/organizersStatistics/{start}/{end}/{count}")
     public OrganizersStatisticsResponseDto getOrganizersStatistics(
-            @PathVariable(name = "start") ZonedDateTime start,
-            @PathVariable(name = "end") ZonedDateTime end
+            @PathVariable ZonedDateTime start,
+            @PathVariable ZonedDateTime end,
+            @PathVariable int count
     ) {
         return modelMapper.map(
-                statisticsService.getOrganizerStatistics("connected-user-mail"),
+                statisticsService.getOrganizerStatistics(start, end, count),
                 OrganizersStatisticsResponseDto.class
         );
     }

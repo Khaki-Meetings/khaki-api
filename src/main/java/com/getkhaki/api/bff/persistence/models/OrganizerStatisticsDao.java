@@ -1,25 +1,32 @@
-package com.getkhaki.api.bff.domain.models;
+package com.getkhaki.api.bff.persistence.models;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
-import lombok.experimental.SuperBuilder;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.util.UUID;
 
 @Data
+@Entity
 @NoArgsConstructor
 @AllArgsConstructor
 @Accessors(chain = true)
-public class OrganizersStatisticsDm {
+public class OrganizerStatisticsDao {
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     UUID id;
-    String email;
+
+    @ManyToOne
+    EmailDao email;
+
+    @Column
     int totalMeetings;
+
+    @Column
     long totalCost;
+
+    @Column
     int totalMinutes;
 }

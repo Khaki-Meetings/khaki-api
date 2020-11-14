@@ -1,11 +1,8 @@
 package com.getkhaki.api.bff.domain.services;
 
 import com.getkhaki.api.bff.domain.models.DepartmentStatisticsDm;
-import com.getkhaki.api.bff.domain.models.OrganizersStatisticsDm;
+import com.getkhaki.api.bff.domain.models.OrganizerStatisticsDm;
 import com.getkhaki.api.bff.domain.models.TimeBlockSummaryDm;
-import com.getkhaki.api.bff.domain.persistence.DepartmentStatisticsPersistenceInterface;
-import com.getkhaki.api.bff.domain.persistence.OrganizersStatisticsPersistenceInterface;
-import com.getkhaki.api.bff.domain.persistence.TimeBlockSummaryPersistenceInterface;
 import com.getkhaki.api.bff.persistence.models.IntervalEnumDao;
 import org.springframework.stereotype.Service;
 
@@ -30,8 +27,8 @@ public class StatisticsService {
 
     }
 
-    public OrganizersStatisticsDm getOrganizerStatistics(String email) {
-        return this.organizersStatisticsPersistenceService.getOrganizerStatistics(email);
+    public List<OrganizerStatisticsDm> getOrganizerStatistics(ZonedDateTime start, ZonedDateTime end, int count) {
+        return this.organizersStatisticsPersistenceService.getOrganizerStatistics(start, end, count);
     }
 
     public TimeBlockSummaryDm getTimeBlockSummary(ZonedDateTime start, ZonedDateTime end) {

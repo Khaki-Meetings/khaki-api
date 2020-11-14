@@ -2,14 +2,11 @@ package com.getkhaki.api.bff.web;
 
 import com.getkhaki.api.bff.domain.models.DepartmentStatisticsDm;
 import com.getkhaki.api.bff.domain.models.IntervalEnumDm;
-import com.getkhaki.api.bff.domain.models.OrganizersStatisticsDm;
+import com.getkhaki.api.bff.domain.models.OrganizerStatisticsDm;
 import com.getkhaki.api.bff.domain.models.TimeBlockSummaryDm;
 import com.getkhaki.api.bff.domain.services.StatisticsService;
 import com.getkhaki.api.bff.persistence.models.*;
-import com.getkhaki.api.bff.web.models.DepartmentStatisticsResponseDto;
-import com.getkhaki.api.bff.web.models.IntervalEnum;
-import com.getkhaki.api.bff.web.models.OrganizersStatisticsResponseDto;
-import com.getkhaki.api.bff.web.models.TimeBlockSummaryResponseDto;
+import com.getkhaki.api.bff.web.models.*;
 import org.assertj.core.util.Lists;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -21,7 +18,6 @@ import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -44,26 +40,38 @@ public class StatisticsControllerUnitTests {
         ZonedDateTime endTest = ZonedDateTime.parse("2020-11-12T12:22:40.274456-07:00[America/Denver]");
 
         String email = "bob@bob.com";
-        OrganizersStatisticsResponseDto mockDto = new OrganizersStatisticsResponseDto(
-                UUID.randomUUID(),
-                email,
-                1,
-                1,
-                1
-        );
+        OrganizersStatisticsResponseDto mockDto = OrganizersStatisticsResponseDto
+                .builder()
+                .page(1)
+                .organizersStatistics(
+                        Lists.list(
+                                OrganizerStatisticsResponseDto
+                                        .builder()
+                                        .organizer(OrganizerDto.builder()
+                                                .email("bob.com")
+                                                .name("Bob")
+                                                .build())
+                                        .totalCost(1)
+                                        .totalHours(1)
+                                        .totalMeetings(1)
+                                        .build()
+                        )
+                )
+                .build();
 
-        OrganizersStatisticsDm mockDm = new OrganizersStatisticsDm(
-                UUID.randomUUID(),
-                email,
-                1,
-                1L,
-                1
-        );
 
-        when(statisticsService.getOrganizerStatistics(anyString())).thenReturn(mockDm);
-        when(modelMapper.map(mockDm, OrganizersStatisticsResponseDto.class)).thenReturn(mockDto);
+        OrganizerStatisticsDm mockDm = OrganizerStatisticsDm.builder()
+                .id(UUID.randomUUID())
+                .email(email)
+                .build();
 
-        OrganizersStatisticsResponseDto organizersStatisticsResponseDto = underTest.getOrganizersStatistics(startTest, endTest);
+        int count = 1;
+        List<OrganizerStatisticsDm> dms = Lists.list(mockDm);
+        when(statisticsService.getOrganizerStatistics(startTest, endTest, count)).thenReturn(dms);
+        when(modelMapper.map(dms, OrganizersStatisticsResponseDto.class)).thenReturn(mockDto);
+
+        OrganizersStatisticsResponseDto organizersStatisticsResponseDto = underTest
+                .getOrganizersStatistics(startTest, endTest, count);
         assertThat(organizersStatisticsResponseDto).isNotNull();
     }
 
