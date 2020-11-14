@@ -15,9 +15,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.time.ZonedDateTime;
 import java.util.List;
-import java.util.Optional;
 import java.util.OptionalInt;
-import java.util.stream.Collectors;
 
 @RequestMapping("/statistics")
 @RestController
@@ -40,7 +38,7 @@ public class StatisticsController {
     ) {
         int count = optionalCount.orElse(5);
         List<OrganizerStatisticsDm> organizerStatisticsDmList = statisticsService
-                .getOrganizerStatistics(start, end, count);
+                .getOrganizersStatistics(start, end, count);
         OrganizersStatisticsResponseDto ret = new OrganizersStatisticsResponseDto();
         ret.setOrganizersStatistics(
                 modelMapper.map(

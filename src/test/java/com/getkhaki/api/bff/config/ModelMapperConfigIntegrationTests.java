@@ -23,7 +23,6 @@ public class ModelMapperConfigIntegrationTests {
     @Test
     public void organizerStatisticsListToOrganizersStatisticsResponseDto() {
         OrganizerStatisticsDm mockDm1 = OrganizerStatisticsDm.builder()
-                .id(UUID.randomUUID())
                 .organizer(
                         OrganizerDm.builder()
                         .email("bob@bob.com")

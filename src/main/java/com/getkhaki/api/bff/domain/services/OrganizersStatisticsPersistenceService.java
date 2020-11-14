@@ -23,7 +23,7 @@ public class OrganizersStatisticsPersistenceService implements OrganizersStatist
     }
 
     @Override
-    public List<OrganizerStatisticsDm> getOrganizerStatistics(ZonedDateTime start, ZonedDateTime end, int count) {
+    public List<OrganizerStatisticsDm> getOrganizersStatistics(ZonedDateTime start, ZonedDateTime end, int count) {
         return modelMapper.map(
                 organizersStatisticsRepositoryInterface.findOrganizersStatistics(start, end, count),
                 new TypeToken<List<OrganizerStatisticsDm>>() {}.getType()

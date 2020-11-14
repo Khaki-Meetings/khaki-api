@@ -18,7 +18,6 @@ import java.util.UUID;
 @AllArgsConstructor
 @Accessors(chain = true)
 public class OrganizerStatisticsDm {
-    UUID id;
     OrganizerDm organizer;
     int totalMeetings;
     long totalCost;

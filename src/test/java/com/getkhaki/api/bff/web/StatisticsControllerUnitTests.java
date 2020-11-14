@@ -52,7 +52,6 @@ public class StatisticsControllerUnitTests {
 
 
         OrganizerStatisticsDm mockDm = OrganizerStatisticsDm.builder()
-                .id(UUID.randomUUID())
                 .organizer(
                         OrganizerDm.builder()
                                 .name(name)
@@ -67,7 +66,7 @@ public class StatisticsControllerUnitTests {
         int count = 1;
         List<OrganizerStatisticsDm> dms = Lists.list(mockDm);
         List<OrganizerStatisticsResponseDto> dtos = Lists.list(organizerStatisticsResponseDto);
-        when(statisticsService.getOrganizerStatistics(eq(startTest), eq(endTest), anyInt())).thenReturn(dms);
+        when(statisticsService.getOrganizersStatistics(eq(startTest), eq(endTest), anyInt())).thenReturn(dms);
         when(modelMapper.map(dms,  new TypeToken<List<OrganizerStatisticsResponseDto>>(){}.getType()))
                 .thenReturn(dtos);
 
