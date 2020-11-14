@@ -12,10 +12,11 @@ import org.modelmapper.TypeToken;
 
 import java.time.ZonedDateTime;
 import java.util.List;
+import java.util.OptionalInt;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -66,12 +67,12 @@ public class StatisticsControllerUnitTests {
         int count = 1;
         List<OrganizerStatisticsDm> dms = Lists.list(mockDm);
         List<OrganizerStatisticsResponseDto> dtos = Lists.list(organizerStatisticsResponseDto);
-        when(statisticsService.getOrganizerStatistics(startTest, endTest, count)).thenReturn(dms);
+        when(statisticsService.getOrganizerStatistics(eq(startTest), eq(endTest), anyInt())).thenReturn(dms);
         when(modelMapper.map(dms,  new TypeToken<List<OrganizerStatisticsResponseDto>>(){}.getType()))
                 .thenReturn(dtos);
 
         OrganizersStatisticsResponseDto organizersStatisticsResponseDto = underTest
-                .getOrganizersStatistics(startTest, endTest, count);
+                .getOrganizersStatistics(startTest, endTest, OptionalInt.empty());
         assertThat(organizersStatisticsResponseDto).isNotNull();
         assertThat(organizersStatisticsResponseDto.getOrganizersStatistics().size()).isEqualTo(1);
         assertThat(organizersStatisticsResponseDto.getOrganizersStatistics().get(0))

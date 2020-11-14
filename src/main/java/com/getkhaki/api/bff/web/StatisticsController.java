@@ -11,13 +11,12 @@ import com.getkhaki.api.bff.web.models.TimeBlockSummaryResponseDto;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeToken;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.time.ZonedDateTime;
 import java.util.List;
+import java.util.Optional;
+import java.util.OptionalInt;
 import java.util.stream.Collectors;
 
 @RequestMapping("/statistics")
@@ -33,12 +32,13 @@ public class StatisticsController {
         this.modelMapper = modelMapper;
     }
 
-    @GetMapping("/organizersStatistics/{start}/{end}/{count}")
+    @GetMapping("/organizersStatistics/{start}/{end}")
     public OrganizersStatisticsResponseDto getOrganizersStatistics(
             @PathVariable ZonedDateTime start,
             @PathVariable ZonedDateTime end,
-            @PathVariable int count
+            @RequestParam OptionalInt optionalCount
     ) {
+        int count = optionalCount.orElse(5);
         List<OrganizerStatisticsDm> organizerStatisticsDmList = statisticsService
                 .getOrganizerStatistics(start, end, count);
         OrganizersStatisticsResponseDto ret = new OrganizersStatisticsResponseDto();
@@ -50,6 +50,7 @@ public class StatisticsController {
                 )
         );
         ret.setPage(1);
+        ret.setCount(count);
         return ret;
     }
 

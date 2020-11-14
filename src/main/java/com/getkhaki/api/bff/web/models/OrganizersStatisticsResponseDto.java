@@ -11,5 +11,6 @@ import java.util.List;
 @Accessors(chain = true)
 public class OrganizersStatisticsResponseDto {
     int page;
+    int count;
     List<OrganizerStatisticsResponseDto> organizersStatistics;
 }
