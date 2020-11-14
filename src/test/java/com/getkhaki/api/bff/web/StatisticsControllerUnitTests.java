@@ -8,6 +8,7 @@ import org.assertj.core.util.Lists;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.modelmapper.ModelMapper;
+import org.modelmapper.TypeToken;
 
 import java.time.ZonedDateTime;
 import java.util.List;
@@ -64,8 +65,10 @@ public class StatisticsControllerUnitTests {
 
         int count = 1;
         List<OrganizerStatisticsDm> dms = Lists.list(mockDm);
+        List<OrganizerStatisticsResponseDto> dtos = Lists.list(organizerStatisticsResponseDto);
         when(statisticsService.getOrganizerStatistics(startTest, endTest, count)).thenReturn(dms);
-        when(modelMapper.map(mockDm, OrganizerStatisticsResponseDto.class)).thenReturn(organizerStatisticsResponseDto);
+        when(modelMapper.map(dms,  new TypeToken<List<OrganizerStatisticsResponseDto>>(){}.getType()))
+                .thenReturn(dtos);
 
         OrganizersStatisticsResponseDto organizersStatisticsResponseDto = underTest
                 .getOrganizersStatistics(startTest, endTest, count);

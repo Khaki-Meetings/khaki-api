@@ -43,9 +43,11 @@ public class StatisticsController {
                 .getOrganizerStatistics(start, end, count);
         OrganizersStatisticsResponseDto ret = new OrganizersStatisticsResponseDto();
         ret.setOrganizersStatistics(
-                organizerStatisticsDmList.stream()
-                .map(el -> modelMapper.map(el, OrganizerStatisticsResponseDto.class))
-                .collect(Collectors.toList())
+                modelMapper.map(
+                        organizerStatisticsDmList,
+                        new TypeToken<List<OrganizerStatisticsResponseDto>>() {
+                        }.getType()
+                )
         );
         ret.setPage(1);
         return ret;
@@ -60,7 +62,8 @@ public class StatisticsController {
     @GetMapping("/department")
     public List<DepartmentStatisticsDao> getPerDepartmentStatistics(@PathVariable(name = "start") ZonedDateTime start, @PathVariable(name = "end") ZonedDateTime end) {
 
-        return modelMapper.map(statisticsService.getPerDepartmentStatistics(start, end), new TypeToken<List<DepartmentStatisticsDao>>() {}.getType());
+        return modelMapper.map(statisticsService.getPerDepartmentStatistics(start, end), new TypeToken<List<DepartmentStatisticsDao>>() {
+        }.getType());
     }
 
     @GetMapping("/trailing")
