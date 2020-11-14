@@ -8,6 +8,7 @@ import org.junit.jupiter.api.Test;
 import org.modelmapper.ModelMapper;
 
 import java.time.LocalDateTime;
+import java.time.ZonedDateTime;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -29,7 +30,7 @@ public class CalendarEventControllerUnitTests {
 
     @Test
     public void goodPath() {
-        LocalDateTime now = LocalDateTime.now();
+        ZonedDateTime now = ZonedDateTime.now();
         CalendarEventDto calendarEventDtoInput = new CalendarEventDto();
         calendarEventDtoInput.setSummary("now");
         calendarEventDtoInput.setCreated(now);

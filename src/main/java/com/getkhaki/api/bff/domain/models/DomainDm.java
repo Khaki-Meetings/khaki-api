@@ -10,12 +10,10 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 
 @Data
-@Entity
 @NoArgsConstructor
 @AllArgsConstructor
 @Accessors(chain = true)
-public class DomainTypeDm {
-
+public class DomainDm {
     @Column(unique = true)
     String name;
 }

@@ -6,7 +6,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.Accessors;
 
-import java.time.LocalDateTime;
+import java.time.ZonedDateTime;
 import java.util.UUID;
 
 @Getter
@@ -21,5 +21,5 @@ public class CalendarEventDm {
 
     String summary;
 
-    LocalDateTime created;
+    ZonedDateTime created;
 }

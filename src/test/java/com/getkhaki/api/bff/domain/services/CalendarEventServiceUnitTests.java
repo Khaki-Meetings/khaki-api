@@ -6,6 +6,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalDateTime;
+import java.time.ZonedDateTime;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -26,7 +27,7 @@ public class CalendarEventServiceUnitTests {
     public void test() {
         CalendarEventDm calendarEventDmInput = new CalendarEventDm();
         calendarEventDmInput.setSummary("kid gloves");
-        calendarEventDmInput.setCreated(LocalDateTime.now());
+        calendarEventDmInput.setCreated(ZonedDateTime.now());
 
         UUID id = UUID.randomUUID();
         CalendarEventDm calendarEventDmResponse = new CalendarEventDm(
