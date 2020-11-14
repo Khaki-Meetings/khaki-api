@@ -2,6 +2,7 @@ package com.getkhaki.api.bff.persistence.models;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
 
@@ -10,14 +11,9 @@ import java.util.UUID;
 
 @Data
 @Entity
-@NoArgsConstructor
-@AllArgsConstructor
 @Accessors(chain = true)
-public class OrganizerStatisticsDao {
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    UUID id;
-
+@EqualsAndHashCode(callSuper = true)
+public class OrganizerStatisticsDao extends EntityBaseDao {
     @ManyToOne
     EmailDao email;
 
@@ -28,5 +24,5 @@ public class OrganizerStatisticsDao {
     long totalCost;
 
     @Column
-    int totalMinutes;
+    int totalHours;
 }
