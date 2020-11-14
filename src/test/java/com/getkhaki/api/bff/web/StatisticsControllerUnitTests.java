@@ -48,7 +48,7 @@ public class StatisticsControllerUnitTests {
                                 OrganizerStatisticsResponseDto
                                         .builder()
                                         .organizer(OrganizerDto.builder()
-                                                .email("bob.com")
+                                                .email(email)
                                                 .name("Bob")
                                                 .build())
                                         .totalCost(1)
@@ -73,6 +73,9 @@ public class StatisticsControllerUnitTests {
         OrganizersStatisticsResponseDto organizersStatisticsResponseDto = underTest
                 .getOrganizersStatistics(startTest, endTest, count);
         assertThat(organizersStatisticsResponseDto).isNotNull();
+
+        assertThat(organizersStatisticsResponseDto).isEqualTo(mockDto);
+
     }
 
     @Test
