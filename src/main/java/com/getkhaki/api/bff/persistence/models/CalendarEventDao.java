@@ -7,7 +7,9 @@ import lombok.NonNull;
 import lombok.experimental.Accessors;
 
 import javax.persistence.Entity;
+import javax.persistence.OneToMany;
 import java.time.ZonedDateTime;
+import java.util.List;
 
 @Data
 @Entity
@@ -19,4 +21,7 @@ public class CalendarEventDao extends EntityBaseDao {
     String summary;
 
     ZonedDateTime created;
+
+    @OneToMany(mappedBy = "calendarEvent")
+    List<CalendarEventParticipantDao> participants;
 }

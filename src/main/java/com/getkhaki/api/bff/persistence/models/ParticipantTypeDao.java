@@ -6,20 +6,13 @@ import lombok.experimental.Accessors;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
+import javax.persistence.UniqueConstraint;
 
 @Data
 @Entity
 @Accessors(chain = true)
 @EqualsAndHashCode(callSuper = true)
-public class EmailDao extends EntityBaseDao {
-    @Column
-    String user;
-
-    @ManyToOne
-    DomainDao domain;
-
-    @ManyToOne
-    PersonDao person;
+public class ParticipantTypeDao extends EntityBaseDao {
+    @Column(unique = true)
+    String name;
 }
