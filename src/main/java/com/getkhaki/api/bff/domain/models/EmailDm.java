@@ -8,11 +8,10 @@ import lombok.experimental.Accessors;
 import javax.persistence.Entity;
 
 @Data
-@Entity
 @NoArgsConstructor
 @AllArgsConstructor
 @Accessors(chain = true)
-public class EmailDm {
+public class EmailDm extends BaseDm {
     String user;
     DomainTypeDm domain;
 

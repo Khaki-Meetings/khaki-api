@@ -13,15 +13,12 @@ import javax.persistence.Id;
 import java.util.UUID;
 
 @Data
-@Entity
 @NoArgsConstructor
 @AllArgsConstructor
 @Accessors(chain = true)
 public class OrganizersStatisticsResponseDto {
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
     UUID id;
-    EmailDm email;
+    String email;
     int totalMeetings;
     long totalCost;
     int totalMinutes;

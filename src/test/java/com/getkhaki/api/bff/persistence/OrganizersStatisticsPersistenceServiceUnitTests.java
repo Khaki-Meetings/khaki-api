@@ -12,13 +12,13 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.modelmapper.ModelMapper;
 
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 public class OrganizersStatisticsPersistenceServiceUnitTests {
@@ -38,15 +38,15 @@ public class OrganizersStatisticsPersistenceServiceUnitTests {
     public void test() {
 
 
-        EmailDm emailDm=new EmailDm("test",new DomainTypeDm("mail"));
+        EmailDm emailDm = new EmailDm("test", new DomainTypeDm("mail"));
 
         UUID id = UUID.randomUUID();
-        OrganizersStatisticsDm organizersStatisticsDm = new OrganizersStatisticsDm(id,emailDm,1,1,1);
-        OrganizersStatisticsDao organizersStatisticsDao = new OrganizersStatisticsDao(organizersStatisticsDm.getId(),modelMapper.map(emailDm, EmailDao.class),organizersStatisticsDm.getTotalMeetings(),organizersStatisticsDm.getTotalCost(),organizersStatisticsDm.getTotalMinutes());
+        OrganizersStatisticsDm organizersStatisticsDm = new OrganizersStatisticsDm(id, "test@test.com", 1, 1, 1);
+        OrganizersStatisticsDao organizersStatisticsDao = new OrganizersStatisticsDao(organizersStatisticsDm.getId(), modelMapper.map(emailDm, EmailDao.class), organizersStatisticsDm.getTotalMeetings(), organizersStatisticsDm.getTotalCost(), organizersStatisticsDm.getTotalMinutes());
 
-        when(modelMapper.map(organizersStatisticsDm, OrganizersStatisticsDao.class)).thenReturn(organizersStatisticsDao);
+        Mockito.lenient().when(modelMapper.map(organizersStatisticsDao, OrganizersStatisticsDm.class)).thenReturn(organizersStatisticsDm);
 
-        when(organizersStatisticsRepositoryInterface.findOrganizerStatisticsByEmail(emailDm.getEmail())).thenReturn(organizersStatisticsDao);
+        Mockito.lenient().when(organizersStatisticsRepositoryInterface.findOrganizerStatisticsByEmail(emailDm.getEmail())).thenReturn(organizersStatisticsDao);
 
         OrganizersStatisticsDm ret = underTest.getOrganizerStatistics(emailDm.getEmail());
 

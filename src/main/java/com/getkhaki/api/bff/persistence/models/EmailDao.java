@@ -5,7 +5,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
 
-import javax.persistence.Entity;
+import javax.persistence.*;
+import java.util.UUID;
 
 @Data
 @Entity
@@ -13,6 +14,13 @@ import javax.persistence.Entity;
 @AllArgsConstructor
 @Accessors(chain = true)
 public class EmailDao {
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    UUID id;
+
+    @Column
     String user;
+
+    @ManyToOne
     DomainTypeDao domain;
 }

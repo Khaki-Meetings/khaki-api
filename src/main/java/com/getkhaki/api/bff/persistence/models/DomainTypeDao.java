@@ -6,8 +6,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
+import javax.persistence.*;
+import java.util.UUID;
 
 @Data
 @Entity
@@ -15,6 +15,9 @@ import javax.persistence.Entity;
 @AllArgsConstructor
 @Accessors(chain = true)
 public class DomainTypeDao {
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    UUID id;
     @Column(unique = true)
     String name;
 }

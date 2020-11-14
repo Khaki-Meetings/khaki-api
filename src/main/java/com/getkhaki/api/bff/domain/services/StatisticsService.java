@@ -13,7 +13,7 @@ import java.time.ZonedDateTime;
 import java.util.List;
 
 @Service
-public class StatisticsService implements OrganizersStatisticsPersistenceInterface, TimeBlockSummaryPersistenceInterface, DepartmentStatisticsPersistenceInterface {
+public class StatisticsService {
 
     private DepartmentStatisticsPersistenceService departmentStatisticsPersistenceService;
     private OrganizersStatisticsPersistenceService organizersStatisticsPersistenceService;
@@ -25,24 +25,19 @@ public class StatisticsService implements OrganizersStatisticsPersistenceInterfa
         this.timeBlockSummaryPersistenceService=timeBlockSummaryPersistenceService;
     }
 
-
-    @Override
-    public DepartmentStatisticsDm getPerDepartmentStatistics(ZonedDateTime start, ZonedDateTime end) {
+    public List<DepartmentStatisticsDm> getPerDepartmentStatistics(ZonedDateTime start, ZonedDateTime end) {
         return this.departmentStatisticsPersistenceService.getPerDepartmentStatistics(start,end);
 
     }
 
-    @Override
     public OrganizersStatisticsDm getOrganizerStatistics(String email) {
         return this.organizersStatisticsPersistenceService.getOrganizerStatistics(email);
     }
 
-    @Override
     public TimeBlockSummaryDm getTimeBlockSummary(ZonedDateTime start, ZonedDateTime end) {
         return this.timeBlockSummaryPersistenceService.getTimeBlockSummary(start,end);
     }
 
-    @Override
     public List<TimeBlockSummaryDm> getTrailingStatistics(ZonedDateTime start, ZonedDateTime end, IntervalEnumDao interval) {
         return this.timeBlockSummaryPersistenceService.getTrailingStatistics(start,end,interval);
     }
