@@ -43,15 +43,15 @@ public class OrganizersStatisticsPersistenceServiceUnitTests {
         EmailDm emailDm = new EmailDm("test", new DomainTypeDm("mail"));
 
         UUID id = UUID.randomUUID();
-        OrganizerStatisticsDm organizerStatisticsDm = new OrganizerStatisticsDm(id, "test@test.com", 1, 1, 1);
-        OrganizerStatisticsDao organizerStatisticsDao = new OrganizerStatisticsDao(organizerStatisticsDm.getId(), modelMapper.map(emailDm, EmailDao.class), organizerStatisticsDm.getTotalMeetings(), organizerStatisticsDm.getTotalCost(), organizerStatisticsDm.getTotalMinutes());
+//        OrganizerStatisticsDm organizerStatisticsDm = new OrganizerStatisticsDm(id, "test@test.com", 1, 1, 1);
+//        OrganizerStatisticsDao organizerStatisticsDao = new OrganizerStatisticsDao(organizerStatisticsDm.getId(), modelMapper.map(emailDm, EmailDao.class), organizerStatisticsDm.getTotalMeetings(), organizerStatisticsDm.getTotalCost(), organizerStatisticsDm.getTotalMinutes());
 
-        Mockito.lenient().when(
-                modelMapper.map(
-                        organizerStatisticsDao,
-                        new TypeToken<List<OrganizerStatisticsDm>>() {}.getType()
-                )
-        ).thenReturn(organizerStatisticsDm);
+//        Mockito.lenient().when(
+//                modelMapper.map(
+//                        organizerStatisticsDao,
+//                        new TypeToken<List<OrganizerStatisticsDm>>() {}.getType()
+//                )
+//        ).thenReturn(organizerStatisticsDm);
 
 //        Mockito.lenient().when(organizersStatisticsRepositoryInterface.findOrganizersStatistics(, emailDm.getEmail(), , )).thenReturn(organizerStatisticsDao);
 

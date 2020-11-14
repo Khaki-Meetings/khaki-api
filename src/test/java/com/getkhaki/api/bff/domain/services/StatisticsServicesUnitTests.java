@@ -36,7 +36,7 @@ public class StatisticsServicesUnitTests {
         EmailDm emailDm = new EmailDm("test", new DomainTypeDm("mail"));
 
         UUID id = UUID.randomUUID();
-        OrganizerStatisticsDm organizerStatisticsDm = new OrganizerStatisticsDm(id, "test@test.com", 1, 1, 1);
+//        OrganizerStatisticsDm organizerStatisticsDm = new OrganizerStatisticsDm(id, "test@test.com", 1, 1, 1);
 //        when(organizersStatisticsPersistenceService.getOrganizerStatistics(, emailDm.getEmail(), , )).thenReturn(organizersStatisticsDm);
 
 //        OrganizersStatisticsDm organizersStatisticsResponse = underTest.getOrganizerStatistics(, emailDm.getEmail(), , );

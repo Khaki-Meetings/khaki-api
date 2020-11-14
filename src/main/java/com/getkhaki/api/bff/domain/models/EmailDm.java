@@ -11,7 +11,7 @@ import javax.persistence.Entity;
 @NoArgsConstructor
 @AllArgsConstructor
 @Accessors(chain = true)
-public class EmailDm extends BaseDm {
+public class EmailDm {
     String user;
     DomainTypeDm domain;
 

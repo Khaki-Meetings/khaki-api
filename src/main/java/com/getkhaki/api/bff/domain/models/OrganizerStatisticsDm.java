@@ -19,8 +19,8 @@ import java.util.UUID;
 @Accessors(chain = true)
 public class OrganizerStatisticsDm {
     UUID id;
-    String email;
+    OrganizerDm organizer;
     int totalMeetings;
     long totalCost;
-    int totalMinutes;
+    int totalHours;
 }

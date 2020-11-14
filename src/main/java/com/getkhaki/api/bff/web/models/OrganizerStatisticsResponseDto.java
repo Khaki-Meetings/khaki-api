@@ -1,10 +1,12 @@
 package com.getkhaki.api.bff.web.models;
 
-import lombok.Builder;
-import lombok.Value;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.experimental.Accessors;
 
-@Value
-@Builder(toBuilder = true)
+@Data
+@NoArgsConstructor
+@Accessors(chain = true)
 public class OrganizerStatisticsResponseDto {
     OrganizerDto organizer;
     int totalMeetings;

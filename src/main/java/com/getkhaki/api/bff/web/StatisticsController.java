@@ -1,9 +1,11 @@
 package com.getkhaki.api.bff.web;
 
+import com.getkhaki.api.bff.domain.models.OrganizerStatisticsDm;
 import com.getkhaki.api.bff.domain.services.StatisticsService;
 import com.getkhaki.api.bff.persistence.models.DepartmentStatisticsDao;
 import com.getkhaki.api.bff.persistence.models.IntervalEnumDao;
 import com.getkhaki.api.bff.persistence.models.TrailingStatisticsDao;
+import com.getkhaki.api.bff.web.models.OrganizerStatisticsResponseDto;
 import com.getkhaki.api.bff.web.models.OrganizersStatisticsResponseDto;
 import com.getkhaki.api.bff.web.models.TimeBlockSummaryResponseDto;
 import org.modelmapper.ModelMapper;
@@ -16,6 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.time.ZonedDateTime;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RequestMapping("/statistics")
 @RestController
@@ -36,10 +39,16 @@ public class StatisticsController {
             @PathVariable ZonedDateTime end,
             @PathVariable int count
     ) {
-        return modelMapper.map(
-                statisticsService.getOrganizerStatistics(start, end, count),
-                OrganizersStatisticsResponseDto.class
+        List<OrganizerStatisticsDm> organizerStatisticsDmList = statisticsService
+                .getOrganizerStatistics(start, end, count);
+        OrganizersStatisticsResponseDto ret = new OrganizersStatisticsResponseDto();
+        ret.setOrganizersStatistics(
+                organizerStatisticsDmList.stream()
+                .map(el -> modelMapper.map(el, OrganizerStatisticsResponseDto.class))
+                .collect(Collectors.toList())
         );
+        ret.setPage(1);
+        return ret;
     }
 
 

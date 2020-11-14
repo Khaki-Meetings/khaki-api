@@ -1,9 +1,6 @@
 package com.getkhaki.api.bff.web;
 
-import com.getkhaki.api.bff.domain.models.DepartmentStatisticsDm;
-import com.getkhaki.api.bff.domain.models.IntervalEnumDm;
-import com.getkhaki.api.bff.domain.models.OrganizerStatisticsDm;
-import com.getkhaki.api.bff.domain.models.TimeBlockSummaryDm;
+import com.getkhaki.api.bff.domain.models.*;
 import com.getkhaki.api.bff.domain.services.StatisticsService;
 import com.getkhaki.api.bff.persistence.models.*;
 import com.getkhaki.api.bff.web.models.*;
@@ -40,41 +37,42 @@ public class StatisticsControllerUnitTests {
         ZonedDateTime endTest = ZonedDateTime.parse("2020-11-12T12:22:40.274456-07:00[America/Denver]");
 
         String email = "bob@bob.com";
-        OrganizersStatisticsResponseDto mockDto = OrganizersStatisticsResponseDto
-                .builder()
-                .page(1)
-                .organizersStatistics(
-                        Lists.list(
-                                OrganizerStatisticsResponseDto
-                                        .builder()
-                                        .organizer(OrganizerDto.builder()
-                                                .email(email)
-                                                .name("Bob")
-                                                .build())
-                                        .totalCost(1)
-                                        .totalHours(1)
-                                        .totalMeetings(1)
-                                        .build()
-                        )
+        String name = "Bob";
+        OrganizerStatisticsResponseDto organizerStatisticsResponseDto = new OrganizerStatisticsResponseDto()
+                .setOrganizer(
+                        new OrganizerDto()
+                                .setEmail(email)
+                                .setName(name)
                 )
-                .build();
+                .setTotalCost(1)
+                .setTotalHours(1)
+                .setTotalMeetings(1);
 
 
         OrganizerStatisticsDm mockDm = OrganizerStatisticsDm.builder()
                 .id(UUID.randomUUID())
-                .email(email)
+                .organizer(
+                        OrganizerDm.builder()
+                                .name(name)
+                                .email(email)
+                                .build()
+                )
+                .totalCost(1)
+                .totalMeetings(1)
+                .totalHours(1)
                 .build();
 
         int count = 1;
         List<OrganizerStatisticsDm> dms = Lists.list(mockDm);
         when(statisticsService.getOrganizerStatistics(startTest, endTest, count)).thenReturn(dms);
-        when(modelMapper.map(dms, OrganizersStatisticsResponseDto.class)).thenReturn(mockDto);
+        when(modelMapper.map(mockDm, OrganizerStatisticsResponseDto.class)).thenReturn(organizerStatisticsResponseDto);
 
         OrganizersStatisticsResponseDto organizersStatisticsResponseDto = underTest
                 .getOrganizersStatistics(startTest, endTest, count);
         assertThat(organizersStatisticsResponseDto).isNotNull();
-
-        assertThat(organizersStatisticsResponseDto).isEqualTo(mockDto);
+        assertThat(organizersStatisticsResponseDto.getOrganizersStatistics().size()).isEqualTo(1);
+        assertThat(organizersStatisticsResponseDto.getOrganizersStatistics().get(0))
+                .isEqualTo(organizerStatisticsResponseDto);
 
     }
 
