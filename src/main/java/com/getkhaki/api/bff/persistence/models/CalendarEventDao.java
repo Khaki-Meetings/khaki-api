@@ -22,6 +22,10 @@ public class CalendarEventDao extends EntityBaseDao {
 
     ZonedDateTime created;
 
+    ZonedDateTime start;
+
+    ZonedDateTime end;
+
     @OneToMany(mappedBy = "calendarEvent")
     List<CalendarEventParticipantDao> participants;
 }

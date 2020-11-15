@@ -10,7 +10,6 @@ import javax.persistence.*;
 import java.util.UUID;
 
 @Data
-@Entity
 @Accessors(chain = true)
 @EqualsAndHashCode(callSuper = true)
 public class OrganizerStatisticsDao extends EntityBaseDao {

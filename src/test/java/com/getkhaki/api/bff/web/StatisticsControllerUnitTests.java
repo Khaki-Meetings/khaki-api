@@ -152,7 +152,7 @@ public class StatisticsControllerUnitTests {
         ZonedDateTime startTest = ZonedDateTime.parse("2020-11-01T00:00:00.000000-07:00[America/Denver]");
         ZonedDateTime endTest = ZonedDateTime.parse("2020-11-12T12:22:40.274456-07:00[America/Denver]");
 
-        TrailingStatisticsDao trailingStatisticsResponseDto = underTest.getTrailingStatistics(startTest, endTest, IntervalEnumDao.Interval1);
+        TrailingStatisticsResponseDto trailingStatisticsResponseDto = underTest.getTrailingStatistics(startTest, endTest, IntervalEnumDao.Interval1);
         assertThat(trailingStatisticsResponseDto).isNotNull();
     }
 }

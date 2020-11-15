@@ -4,10 +4,10 @@ import com.getkhaki.api.bff.domain.models.OrganizerStatisticsDm;
 import com.getkhaki.api.bff.domain.services.StatisticsService;
 import com.getkhaki.api.bff.persistence.models.DepartmentStatisticsDao;
 import com.getkhaki.api.bff.persistence.models.IntervalEnumDao;
-import com.getkhaki.api.bff.persistence.models.TrailingStatisticsDao;
 import com.getkhaki.api.bff.web.models.OrganizerStatisticsResponseDto;
 import com.getkhaki.api.bff.web.models.OrganizersStatisticsResponseDto;
 import com.getkhaki.api.bff.web.models.TimeBlockSummaryResponseDto;
+import com.getkhaki.api.bff.web.models.TrailingStatisticsResponseDto;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeToken;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -66,9 +66,9 @@ public class StatisticsController {
     }
 
     @GetMapping("/trailing")
-    public TrailingStatisticsDao getTrailingStatistics(@PathVariable(name = "start") ZonedDateTime start, @PathVariable(name = "end") ZonedDateTime end, @PathVariable(name = "interval") IntervalEnumDao interval) {
+    public TrailingStatisticsResponseDto getTrailingStatistics(@PathVariable(name = "start") ZonedDateTime start, @PathVariable(name = "end") ZonedDateTime end, @PathVariable(name = "interval") IntervalEnumDao interval) {
 
-        return modelMapper.map(statisticsService.getTrailingStatistics(start, end, interval), TrailingStatisticsDao.class);
+        return modelMapper.map(statisticsService.getTrailingStatistics(start, end, interval), TrailingStatisticsResponseDto.class);
     }
 
 

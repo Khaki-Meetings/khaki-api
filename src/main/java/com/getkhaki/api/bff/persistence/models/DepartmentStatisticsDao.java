@@ -13,7 +13,6 @@ import java.util.UUID;
 
 
 @Data
-@Entity
 @NoArgsConstructor
 @AllArgsConstructor
 @Accessors(chain = true)
@@ -26,4 +25,5 @@ public class DepartmentStatisticsDao {
     long totalHours;
     long totalCost;
     long averageCost;
+    long newThing;
 }
