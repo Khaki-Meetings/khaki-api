@@ -5,6 +5,7 @@ import com.getkhaki.api.bff.domain.persistence.TimeBlockSummaryPersistenceInterf
 import com.getkhaki.api.bff.persistence.models.IntervalEnumDao;
 import com.getkhaki.api.bff.persistence.models.TimeBlockSummaryDao;
 import com.getkhaki.api.bff.persistence.repositories.TimeBlockSummaryRepositoryInterface;
+import org.apache.commons.lang3.NotImplementedException;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeToken;
 import org.springframework.stereotype.Service;
@@ -25,14 +26,16 @@ public class TimeBlockSummaryPersistenceService implements TimeBlockSummaryPersi
 
     @Override
     public TimeBlockSummaryDm getTimeBlockSummary(ZonedDateTime start, ZonedDateTime end) {
-        return modelMapper.map(timeBlockSummaryRepositoryInterface.findTimeBlockSummaryInRange(start, end), TimeBlockSummaryDm.class);
+//        return modelMapper.map(timeBlockSummaryRepositoryInterface.findTimeBlockSummaryInRange(start, end), TimeBlockSummaryDm.class);
+        throw new NotImplementedException();
     }
 
     @Override
     public List<TimeBlockSummaryDm> getTrailingStatistics(ZonedDateTime start, ZonedDateTime end, IntervalEnumDao interval) {
-        List<TimeBlockSummaryDao> daoList = timeBlockSummaryRepositoryInterface
-                .findTimeBlockSummaryInRangeWithInterval(start, end, interval);
-        return modelMapper.map(daoList, new TypeToken<List<TimeBlockSummaryDm>>() {}.getType());
+//        List<TimeBlockSummaryDao> daoList = timeBlockSummaryRepositoryInterface
+//                .findTimeBlockSummaryInRangeWithInterval(start, end, interval);
+//        return modelMapper.map(daoList, new TypeToken<List<TimeBlockSummaryDm>>() {}.getType());
+        throw new NotImplementedException();
 
     }
 }

@@ -17,9 +17,6 @@ import java.util.UUID;
 @AllArgsConstructor
 @Accessors(chain = true)
 public class DepartmentStatisticsDao {
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    UUID id;
     String department;
     long meetingCount;
     long totalHours;

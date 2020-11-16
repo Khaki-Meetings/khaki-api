@@ -13,7 +13,6 @@ import java.util.UUID;
 @AllArgsConstructor
 @Accessors(chain = true)
 public class TimeBlockSummaryDao {
-    @Enumerated(EnumType.STRING)
     IntervalEnumDao interval;
     long totalTime;
     long totalCost;

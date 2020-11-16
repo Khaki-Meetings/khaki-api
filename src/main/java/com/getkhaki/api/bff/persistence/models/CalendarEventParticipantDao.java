@@ -12,12 +12,12 @@ import javax.persistence.ManyToOne;
 @Accessors(chain = true)
 @EqualsAndHashCode(callSuper = true)
 public class CalendarEventParticipantDao extends EntityBaseDao {
-    @ManyToOne
+    @ManyToOne(optional = false)
     CalendarEventDao calendarEvent;
 
-    @ManyToOne
+    @ManyToOne(optional = false)
     EmailDao email;
 
-    @ManyToOne
+    @ManyToOne(optional = false)
     ParticipantTypeDao participantType;
 }

@@ -22,4 +22,8 @@ public class CalendarEventDm {
     String summary;
 
     ZonedDateTime created;
+
+    ZonedDateTime start;
+
+    ZonedDateTime end;
 }

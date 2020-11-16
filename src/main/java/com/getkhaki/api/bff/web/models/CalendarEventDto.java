@@ -22,4 +22,9 @@ public class CalendarEventDto {
     String summary;
 
     ZonedDateTime created;
+
+    ZonedDateTime start;
+
+    ZonedDateTime end;
+
 }

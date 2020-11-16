@@ -5,7 +5,6 @@ import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
 import javax.inject.Inject;
-import java.time.LocalDateTime;
 import java.time.ZonedDateTime;
 
 @DataJpaTest

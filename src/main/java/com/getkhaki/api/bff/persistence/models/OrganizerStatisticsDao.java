@@ -13,15 +13,11 @@ import java.util.UUID;
 @Accessors(chain = true)
 @EqualsAndHashCode(callSuper = true)
 public class OrganizerStatisticsDao extends EntityBaseDao {
-    @ManyToOne
     EmailDao email;
 
-    @Column
     int totalMeetings;
 
-    @Column
     long totalCost;
 
-    @Column
     int totalHours;
 }
