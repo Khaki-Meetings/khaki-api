@@ -11,7 +11,7 @@ databaseChangeLog:
               primaryKey: true
               primaryKeyName: calendar_event_daoPK
             name: id
-            type: BINARY(255)
+            type: BINARY(16)
         - column:
             constraints:
               nullable: false
@@ -46,22 +46,22 @@ databaseChangeLog:
               primaryKey: true
               primaryKeyName: calendar_event_participant_daoPK
             name: id
-            type: BINARY(255)
+            type: BINARY(16)
         - column:
             constraints:
               nullable: false
             name: calendar_event_id
-            type: BINARY(255)
+            type: BINARY(16)
         - column:
             constraints:
               nullable: false
             name: email_id
-            type: BINARY(255)
+            type: BINARY(16)
         - column:
             constraints:
               nullable: false
             name: participant_type_id
-            type: BINARY(255)
+            type: BINARY(16)
         tableName: calendar_event_participant_dao
 - changeSet:
     id: 1605484309967-3
@@ -75,7 +75,7 @@ databaseChangeLog:
               primaryKey: true
               primaryKeyName: domain_daoPK
             name: id
-            type: BINARY(255)
+            type: BINARY(16)
         - column:
             name: name
             type: VARCHAR(255)
@@ -92,16 +92,16 @@ databaseChangeLog:
               primaryKey: true
               primaryKeyName: email_daoPK
             name: id
-            type: BINARY(255)
+            type: BINARY(16)
         - column:
             name: user
             type: VARCHAR(255)
         - column:
             name: domain_id
-            type: BINARY(255)
+            type: BINARY(16)
         - column:
             name: person_id
-            type: BINARY(255)
+            type: BINARY(16)
         tableName: email_dao
 - changeSet:
     id: 1605484309967-5
@@ -115,7 +115,7 @@ databaseChangeLog:
               primaryKey: true
               primaryKeyName: participant_type_daoPK
             name: id
-            type: BINARY(255)
+            type: BINARY(16)
         - column:
             name: name
             type: VARCHAR(255)
@@ -132,7 +132,7 @@ databaseChangeLog:
               primaryKey: true
               primaryKeyName: person_daoPK
             name: id
-            type: BINARY(255)
+            type: BINARY(16)
         - column:
             name: first_name
             type: VARCHAR(255)
