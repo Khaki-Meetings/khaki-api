@@ -1,6 +1,6 @@
 databaseChangeLog:
 - changeSet:
-    id: 1605578529992-1
+    id: 1605581549937-1
     author: jacob (generated)
     changes:
     - createTable:
@@ -35,7 +35,7 @@ databaseChangeLog:
             type: VARCHAR(255)
         tableName: calendar_event_dao
 - changeSet:
-    id: 1605578529992-2
+    id: 1605581549937-2
     author: jacob (generated)
     changes:
     - createTable:
@@ -64,7 +64,7 @@ databaseChangeLog:
             type: BINARY(16)
         tableName: calendar_event_participant_dao
 - changeSet:
-    id: 1605578529992-3
+    id: 1605581549937-3
     author: jacob (generated)
     changes:
     - createTable:
@@ -81,7 +81,7 @@ databaseChangeLog:
             type: VARCHAR(255)
         tableName: domain_dao
 - changeSet:
-    id: 1605578529992-4
+    id: 1605581549937-4
     author: jacob (generated)
     changes:
     - createTable:
@@ -101,7 +101,7 @@ databaseChangeLog:
             type: BINARY(16)
         tableName: email_dao
 - changeSet:
-    id: 1605578529992-5
+    id: 1605581549937-5
     author: jacob (generated)
     changes:
     - createTable:
@@ -109,7 +109,7 @@ databaseChangeLog:
         - column:
             constraints:
               nullable: false
-            name: email_dao_id
+            name: emails_id
             type: BINARY(16)
         - column:
             constraints:
@@ -118,7 +118,7 @@ databaseChangeLog:
             type: BINARY(16)
         tableName: email_dao_people
 - changeSet:
-    id: 1605578529992-6
+    id: 1605581549937-6
     author: jacob (generated)
     changes:
     - createTable:
@@ -135,7 +135,7 @@ databaseChangeLog:
             type: VARCHAR(255)
         tableName: participant_type_dao
 - changeSet:
-    id: 1605578529992-7
+    id: 1605581549937-7
     author: jacob (generated)
     changes:
     - createTable:
@@ -155,24 +155,7 @@ databaseChangeLog:
             type: VARCHAR(255)
         tableName: person_dao
 - changeSet:
-    id: 1605578529992-8
-    author: jacob (generated)
-    changes:
-    - createTable:
-        columns:
-        - column:
-            constraints:
-              nullable: false
-            name: person_dao_id
-            type: BINARY(16)
-        - column:
-            constraints:
-              nullable: false
-            name: emails_id
-            type: BINARY(16)
-        tableName: person_dao_emails
-- changeSet:
-    id: 1605578529992-9
+    id: 1605581549937-8
     author: jacob (generated)
     changes:
     - addUniqueConstraint:
@@ -180,15 +163,15 @@ databaseChangeLog:
         constraintName: UC_DOMAIN_DAONAME_COL
         tableName: domain_dao
 - changeSet:
-    id: 1605578529992-10
+    id: 1605581549937-9
     author: jacob (generated)
     changes:
     - addUniqueConstraint:
-        columnNames: email_dao_id
-        constraintName: UC_EMAIL_DAO_PEOPLEEMAIL_DAO_ID_COL
+        columnNames: emails_id
+        constraintName: UC_EMAIL_DAO_PEOPLEEMAILS_ID_COL
         tableName: email_dao_people
 - changeSet:
-    id: 1605578529992-11
+    id: 1605581549937-10
     author: jacob (generated)
     changes:
     - addUniqueConstraint:
@@ -196,7 +179,20 @@ databaseChangeLog:
         constraintName: UC_PARTICIPANT_TYPE_DAONAME_COL
         tableName: participant_type_dao
 - changeSet:
-    id: 1605578529992-12
+    id: 1605581549937-11
+    author: jacob (generated)
+    changes:
+    - addForeignKeyConstraint:
+        baseColumnNames: emails_id
+        baseTableName: email_dao_people
+        constraintName: FK1m90hn7kxx16j9diaapvqj1kd
+        deferrable: false
+        initiallyDeferred: false
+        referencedColumnNames: id
+        referencedTableName: email_dao
+        validate: true
+- changeSet:
+    id: 1605581549937-12
     author: jacob (generated)
     changes:
     - addForeignKeyConstraint:
@@ -209,33 +205,7 @@ databaseChangeLog:
         referencedTableName: domain_dao
         validate: true
 - changeSet:
-    id: 1605578529992-13
-    author: jacob (generated)
-    changes:
-    - addForeignKeyConstraint:
-        baseColumnNames: email_dao_id
-        baseTableName: email_dao_people
-        constraintName: FK2w0ubmlfqkhfmnqxi05scuj76
-        deferrable: false
-        initiallyDeferred: false
-        referencedColumnNames: id
-        referencedTableName: email_dao
-        validate: true
-- changeSet:
-    id: 1605578529992-14
-    author: jacob (generated)
-    changes:
-    - addForeignKeyConstraint:
-        baseColumnNames: emails_id
-        baseTableName: person_dao_emails
-        constraintName: FK60908hx4tpmfgepw81nqt7w83
-        deferrable: false
-        initiallyDeferred: false
-        referencedColumnNames: id
-        referencedTableName: email_dao
-        validate: true
-- changeSet:
-    id: 1605578529992-15
+    id: 1605581549937-13
     author: jacob (generated)
     changes:
     - addForeignKeyConstraint:
@@ -248,20 +218,7 @@ databaseChangeLog:
         referencedTableName: person_dao
         validate: true
 - changeSet:
-    id: 1605578529992-16
-    author: jacob (generated)
-    changes:
-    - addForeignKeyConstraint:
-        baseColumnNames: person_dao_id
-        baseTableName: person_dao_emails
-        constraintName: FKdaybi9mp7hoxpteq546eoa2w0
-        deferrable: false
-        initiallyDeferred: false
-        referencedColumnNames: id
-        referencedTableName: person_dao
-        validate: true
-- changeSet:
-    id: 1605578529992-17
+    id: 1605581549937-14
     author: jacob (generated)
     changes:
     - addForeignKeyConstraint:
@@ -274,7 +231,7 @@ databaseChangeLog:
         referencedTableName: email_dao
         validate: true
 - changeSet:
-    id: 1605578529992-18
+    id: 1605581549937-15
     author: jacob (generated)
     changes:
     - addForeignKeyConstraint:
@@ -287,7 +244,7 @@ databaseChangeLog:
         referencedTableName: participant_type_dao
         validate: true
 - changeSet:
-    id: 1605578529992-19
+    id: 1605581549937-16
     author: jacob (generated)
     changes:
     - addForeignKeyConstraint:

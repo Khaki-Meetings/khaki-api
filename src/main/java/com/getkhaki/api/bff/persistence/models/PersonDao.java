@@ -16,6 +16,6 @@ public class PersonDao extends EntityBaseDao {
     String firstName;
     String lastName;
 
-    @ManyToMany
+    @ManyToMany(mappedBy = "people")
     List<EmailDao> emails;
 }

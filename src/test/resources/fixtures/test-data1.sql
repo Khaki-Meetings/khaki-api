@@ -26,9 +26,18 @@ insert into domain_dao
 values (unhex(replace('63b56252-7e11-4ba7-b3bc-e794a8a21fbe', '-', '')),
         '2112.com');
 
+-- email
 insert into email_dao
 values (unhex(replace('416285a0-9a93-49dc-8e19-bd447c4d39db', '-', '')),
+        'bob',
         unhex(replace('63b56252-7e11-4ba7-b3bc-e794a8a21fbe', '-', '')));
-
+insert into email_dao
+values (unhex(replace('e19aa104-e818-48b1-861f-93747e96f84f', '-', '')),
+        'bob',
+        unhex(replace('63b56252-7e11-4ba7-b3bc-e794a8a21fbe', '-', '')));
+insert into email_dao
+values (unhex(replace('63a204d9-7ce3-4bb6-bf1c-727bec833709', '-', '')),
+           'bob',
+           unhex(replace('63b56252-7e11-4ba7-b3bc-e794a8a21fbe', '-', '')));
 
 
