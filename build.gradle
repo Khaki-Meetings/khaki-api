@@ -62,17 +62,18 @@ if (gradle.startParameter.taskNames.contains('diffChangeLog') && !project.ext.ha
     throw new InvalidUserDataException('changeLogFile is required with diffChagneLog')
 }
 
-def liquibaseChangelogDir = 'liquibase'
-def changeLogfileName = 'master-changelog.yaml'
+def changeLogFileName
 if (project.ext.has('changeLogFile')) {
-    changeLogfileName = "changelogs/${project.ext.changeLogFile}.yaml"
+    changeLogFileName = "src/main/resources/liquibase/changelogs/${project.ext.changeLogFile}.yaml"
+} else {
+    changeLogFileName = "liquibase/master-changelog.yaml"
 }
 
 liquibase {
     activities {
         main {
 //            classpath "$projectDir/src/main/resources"
-            changeLogFile "${liquibaseChangelogDir}/${changeLogfileName}"
+            changeLogFile changeLogFileName
             referenceUrl "hibernate:spring:com.getkhaki.api.bff.persistence.models?dialect=" + System.getenv("SPRING_JPA_DATABASE_PLATFORM") + "&hibernate.implicit_naming_strategy=org.springframework.boot.orm.jpa.hibernate.SpringImplicitNamingStrategy&hibernate.physical_naming_strategy=org.springframework.boot.orm.jpa.hibernate.SpringPhysicalNamingStrategy"
             url System.getenv("JDBC_DATABASE_URL")
             username System.getenv("JDBC_DATABASE_USERNAME")

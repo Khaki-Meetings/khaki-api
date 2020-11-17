@@ -5,7 +5,6 @@ import com.getkhaki.api.bff.domain.persistence.CalendarEventPersistenceInterface
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import java.time.LocalDateTime;
 import java.time.ZonedDateTime;
 import java.util.UUID;
 
@@ -30,12 +29,11 @@ public class CalendarEventServiceUnitTests {
         calendarEventDmInput.setCreated(ZonedDateTime.now());
 
         UUID id = UUID.randomUUID();
-        CalendarEventDm calendarEventDmResponse = new CalendarEventDm(
-                id,
-                calendarEventDmInput.getSummary(),
-                calendarEventDmInput.getGoogleCalendarId(),
-                calendarEventDmInput.getCreated()
-        );
+        CalendarEventDm calendarEventDmResponse = new CalendarEventDm()
+                .setSummary(calendarEventDmInput.getSummary())
+                .setGoogleCalendarId(calendarEventDmInput.getGoogleCalendarId())
+                .setCreated(calendarEventDmInput.getCreated())
+                .setId(id);
 
         when(calendarEventPersistence.createEvent(calendarEventDmInput)).thenReturn(calendarEventDmResponse);
 

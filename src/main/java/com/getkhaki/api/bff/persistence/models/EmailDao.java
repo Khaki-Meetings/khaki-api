@@ -4,10 +4,8 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
+import javax.persistence.*;
+import java.util.List;
 
 @Data
 @Entity
@@ -20,6 +18,19 @@ public class EmailDao extends EntityBaseDao {
     @ManyToOne
     DomainDao domain;
 
-    @ManyToOne
-    PersonDao person;
+    @ManyToMany
+    @JoinTable(joinColumns = {@JoinColumn(unique = true)}, inverseJoinColumns = {@JoinColumn})
+    List<PersonDao> people;
+
+    @Transient
+    public EmailDao setPerson(PersonDao person) {
+        this.getPeople().clear();
+        this.getPeople().add(person);
+        return this;
+    }
+
+    @Transient
+    public PersonDao getPerson() {
+        return getPeople().get(0);
+    }
 }

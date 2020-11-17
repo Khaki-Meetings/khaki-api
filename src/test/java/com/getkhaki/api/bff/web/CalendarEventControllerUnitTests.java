@@ -7,7 +7,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.modelmapper.ModelMapper;
 
-import java.time.LocalDateTime;
 import java.time.ZonedDateTime;
 import java.util.UUID;
 
@@ -42,20 +41,18 @@ public class CalendarEventControllerUnitTests {
         when(modelMapper.map(calendarEventDtoInput, CalendarEventDm.class)).thenReturn(calendarEventDmMapped);
 
         UUID id = UUID.randomUUID();
-        CalendarEventDm calendarEventDmMockedResponse = new CalendarEventDm(
-                id,
-                calendarEventDmMapped.getSummary(),
-                calendarEventDmMapped.getGoogleCalendarId(),
-                calendarEventDmMapped.getCreated()
-        );
+        CalendarEventDm calendarEventDmMockedResponse = new CalendarEventDm()
+                .setSummary(calendarEventDmMapped.getSummary())
+                .setGoogleCalendarId(calendarEventDmMapped.getGoogleCalendarId())
+                .setCreated(calendarEventDmMapped.getCreated())
+                .setId(id);
         when(calendarEventService.createEvent(calendarEventDmMapped)).thenReturn(calendarEventDmMockedResponse);
 
-        CalendarEventDto calendarEventDtoMockedResponse = new CalendarEventDto(
-                id,
-                calendarEventDmMockedResponse.getSummary(),
-                calendarEventDmMockedResponse.getGoogleCalendarId(),
-                calendarEventDmMockedResponse.getCreated()
-        );
+        CalendarEventDto calendarEventDtoMockedResponse = new CalendarEventDto()
+                .setSummary(calendarEventDmMockedResponse.getSummary())
+                .setGoogleCalendarId(calendarEventDmMockedResponse.getGoogleCalendarId())
+                .setCreated(calendarEventDmMockedResponse.getCreated())
+                .setId(id);
 
         when(modelMapper.map(calendarEventDmMockedResponse, CalendarEventDto.class)).thenReturn(calendarEventDtoMockedResponse);
 
