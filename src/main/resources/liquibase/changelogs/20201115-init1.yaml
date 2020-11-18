@@ -1,0 +1,74 @@
+databaseChangeLog:
+- changeSet:
+    id: 1605729021825-1
+    author: jacob (generated)
+    changes:
+    - dropDefaultValue:
+        columnDataType: varchar(255)
+        columnName: first_name
+        tableName: person_dao
+- changeSet:
+    id: 1605729021825-2
+    author: jacob (generated)
+    changes:
+    - dropDefaultValue:
+        columnDataType: varchar(255)
+        columnName: google_calendar_id
+        tableName: calendar_event_dao
+- changeSet:
+    id: 1605729021825-3
+    author: jacob (generated)
+    changes:
+    - dropDefaultValue:
+        columnDataType: varchar(255)
+        columnName: last_name
+        tableName: person_dao
+- changeSet:
+    id: 1605729021825-4
+    author: jacob (generated)
+    changes:
+    - dropDefaultValue:
+        columnDataType: varchar(255)
+        columnName: name
+        tableName: department_dao
+- changeSet:
+    id: 1605729021825-5
+    author: jacob (generated)
+    changes:
+    - dropDefaultValue:
+        columnDataType: varchar(255)
+        columnName: name
+        tableName: domain_dao
+- changeSet:
+    id: 1605729021825-6
+    author: jacob (generated)
+    changes:
+    - dropDefaultValue:
+        columnDataType: varchar(255)
+        columnName: name
+        tableName: organization_dao
+- changeSet:
+    id: 1605729021825-7
+    author: jacob (generated)
+    changes:
+    - dropDefaultValue:
+        columnDataType: varchar(255)
+        columnName: name
+        tableName: participant_type_dao
+- changeSet:
+    id: 1605729021825-8
+    author: jacob (generated)
+    changes:
+    - dropDefaultValue:
+        columnDataType: varchar(255)
+        columnName: role
+        tableName: salary_group_dao
+- changeSet:
+    id: 1605729021825-9
+    author: jacob (generated)
+    changes:
+    - dropDefaultValue:
+        columnDataType: varchar(255)
+        columnName: user
+        tableName: email_dao
+
