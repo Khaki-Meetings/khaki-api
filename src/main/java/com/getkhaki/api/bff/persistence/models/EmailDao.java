@@ -10,6 +10,7 @@ import java.util.List;
 @Data
 @Entity
 @Accessors(chain = true)
+//@Table(uniqueConstraints = {@UniqueConstraint(columnNames = {"user", "domain_id"})})
 @EqualsAndHashCode(callSuper = true)
 public class EmailDao extends EntityBaseDao {
     @Column

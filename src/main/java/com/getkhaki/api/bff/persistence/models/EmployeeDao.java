@@ -5,21 +5,20 @@ import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 
 import javax.persistence.Entity;
-import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
-import java.util.List;
 
 @Data
 @Entity
 @Accessors(chain = true)
 @EqualsAndHashCode(callSuper = true)
-public class PersonDao extends EntityBaseDao {
-    String firstName;
-    String lastName;
+public class EmployeeDao extends EntityBaseDao {
+    @ManyToOne
+    SalaryGroupDao salaryGroup;
 
-    @ManyToMany(mappedBy = "people")
-    List<EmailDao> emails;
+    @ManyToOne
+    DepartmentDao department;
 
-    @OneToOne(mappedBy = "person")
-    EmployeeDao employee;
+    @OneToOne
+    PersonDao person;
 }

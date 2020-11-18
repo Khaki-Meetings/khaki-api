@@ -12,15 +12,10 @@ import javax.persistence.UniqueConstraint;
 @Data
 @Entity
 @Accessors(chain = true)
-@Table(uniqueConstraints = @UniqueConstraint(columnNames = {"calendar_event_id", "email_id"}))
+@Table(uniqueConstraints = @UniqueConstraint(columnNames = {"name", "organization_id"}))
 @EqualsAndHashCode(callSuper = true)
-public class CalendarEventParticipantDao extends EntityBaseDao {
-    @ManyToOne(optional = false)
-    CalendarEventDao calendarEvent;
-
-    @ManyToOne(optional = false)
-    EmailDao email;
-
-    @ManyToOne(optional = false)
-    ParticipantTypeDao participantType;
+public class DepartmentDao extends EntityBaseDao {
+    String name;
+    @ManyToOne
+    OrganizationDao organization;
 }
