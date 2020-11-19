@@ -27,6 +27,10 @@ public class OrganizersStatisticsRepositoryInterfaceIntegrationTests {
         List<OrganizerStatisticsDaoInterface> ret = underTest.findOrganizersStatistics("bob");
         OrganizerStatisticsDaoInterface item = ret.get(0);
         String firstName = item.getFirstName();
+        String lastName = item.getLastName();
+        String email = item.getEmail();
+        int totalMeetings = item.getTotalMeetings();
+        int totalParticipants = item.getTotalParticipants();
 //        Object[] ret = underTest.findOrganizersStatistics("bob");
     }
 

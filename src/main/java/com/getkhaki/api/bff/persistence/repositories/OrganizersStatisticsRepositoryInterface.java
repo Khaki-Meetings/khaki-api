@@ -56,10 +56,16 @@ public interface OrganizersStatisticsRepositoryInterface extends JpaRepository<O
 //            nativeQuery = true
 //    )
     @Query(
-            "select person.firstName as firstName from CalendarEventDao as calendarEvent " +
+            "select person.firstName as firstName, " +
+                    "person.lastName as lastName," +
+                    "concat(emailAddress.user, '@', domain.name) as email," +
+                    "(select count(calendarEvent.id) from calendarEvent) as totalMeetings," +
+                    "(select count(cep.id) from CalendarEventParticipantDao as cep where cep.calendarEvent = calendarEvent) as totalParticipants " +
+                    "from CalendarEventDao as calendarEvent " +
                     "left join calendarEvent.participants as participants " +
-                    "left join participants.email as email " +
-                    "left join email.people as person"
+                    "left join participants.email as emailAddress " +
+                    "left join emailAddress.domain as domain " +
+                    "left join emailAddress.people as person "
     )
     List<OrganizerStatisticsDaoInterface> findOrganizersStatistics(String orgId);
 }
