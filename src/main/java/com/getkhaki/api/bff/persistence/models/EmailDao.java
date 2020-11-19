@@ -5,23 +5,23 @@ import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 
 @Data
 @Entity
 @Accessors(chain = true)
-//@Table(uniqueConstraints = {@UniqueConstraint(columnNames = {"user", "domain_id"})})
 @EqualsAndHashCode(callSuper = true)
 public class EmailDao extends EntityBaseDao {
-    @Column
+    @Column(nullable = false)
     String user;
 
-    @ManyToOne
+    @ManyToOne(optional = false)
     DomainDao domain;
 
     @ManyToMany
     @JoinTable(joinColumns = {@JoinColumn(unique = true)}, inverseJoinColumns = {@JoinColumn})
-    List<PersonDao> people;
+    List<PersonDao> people = new ArrayList<>();
 
     @Transient
     public EmailDao setPerson(PersonDao person) {

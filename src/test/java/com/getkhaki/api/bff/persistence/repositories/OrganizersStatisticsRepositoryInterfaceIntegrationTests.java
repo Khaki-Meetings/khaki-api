@@ -1,11 +1,13 @@
 package com.getkhaki.api.bff.persistence.repositories;
 
-import com.getkhaki.api.bff.persistence.models.CalendarEventDao;
+import com.getkhaki.api.bff.persistence.models.OrganizerStatisticsDaoInterface;
+import liquibase.exception.LiquibaseException;
+import liquibase.integration.spring.SpringLiquibase;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
 import javax.inject.Inject;
-import java.time.ZonedDateTime;
+import java.util.List;
 
 @DataJpaTest
 public class OrganizersStatisticsRepositoryInterfaceIntegrationTests {
@@ -15,12 +17,25 @@ public class OrganizersStatisticsRepositoryInterfaceIntegrationTests {
     @Inject
     private CalendarEventRepositoryInterface calendarEventRepository;
 
-    @Test
-    public void queryTest() {
-        CalendarEventDao calendarEvent = new CalendarEventDao()
-                .setGoogleCalendarId("cal-id")
-                .setCreated(ZonedDateTime.now())
-                .setSummary("calEvent");
+    @Inject
+    SpringLiquibase liquibase;
 
+    @Test
+    public void queryTest() throws LiquibaseException {
+        loadData();
+
+        List<OrganizerStatisticsDaoInterface> ret = underTest.findOrganizersStatistics("bob");
+        OrganizerStatisticsDaoInterface item = ret.get(0);
+        String firstName = item.getFirstName();
+//        Object[] ret = underTest.findOrganizersStatistics("bob");
+    }
+
+    private void loadData() throws LiquibaseException {
+        liquibase.setChangeLog("classpath:fixtures/liquibase-test-data.yaml");
+        liquibase.setShouldRun(true);
+        liquibase.afterPropertiesSet();
+
+//        List<CalendarEventDao> calendarEvent = calendarEventRepository.findAll();
+//        CalendarEventParticipantDao calendarEventParticipant = new CalendarEventParticipantTestData().getData().get(0);
     }
 }

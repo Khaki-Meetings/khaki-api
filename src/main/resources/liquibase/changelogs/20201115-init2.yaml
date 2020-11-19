@@ -1,6 +1,14 @@
 databaseChangeLog:
 - changeSet:
-    id: 1605729021825-1
+    id: 1605754411498-1
+    author: jacob (generated)
+    changes:
+    - dropDefaultValue:
+        columnDataType: varchar(255)
+        columnName: email
+        tableName: organizer_statistics_dao
+- changeSet:
+    id: 1605754411498-2
     author: jacob (generated)
     changes:
     - dropDefaultValue:
@@ -8,7 +16,7 @@ databaseChangeLog:
         columnName: first_name
         tableName: person_dao
 - changeSet:
-    id: 1605729021825-2
+    id: 1605754411498-3
     author: jacob (generated)
     changes:
     - dropDefaultValue:
@@ -16,7 +24,7 @@ databaseChangeLog:
         columnName: google_calendar_id
         tableName: calendar_event_dao
 - changeSet:
-    id: 1605729021825-3
+    id: 1605754411498-4
     author: jacob (generated)
     changes:
     - dropDefaultValue:
@@ -24,7 +32,7 @@ databaseChangeLog:
         columnName: last_name
         tableName: person_dao
 - changeSet:
-    id: 1605729021825-4
+    id: 1605754411498-5
     author: jacob (generated)
     changes:
     - dropDefaultValue:
@@ -32,7 +40,7 @@ databaseChangeLog:
         columnName: name
         tableName: department_dao
 - changeSet:
-    id: 1605729021825-5
+    id: 1605754411498-6
     author: jacob (generated)
     changes:
     - dropDefaultValue:
@@ -40,7 +48,7 @@ databaseChangeLog:
         columnName: name
         tableName: domain_dao
 - changeSet:
-    id: 1605729021825-6
+    id: 1605754411498-7
     author: jacob (generated)
     changes:
     - dropDefaultValue:
@@ -48,7 +56,7 @@ databaseChangeLog:
         columnName: name
         tableName: organization_dao
 - changeSet:
-    id: 1605729021825-7
+    id: 1605754411498-8
     author: jacob (generated)
     changes:
     - dropDefaultValue:
@@ -56,19 +64,11 @@ databaseChangeLog:
         columnName: name
         tableName: participant_type_dao
 - changeSet:
-    id: 1605729021825-8
+    id: 1605754411498-9
     author: jacob (generated)
     changes:
     - dropDefaultValue:
         columnDataType: varchar(255)
         columnName: role
         tableName: salary_group_dao
-- changeSet:
-    id: 1605729021825-9
-    author: jacob (generated)
-    changes:
-    - dropDefaultValue:
-        columnDataType: varchar(255)
-        columnName: user
-        tableName: email_dao
 

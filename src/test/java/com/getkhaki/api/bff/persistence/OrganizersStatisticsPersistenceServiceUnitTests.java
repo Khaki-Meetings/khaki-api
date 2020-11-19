@@ -65,7 +65,7 @@ public class OrganizersStatisticsPersistenceServiceUnitTests {
         email.getPerson().setId(UUID.randomUUID());
 
         OrganizerStatisticsDao organizerStatisticsDao = new OrganizerStatisticsDao()
-                .setEmail(email)
+                .setEmail("bob@bob.com")
                 .setTotalCost(233)
                 .setTotalMeetings(23)
                 .setTotalHours(23);

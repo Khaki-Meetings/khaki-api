@@ -4,6 +4,7 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
@@ -21,6 +22,6 @@ public class CalendarEventParticipantDao extends EntityBaseDao {
     @ManyToOne(optional = false)
     EmailDao email;
 
-    @ManyToOne(optional = false)
+    @ManyToOne(optional = false, cascade = CascadeType.ALL)
     ParticipantTypeDao participantType;
 }
