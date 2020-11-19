@@ -22,7 +22,6 @@ public class CalendarImportController {
 
     @PostMapping
     public void importAsync(@PathVariable String adminEmail) {
-
         this.calendarEventService.importAsync(adminEmail);
     }
 }
