@@ -2,6 +2,7 @@ package com.getkhaki.api.bff.persistence.models;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.ToString;
 import lombok.experimental.Accessors;
 
 import javax.persistence.Entity;
@@ -10,6 +11,7 @@ import javax.persistence.OneToOne;
 import java.util.List;
 
 @Data
+@ToString(callSuper = true)
 @Entity
 @Accessors(chain = true)
 @EqualsAndHashCode(callSuper = true)

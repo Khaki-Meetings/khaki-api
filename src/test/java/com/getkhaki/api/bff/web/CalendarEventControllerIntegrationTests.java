@@ -7,7 +7,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.web.server.LocalServerPort;
 import org.springframework.web.context.WebApplicationContext;
 
-import java.time.LocalDateTime;
 import java.time.ZonedDateTime;
 
 import static io.restassured.RestAssured.given;

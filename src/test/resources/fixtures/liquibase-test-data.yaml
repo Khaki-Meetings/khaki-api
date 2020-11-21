@@ -1,13 +1,10 @@
 databaseChangeLog:
   - property:
-      name: organizerTypeId
-      value: 49252caecba145b28680a8af93dda85e
-  - property:
-      name: participantTypeId
-      value: 0a17b67b3fb94c4396033944fb30b2b6
-  - property:
       name: calendarEvent1Id
       value: f72132c7bc014d1f87e577b48add1a1d
+  - property:
+      name: calendarEvent2Id
+      value: ff1e107178d1493ba13e6d0ec8457038
   - property:
       name: domainS56NetId
       value: 927a7c4ee31849a58f445ab8e337124a
@@ -21,37 +18,27 @@ databaseChangeLog:
       name: bettySmithS56NetEmailId
       value: 1435aea1b46d4acbb02078c5c64cf007
   - property:
-      name: bobJonesCalendarEventParticipantId
+      name: bobJonesCalendarEvent1ParticipantId
       value: 1c0e8ab0524f4c0ba540325e15940a7b
   - property:
-      name: bettySmithCalendarEventParticipantId
+      name: bettySmithCalendarEvent1ParticipantId
       value: bd9bb9baf6f04b6c8bdb69a831d93208
+  - property:
+      name: bobJonesCalendarEvent2ParticipantId
+      value: 90ed9ee477074ccc94378881938e079d
+  - property:
+      name: bettySmithCalendarEvent2ParticipantId
+      value: cca68d2cd27842d695ba5de3941b2d7a
   - property:
       name: bobJonesPersonId
       value: 580cf117aee1433e90ed51c23a9b6e47
+  - property:
+      name: bettySmithPersonId
+      value: c60f4b4b343640ae909de41a69111893
   - changeSet:
       id: test-data-1
-      author: jacob
-      comment: "Some comments go here"
+      author: jacob (generated)
       changes:
-        - insert:
-            tableName: participant_type_dao
-            columns:
-              - column:
-                  name: id
-                  value: ${organizerTypeId}
-              - column:
-                  name: name
-                  value: Organizer
-        - insert:
-            tableName: participant_type_dao
-            columns:
-              - column:
-                  name: id
-                  value: ${participantTypeId}
-              - column:
-                  name: name
-                  value: Participant
         - insert:
             tableName: calendar_event_dao
             columns:
@@ -70,6 +57,27 @@ databaseChangeLog:
               - column:
                   name: summary
                   value: event 1
+              - column:
+                  name: google_calendar_id
+                  value: google id 1
+        - insert:
+            tableName: calendar_event_dao
+            columns:
+              - column:
+                  name: id
+                  value: ${calendarEvent2Id}
+              - column:
+                  name: created
+                  value: 2020-11-02T00:00:00.000000-07:00[America/Denver]
+              - column:
+                  name: start
+                  value: 2020-11-02T00:00:00.000000-07:00[America/Denver]
+              - column:
+                  name: end
+                  value: 2020-11-02T01:00:00.000000-07:00[America/Denver]
+              - column:
+                  name: summary
+                  value: event 2
               - column:
                   name: google_calendar_id
                   value: google id 1
@@ -120,7 +128,7 @@ databaseChangeLog:
             columns:
               - column:
                   name: id
-                  value: ${bobJonesCalendarEventParticipantId}
+                  value: ${bobJonesCalendarEvent1ParticipantId}
               - column:
                   name: calendar_event_id
                   value: ${calendarEvent1Id}
@@ -128,8 +136,47 @@ databaseChangeLog:
                   name: email_id
                   value: ${bobJonesS56NetEmailId}
               - column:
-                  name: participant_type_id
-                  value: ${organizerTypeId}
+                  name: organizer
+                  value: true
+        - insert:
+            tableName: calendar_event_participant_dao
+            columns:
+              - column:
+                  name: id
+                  value: ${bettySmithCalendarEvent1ParticipantId}
+              - column:
+                  name: calendar_event_id
+                  value: ${calendarEvent1Id}
+              - column:
+                  name: email_id
+                  value: ${bettySmithS56NetEmailId}
+        - insert:
+            tableName: calendar_event_participant_dao
+            columns:
+              - column:
+                  name: id
+                  value: ${bobJonesCalendarEvent2ParticipantId}
+              - column:
+                  name: calendar_event_id
+                  value: ${calendarEvent2Id}
+              - column:
+                  name: email_id
+                  value: ${bobJonesS56NetEmailId}
+              - column:
+                  name: organizer
+                  value: true
+        - insert:
+            tableName: calendar_event_participant_dao
+            columns:
+              - column:
+                  name: id
+                  value: ${bettySmithCalendarEvent2ParticipantId}
+              - column:
+                  name: calendar_event_id
+                  value: ${calendarEvent2Id}
+              - column:
+                  name: email_id
+                  value: ${bettySmithS56NetEmailId}
         - insert:
             tableName: person_dao
             columns:
@@ -143,6 +190,18 @@ databaseChangeLog:
                   name: last_name
                   value: Jones
         - insert:
+            tableName: person_dao
+            columns:
+              - column:
+                  name: id
+                  value: ${bettySmithPersonId}
+              - column:
+                  name: first_name
+                  value: Betty
+              - column:
+                  name: last_name
+                  value: Smith
+        - insert:
             tableName: email_dao_people
             columns:
               - column:
@@ -151,3 +210,12 @@ databaseChangeLog:
               - column:
                   name: people_id
                   value: ${bobJonesPersonId}
+        - insert:
+            tableName: email_dao_people
+            columns:
+              - column:
+                  name: emails_id
+                  value: ${bettySmithS56NetEmailId}
+              - column:
+                  name: people_id
+                  value: ${bettySmithPersonId}

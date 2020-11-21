@@ -8,6 +8,7 @@ import javax.persistence.*;
 import java.util.List;
 
 @Data
+@ToString(callSuper = true)
 @Entity
 @Accessors(chain = true)
 @EqualsAndHashCode(callSuper = true)

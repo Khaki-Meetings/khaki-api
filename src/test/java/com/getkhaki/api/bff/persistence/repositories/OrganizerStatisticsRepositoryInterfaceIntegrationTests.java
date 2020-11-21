@@ -1,6 +1,6 @@
 package com.getkhaki.api.bff.persistence.repositories;
 
-import com.getkhaki.api.bff.persistence.models.OrganizerStatisticsDaoInterface;
+import com.getkhaki.api.bff.persistence.models.OrganizerStatisticsViewDao;
 import liquibase.exception.LiquibaseException;
 import liquibase.integration.spring.SpringLiquibase;
 import org.junit.jupiter.api.Test;
@@ -10,9 +10,9 @@ import javax.inject.Inject;
 import java.util.List;
 
 @DataJpaTest
-public class OrganizersStatisticsRepositoryInterfaceIntegrationTests {
+public class OrganizerStatisticsRepositoryInterfaceIntegrationTests {
     @Inject
-    private OrganizersStatisticsRepositoryInterface underTest;
+    private OrganizerStatisticsRepositoryInterface underTest;
 
     @Inject
     private CalendarEventRepositoryInterface calendarEventRepository;
@@ -24,14 +24,8 @@ public class OrganizersStatisticsRepositoryInterfaceIntegrationTests {
     public void queryTest() throws LiquibaseException {
         loadData();
 
-        List<OrganizerStatisticsDaoInterface> ret = underTest.findOrganizersStatistics("bob");
-        OrganizerStatisticsDaoInterface item = ret.get(0);
-        String firstName = item.getFirstName();
-        String lastName = item.getLastName();
-        String email = item.getEmail();
-        int totalMeetings = item.getTotalMeetings();
-        int totalParticipants = item.getTotalParticipants();
-//        Object[] ret = underTest.findOrganizersStatistics("bob");
+        List<OrganizerStatisticsViewDao> stats = underTest.findAll();
+
     }
 
     private void loadData() throws LiquibaseException {
