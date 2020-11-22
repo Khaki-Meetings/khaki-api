@@ -35,6 +35,18 @@ databaseChangeLog:
   - property:
       name: bettySmithPersonId
       value: c60f4b4b343640ae909de41a69111893
+  - property:
+      name: bobSmithEmployeeId
+      value: f66d66d77b404ffea38aaae70919a1ef
+  - property:
+      name: salaryGroup1Id
+      value: 166d0d87b916430fb01f167b9701dd6c
+  - property:
+      name: hrDepartmentId
+      value: 588d4af1b6fa42b18d7495d6cdf4201d
+  - property:
+      name: s56OrganizationId
+      value: d713ace20d3043beb4badb973967d6d4
   - changeSet:
       id: test-data-1
       author: jacob (generated)
@@ -219,3 +231,51 @@ databaseChangeLog:
               - column:
                   name: people_id
                   value: ${bettySmithPersonId}
+        - insert:
+            tableName: salary_group_dao
+            columns:
+              - column:
+                  name: id
+                  value: ${salaryGroup1Id}
+              - column:
+                  name: role
+                  value: ${cool guys}
+              - column:
+                  name: salary
+                  value: 95000
+        - insert:
+            tableName: organization_dao
+            columns:
+              - column:
+                  name: id
+                  value: ${s56OrganizationId}
+              - column:
+                  name: name
+                  value: S56
+        - insert:
+            tableName: department_dao
+            columns:
+              - column:
+                  name: id
+                  value: ${hrDepartmentId}
+              - column:
+                  name: name
+                  value: HR
+              - column:
+                  name: organization_id
+                  value: ${s56OrganizationId}
+        - insert:
+            tableName: employee_dao
+            columns:
+              - column:
+                  name: id
+                  value: ${bobSmithEmployeeId}
+              - column:
+                  name: department_id
+                  value: ${hrDepartmentId}
+              - column:
+                  name: person_id
+                  value: ${bobJonesPersonId}
+              - column:
+                  name: salary_group_id
+                  value: ${salaryGroup1Id}
