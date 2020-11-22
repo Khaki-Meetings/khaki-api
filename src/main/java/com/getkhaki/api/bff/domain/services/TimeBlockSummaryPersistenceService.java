@@ -1,11 +1,11 @@
 package com.getkhaki.api.bff.domain.services;
 
+import com.getkhaki.api.bff.domain.models.IntervalEnumDm;
 import com.getkhaki.api.bff.domain.models.TimeBlockSummaryDm;
 import com.getkhaki.api.bff.domain.persistence.TimeBlockSummaryPersistenceInterface;
-import com.getkhaki.api.bff.persistence.models.IntervalEnumDao;
 import com.getkhaki.api.bff.persistence.repositories.TimeBlockSummaryRepositoryInterface;
+import org.apache.commons.lang3.NotImplementedException;
 import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.ZonedDateTime;
@@ -15,22 +15,25 @@ import java.util.List;
 public class TimeBlockSummaryPersistenceService implements TimeBlockSummaryPersistenceInterface {
     private final ModelMapper modelMapper;
 
-    public TimeBlockSummaryPersistenceService(ModelMapper modelMapper,TimeBlockSummaryRepositoryInterface timeBlockSummaryRepositoryInterface) {
+    public TimeBlockSummaryPersistenceService(ModelMapper modelMapper, TimeBlockSummaryRepositoryInterface timeBlockSummaryRepositoryInterface) {
         this.modelMapper = modelMapper;
-        this.timeBlockSummaryRepositoryInterface=timeBlockSummaryRepositoryInterface;
+        this.timeBlockSummaryRepositoryInterface = timeBlockSummaryRepositoryInterface;
     }
 
     private TimeBlockSummaryRepositoryInterface timeBlockSummaryRepositoryInterface;
 
     @Override
     public TimeBlockSummaryDm getTimeBlockSummary(ZonedDateTime start, ZonedDateTime end) {
-        return modelMapper.map( timeBlockSummaryRepositoryInterface.findTimeBlockSummaryInRange(start,end),TimeBlockSummaryDm.class);
+//        return modelMapper.map(timeBlockSummaryRepositoryInterface.findTimeBlockSummaryInRange(start, end), TimeBlockSummaryDm.class);
+        throw new NotImplementedException();
     }
 
     @Override
-    public List<TimeBlockSummaryDm> getTrailingStatistics(ZonedDateTime start, ZonedDateTime end, IntervalEnumDao interval) {
-
-        return modelMapper.map( timeBlockSummaryRepositoryInterface.findTimeBlockSummaryInRangeWithInterval(start,end,interval),List.class);
+    public List<TimeBlockSummaryDm> getTrailingStatistics(ZonedDateTime start, ZonedDateTime end, IntervalEnumDm interval) {
+//        List<TimeBlockSummaryDao> daoList = timeBlockSummaryRepositoryInterface
+//                .findTimeBlockSummaryInRangeWithInterval(start, end, interval);
+//        return modelMapper.map(daoList, new TypeToken<List<TimeBlockSummaryDm>>() {}.getType());
+        throw new NotImplementedException();
 
     }
 }

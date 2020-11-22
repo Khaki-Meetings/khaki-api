@@ -1,6 +1,9 @@
 package com.getkhaki.api.bff.domain.persistence;
-import com.getkhaki.api.bff.domain.models.OrganizersStatisticsDm;
+import com.getkhaki.api.bff.domain.models.OrganizerStatisticsDm;
+
+import java.time.ZonedDateTime;
+import java.util.List;
 
 public interface OrganizersStatisticsPersistenceInterface {
-    OrganizersStatisticsDm getOrganizerStatistics(String email);
+    List<OrganizerStatisticsDm> getOrganizersStatistics(ZonedDateTime start, ZonedDateTime end, int count);
 }

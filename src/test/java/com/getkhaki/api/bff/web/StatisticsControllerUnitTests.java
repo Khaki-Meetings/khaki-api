@@ -1,83 +1,165 @@
 package com.getkhaki.api.bff.web;
 
+import com.getkhaki.api.bff.domain.models.*;
 import com.getkhaki.api.bff.domain.services.StatisticsService;
 import com.getkhaki.api.bff.persistence.models.*;
+import com.getkhaki.api.bff.web.models.*;
+import org.assertj.core.util.Lists;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.modelmapper.ModelMapper;
+import org.modelmapper.TypeToken;
 
 import java.time.ZonedDateTime;
 import java.util.List;
+import java.util.OptionalInt;
+import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 public class StatisticsControllerUnitTests {
-    private StatisticsController statisticsController;
+    private StatisticsController underTest;
 
-    private StatisticsService underTest;
+    private StatisticsService statisticsService;
     private ModelMapper modelMapper;
 
     @BeforeEach
     public void setup() {
-        underTest = mock(StatisticsService.class);
+        statisticsService = mock(StatisticsService.class);
         modelMapper = mock(ModelMapper.class);
-        statisticsController = new StatisticsController(this.underTest, this.modelMapper);
+        underTest = new StatisticsController(this.statisticsService, this.modelMapper);
     }
 
     @Test
     public void getOrganizersStatistics() {
+        ZonedDateTime startTest = ZonedDateTime.parse("2020-11-01T00:00:00.000000-07:00[America/Denver]");
+        ZonedDateTime endTest = ZonedDateTime.parse("2020-11-12T12:22:40.274456-07:00[America/Denver]");
+
+        String email = "bob@bob.com";
+        String name = "Bob";
+        OrganizerStatisticsResponseDto organizerStatisticsResponseDto = new OrganizerStatisticsResponseDto()
+                .setOrganizer(
+                        new OrganizerDto()
+                                .setEmail(email)
+                                .setName(name)
+                )
+                .setTotalCost(1)
+                .setTotalHours(1)
+                .setTotalMeetings(1);
 
 
-        ZonedDateTime startTest = ZonedDateTime.parse("2019-03-27T10:15:30");
-        ZonedDateTime endTest = ZonedDateTime.now();
+        OrganizerStatisticsDm mockDm = OrganizerStatisticsDm.builder()
+                .organizer(
+                        OrganizerDm.builder()
+                                .name(name)
+                                .email(email)
+                                .build()
+                )
+                .totalCost(1)
+                .totalMeetings(1)
+                .totalHours(1)
+                .build();
 
-        OrganizersStatisticsDao organizersStatisticsResponseDto = statisticsController.getOrganizersStatistics(startTest,endTest);
+        int count = 1;
+        List<OrganizerStatisticsDm> dms = Lists.list(mockDm);
+        List<OrganizerStatisticsResponseDto> dtos = Lists.list(organizerStatisticsResponseDto);
+        when(statisticsService.getOrganizersStatistics(eq(startTest), eq(endTest), anyInt())).thenReturn(dms);
+        when(modelMapper.map(dms, new TypeToken<List<OrganizerStatisticsResponseDto>>() {
+        }.getType()))
+                .thenReturn(dtos);
+
+        OrganizersStatisticsResponseDto organizersStatisticsResponseDto = underTest
+                .getOrganizersStatistics(startTest, endTest, OptionalInt.empty());
         assertThat(organizersStatisticsResponseDto).isNotNull();
-
-
+        assertThat(organizersStatisticsResponseDto.getOrganizersStatistics().size()).isEqualTo(1);
+        assertThat(organizersStatisticsResponseDto.getOrganizersStatistics().get(0))
+                .isEqualTo(organizerStatisticsResponseDto);
 
     }
 
-
     @Test
     public void getTimeBlockSummary() {
+        ZonedDateTime startTest = ZonedDateTime.parse("2020-11-01T00:00:00.000000-07:00[America/Denver]");
+        ZonedDateTime endTest = ZonedDateTime.parse("2020-11-12T12:22:40.274456-07:00[America/Denver]");
 
+        TimeBlockSummaryResponseDto mockDto = new TimeBlockSummaryResponseDto(
+                UUID.randomUUID(),
+                IntervalEnumDto.Day,
+                1L,
+                1L,
+                1L,
+                1L
+        );
 
-        ZonedDateTime startTest = ZonedDateTime.parse("2019-03-27T10:15:30");
-        ZonedDateTime endTest = ZonedDateTime.now();
+        TimeBlockSummaryDm mockDm = new TimeBlockSummaryDm(
+                mockDto.getId(),
+                IntervalEnumDm.Day,
+                1L,
+                1L,
+                1L,
+                1L
 
-        TimeBlockSummaryDao timeBlockSummaryResponseDto = statisticsController.getTimeBlockSummary(startTest,endTest);
+        );
+
+        when(statisticsService.getTimeBlockSummary(any(ZonedDateTime.class), any(ZonedDateTime.class)))
+                .thenReturn(mockDm);
+        when(modelMapper.map(mockDm, TimeBlockSummaryResponseDto.class)).thenReturn(mockDto);
+
+        TimeBlockSummaryResponseDto timeBlockSummaryResponseDto = underTest.getTimeBlockSummary(startTest, endTest);
         assertThat(timeBlockSummaryResponseDto).isNotNull();
-
-
     }
 
 
     @Test
     public void getPerDepartmentStatistics() {
+        ZonedDateTime startTest = ZonedDateTime.parse("2020-11-01T00:00:00.000000-07:00[America/Denver]");
+        ZonedDateTime endTest = ZonedDateTime.parse("2020-11-12T12:22:40.274456-07:00[America/Denver]");
 
-        ZonedDateTime startTest = ZonedDateTime.parse("2019-03-27T10:15:30");
-        ZonedDateTime endTest = ZonedDateTime.now();
+        DepartmentStatisticsDm departmentStatisticsDm = new DepartmentStatisticsDm(
+                UUID.randomUUID(),
+                "HR",
+                1L,
+                1L,
+                1L,
+                1L
+        );
 
+        List<DepartmentStatisticsDm> mockDmList = Lists.list(departmentStatisticsDm);
 
-        List<DepartmentStatisticsDao> departmentStatisticsResponseDtoList = statisticsController.getPerDepartmentStatistics(startTest,endTest);
-        assertThat(departmentStatisticsResponseDtoList).isNotNull();
+        DepartmentStatisticsResponseDto departmentStatisticsResponseDto = new DepartmentStatisticsResponseDto(
+                UUID.randomUUID(),
+                "HR",
+                1L,
+                1L,
+                1L,
+                1L
+        );
 
+        List<DepartmentStatisticsResponseDto> mockDtoList = Lists.list(departmentStatisticsResponseDto);
+
+//        when(statisticsService.getPerDepartmentStatistics(any(ZonedDateTime.class), any(ZonedDateTime.class)))
+//                .thenReturn(mockDmList);
+//
+//        List<DepartmentStatisticsDao> departmentStatisticsResponseDtoList = underTest.getPerDepartmentStatistics(startTest, endTest);
+//        assertThat(departmentStatisticsResponseDtoList).isNotNull();
     }
 
 
     @Test
     public void getTrailingStatistics() {
+        ZonedDateTime startTest = ZonedDateTime.parse("2020-11-01T00:00:00.000000-07:00[America/Denver]");
+        ZonedDateTime endTest = ZonedDateTime.parse("2020-11-12T12:22:40.274456-07:00[America/Denver]");
+        List<TimeBlockSummaryDm> timeBlockSummaryDmList = Lists.list(
+                new TimeBlockSummaryDm().setAverageCost(10).setId(UUID.randomUUID())
+        );
+        when(statisticsService.getTrailingStatistics(startTest, endTest, IntervalEnumDm.Month))
+                .thenReturn(timeBlockSummaryDmList);
 
-        ZonedDateTime startTest = ZonedDateTime.parse("2019-03-27T10:15:30");
-        ZonedDateTime endTest = ZonedDateTime.now();
 
-
-
-        TrailingStatisticsDao trailingStatisticsResponseDto = statisticsController.getTrailingStatistics(startTest,endTest, IntervalEnumDao.Interval1);
-        assertThat(trailingStatisticsResponseDto).isNotNull();
-
-
+//        TrailingStatisticsResponseDto trailingStatisticsResponseDto = underTest.getTrailingStatistics(startTest, endTest, IntervalEnumDao.Month);
+//        assertThat(trailingStatisticsResponseDto).isNotNull();
     }
 }

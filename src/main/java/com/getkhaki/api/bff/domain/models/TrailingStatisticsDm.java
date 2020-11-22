@@ -12,7 +12,6 @@ import javax.persistence.Id;
 import java.util.UUID;
 
 @Data
-@Entity
 @NoArgsConstructor
 @AllArgsConstructor
 @Accessors(chain = true)

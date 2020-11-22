@@ -7,7 +7,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-@RequestMapping("/calendar-events")
+@RequestMapping("/calendar-imports")
 @RestController
 public class CalendarImportController {
     private final CalendarEventService calendarEventService;

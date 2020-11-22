@@ -1,0 +1,534 @@
+databaseChangeLog:
+  - changeSet:
+      id: 1605996191580-1
+      author: jacob (generated)
+      changes:
+        - createTable:
+            columns:
+              - column:
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                    primaryKeyName: calendar_event_daoPK
+                  name: id
+                  type: BINARY(16)
+              - column:
+                  constraints:
+                    nullable: false
+                  name: created
+                  type: datetime(6)
+              - column:
+                  name: end
+                  type: datetime(6)
+              - column:
+                  name: google_calendar_id
+                  type: VARCHAR(255)
+              - column:
+                  constraints:
+                    nullable: false
+                  name: start
+                  type: datetime(6)
+              - column:
+                  constraints:
+                    nullable: false
+                  name: summary
+                  type: VARCHAR(255)
+            tableName: calendar_event_dao
+  - changeSet:
+      id: 1605996191580-2
+      author: jacob (generated)
+      changes:
+        - createTable:
+            columns:
+              - column:
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                    primaryKeyName: calendar_event_participant_daoPK
+                  name: id
+                  type: BINARY(16)
+              - column:
+                  name: organizer
+                  type: BIT
+              - column:
+                  constraints:
+                    nullable: false
+                  name: calendar_event_id
+                  type: BINARY(16)
+              - column:
+                  constraints:
+                    nullable: false
+                  name: email_id
+                  type: BINARY(16)
+            tableName: calendar_event_participant_dao
+  - changeSet:
+      id: 1605996191580-3
+      author: jacob (generated)
+      changes:
+        - createTable:
+            columns:
+              - column:
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                    primaryKeyName: department_daoPK
+                  name: id
+                  type: BINARY(16)
+              - column:
+                  name: name
+                  type: VARCHAR(255)
+              - column:
+                  name: organization_id
+                  type: BINARY(16)
+            tableName: department_dao
+  - changeSet:
+      id: 1605996191580-4
+      author: jacob (generated)
+      changes:
+        - createTable:
+            columns:
+              - column:
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                    primaryKeyName: domain_daoPK
+                  name: id
+                  type: BINARY(16)
+              - column:
+                  name: name
+                  type: VARCHAR(255)
+            tableName: domain_dao
+  - changeSet:
+      id: 1605996191580-5
+      author: jacob (generated)
+      changes:
+        - createTable:
+            columns:
+              - column:
+                  constraints:
+                    nullable: false
+                  name: domains_id
+                  type: BINARY(16)
+              - column:
+                  constraints:
+                    nullable: false
+                  name: organizations_id
+                  type: BINARY(16)
+            tableName: domain_dao_organizations
+  - changeSet:
+      id: 1605996191580-6
+      author: jacob (generated)
+      changes:
+        - createTable:
+            columns:
+              - column:
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                    primaryKeyName: email_daoPK
+                  name: id
+                  type: BINARY(16)
+              - column:
+                  constraints:
+                    nullable: false
+                  name: user
+                  type: VARCHAR(255)
+              - column:
+                  constraints:
+                    nullable: false
+                  name: domain_id
+                  type: BINARY(16)
+            tableName: email_dao
+  - changeSet:
+      id: 1605996191580-7
+      author: jacob (generated)
+      changes:
+        - createTable:
+            columns:
+              - column:
+                  constraints:
+                    nullable: false
+                  name: emails_id
+                  type: BINARY(16)
+              - column:
+                  constraints:
+                    nullable: false
+                  name: people_id
+                  type: BINARY(16)
+            tableName: email_dao_people
+  - changeSet:
+      id: 1605996191580-8
+      author: jacob (generated)
+      changes:
+        - createTable:
+            columns:
+              - column:
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                    primaryKeyName: employee_daoPK
+                  name: id
+                  type: BINARY(16)
+              - column:
+                  name: department_id
+                  type: BINARY(16)
+              - column:
+                  name: person_id
+                  type: BINARY(16)
+              - column:
+                  name: salary_group_id
+                  type: BINARY(16)
+            tableName: employee_dao
+  - changeSet:
+      id: 1605996191580-9
+      author: jacob (generated)
+      changes:
+        - createTable:
+            columns:
+              - column:
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                    primaryKeyName: organization_daoPK
+                  name: id
+                  type: BINARY(16)
+              - column:
+                  name: name
+                  type: VARCHAR(255)
+            tableName: organization_dao
+  - changeSet:
+      id: 1605996191580-10
+      author: jacob (generated)
+      changes:
+        - createTable:
+            columns:
+              - column:
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                    primaryKeyName: organizer_statistics_daoPK
+                  name: id
+                  type: BINARY(16)
+              - column:
+                  name: email
+                  type: VARCHAR(255)
+              - column:
+                  constraints:
+                    nullable: false
+                  name: total_cost
+                  type: BIGINT
+              - column:
+                  constraints:
+                    nullable: false
+                  name: total_hours
+                  type: INT
+              - column:
+                  constraints:
+                    nullable: false
+                  name: total_meetings
+                  type: INT
+            tableName: organizer_statistics_dao
+  - changeSet:
+      id: 1605996191580-11
+      author: jacob (generated)
+      changes:
+        - createTable:
+            columns:
+              - column:
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                    primaryKeyName: person_daoPK
+                  name: id
+                  type: BINARY(16)
+              - column:
+                  name: first_name
+                  type: VARCHAR(255)
+              - column:
+                  name: last_name
+                  type: VARCHAR(255)
+            tableName: person_dao
+  - changeSet:
+      id: 1605996191580-12
+      author: jacob (generated)
+      changes:
+        - createTable:
+            columns:
+              - column:
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                    primaryKeyName: salary_group_daoPK
+                  name: id
+                  type: BINARY(16)
+              - column:
+                  name: role
+                  type: VARCHAR(255)
+              - column:
+                  name: salary
+                  type: DOUBLE
+            tableName: salary_group_dao
+  - changeSet:
+      id: 1605996191580-13
+      author: jacob (generated)
+      changes:
+        - addUniqueConstraint:
+            columnNames: name
+            constraintName: UC_DOMAIN_DAONAME_COL
+            tableName: domain_dao
+  - changeSet:
+      id: 1605996191580-14
+      author: jacob (generated)
+      changes:
+        - addUniqueConstraint:
+            columnNames: organizations_id
+            constraintName: UC_DOMAIN_DAO_ORGANIZATIONSORGANIZATIONS_ID_COL
+            tableName: domain_dao_organizations
+  - changeSet:
+      id: 1605996191580-15
+      author: jacob (generated)
+      changes:
+        - addUniqueConstraint:
+            columnNames: emails_id
+            constraintName: UC_EMAIL_DAO_PEOPLEEMAILS_ID_COL
+            tableName: email_dao_people
+  - changeSet:
+      id: 1605996191580-16
+      author: jacob (generated)
+      changes:
+        - addUniqueConstraint:
+            columnNames: calendar_event_id, email_id
+            constraintName: UKbjn5ydxqoknmhjdsc7lagec9o
+            tableName: calendar_event_participant_dao
+  - changeSet:
+      id: 1605996191580-17
+      author: jacob (generated)
+      changes:
+        - addUniqueConstraint:
+            columnNames: name, organization_id
+            constraintName: UKc1nayjbksjyyvhkwjanvunu6h
+            tableName: department_dao
+  - changeSet:
+      id: 1605996191580-18
+      author: jacob (generated)
+      changes:
+        - addUniqueConstraint:
+            columnNames: calendar_event_id, organizer
+            constraintName: UKqhlthh674ddb34ew2c3bs9v4b
+            tableName: calendar_event_participant_dao
+  - changeSet:
+      id: 1605996191580-19
+      author: jacob (generated)
+      changes:
+        - addForeignKeyConstraint:
+            baseColumnNames: emails_id
+            baseTableName: email_dao_people
+            constraintName: FK1m90hn7kxx16j9diaapvqj1kd
+            deferrable: false
+            initiallyDeferred: false
+            referencedColumnNames: id
+            referencedTableName: email_dao
+            validate: true
+  - changeSet:
+      id: 1605996191580-20
+      author: jacob (generated)
+      changes:
+        - addForeignKeyConstraint:
+            baseColumnNames: domain_id
+            baseTableName: email_dao
+            constraintName: FK1ye11fk8v2fo54naahchni1pl
+            deferrable: false
+            initiallyDeferred: false
+            referencedColumnNames: id
+            referencedTableName: domain_dao
+            validate: true
+  - changeSet:
+      id: 1605996191580-21
+      author: jacob (generated)
+      changes:
+        - addForeignKeyConstraint:
+            baseColumnNames: department_id
+            baseTableName: employee_dao
+            constraintName: FK2mxnytf1msl4y35mmxf0x455m
+            deferrable: false
+            initiallyDeferred: false
+            referencedColumnNames: id
+            referencedTableName: department_dao
+            validate: true
+  - changeSet:
+      id: 1605996191580-22
+      author: jacob (generated)
+      changes:
+        - addForeignKeyConstraint:
+            baseColumnNames: person_id
+            baseTableName: employee_dao
+            constraintName: FK5sofryc697snaqi52qdtg1olw
+            deferrable: false
+            initiallyDeferred: false
+            referencedColumnNames: id
+            referencedTableName: person_dao
+            validate: true
+  - changeSet:
+      id: 1605996191580-23
+      author: jacob (generated)
+      changes:
+        - addForeignKeyConstraint:
+            baseColumnNames: people_id
+            baseTableName: email_dao_people
+            constraintName: FK6bf3t2b0j23wxqcgt900v9ebi
+            deferrable: false
+            initiallyDeferred: false
+            referencedColumnNames: id
+            referencedTableName: person_dao
+            validate: true
+  - changeSet:
+      id: 1605996191580-24
+      author: jacob (generated)
+      changes:
+        - addForeignKeyConstraint:
+            baseColumnNames: email_id
+            baseTableName: calendar_event_participant_dao
+            constraintName: FKdq3bjnds2fn4h20qdkucxda3w
+            deferrable: false
+            initiallyDeferred: false
+            referencedColumnNames: id
+            referencedTableName: email_dao
+            validate: true
+  - changeSet:
+      id: 1605996191580-25
+      author: jacob (generated)
+      changes:
+        - addForeignKeyConstraint:
+            baseColumnNames: organizations_id
+            baseTableName: domain_dao_organizations
+            constraintName: FKf3goaprxwh9rg0htsi4rm5196
+            deferrable: false
+            initiallyDeferred: false
+            referencedColumnNames: id
+            referencedTableName: organization_dao
+            validate: true
+  - changeSet:
+      id: 1605996191580-26
+      author: jacob (generated)
+      changes:
+        - addForeignKeyConstraint:
+            baseColumnNames: domains_id
+            baseTableName: domain_dao_organizations
+            constraintName: FKk0nko6vg1fp9b09bhsqua00h0
+            deferrable: false
+            initiallyDeferred: false
+            referencedColumnNames: id
+            referencedTableName: domain_dao
+            validate: true
+  - changeSet:
+      id: 1605996191580-27
+      author: jacob (generated)
+      changes:
+        - addForeignKeyConstraint:
+            baseColumnNames: salary_group_id
+            baseTableName: employee_dao
+            constraintName: FKkqlvwpu14aw28y10vitfklgse
+            deferrable: false
+            initiallyDeferred: false
+            referencedColumnNames: id
+            referencedTableName: salary_group_dao
+            validate: true
+  - changeSet:
+      id: 1605996191580-28
+      author: jacob (generated)
+      changes:
+        - addForeignKeyConstraint:
+            baseColumnNames: calendar_event_id
+            baseTableName: calendar_event_participant_dao
+            constraintName: FKnd2hn7u88sjmmwakii626wtsp
+            deferrable: false
+            initiallyDeferred: false
+            referencedColumnNames: id
+            referencedTableName: calendar_event_dao
+            validate: true
+  - changeSet:
+      id: 1605996191580-29
+      author: jacob (generated)
+      changes:
+        - addForeignKeyConstraint:
+            baseColumnNames: organization_id
+            baseTableName: department_dao
+            constraintName: FKsj7y4kup3miy81dt5u0pmx6si
+            deferrable: false
+            initiallyDeferred: false
+            referencedColumnNames: id
+            referencedTableName: organization_dao
+            validate: true
+  - changeSet:
+      id: 1605996290480-1
+      author: jacob (generated)
+      changes:
+        - dropDefaultValue:
+            columnDataType: varchar(255)
+            columnName: email
+            tableName: organizer_statistics_dao
+  - changeSet:
+      id: 1605996290480-2
+      author: jacob (generated)
+      changes:
+        - dropDefaultValue:
+            columnDataType: varchar(255)
+            columnName: first_name
+            tableName: person_dao
+  - changeSet:
+      id: 1605996290480-3
+      author: jacob (generated)
+      changes:
+        - dropDefaultValue:
+            columnDataType: varchar(255)
+            columnName: google_calendar_id
+            tableName: calendar_event_dao
+  - changeSet:
+      id: 1605996290480-4
+      author: jacob (generated)
+      changes:
+        - dropDefaultValue:
+            columnDataType: varchar(255)
+            columnName: last_name
+            tableName: person_dao
+  - changeSet:
+      id: 1605996290480-5
+      author: jacob (generated)
+      changes:
+        - dropDefaultValue:
+            columnDataType: varchar(255)
+            columnName: name
+            tableName: department_dao
+  - changeSet:
+      id: 1605996290480-6
+      author: jacob (generated)
+      changes:
+        - dropDefaultValue:
+            columnDataType: varchar(255)
+            columnName: name
+            tableName: domain_dao
+  - changeSet:
+      id: 1605996290480-7
+      author: jacob (generated)
+      changes:
+        - dropDefaultValue:
+            columnDataType: varchar(255)
+            columnName: name
+            tableName: organization_dao
+  - changeSet:
+      id: 1605996290480-8
+      author: jacob (generated)
+      changes:
+        - dropDefaultValue:
+            columnDataType: boolean
+            columnName: organizer
+            tableName: calendar_event_participant_dao
+  - changeSet:
+      id: 1605996290480-9
+      author: jacob (generated)
+      changes:
+        - dropDefaultValue:
+            columnDataType: varchar(255)
+            columnName: role
+            tableName: salary_group_dao
+

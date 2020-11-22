@@ -13,13 +13,10 @@ import java.util.UUID;
 
 
 @Data
-@Entity
 @NoArgsConstructor
 @AllArgsConstructor
 @Accessors(chain = true)
 public class DepartmentStatisticsResponseDto {
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
     UUID id;
     String department;
     long meetingCount;
