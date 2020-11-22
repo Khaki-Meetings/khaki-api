@@ -19,10 +19,13 @@ public class CalendarEventRepositoryIntegrationTest {
 
     @Test
     void testPersistence() {
+        ZonedDateTime now = ZonedDateTime.now();
         CalendarEventDao dao = new CalendarEventDao()
                 .setGoogleCalendarId("12345")
                 .setSummary("Summary")
-                .setCreated(ZonedDateTime.now());
+                .setCreated(now)
+                .setStart(now)
+                .setEnd(now.plusHours(1)) ;
 
         CalendarEventDao result = this.repository.save(dao);
 

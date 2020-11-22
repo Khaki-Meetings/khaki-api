@@ -100,8 +100,8 @@ public class StatisticsServicesUnitTests {
         TimeBlockSummaryDm timeBlockSummaryDm = new TimeBlockSummaryDm(id, IntervalEnumDm.Day, 1, 1, 1, 1);
         List<TimeBlockSummaryDm> trailingListDm = Lists.list(timeBlockSummaryDm);
         when(timeBlockSummaryPersistenceService.getTimeBlockSummary(startTest, endTest)).thenReturn(timeBlockSummaryDm);
-        when(timeBlockSummaryPersistenceService.getTrailingStatistics(startTest, endTest, IntervalEnumDao.Interval1)).thenReturn(trailingListDm);
-        List<TimeBlockSummaryDm> trailingStatisticsResponseDm = underTest.getTrailingStatistics(startTest, endTest, IntervalEnumDao.Interval1);
+        when(timeBlockSummaryPersistenceService.getTrailingStatistics(startTest, endTest, IntervalEnumDm.Day)).thenReturn(trailingListDm);
+        List<TimeBlockSummaryDm> trailingStatisticsResponseDm = underTest.getTrailingStatistics(startTest, endTest, IntervalEnumDm.Day);
         assertThat(trailingStatisticsResponseDm).isNotNull();
 
 

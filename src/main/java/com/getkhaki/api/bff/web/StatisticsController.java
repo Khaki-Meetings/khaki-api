@@ -1,5 +1,6 @@
 package com.getkhaki.api.bff.web;
 
+import com.getkhaki.api.bff.domain.models.IntervalEnumDm;
 import com.getkhaki.api.bff.domain.models.OrganizerStatisticsDm;
 import com.getkhaki.api.bff.domain.services.StatisticsService;
 import com.getkhaki.api.bff.persistence.models.DepartmentStatisticsDao;
@@ -65,10 +66,17 @@ public class StatisticsController {
         }.getType());
     }
 
-    @GetMapping("/trailing")
-    public TrailingStatisticsResponseDto getTrailingStatistics(@PathVariable(name = "start") ZonedDateTime start, @PathVariable(name = "end") ZonedDateTime end, @PathVariable(name = "interval") IntervalEnumDao interval) {
-
-        return modelMapper.map(statisticsService.getTrailingStatistics(start, end, interval), TrailingStatisticsResponseDto.class);
+    @GetMapping("/trailing/{start}/{end}")
+    public TrailingStatisticsResponseDto getTrailingStatistics(
+            @PathVariable(name = "start") ZonedDateTime start,
+            @PathVariable(name = "end") ZonedDateTime end,
+            @RequestParam(name = "interval") IntervalEnumDao interval
+    ) {
+        IntervalEnumDm intervalEnumDm = modelMapper.map(interval, IntervalEnumDm.class);
+        return modelMapper.map(
+                statisticsService.getTrailingStatistics(start, end, intervalEnumDm),
+                TrailingStatisticsResponseDto.class
+        );
     }
 
 

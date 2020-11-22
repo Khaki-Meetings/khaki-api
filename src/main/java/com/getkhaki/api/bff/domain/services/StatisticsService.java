@@ -1,12 +1,13 @@
 package com.getkhaki.api.bff.domain.services;
 
 import com.getkhaki.api.bff.domain.models.DepartmentStatisticsDm;
+import com.getkhaki.api.bff.domain.models.IntervalEnumDm;
 import com.getkhaki.api.bff.domain.models.OrganizerStatisticsDm;
 import com.getkhaki.api.bff.domain.models.TimeBlockSummaryDm;
 import com.getkhaki.api.bff.domain.persistence.DepartmentStatisticsPersistenceInterface;
 import com.getkhaki.api.bff.domain.persistence.OrganizersStatisticsPersistenceInterface;
 import com.getkhaki.api.bff.domain.persistence.TimeBlockSummaryPersistenceInterface;
-import com.getkhaki.api.bff.persistence.models.IntervalEnumDao;
+import com.getkhaki.api.bff.web.models.IntervalEnumDto;
 import org.springframework.stereotype.Service;
 
 import java.time.ZonedDateTime;
@@ -42,7 +43,7 @@ public class StatisticsService {
         return this.timeBlockSummaryPersistenceService.getTimeBlockSummary(start, end);
     }
 
-    public List<TimeBlockSummaryDm> getTrailingStatistics(ZonedDateTime start, ZonedDateTime end, IntervalEnumDao interval) {
+    public List<TimeBlockSummaryDm> getTrailingStatistics(ZonedDateTime start, ZonedDateTime end, IntervalEnumDm interval) {
         return this.timeBlockSummaryPersistenceService.getTrailingStatistics(start, end, interval);
     }
 

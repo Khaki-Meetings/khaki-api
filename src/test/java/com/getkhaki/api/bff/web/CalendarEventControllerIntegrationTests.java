@@ -24,10 +24,13 @@ public class CalendarEventControllerIntegrationTests {
 
     @Test
     public void createEvent() {
+        ZonedDateTime now = ZonedDateTime.now();
         CalendarEventDto body = new CalendarEventDto()
                 .setGoogleCalendarId("12345")
                 .setSummary("Summary")
-                .setCreated(ZonedDateTime.now());
+                .setCreated(now)
+                .setStart(now)
+                .setEnd(now.plusHours(1));
 
         given()
             .port(this.port)

@@ -13,7 +13,7 @@ import java.util.UUID;
 @Accessors(chain = true)
 public class TimeBlockSummaryResponseDto {
     UUID id;
-    IntervalEnum interval;
+    IntervalEnumDto interval;
     long totalTime;
     long totalCost;
     long averageCost;
