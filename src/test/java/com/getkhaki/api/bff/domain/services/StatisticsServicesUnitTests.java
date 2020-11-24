@@ -11,9 +11,11 @@ import org.junit.jupiter.api.Test;
 
 import java.time.ZonedDateTime;
 import java.util.List;
+import java.util.OptionalInt;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.mock;
@@ -49,16 +51,15 @@ public class StatisticsServicesUnitTests {
                 1,
                 1
         );
-        when(organizersStatisticsPersistenceService.getOrganizersStatistics(eq(startTest), eq(endTest), anyInt()))
+        when(organizersStatisticsPersistenceService.getOrganizersStatistics(eq(startTest), eq(endTest), any(OptionalInt.class)))
                 .thenReturn(Lists.list(organizerStatisticsDm));
 
-        List<OrganizerStatisticsDm> organizersStatistics = underTest.getOrganizersStatistics(startTest, endTest, count);
+        List<OrganizerStatisticsDm> organizersStatistics = underTest.getOrganizersStatistics(startTest, endTest, OptionalInt.empty());
         assertThat(organizersStatistics).isNotNull();
         assertThat(organizersStatistics.size()).isEqualTo(1);
         assertThat(organizersStatistics.get(0)).isEqualTo(organizerStatisticsDm);
 
     }
-
 
     @Test
     public void getTimeBlockSummary() {

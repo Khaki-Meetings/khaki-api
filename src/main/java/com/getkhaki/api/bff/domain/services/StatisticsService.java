@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.ZonedDateTime;
 import java.util.List;
+import java.util.OptionalInt;
 
 @Service
 public class StatisticsService {
@@ -35,7 +36,7 @@ public class StatisticsService {
 
     }
 
-    public List<OrganizerStatisticsDm> getOrganizersStatistics(ZonedDateTime start, ZonedDateTime end, int count) {
+    public List<OrganizerStatisticsDm> getOrganizersStatistics(ZonedDateTime start, ZonedDateTime end, OptionalInt count) {
         return this.organizersStatisticsPersistenceService.getOrganizersStatistics(start, end, count);
     }
 

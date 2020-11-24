@@ -5,12 +5,13 @@ import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
 
 import java.util.List;
+import java.util.OptionalInt;
 
 @Data
 @NoArgsConstructor
 @Accessors(chain = true)
 public class OrganizersStatisticsResponseDto {
     int page;
-    int count;
+    OptionalInt count;
     List<OrganizerStatisticsResponseDto> organizersStatistics;
 }

@@ -1,9 +1,17 @@
 package com.getkhaki.api.bff.web;
 
-import com.getkhaki.api.bff.domain.models.*;
+import com.getkhaki.api.bff.domain.models.DepartmentStatisticsDm;
+import com.getkhaki.api.bff.domain.models.IntervalEnumDm;
+import com.getkhaki.api.bff.domain.models.OrganizerDm;
+import com.getkhaki.api.bff.domain.models.OrganizerStatisticsDm;
+import com.getkhaki.api.bff.domain.models.TimeBlockSummaryDm;
 import com.getkhaki.api.bff.domain.services.StatisticsService;
-import com.getkhaki.api.bff.persistence.models.*;
-import com.getkhaki.api.bff.web.models.*;
+import com.getkhaki.api.bff.web.models.DepartmentStatisticsResponseDto;
+import com.getkhaki.api.bff.web.models.IntervalEnumDto;
+import com.getkhaki.api.bff.web.models.OrganizerDto;
+import com.getkhaki.api.bff.web.models.OrganizerStatisticsResponseDto;
+import com.getkhaki.api.bff.web.models.OrganizersStatisticsResponseDto;
+import com.getkhaki.api.bff.web.models.TimeBlockSummaryResponseDto;
 import org.assertj.core.util.Lists;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -16,7 +24,8 @@ import java.util.OptionalInt;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.ArgumentMatchers.*;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -63,10 +72,10 @@ public class StatisticsControllerUnitTests {
                 .totalHours(1)
                 .build();
 
-        int count = 1;
         List<OrganizerStatisticsDm> dms = Lists.list(mockDm);
         List<OrganizerStatisticsResponseDto> dtos = Lists.list(organizerStatisticsResponseDto);
-        when(statisticsService.getOrganizersStatistics(eq(startTest), eq(endTest), anyInt())).thenReturn(dms);
+        when(statisticsService.getOrganizersStatistics(eq(startTest), eq(endTest), any(OptionalInt.class)))
+                .thenReturn(dms);
         when(modelMapper.map(dms, new TypeToken<List<OrganizerStatisticsResponseDto>>() {
         }.getType()))
                 .thenReturn(dtos);

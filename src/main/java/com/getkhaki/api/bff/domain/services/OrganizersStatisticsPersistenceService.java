@@ -3,38 +3,37 @@ package com.getkhaki.api.bff.domain.services;
 import com.getkhaki.api.bff.domain.models.OrganizerStatisticsDm;
 import com.getkhaki.api.bff.domain.persistence.OrganizersStatisticsPersistenceInterface;
 import com.getkhaki.api.bff.persistence.repositories.OrganizerStatisticsRepositoryInterface;
-import org.apache.commons.lang3.NotImplementedException;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
 import java.time.ZonedDateTime;
 import java.util.List;
+import java.util.OptionalInt;
 
 @Service
 public class OrganizersStatisticsPersistenceService implements OrganizersStatisticsPersistenceInterface {
 
     private final ModelMapper modelMapper;
 
-    private OrganizerStatisticsRepositoryInterface OrganizerStatisticsRepositoryInterface;
+    private OrganizerStatisticsRepositoryInterface organizerStatisticsRepository;
 
     public OrganizersStatisticsPersistenceService(
-            OrganizerStatisticsRepositoryInterface OrganizerStatisticsRepositoryInterface,
+            OrganizerStatisticsRepositoryInterface organizerStatisticsRepository,
             ModelMapper modelMapper
     ) {
         this.modelMapper = modelMapper;
-        this.OrganizerStatisticsRepositoryInterface = OrganizerStatisticsRepositoryInterface;
+        this.organizerStatisticsRepository = organizerStatisticsRepository;
     }
 
     @Override
-    public List<OrganizerStatisticsDm> getOrganizersStatistics(ZonedDateTime start, ZonedDateTime end, int count) {
-//        List<OrganizerStatisticsDao> organizerStatisticsDaoList = organizersStatisticsRepositoryInterface
-//                .findOrganizersStatistics(start, end, count);
+    public List<OrganizerStatisticsDm> getOrganizersStatistics(ZonedDateTime start, ZonedDateTime end, OptionalInt count) {
+//        List<OrganizerStatisticsViewDao> organizerStatisticsDaoList = organizerStatisticsRepository.findAll();
 //        return modelMapper.map(
 //                organizerStatisticsDaoList,
 //                new TypeToken<List<OrganizerStatisticsDm>>() {
 //                }.getType()
 //        );
-        throw new NotImplementedException();
+        return null;
     }
 
 

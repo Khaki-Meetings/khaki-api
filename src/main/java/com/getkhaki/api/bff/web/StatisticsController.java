@@ -37,9 +37,8 @@ public class StatisticsController {
             @PathVariable ZonedDateTime end,
             @RequestParam OptionalInt optionalCount
     ) {
-        int count = optionalCount.orElse(5);
         List<OrganizerStatisticsDm> organizerStatisticsDmList = statisticsService
-                .getOrganizersStatistics(start, end, count);
+                .getOrganizersStatistics(start, end, optionalCount);
         OrganizersStatisticsResponseDto ret = new OrganizersStatisticsResponseDto();
         ret.setOrganizersStatistics(
                 modelMapper.map(
@@ -49,7 +48,7 @@ public class StatisticsController {
                 )
         );
         ret.setPage(1);
-        ret.setCount(count);
+        ret.setCount(optionalCount);
         return ret;
     }
 
