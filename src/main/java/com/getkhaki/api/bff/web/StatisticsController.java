@@ -36,10 +36,9 @@ public class StatisticsController {
     @GetMapping("/organizersStatistics/{start}/{end}")
     public OrganizersStatisticsResponseDto getOrganizersStatistics(
             @PathVariable @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) Instant start,
-            @PathVariable @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) Instant end
-//            @RequestParam OptionalInt optionalCount
+            @PathVariable @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) Instant end,
+            @RequestParam(required = false) OptionalInt optionalCount
     ) {
-        OptionalInt optionalCount = OptionalInt.empty();
         List<OrganizerStatisticsDm> organizerStatisticsDmList = statisticsService
                 .getOrganizersStatistics(start, end, optionalCount);
         OrganizersStatisticsResponseDto ret = new OrganizersStatisticsResponseDto();

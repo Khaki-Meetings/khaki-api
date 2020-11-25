@@ -73,7 +73,7 @@ public class StatisticsControllerUnitTests {
 //        OrganizersStatisticsResponseDto organizersStatisticsResponseDto = underTest
 //                .getOrganizersStatistics(startTest, endTest, OptionalInt.empty());
         OrganizersStatisticsResponseDto organizersStatisticsResponseDto = underTest
-                .getOrganizersStatistics(startTest, endTest);
+                .getOrganizersStatistics(startTest, endTest, OptionalInt.empty());
         assertThat(organizersStatisticsResponseDto).isNotNull();
         assertThat(organizersStatisticsResponseDto.getOrganizersStatistics().size()).isEqualTo(1);
         assertThat(organizersStatisticsResponseDto.getOrganizersStatistics().get(0))

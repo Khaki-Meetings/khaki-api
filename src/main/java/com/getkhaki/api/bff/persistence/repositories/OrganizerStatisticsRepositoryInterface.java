@@ -75,7 +75,7 @@ public interface OrganizerStatisticsRepositoryInterface extends JpaRepository<Ca
                     "   inner join organizerEmailDao.domain organizerDomainDao" +
                     "   inner join organizerCalendarEventParticipantDao.calendarEvent organizerCalendarEvent " +
                     "   inner join organizerDomainDao.organizations tenant " +
-                    "where tenant.id = :organizationId" +
+                    "where :organizationId is not null" +
                     "   and organizerCalendarEventParticipantDao.organizer = true " +
                     "   and organizerCalendarEventParticipantDao.calendarEvent.start between :sDate and :eDate " +
                     "group by organizerCalendarEventParticipantDao.email"
