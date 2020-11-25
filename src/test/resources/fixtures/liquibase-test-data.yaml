@@ -310,6 +310,15 @@ databaseChangeLog:
                   name: name
                   value: S56
         - insert:
+            tableName: domain_dao_organizations
+            columns:
+              - column:
+                  name: domains_id
+                  value: ${domainS56NetId}
+              - column:
+                  name: organizations_id
+                  value: ${s56OrganizationId}
+        - insert:
             tableName: department_dao
             columns:
               - column:

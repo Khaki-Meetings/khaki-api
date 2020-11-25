@@ -9,6 +9,7 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import javax.inject.Inject;
 import java.time.ZonedDateTime;
 import java.util.List;
+import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -28,8 +29,11 @@ public class OrganizerStatisticsRepositoryInterfaceIntegrationTests {
         loadData();
         ZonedDateTime start = ZonedDateTime.parse("2020-11-01T00:00:00.000000-07:00[America/Denver]");
         ZonedDateTime end = ZonedDateTime.parse("2020-11-08T00:00:00.000000-07:00[America/Denver]");
-        List<OrganizerStatisticsView> stats = underTest.findAllOrganizerStatistics(start, end);
-        OrganizerStatisticsView thing = stats.get(0);
+        List<OrganizerStatisticsView> stats = underTest.findAllOrganizerStatistics(
+                start,
+                end,
+                UUID.fromString("d713ace2-0d30-43be-b4ba-db973967d6d4")
+        );
 
         stats.stream().forEach(
                 stat -> {
