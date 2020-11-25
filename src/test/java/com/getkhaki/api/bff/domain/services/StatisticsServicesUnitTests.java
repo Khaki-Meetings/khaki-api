@@ -4,17 +4,18 @@ import com.getkhaki.api.bff.domain.models.*;
 import com.getkhaki.api.bff.domain.persistence.DepartmentStatisticsPersistenceInterface;
 import com.getkhaki.api.bff.domain.persistence.OrganizersStatisticsPersistenceInterface;
 import com.getkhaki.api.bff.domain.persistence.TimeBlockSummaryPersistenceInterface;
-import com.getkhaki.api.bff.persistence.models.IntervalEnumDao;
 import org.assertj.core.util.Lists;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.time.Instant;
 import java.time.ZonedDateTime;
 import java.util.List;
+import java.util.OptionalInt;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.ArgumentMatchers.anyInt;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -36,29 +37,24 @@ public class StatisticsServicesUnitTests {
 
     @Test
     public void getOrganizersStatistics() {
-        ZonedDateTime startTest = ZonedDateTime.parse("2020-11-01T00:00:00.000000-07:00[America/Denver]");
-        ZonedDateTime endTest = ZonedDateTime.parse("2020-11-12T12:22:40.274456-07:00[America/Denver]");
-        int count = 5;
+        Instant startTest = Instant.parse("2020-11-01T00:00:00.000Z");
+        Instant endTest = Instant.parse("2020-11-12T00:00:00.000Z");
 
         OrganizerStatisticsDm organizerStatisticsDm = new OrganizerStatisticsDm(
-                OrganizerDm.builder()
-                        .email("bob@bob.com")
-                        .name("Bob")
-                        .build(),
+                "bob@bob.com",
                 1,
-                1,
+                1.0,
                 1
         );
-        when(organizersStatisticsPersistenceService.getOrganizersStatistics(eq(startTest), eq(endTest), anyInt()))
+        when(organizersStatisticsPersistenceService.getOrganizersStatistics(eq(startTest), eq(endTest), any(OptionalInt.class)))
                 .thenReturn(Lists.list(organizerStatisticsDm));
 
-        List<OrganizerStatisticsDm> organizersStatistics = underTest.getOrganizersStatistics(startTest, endTest, count);
+        List<OrganizerStatisticsDm> organizersStatistics = underTest.getOrganizersStatistics(startTest, endTest, OptionalInt.empty());
         assertThat(organizersStatistics).isNotNull();
         assertThat(organizersStatistics.size()).isEqualTo(1);
         assertThat(organizersStatistics.get(0)).isEqualTo(organizerStatisticsDm);
 
     }
-
 
     @Test
     public void getTimeBlockSummary() {

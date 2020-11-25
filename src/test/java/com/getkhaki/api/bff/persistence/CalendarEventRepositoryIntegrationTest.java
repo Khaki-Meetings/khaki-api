@@ -6,8 +6,8 @@ import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
 import javax.inject.Inject;
-import java.time.LocalDateTime;
-import java.time.ZonedDateTime;
+import java.time.Instant;
+import java.time.temporal.ChronoUnit;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -19,13 +19,13 @@ public class CalendarEventRepositoryIntegrationTest {
 
     @Test
     void testPersistence() {
-        ZonedDateTime now = ZonedDateTime.now();
+        Instant now = Instant.now();
         CalendarEventDao dao = new CalendarEventDao()
                 .setGoogleCalendarId("12345")
                 .setSummary("Summary")
                 .setCreated(now)
                 .setStart(now)
-                .setEnd(now.plusHours(1)) ;
+                .setEnd(now.plus(1, ChronoUnit.HOURS));
 
         CalendarEventDao result = this.repository.save(dao);
 

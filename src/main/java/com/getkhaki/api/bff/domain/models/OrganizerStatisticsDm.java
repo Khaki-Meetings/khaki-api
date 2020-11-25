@@ -5,21 +5,15 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
-import lombok.experimental.SuperBuilder;
-
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import java.util.UUID;
 
 @Data
 @Builder
 @AllArgsConstructor
+@NoArgsConstructor
 @Accessors(chain = true)
 public class OrganizerStatisticsDm {
-    OrganizerDm organizer;
-    int totalMeetings;
-    long totalCost;
+    String organizerEmail;
+    int totalMeetingCount;
+    Double totalCost;
     int totalHours;
 }

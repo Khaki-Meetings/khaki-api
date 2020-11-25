@@ -1,9 +1,3 @@
 databaseChangeLog:
-
-#  - include:
-#      file: liquibase/changelogs/20201115-init.yaml
-
   - include:
       file: liquibase/changelogs/20201115-init.yaml
-  - include:
-      file: liquibase/changelogs/20201116-views.yaml

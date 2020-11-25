@@ -1,13 +1,10 @@
 package com.getkhaki.api.bff.config;
 
-import com.getkhaki.api.bff.domain.models.OrganizerDm;
 import com.getkhaki.api.bff.domain.models.OrganizerStatisticsDm;
 import com.getkhaki.api.bff.web.models.OrganizerStatisticsResponseDto;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.modelmapper.ModelMapper;
-
-import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -23,23 +20,18 @@ public class ModelMapperConfigIntegrationTests {
     @Test
     public void organizerStatisticsListToOrganizersStatisticsResponseDto() {
         OrganizerStatisticsDm mockDm1 = OrganizerStatisticsDm.builder()
-                .organizer(
-                        OrganizerDm.builder()
-                        .email("bob@bob.com")
-                        .name("Bob")
-                        .build()
-                )
-                .totalCost(12)
-                .totalMeetings(123)
+                .organizerEmail("bob@bob.com")
+                .totalCost(12.0)
+                .totalMeetingCount(123)
                 .totalHours(194)
                 .build();
 
         OrganizerStatisticsResponseDto dto = underTest.map(mockDm1, OrganizerStatisticsResponseDto.class);
 
         assertThat(dto.getTotalCost()).isEqualTo(mockDm1.getTotalCost());
-        assertThat(dto.getTotalMeetings()).isEqualTo(mockDm1.getTotalMeetings());
+        assertThat(dto.getTotalMeetingCount()).isEqualTo(mockDm1.getTotalMeetingCount());
         assertThat(dto.getTotalHours()).isEqualTo(mockDm1.getTotalHours());
-        assertThat(dto.getOrganizer().getEmail()).isEqualTo(mockDm1.getOrganizer().getEmail());
-        assertThat(dto.getOrganizer().getName()).isEqualTo(mockDm1.getOrganizer().getName());
+        assertThat(dto.getOrganizerEmail()).isEqualTo(mockDm1.getOrganizerEmail());
+        assertThat(dto.getOrganizerEmail()).isEqualTo(mockDm1.getOrganizerEmail());
     }
 }

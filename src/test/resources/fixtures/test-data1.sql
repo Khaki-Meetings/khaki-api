@@ -145,7 +145,7 @@ VALUES (@SalaryGroup2Id,
         55000);
 
 -- organization
-set @ThatCoolCompanyId = unhex(replace(uuid(), '-', ''));
+set @ThatCoolCompanyId = unhex(replace('d713ace2-0d30-43be-b4ba-db973967d6d4', '-', ''));
 insert into organization_dao (id, name)
 VALUES (@ThatCoolCompanyId,
         'That Cool Company');

@@ -8,8 +8,8 @@ import lombok.experimental.Accessors;
 @NoArgsConstructor
 @Accessors(chain = true)
 public class OrganizerStatisticsResponseDto {
-    OrganizerDto organizer;
-    int totalMeetings;
+    String organizerEmail;
+    int totalMeetingCount;
     int totalHours;
-    int totalCost;
+    Double totalCost;
 }

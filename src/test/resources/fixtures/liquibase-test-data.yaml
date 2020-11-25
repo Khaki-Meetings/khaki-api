@@ -6,6 +6,9 @@ databaseChangeLog:
       name: calendarEvent2Id
       value: ff1e107178d1493ba13e6d0ec8457038
   - property:
+      name: calendarEvent3Id
+      value: 9fbd3dd3326249a2bef4cae39f7856bb
+  - property:
       name: domainS56NetId
       value: 927a7c4ee31849a58f445ab8e337124a
   - property:
@@ -29,6 +32,12 @@ databaseChangeLog:
   - property:
       name: bettySmithCalendarEvent2ParticipantId
       value: cca68d2cd27842d695ba5de3941b2d7a
+  - property:
+      name: bobJonesCalendarEvent3ParticipantId
+      value: b8faa28f169044f1ad1c447ccde65bb1
+  - property:
+      name: bettySmithCalendarEvent3ParticipantId
+      value: bf6cc3b307a94836ad2a43db771cf982
   - property:
       name: bobJonesPersonId
       value: 580cf117aee1433e90ed51c23a9b6e47
@@ -59,13 +68,13 @@ databaseChangeLog:
                   value: ${calendarEvent1Id}
               - column:
                   name: created
-                  value: 2020-11-01T00:00:00.000000-07:00[America/Denver]
+                  value: 2020-11-01 00:00+00
               - column:
                   name: start
-                  value: 2020-11-01T00:00:00.000000-07:00[America/Denver]
+                  value: 2020-11-01 01:00+00
               - column:
                   name: end
-                  value: 2020-11-01T02:00:00.000000-07:00[America/Denver]
+                  value: 2020-11-01 03:00+00
               - column:
                   name: summary
                   value: event 1
@@ -80,16 +89,37 @@ databaseChangeLog:
                   value: ${calendarEvent2Id}
               - column:
                   name: created
-                  value: 2020-11-02T00:00:00.000000-07:00[America/Denver]
+                  value: 2020-11-09 00:00+00
               - column:
                   name: start
-                  value: 2020-11-02T00:00:00.000000-07:00[America/Denver]
+                  value: 2020-11-09 01:00+00
               - column:
                   name: end
-                  value: 2020-11-02T01:00:00.000000-07:00[America/Denver]
+                  value: 2020-11-09 02:00+00
               - column:
                   name: summary
                   value: event 2
+              - column:
+                  name: google_calendar_id
+                  value: google id 1
+        - insert:
+            tableName: calendar_event_dao
+            columns:
+              - column:
+                  name: id
+                  value: ${calendarEvent3Id}
+              - column:
+                  name: created
+                  value: 2020-11-02 00:00+00
+              - column:
+                  name: start
+                  value: 2020-11-02 01:00+00
+              - column:
+                  name: end
+                  value: 2020-11-02 02:00+00
+              - column:
+                  name: summary
+                  value: event 3
               - column:
                   name: google_calendar_id
                   value: google id 1
@@ -190,6 +220,33 @@ databaseChangeLog:
                   name: email_id
                   value: ${bettySmithS56NetEmailId}
         - insert:
+            tableName: calendar_event_participant_dao
+            columns:
+              - column:
+                  name: id
+                  value: ${bettySmithCalendarEvent3ParticipantId}
+              - column:
+                  name: calendar_event_id
+                  value: ${calendarEvent3Id}
+              - column:
+                  name: email_id
+                  value: ${bettySmithS56NetEmailId}
+              - column:
+                  name: organizer
+                  value: true
+        - insert:
+            tableName: calendar_event_participant_dao
+            columns:
+              - column:
+                  name: id
+                  value: ${bobJonesCalendarEvent3ParticipantId}
+              - column:
+                  name: calendar_event_id
+                  value: ${calendarEvent3Id}
+              - column:
+                  name: email_id
+                  value: ${bobJonesS56NetEmailId}
+        - insert:
             tableName: person_dao
             columns:
               - column:
@@ -252,6 +309,15 @@ databaseChangeLog:
               - column:
                   name: name
                   value: S56
+        - insert:
+            tableName: domain_dao_organizations
+            columns:
+              - column:
+                  name: domains_id
+                  value: ${domainS56NetId}
+              - column:
+                  name: organizations_id
+                  value: ${s56OrganizationId}
         - insert:
             tableName: department_dao
             columns:

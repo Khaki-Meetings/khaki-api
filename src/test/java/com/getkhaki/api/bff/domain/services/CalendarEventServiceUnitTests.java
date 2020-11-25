@@ -7,18 +7,17 @@ import com.getkhaki.api.bff.domain.persistence.CalendarProviderPersistenceInterf
 import org.assertj.core.util.Lists;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
 
-import java.time.ZonedDateTime;
-import java.time.LocalDateTime;
+import java.time.Instant;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
-import java.util.function.Consumer;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 public class CalendarEventServiceUnitTests {
     private CalendarEventService underTest;
@@ -36,7 +35,7 @@ public class CalendarEventServiceUnitTests {
     public void test() {
         CalendarEventDm calendarEventDmInput = new CalendarEventDm();
         calendarEventDmInput.setSummary("kid gloves");
-        calendarEventDmInput.setCreated(ZonedDateTime.now());
+        calendarEventDmInput.setCreated(Instant.now());
 
         UUID id = UUID.randomUUID();
         CalendarEventDm calendarEventDmResponse = new CalendarEventDm()
@@ -59,22 +58,22 @@ public class CalendarEventServiceUnitTests {
     public void importAsynch() {
         CalendarProviderPersistenceInterface calendarProviderPersistenceInterface = mock(CalendarProviderPersistenceInterface.class);
         when(calendarProviderPersistenceFactory.get()).thenReturn(calendarProviderPersistenceInterface);
-        ZonedDateTime now = ZonedDateTime.now();
+        Instant now = Instant.now();
 
         List<CalendarEventDm> calendarEventDmList = Lists.list(
                 new CalendarEventDm()
-                .setCreated(now)
-                .setStart(now)
-                .setEnd(now.plusHours(1))
+                        .setCreated(now)
+                        .setStart(now)
+                        .setEnd(now.plus(1, ChronoUnit.HOURS))
         );
 
 
         Answer<Integer> answer = invocation -> {
             List<CalendarEventDm> ret = new ArrayList<>();
 
-            calendarEventDmList.forEach(calendarEventDm -> {
-                ret.add(calendarEventPersistence.createEvent(calendarEventDm));
-            });
+            calendarEventDmList.forEach(
+                    calendarEventDm -> ret.add(calendarEventPersistence.createEvent(calendarEventDm))
+            );
             assertThat(ret.size()).isEqualTo(calendarEventDmList.size());
             return ret.size();
         };
