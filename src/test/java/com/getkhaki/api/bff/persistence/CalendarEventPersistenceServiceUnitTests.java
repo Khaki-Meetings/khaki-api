@@ -10,8 +10,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.modelmapper.ModelMapper;
 
-import java.time.LocalDateTime;
-import java.time.ZonedDateTime;
+import java.time.Instant;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -34,7 +33,7 @@ public class CalendarEventPersistenceServiceUnitTests {
     @Test
     public void test() {
         CalendarEventDm calendarEventDmInput = new CalendarEventDm()
-                .setCreated(ZonedDateTime.now())
+                .setCreated(Instant.now())
                 .setSummary("Before the motor laws");
         CalendarEventDao calendarEventDaoMapped = new CalendarEventDao()
                 .setCreated(calendarEventDmInput.getCreated())

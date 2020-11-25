@@ -12,8 +12,10 @@ import com.getkhaki.api.bff.web.models.TrailingStatisticsResponseDto;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeToken;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.Instant;
 import java.time.ZonedDateTime;
 import java.util.List;
 import java.util.OptionalInt;
@@ -33,10 +35,11 @@ public class StatisticsController {
 
     @GetMapping("/organizersStatistics/{start}/{end}")
     public OrganizersStatisticsResponseDto getOrganizersStatistics(
-            @PathVariable ZonedDateTime start,
-            @PathVariable ZonedDateTime end,
-            @RequestParam OptionalInt optionalCount
+            @PathVariable @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) Instant start,
+            @PathVariable @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) Instant end
+//            @RequestParam OptionalInt optionalCount
     ) {
+        OptionalInt optionalCount = OptionalInt.empty();
         List<OrganizerStatisticsDm> organizerStatisticsDmList = statisticsService
                 .getOrganizersStatistics(start, end, optionalCount);
         OrganizersStatisticsResponseDto ret = new OrganizersStatisticsResponseDto();

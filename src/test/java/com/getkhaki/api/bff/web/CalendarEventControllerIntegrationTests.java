@@ -7,7 +7,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.web.server.LocalServerPort;
 import org.springframework.web.context.WebApplicationContext;
 
-import java.time.ZonedDateTime;
+import java.time.Instant;
+import java.time.temporal.ChronoUnit;
 
 import static io.restassured.RestAssured.given;
 import static io.restassured.http.ContentType.JSON;
@@ -24,22 +25,22 @@ public class CalendarEventControllerIntegrationTests {
 
     @Test
     public void createEvent() {
-        ZonedDateTime now = ZonedDateTime.now();
+        Instant now = Instant.now();
         CalendarEventDto body = new CalendarEventDto()
                 .setGoogleCalendarId("12345")
                 .setSummary("Summary")
                 .setCreated(now)
                 .setStart(now)
-                .setEnd(now.plusHours(1));
+                .setEnd(now.plus(1, ChronoUnit.HOURS));
 
         given()
-            .port(this.port)
-            .contentType(JSON)
-            .body(body)
-        .when()
-            .post("/calendar-events")
-        .then().assertThat()
-            .statusCode(200)
-            .body("id", notNullValue());
+                .port(this.port)
+                .contentType(JSON)
+                .body(body)
+                .when()
+                .post("/calendar-events")
+                .then().assertThat()
+                .statusCode(200)
+                .body("id", notNullValue());
     }
 }

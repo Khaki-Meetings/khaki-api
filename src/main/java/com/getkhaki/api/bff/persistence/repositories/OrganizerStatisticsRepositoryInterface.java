@@ -1,12 +1,12 @@
 package com.getkhaki.api.bff.persistence.repositories;
 
 import com.getkhaki.api.bff.persistence.models.CalendarEventParticipantDao;
-import com.getkhaki.api.bff.persistence.models.OrganizerStatisticsView;
+import com.getkhaki.api.bff.persistence.models.views.OrganizerStatisticsView;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
-import java.time.ZonedDateTime;
+import java.time.Instant;
 import java.util.List;
 import java.util.UUID;
 
@@ -80,5 +80,5 @@ public interface OrganizerStatisticsRepositoryInterface extends JpaRepository<Ca
                     "   and organizerCalendarEventParticipantDao.calendarEvent.start between :sDate and :eDate " +
                     "group by organizerCalendarEventParticipantDao.email"
     )
-    List<OrganizerStatisticsView> findAllOrganizerStatistics(ZonedDateTime sDate, ZonedDateTime eDate, UUID organizationId);
+    List<OrganizerStatisticsView> findAllOrganizerStatistics(Instant sDate, Instant eDate, UUID organizationId);
 }

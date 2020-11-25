@@ -7,7 +7,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.modelmapper.ModelMapper;
 
-import java.time.ZonedDateTime;
+import java.time.Instant;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -29,7 +29,7 @@ public class CalendarEventControllerUnitTests {
 
     @Test
     public void goodPath() {
-        ZonedDateTime now = ZonedDateTime.now();
+        Instant now = Instant.now();
         CalendarEventDto calendarEventDtoInput = new CalendarEventDto();
         calendarEventDtoInput.setSummary("now");
         calendarEventDtoInput.setCreated(now);

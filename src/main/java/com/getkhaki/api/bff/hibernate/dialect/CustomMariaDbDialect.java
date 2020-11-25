@@ -1,16 +1,16 @@
 package com.getkhaki.api.bff.hibernate.dialect;
 
-import org.hibernate.dialect.H2Dialect;
+import org.hibernate.dialect.MariaDB103Dialect;
 import org.hibernate.dialect.function.SQLFunctionTemplate;
 import org.hibernate.type.StandardBasicTypes;
 
-public class CustomH2Dialect extends H2Dialect {
-    public CustomH2Dialect() {
+public class CustomMariaDbDialect extends MariaDB103Dialect {
+    public CustomMariaDbDialect() {
         super();
 
         registerFunction(
                 "timestampdiff",
-                new SQLFunctionTemplate(StandardBasicTypes.INTEGER, "datediff(?1, ?2, ?3)")
+                new SQLFunctionTemplate(StandardBasicTypes.INTEGER, "timestampdiff(?1, ?2, ?3)")
         );
     }
 }

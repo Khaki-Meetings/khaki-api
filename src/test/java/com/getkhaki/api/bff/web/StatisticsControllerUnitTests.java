@@ -2,13 +2,11 @@ package com.getkhaki.api.bff.web;
 
 import com.getkhaki.api.bff.domain.models.DepartmentStatisticsDm;
 import com.getkhaki.api.bff.domain.models.IntervalEnumDm;
-import com.getkhaki.api.bff.domain.models.OrganizerDm;
 import com.getkhaki.api.bff.domain.models.OrganizerStatisticsDm;
 import com.getkhaki.api.bff.domain.models.TimeBlockSummaryDm;
 import com.getkhaki.api.bff.domain.services.StatisticsService;
 import com.getkhaki.api.bff.web.models.DepartmentStatisticsResponseDto;
 import com.getkhaki.api.bff.web.models.IntervalEnumDto;
-import com.getkhaki.api.bff.web.models.OrganizerDto;
 import com.getkhaki.api.bff.web.models.OrganizerStatisticsResponseDto;
 import com.getkhaki.api.bff.web.models.OrganizersStatisticsResponseDto;
 import com.getkhaki.api.bff.web.models.TimeBlockSummaryResponseDto;
@@ -18,6 +16,7 @@ import org.junit.jupiter.api.Test;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeToken;
 
+import java.time.Instant;
 import java.time.ZonedDateTime;
 import java.util.List;
 import java.util.OptionalInt;
@@ -44,31 +43,22 @@ public class StatisticsControllerUnitTests {
 
     @Test
     public void getOrganizersStatistics() {
-        ZonedDateTime startTest = ZonedDateTime.parse("2020-11-01T00:00:00.000000-07:00[America/Denver]");
-        ZonedDateTime endTest = ZonedDateTime.parse("2020-11-12T12:22:40.274456-07:00[America/Denver]");
+        Instant startTest = Instant.parse("2020-11-01T00:00:00.000Z");
+        Instant endTest = Instant.parse("2020-11-30T00:00:00.000Z");
 
         String email = "bob@bob.com";
         String name = "Bob";
         OrganizerStatisticsResponseDto organizerStatisticsResponseDto = new OrganizerStatisticsResponseDto()
-                .setOrganizer(
-                        new OrganizerDto()
-                                .setEmail(email)
-                                .setName(name)
-                )
-                .setTotalCost(1)
+                .setOrganizerEmail("bob@bob.com")
+                .setTotalCost(1.0)
                 .setTotalHours(1)
-                .setTotalMeetings(1);
+                .setTotalMeetingCount(1);
 
 
         OrganizerStatisticsDm mockDm = OrganizerStatisticsDm.builder()
-                .organizer(
-                        OrganizerDm.builder()
-                                .name(name)
-                                .email(email)
-                                .build()
-                )
-                .totalCost(1)
-                .totalMeetings(1)
+                .organizerEmail("bob@bob.com")
+                .totalCost(1.0)
+                .totalMeetingCount(1)
                 .totalHours(1)
                 .build();
 
@@ -80,8 +70,10 @@ public class StatisticsControllerUnitTests {
         }.getType()))
                 .thenReturn(dtos);
 
+//        OrganizersStatisticsResponseDto organizersStatisticsResponseDto = underTest
+//                .getOrganizersStatistics(startTest, endTest, OptionalInt.empty());
         OrganizersStatisticsResponseDto organizersStatisticsResponseDto = underTest
-                .getOrganizersStatistics(startTest, endTest, OptionalInt.empty());
+                .getOrganizersStatistics(startTest, endTest);
         assertThat(organizersStatisticsResponseDto).isNotNull();
         assertThat(organizersStatisticsResponseDto.getOrganizersStatistics().size()).isEqualTo(1);
         assertThat(organizersStatisticsResponseDto.getOrganizersStatistics().get(0))

@@ -5,8 +5,7 @@ import com.getkhaki.api.bff.domain.models.CalendarEventDm;
 import com.getkhaki.api.bff.web.models.CalendarEventDto;
 import org.junit.jupiter.api.Test;
 
-import java.time.LocalDateTime;
-import java.time.ZonedDateTime;
+import java.time.Instant;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -17,7 +16,7 @@ public class DmToDtoMapperIntegrationTests extends BaseModelMapperIntegrationTes
         CalendarEventDm calendarEventDm = new CalendarEventDm()
                 .setId(UUID.randomUUID())
                 .setSummary("cignus")
-                .setCreated(ZonedDateTime.now());
+                .setCreated(Instant.now());
 
         CalendarEventDto calendarEventDto = modelMapper.map(calendarEventDm, CalendarEventDto.class);
 

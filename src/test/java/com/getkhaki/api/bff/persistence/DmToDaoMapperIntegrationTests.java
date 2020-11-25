@@ -5,8 +5,7 @@ import com.getkhaki.api.bff.domain.models.CalendarEventDm;
 import com.getkhaki.api.bff.persistence.models.CalendarEventDao;
 import org.junit.jupiter.api.Test;
 
-import java.time.LocalDateTime;
-import java.time.ZonedDateTime;
+import java.time.Instant;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -18,7 +17,7 @@ public class DmToDaoMapperIntegrationTests extends BaseModelMapperIntegrationTes
                 .setId(UUID.randomUUID())
                 .setGoogleCalendarId("12345")
                 .setSummary("cignus")
-                .setCreated(ZonedDateTime.now());
+                .setCreated(Instant.now());
 
         CalendarEventDao calendarEventDao = modelMapper.map(calendarEventDm, CalendarEventDao.class);
 

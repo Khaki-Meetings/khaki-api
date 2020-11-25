@@ -1,17 +1,13 @@
 package com.getkhaki.api.bff.persistence.models;
 
-import com.sun.istack.NotNull;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
-import lombok.NonNull;
 import lombok.experimental.Accessors;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.OneToMany;
-import java.time.ZonedDateTime;
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -26,12 +22,12 @@ public class CalendarEventDao extends EntityBaseDao {
     String summary;
 
     @Column(nullable = false)
-    ZonedDateTime created;
+    Instant created;
 
     @Column(nullable = false)
-    ZonedDateTime start;
+    Instant start;
 
-    ZonedDateTime end;
+    Instant end;
 
     @OneToMany(mappedBy = "calendarEvent")
     List<CalendarEventParticipantDao> participants = new ArrayList<>();
