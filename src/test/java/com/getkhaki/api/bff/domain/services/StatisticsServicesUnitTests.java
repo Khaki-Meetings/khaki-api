@@ -37,9 +37,8 @@ public class StatisticsServicesUnitTests {
 
     @Test
     public void getOrganizersStatistics() {
-        Instant startTest = Instant.parse("2020-11-01T00:00:00.000000-07:00[America/Denver]");
-        Instant endTest = Instant.parse("2020-11-12T12:22:40.274456-07:00[America/Denver]");
-        int count = 5;
+        Instant startTest = Instant.parse("2020-11-01T00:00:00.000Z");
+        Instant endTest = Instant.parse("2020-11-12T00:00:00.000Z");
 
         OrganizerStatisticsDm organizerStatisticsDm = new OrganizerStatisticsDm(
                 "bob@bob.com",
