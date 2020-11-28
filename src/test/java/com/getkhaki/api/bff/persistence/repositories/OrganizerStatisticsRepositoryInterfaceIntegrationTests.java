@@ -37,8 +37,8 @@ public class OrganizerStatisticsRepositoryInterfaceIntegrationTests extends Base
                 .filter(stat -> stat.getOrganizerEmail().equals("betty@s56.net"))
                 .findFirst()
                 .orElseThrow();
-        assertThat(bettyStats.getTotalCost()).isEqualTo(95.0);
-        assertThat(bettyStats.getTotalHours()).isEqualTo(2);
+        assertThat(bettyStats.getTotalCost()).isEqualTo(1282.5);
+        assertThat(bettyStats.getTotalHours()).isEqualTo(9);
         assertThat(bettyStats.getTotalMeetingCount()).isEqualTo(1);
 
         OrganizerStatisticsView bobStats = stats
@@ -49,6 +49,6 @@ public class OrganizerStatisticsRepositoryInterfaceIntegrationTests extends Base
         assertThat(bobStats.getOrganizerEmail()).isEqualTo("bob@s56.net");
         assertThat(bobStats.getTotalMeetingCount()).isEqualTo(1);
         assertThat(bobStats.getTotalHours()).isEqualTo(4);
-        assertThat(bobStats.getTotalCost()).isEqualTo(190.0);
+        assertThat(bobStats.getTotalCost()).isEqualTo(380.0);
     }
 }
