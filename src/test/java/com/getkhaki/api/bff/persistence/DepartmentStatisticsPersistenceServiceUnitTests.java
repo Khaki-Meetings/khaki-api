@@ -1,20 +1,13 @@
 package com.getkhaki.api.bff.persistence;
 
-import com.getkhaki.api.bff.domain.models.DepartmentStatisticsDm;
 import com.getkhaki.api.bff.domain.services.DepartmentStatisticsPersistenceService;
-import com.getkhaki.api.bff.persistence.models.DepartmentStatisticsDao;
 import com.getkhaki.api.bff.persistence.repositories.DepartmentStatisticsRepositoryInterface;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.modelmapper.ModelMapper;
-
-import java.time.ZonedDateTime;
-import java.util.List;
-import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
 

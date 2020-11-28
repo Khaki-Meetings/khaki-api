@@ -3,8 +3,8 @@ package com.getkhaki.api.bff.web;
 import com.getkhaki.api.bff.domain.models.IntervalEnumDm;
 import com.getkhaki.api.bff.domain.models.OrganizerStatisticsDm;
 import com.getkhaki.api.bff.domain.services.StatisticsService;
-import com.getkhaki.api.bff.persistence.models.DepartmentStatisticsDao;
 import com.getkhaki.api.bff.persistence.models.IntervalEnumDao;
+import com.getkhaki.api.bff.web.models.DepartmentStatisticsResponseDto;
 import com.getkhaki.api.bff.web.models.OrganizerStatisticsResponseDto;
 import com.getkhaki.api.bff.web.models.OrganizersStatisticsResponseDto;
 import com.getkhaki.api.bff.web.models.TimeBlockSummaryResponseDto;
@@ -13,7 +13,11 @@ import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeToken;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.time.Instant;
 import java.time.ZonedDateTime;
@@ -61,10 +65,14 @@ public class StatisticsController {
     }
 
     @GetMapping("/department")
-    public List<DepartmentStatisticsDao> getPerDepartmentStatistics(@PathVariable(name = "start") ZonedDateTime start, @PathVariable(name = "end") ZonedDateTime end) {
+    public List<DepartmentStatisticsResponseDto> getPerDepartmentStatistics(
+            @PathVariable(name = "start") Instant start,
+            @PathVariable(name = "end") Instant end
+    ) {
 
-        return modelMapper.map(statisticsService.getPerDepartmentStatistics(start, end), new TypeToken<List<DepartmentStatisticsDao>>() {
-        }.getType());
+//        return modelMapper.map(statisticsService.getPerDepartmentStatistics(start, end), new TypeToken<List<DepartmentStatisticsDao>>() {
+//        }.getType());
+        return null;
     }
 
     @GetMapping("/trailing/{start}/{end}")

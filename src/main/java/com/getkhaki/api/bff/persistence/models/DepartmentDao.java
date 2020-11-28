@@ -6,8 +6,10 @@ import lombok.experimental.Accessors;
 
 import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
+import java.util.List;
 
 @Data
 @Entity
@@ -18,4 +20,7 @@ public class DepartmentDao extends EntityBaseDao {
     String name;
     @ManyToOne
     OrganizationDao organization;
+
+    @OneToMany(mappedBy = "department")
+    List<EmployeeDao> employees;
 }
