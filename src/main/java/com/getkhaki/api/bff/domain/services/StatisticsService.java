@@ -31,9 +31,8 @@ public class StatisticsService {
         this.timeBlockSummaryPersistenceService = timeBlockSummaryPersistenceService;
     }
 
-    public List<DepartmentStatisticsDm> getPerDepartmentStatistics(ZonedDateTime start, ZonedDateTime end) {
+    public List<DepartmentStatisticsDm> getPerDepartmentStatistics(Instant start, Instant end) {
         return this.departmentStatisticsPersistenceService.getPerDepartmentStatistics(start, end);
-
     }
 
     public List<OrganizerStatisticsDm> getOrganizersStatistics(Instant start, Instant end, OptionalInt count) {
