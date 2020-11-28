@@ -2,6 +2,8 @@ package com.getkhaki.api.bff.web;
 
 import com.getkhaki.api.bff.BaseJpaIntegrationTest;
 import com.getkhaki.api.bff.persistence.models.views.OrganizerStatisticsView;
+import com.getkhaki.api.bff.web.models.DepartmentStatisticsResponseDto;
+import com.getkhaki.api.bff.web.models.DepartmentsStatisticsResponseDto;
 import com.getkhaki.api.bff.web.models.OrganizerStatisticsResponseDto;
 import com.getkhaki.api.bff.web.models.OrganizersStatisticsResponseDto;
 import io.restassured.module.mockmvc.RestAssuredMockMvc;
@@ -34,7 +36,7 @@ public class StatisticsControllerIntegrationTests extends BaseJpaIntegrationTest
         Instant start = Instant.parse("2020-11-01T00:00:00.000Z");
         Instant end = Instant.parse("2020-11-08T00:00:00.000Z");
 
-        String urlStringBuilder = "/statistics/organizersStatistics/" +
+        String url = "/statistics/organizersStatistics/" +
                 start.toString() +
                 "/" +
                 end.toString();
@@ -42,7 +44,7 @@ public class StatisticsControllerIntegrationTests extends BaseJpaIntegrationTest
                 .port(this.port)
                 .contentType(JSON)
                 .when()
-                .get(urlStringBuilder)
+                .get(url)
                 .then().assertThat()
                 .statusCode(200)
                 .extract()
@@ -67,4 +69,39 @@ public class StatisticsControllerIntegrationTests extends BaseJpaIntegrationTest
         assertThat(bobStats.getTotalHours()).isEqualTo(4);
         assertThat(bobStats.getTotalCost()).isEqualTo(190.0);
     }
+
+    @Test
+    public void testDepartmentStatistics() {
+        Instant start = Instant.parse("2020-11-01T00:00:00.000Z");
+        Instant end = Instant.parse("2020-11-08T00:00:00.000Z");
+
+        String url = "/statistics/department/" +
+                start.toString() +
+                "/" +
+                end.toString();
+        DepartmentsStatisticsResponseDto stats = given()
+                .port(this.port)
+                .contentType(JSON)
+                .when()
+                .get(url)
+                .then().assertThat()
+                .statusCode(200)
+                .extract()
+                .as(DepartmentsStatisticsResponseDto.class);
+
+        DepartmentStatisticsResponseDto itDepartment = stats.getDepartmentsStatistics()
+                .stream()
+                .filter(stat -> stat.getDepartment().equals("IT"))
+                .findFirst()
+                .orElseThrow();
+        assertThat(itDepartment.getTotalHours()).isEqualTo(8);
+
+        DepartmentStatisticsResponseDto hrDepartment = stats.getDepartmentsStatistics()
+                .stream()
+                .filter(stat -> stat.getDepartment().equals("HR"))
+                .findFirst()
+                .orElseThrow();
+        assertThat(itDepartment.getTotalHours()).isEqualTo(8);
+    }
+
 }

@@ -1,10 +1,12 @@
 package com.getkhaki.api.bff.web;
 
+import com.getkhaki.api.bff.domain.models.DepartmentStatisticsDm;
 import com.getkhaki.api.bff.domain.models.IntervalEnumDm;
 import com.getkhaki.api.bff.domain.models.OrganizerStatisticsDm;
 import com.getkhaki.api.bff.domain.services.StatisticsService;
 import com.getkhaki.api.bff.persistence.models.IntervalEnumDao;
 import com.getkhaki.api.bff.web.models.DepartmentStatisticsResponseDto;
+import com.getkhaki.api.bff.web.models.DepartmentsStatisticsResponseDto;
 import com.getkhaki.api.bff.web.models.OrganizerStatisticsResponseDto;
 import com.getkhaki.api.bff.web.models.OrganizersStatisticsResponseDto;
 import com.getkhaki.api.bff.web.models.TimeBlockSummaryResponseDto;
@@ -64,15 +66,21 @@ public class StatisticsController {
         return modelMapper.map(statisticsService.getTimeBlockSummary(start, end), TimeBlockSummaryResponseDto.class);
     }
 
-    @GetMapping("/department")
-    public List<DepartmentStatisticsResponseDto> getPerDepartmentStatistics(
-            @PathVariable(name = "start") Instant start,
-            @PathVariable(name = "end") Instant end
+    @GetMapping("/department/{start}/{end}")
+    public DepartmentsStatisticsResponseDto getPerDepartmentStatistics(
+            @PathVariable Instant start,
+            @PathVariable Instant end
     ) {
+        DepartmentsStatisticsResponseDto ret = new DepartmentsStatisticsResponseDto();
+        ret.setDepartmentsStatistics(
+                modelMapper.map(
+                        statisticsService.getPerDepartmentStatistics(start, end),
+                        new TypeToken<List<DepartmentStatisticsResponseDto>>() {
+                        }.getType()
+                )
+        );
 
-//        return modelMapper.map(statisticsService.getPerDepartmentStatistics(start, end), new TypeToken<List<DepartmentStatisticsDao>>() {
-//        }.getType());
-        return null;
+        return ret;
     }
 
     @GetMapping("/trailing/{start}/{end}")

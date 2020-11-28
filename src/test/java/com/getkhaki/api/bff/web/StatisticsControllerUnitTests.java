@@ -133,10 +133,7 @@ public class StatisticsControllerUnitTests {
         DepartmentStatisticsResponseDto departmentStatisticsResponseDto = new DepartmentStatisticsResponseDto(
                 UUID.randomUUID(),
                 "HR",
-                1L,
-                1L,
-                1L,
-                1L
+                1
         );
 
         List<DepartmentStatisticsResponseDto> mockDtoList = Lists.list(departmentStatisticsResponseDto);

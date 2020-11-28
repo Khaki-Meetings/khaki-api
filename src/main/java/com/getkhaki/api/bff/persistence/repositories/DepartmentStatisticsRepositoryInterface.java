@@ -10,19 +10,6 @@ import java.util.List;
 import java.util.UUID;
 
 public interface DepartmentStatisticsRepositoryInterface extends JpaRepository<DepartmentDao, UUID> {
-    //    @Query(
-//            "select" +
-//                    "   department.id as departmentId," +
-//                    "   department.name as departmentName," +
-//                    "   (" +
-//                    "       select count(employee.person.id)" +
-//                    "       from employees employee " +
-//                    "       inner join employee.person person" +
-//                    "       inner join " +
-//                    "   ) as count " +
-//                    "from DepartmentDao as department" +
-//                    "   inner join department.employees as employees"
-//    )
     @Query(
             "select " +
                     "department.id as departmentId," +
