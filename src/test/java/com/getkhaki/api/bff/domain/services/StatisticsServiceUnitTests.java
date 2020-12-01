@@ -20,7 +20,7 @@ import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-public class StatisticsServicesUnitTests {
+public class StatisticsServiceUnitTests {
 
     private StatisticsService underTest;
     private DepartmentStatisticsPersistenceInterface departmentStatisticsPersistenceService;
@@ -61,8 +61,8 @@ public class StatisticsServicesUnitTests {
 
 
         EmailDm emailDm = new EmailDm("test", new DomainDm("mail"));
-        Instant startTest = Instant.parse("2020-11-01T00:00:00.000000-07:00[America/Denver]");
-        Instant endTest = Instant.parse("2020-11-12T12:22:40.274456-07:00[America/Denver]");
+        Instant startTest = Instant.parse("2020-11-01T00:00:00.000Z");
+        Instant endTest = Instant.parse("2020-11-18T00:00:00.000Z");
 
         UUID id = UUID.randomUUID();
         TimeBlockSummaryDm timeBlockSummaryDm = new TimeBlockSummaryDm(1, 1);
@@ -90,8 +90,8 @@ public class StatisticsServicesUnitTests {
 
     @Test
     public void test() {
-        Instant startTest = Instant.parse("2020-11-01T00:00:00.000000-07:00[America/Denver]");
-        Instant endTest = Instant.parse("2020-11-12T12:22:40.274456-07:00[America/Denver]");
+        Instant startTest = Instant.parse("2020-11-01T00:00:00.000Z");
+        Instant endTest = Instant.parse("2020-11-18T00:00:00.000Z");
         UUID id = UUID.randomUUID();
         TimeBlockSummaryDm timeBlockSummaryDm = new TimeBlockSummaryDm(1, 1);
         List<TimeBlockSummaryDm> trailingListDm = Lists.list(timeBlockSummaryDm);

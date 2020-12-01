@@ -83,8 +83,8 @@ public class StatisticsControllerUnitTests {
 
     @Test
     public void getTimeBlockSummary() {
-        Instant startTest = Instant.parse("2020-11-01T00:00:00.000000-07:00[America/Denver]");
-        Instant endTest = Instant.parse("2020-11-12T12:22:40.274456-07:00[America/Denver]");
+        Instant startTest = Instant.parse("2020-11-01T00:00:00.000Z");
+        Instant endTest = Instant.parse("2020-11-30T00:00:00.000Z");
 
         TimeBlockSummaryResponseDto mockDto = new TimeBlockSummaryResponseDto(
                 1L,
@@ -133,8 +133,8 @@ public class StatisticsControllerUnitTests {
 
     @Test
     public void getTrailingStatistics() {
-        Instant startTest = Instant.parse("2020-11-01T00:00:00.000000-07:00[America/Denver]");
-        Instant endTest = Instant.parse("2020-11-12T12:22:40.274456-07:00[America/Denver]");
+        Instant startTest = Instant.parse("2020-11-01T00:00:00.000Z");
+        Instant endTest = Instant.parse("2020-11-18T00:00:00.000Z");
         List<TimeBlockSummaryDm> timeBlockSummaryDmList = Lists.list(
                 new TimeBlockSummaryDm().setMeetingCount(1).setTotalHours(1)
         );
