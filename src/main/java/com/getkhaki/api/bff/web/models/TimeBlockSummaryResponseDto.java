@@ -12,10 +12,6 @@ import java.util.UUID;
 @AllArgsConstructor
 @Accessors(chain = true)
 public class TimeBlockSummaryResponseDto {
-    UUID id;
-    IntervalEnumDto interval;
-    long totalTime;
-    long totalCost;
-    long averageCost;
+    long totalHours;
     long meetingCount;
 }

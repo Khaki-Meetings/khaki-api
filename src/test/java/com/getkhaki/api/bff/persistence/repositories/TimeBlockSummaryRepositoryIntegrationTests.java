@@ -27,6 +27,5 @@ public class TimeBlockSummaryRepositoryIntegrationTests extends BaseJpaIntegrati
 
         assertThat(hours).isEqualTo(15);
         assertThat(count).isEqualTo(3);
-
     }
 }
