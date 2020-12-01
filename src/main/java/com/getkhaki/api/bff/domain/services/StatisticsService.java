@@ -10,7 +10,6 @@ import com.getkhaki.api.bff.domain.persistence.TimeBlockSummaryPersistenceInterf
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
-import java.time.ZonedDateTime;
 import java.util.List;
 import java.util.OptionalInt;
 
@@ -39,11 +38,11 @@ public class StatisticsService {
         return this.organizersStatisticsPersistenceService.getOrganizersStatistics(start, end, count);
     }
 
-    public TimeBlockSummaryDm getTimeBlockSummary(ZonedDateTime start, ZonedDateTime end) {
+    public TimeBlockSummaryDm getTimeBlockSummary(Instant start, Instant end) {
         return this.timeBlockSummaryPersistenceService.getTimeBlockSummary(start, end);
     }
 
-    public List<TimeBlockSummaryDm> getTrailingStatistics(ZonedDateTime start, ZonedDateTime end, IntervalEnumDm interval) {
+    public List<TimeBlockSummaryDm> getTrailingStatistics(Instant start, Instant end, IntervalEnumDm interval) {
         return this.timeBlockSummaryPersistenceService.getTrailingStatistics(start, end, interval);
     }
 

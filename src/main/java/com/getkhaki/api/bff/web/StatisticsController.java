@@ -1,6 +1,5 @@
 package com.getkhaki.api.bff.web;
 
-import com.getkhaki.api.bff.domain.models.DepartmentStatisticsDm;
 import com.getkhaki.api.bff.domain.models.IntervalEnumDm;
 import com.getkhaki.api.bff.domain.models.OrganizerStatisticsDm;
 import com.getkhaki.api.bff.domain.services.StatisticsService;
@@ -22,7 +21,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.time.Instant;
-import java.time.ZonedDateTime;
 import java.util.List;
 import java.util.OptionalInt;
 
@@ -61,8 +59,10 @@ public class StatisticsController {
     }
 
 
-    @GetMapping("/summary")
-    public TimeBlockSummaryResponseDto getTimeBlockSummary(@PathVariable(name = "start") ZonedDateTime start, @PathVariable(name = "end") ZonedDateTime end) {
+    @GetMapping("/summary/{start}/{end}")
+    public TimeBlockSummaryResponseDto getTimeBlockSummary(
+            @PathVariable Instant start, @PathVariable Instant end
+    ) {
         return modelMapper.map(statisticsService.getTimeBlockSummary(start, end), TimeBlockSummaryResponseDto.class);
     }
 
@@ -85,8 +85,8 @@ public class StatisticsController {
 
     @GetMapping("/trailing/{start}/{end}")
     public TrailingStatisticsResponseDto getTrailingStatistics(
-            @PathVariable(name = "start") ZonedDateTime start,
-            @PathVariable(name = "end") ZonedDateTime end,
+            @PathVariable(name = "start") Instant start,
+            @PathVariable(name = "end") Instant end,
             @RequestParam(name = "interval") IntervalEnumDao interval
     ) {
         IntervalEnumDm intervalEnumDm = modelMapper.map(interval, IntervalEnumDm.class);

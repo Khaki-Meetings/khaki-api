@@ -7,6 +7,7 @@ import lombok.experimental.Accessors;
 
 import javax.persistence.Entity;
 import javax.persistence.ManyToMany;
+import javax.persistence.OneToMany;
 import java.util.List;
 
 @Data
@@ -19,4 +20,6 @@ public class OrganizationDao extends EntityBaseDao {
     @ManyToMany(mappedBy = "organizations")
     List<DomainDao> domains;
 
+    @OneToMany(mappedBy = "organization")
+    List<DepartmentDao> departments;
 }

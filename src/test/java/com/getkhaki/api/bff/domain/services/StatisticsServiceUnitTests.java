@@ -20,7 +20,7 @@ import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-public class StatisticsServicesUnitTests {
+public class StatisticsServiceUnitTests {
 
     private StatisticsService underTest;
     private DepartmentStatisticsPersistenceInterface departmentStatisticsPersistenceService;
@@ -61,11 +61,11 @@ public class StatisticsServicesUnitTests {
 
 
         EmailDm emailDm = new EmailDm("test", new DomainDm("mail"));
-        ZonedDateTime startTest = ZonedDateTime.parse("2020-11-01T00:00:00.000000-07:00[America/Denver]");
-        ZonedDateTime endTest = ZonedDateTime.parse("2020-11-12T12:22:40.274456-07:00[America/Denver]");
+        Instant startTest = Instant.parse("2020-11-01T00:00:00.000Z");
+        Instant endTest = Instant.parse("2020-11-18T00:00:00.000Z");
 
         UUID id = UUID.randomUUID();
-        TimeBlockSummaryDm timeBlockSummaryDm = new TimeBlockSummaryDm(id, IntervalEnumDm.Day, 1, 1, 1, 1);
+        TimeBlockSummaryDm timeBlockSummaryDm = new TimeBlockSummaryDm(1, 1);
 
 
         when(timeBlockSummaryPersistenceService.getTimeBlockSummary(startTest, endTest)).thenReturn(timeBlockSummaryDm);
@@ -90,10 +90,10 @@ public class StatisticsServicesUnitTests {
 
     @Test
     public void test() {
-        ZonedDateTime startTest = ZonedDateTime.parse("2020-11-01T00:00:00.000000-07:00[America/Denver]");
-        ZonedDateTime endTest = ZonedDateTime.parse("2020-11-12T12:22:40.274456-07:00[America/Denver]");
+        Instant startTest = Instant.parse("2020-11-01T00:00:00.000Z");
+        Instant endTest = Instant.parse("2020-11-18T00:00:00.000Z");
         UUID id = UUID.randomUUID();
-        TimeBlockSummaryDm timeBlockSummaryDm = new TimeBlockSummaryDm(id, IntervalEnumDm.Day, 1, 1, 1, 1);
+        TimeBlockSummaryDm timeBlockSummaryDm = new TimeBlockSummaryDm(1, 1);
         List<TimeBlockSummaryDm> trailingListDm = Lists.list(timeBlockSummaryDm);
         when(timeBlockSummaryPersistenceService.getTimeBlockSummary(startTest, endTest)).thenReturn(timeBlockSummaryDm);
         when(timeBlockSummaryPersistenceService.getTrailingStatistics(startTest, endTest, IntervalEnumDm.Day)).thenReturn(trailingListDm);
