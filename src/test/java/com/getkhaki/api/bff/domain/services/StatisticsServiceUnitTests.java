@@ -4,6 +4,7 @@ import com.getkhaki.api.bff.domain.models.*;
 import com.getkhaki.api.bff.domain.persistence.DepartmentStatisticsPersistenceInterface;
 import com.getkhaki.api.bff.domain.persistence.OrganizersStatisticsPersistenceInterface;
 import com.getkhaki.api.bff.domain.persistence.TimeBlockSummaryPersistenceInterface;
+import com.getkhaki.api.bff.web.models.IntervalDte;
 import org.assertj.core.util.Lists;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -19,6 +20,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -28,13 +30,20 @@ public class StatisticsServiceUnitTests {
     private DepartmentStatisticsPersistenceInterface departmentStatisticsPersistenceService;
     private OrganizersStatisticsPersistenceInterface organizersStatisticsPersistenceService;
     private TimeBlockSummaryPersistenceInterface timeBlockSummaryPersistenceService;
+    private TimeBlockGeneratorFactory timeBlockGeneratorFactory;
 
     @BeforeEach
     public void setup() {
         departmentStatisticsPersistenceService = mock(DepartmentStatisticsPersistenceInterface.class);
         organizersStatisticsPersistenceService = mock(OrganizersStatisticsPersistenceInterface.class);
         timeBlockSummaryPersistenceService = mock(TimeBlockSummaryPersistenceInterface.class);
-        underTest = new StatisticsService(departmentStatisticsPersistenceService, organizersStatisticsPersistenceService, timeBlockSummaryPersistenceService);
+        timeBlockGeneratorFactory = mock(TimeBlockGeneratorFactory.class);
+        underTest = new StatisticsService(
+                departmentStatisticsPersistenceService,
+                organizersStatisticsPersistenceService,
+                timeBlockSummaryPersistenceService,
+                timeBlockGeneratorFactory
+        );
     }
 
     @Test
@@ -94,28 +103,32 @@ public class StatisticsServiceUnitTests {
     public void testTrailingStatisticsMonth() {
         Instant startTest = Instant.parse("2020-11-01T00:00:00.000Z");
         int count = 2;
-        IntervalEnumDm interval = IntervalEnumDm.Month;
-
+        IntervalDe interval = IntervalDe.Month;
 
         ArgumentCaptor<Instant> startCaptor = ArgumentCaptor.forClass(Instant.class);
         ArgumentCaptor<Instant> endCaptor = ArgumentCaptor.forClass(Instant.class);
+        when(timeBlockGeneratorFactory.get(any())).thenCallRealMethod();
         when(timeBlockSummaryPersistenceService.getTimeBlockSummary(any(Instant.class), any(Instant.class)))
                 .thenReturn(new TimeBlockSummaryDm(1, 1));
 
         underTest.getTrailingStatistics(startTest, interval, count);
 
-        verify(timeBlockSummaryPersistenceService).getTimeBlockSummary(startCaptor.capture(), endCaptor.capture());
+        verify(timeBlockSummaryPersistenceService, times(2))
+                .getTimeBlockSummary(startCaptor.capture(), endCaptor.capture());
 
-        Instant firstPassedStartInstant = startCaptor.getValue();
-        Instant firstPassedEndInstant = endCaptor.getValue();
+        List<Instant> allStarts = startCaptor.getAllValues();
+        List<Instant> allEnds = endCaptor.getAllValues();
+
+        Instant firstPassedStartInstant = allStarts.get(0);
+        Instant firstPassedEndInstant = allEnds.get(0);
         Instant firstStartShouldBe = Instant.parse("2020-11-01T00:00:00.000Z");
         Instant firstEndShouldBe = Instant.parse("2020-11-30T23:59:59.999Z");
 
         assertThat(firstPassedStartInstant).isEqualTo(firstStartShouldBe);
         assertThat(firstPassedEndInstant).isEqualTo(firstEndShouldBe);
 
-        Instant secondPassedStartInstant = startCaptor.getValue();
-        Instant secondPassedEndInstant = endCaptor.getValue();
+        Instant secondPassedStartInstant = allStarts.get(1);
+        Instant secondPassedEndInstant = allEnds.get(1);
         Instant secondStartShouldBe = Instant.parse("2020-12-01T00:00:00.000Z");
         Instant secondEndShouldBe = Instant.parse("2020-12-31T23:59:59.999Z");
 

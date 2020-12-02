@@ -1,11 +1,12 @@
 package com.getkhaki.api.bff.web;
 
 import com.getkhaki.api.bff.domain.models.DepartmentStatisticsDm;
-import com.getkhaki.api.bff.domain.models.IntervalEnumDm;
+import com.getkhaki.api.bff.domain.models.IntervalDe;
 import com.getkhaki.api.bff.domain.models.OrganizerStatisticsDm;
 import com.getkhaki.api.bff.domain.models.TimeBlockSummaryDm;
 import com.getkhaki.api.bff.domain.services.StatisticsService;
 import com.getkhaki.api.bff.web.models.DepartmentStatisticsResponseDto;
+import com.getkhaki.api.bff.web.models.IntervalDte;
 import com.getkhaki.api.bff.web.models.OrganizerStatisticsResponseDto;
 import com.getkhaki.api.bff.web.models.OrganizersStatisticsResponseDto;
 import com.getkhaki.api.bff.web.models.TimeBlockSummaryResponseDto;
@@ -138,11 +139,11 @@ public class StatisticsControllerUnitTests {
         List<TimeBlockSummaryDm> timeBlockSummaryDmList = Lists.list(
                 new TimeBlockSummaryDm().setMeetingCount(1).setTotalHours(1)
         );
-        when(statisticsService.getTrailingStatistics(startTest, IntervalEnumDm.Month, 1))
+        when(statisticsService.getTrailingStatistics(startTest, IntervalDe.Month, 1))
                 .thenReturn(timeBlockSummaryDmList);
 
-        underTest.getTrailingStatistics(startTest, IntervalEnumDm.Month, 1);
+        underTest.getTrailingStatistics(startTest, IntervalDe.Month, 1);
 
-        verify(statisticsService, times(1)).getTrailingStatistics(startTest, IntervalEnumDm.Month, 1);
+        verify(statisticsService, times(1)).getTrailingStatistics(startTest, IntervalDe.Month, 1);
     }
 }

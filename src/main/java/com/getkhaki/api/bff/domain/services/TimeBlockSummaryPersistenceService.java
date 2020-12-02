@@ -1,15 +1,12 @@
 package com.getkhaki.api.bff.domain.services;
 
-import com.getkhaki.api.bff.domain.models.IntervalEnumDm;
 import com.getkhaki.api.bff.domain.models.TimeBlockSummaryDm;
 import com.getkhaki.api.bff.domain.persistence.TimeBlockSummaryPersistenceInterface;
 import com.getkhaki.api.bff.persistence.repositories.TimeBlockSummaryRepositoryInterface;
-import org.apache.commons.lang3.NotImplementedException;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
-import java.util.List;
 import java.util.UUID;
 
 @Service

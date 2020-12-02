@@ -1,10 +1,11 @@
 package com.getkhaki.api.bff.web;
 
-import com.getkhaki.api.bff.domain.models.IntervalEnumDm;
+import com.getkhaki.api.bff.domain.models.IntervalDe;
 import com.getkhaki.api.bff.domain.models.OrganizerStatisticsDm;
 import com.getkhaki.api.bff.domain.services.StatisticsService;
 import com.getkhaki.api.bff.web.models.DepartmentStatisticsResponseDto;
 import com.getkhaki.api.bff.web.models.DepartmentsStatisticsResponseDto;
+import com.getkhaki.api.bff.web.models.IntervalDte;
 import com.getkhaki.api.bff.web.models.OrganizerStatisticsResponseDto;
 import com.getkhaki.api.bff.web.models.OrganizersStatisticsResponseDto;
 import com.getkhaki.api.bff.web.models.TimeBlockSummaryResponseDto;
@@ -85,7 +86,7 @@ public class StatisticsController {
     @GetMapping("/trailing/{start}/{interval}/{count}")
     public TrailingStatisticsResponseDto getTrailingStatistics(
             @PathVariable Instant start,
-            @PathVariable IntervalEnumDm interval,
+            @PathVariable IntervalDe interval,
             @PathVariable int count
     ) {
         return modelMapper.map(

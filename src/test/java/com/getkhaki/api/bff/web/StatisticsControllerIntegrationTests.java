@@ -123,4 +123,28 @@ public class StatisticsControllerIntegrationTests extends BaseJpaIntegrationTest
         assertThat(stats.getTotalHours()).isEqualTo(15);
     }
 
+    @Test
+    public void testTrailingStatistics() {
+        Instant start = Instant.parse("2020-11-01T00:00:00.000Z");
+        Instant end = Instant.parse("2020-11-18T00:00:00.000Z");
+
+        String url = "/statistics/summary/" +
+                start.toString() +
+                "/" +
+                end.toString();
+        TimeBlockSummaryResponseDto stats = given()
+                .port(this.port)
+                .contentType(JSON)
+                .when()
+                .get(url)
+                .then().assertThat()
+                .statusCode(200)
+                .extract()
+                .as(TimeBlockSummaryResponseDto.class);
+
+        assertThat(stats.getMeetingCount()).isEqualTo(3);
+        assertThat(stats.getTotalHours()).isEqualTo(15);
+
+    }
+
 }
