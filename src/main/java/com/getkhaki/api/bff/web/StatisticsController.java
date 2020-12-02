@@ -21,8 +21,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.time.Instant;
+import java.util.Collections;
 import java.util.List;
 import java.util.OptionalInt;
+import java.util.stream.Collectors;
 
 @RequestMapping("/statistics")
 @RestController
@@ -89,10 +91,17 @@ public class StatisticsController {
             @PathVariable IntervalDe interval,
             @PathVariable int count
     ) {
-        return modelMapper.map(
-                statisticsService.getTrailingStatistics(start, interval, count),
-                TrailingStatisticsResponseDto.class
+        TrailingStatisticsResponseDto ret = new TrailingStatisticsResponseDto();
+        ret.setTimeBlockSummaries(statisticsService
+                .getTrailingStatistics(start, interval, count)
+                .stream()
+                .map(
+                        stat -> modelMapper.map(stat, TimeBlockSummaryResponseDto.class)
+                )
+                .collect(Collectors.toList())
         );
+
+        return ret;
     }
 
 

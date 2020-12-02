@@ -5,19 +5,12 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import java.util.UUID;
+import java.util.List;
 
 @Data
-@Entity
 @NoArgsConstructor
 @AllArgsConstructor
 @Accessors(chain = true)
 public class TrailingStatisticsResponseDto {
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    UUID id;
+    List<TimeBlockSummaryResponseDto> timeBlockSummaries;
 }

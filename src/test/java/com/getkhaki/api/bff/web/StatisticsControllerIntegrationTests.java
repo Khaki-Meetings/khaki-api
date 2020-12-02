@@ -3,9 +3,11 @@ package com.getkhaki.api.bff.web;
 import com.getkhaki.api.bff.BaseJpaIntegrationTest;
 import com.getkhaki.api.bff.web.models.DepartmentStatisticsResponseDto;
 import com.getkhaki.api.bff.web.models.DepartmentsStatisticsResponseDto;
+import com.getkhaki.api.bff.web.models.IntervalDte;
 import com.getkhaki.api.bff.web.models.OrganizerStatisticsResponseDto;
 import com.getkhaki.api.bff.web.models.OrganizersStatisticsResponseDto;
 import com.getkhaki.api.bff.web.models.TimeBlockSummaryResponseDto;
+import com.getkhaki.api.bff.web.models.TrailingStatisticsResponseDto;
 import io.restassured.module.mockmvc.RestAssuredMockMvc;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -13,6 +15,7 @@ import org.springframework.boot.web.server.LocalServerPort;
 import org.springframework.web.context.WebApplicationContext;
 
 import java.time.Instant;
+import java.util.List;
 
 import static io.restassured.RestAssured.given;
 import static io.restassured.http.ContentType.JSON;
@@ -101,15 +104,18 @@ public class StatisticsControllerIntegrationTests extends BaseJpaIntegrationTest
     }
 
     @Test
-    public void testTimeBlockSummary() {
+    public void testTrailingStatistics() {
         Instant start = Instant.parse("2020-11-01T00:00:00.000Z");
-        Instant end = Instant.parse("2020-11-18T00:00:00.000Z");
+        int count = 2;
 
-        String url = "/statistics/summary/" +
-                start.toString() +
-                "/" +
-                end.toString();
-        TimeBlockSummaryResponseDto stats = given()
+        String url = String.format(
+                "/statistics/trailing/%s/%s/%d",
+                start.toString(),
+                IntervalDte.Day,
+                count
+        );
+
+        TrailingStatisticsResponseDto stats = given()
                 .port(this.port)
                 .contentType(JSON)
                 .when()
@@ -117,14 +123,20 @@ public class StatisticsControllerIntegrationTests extends BaseJpaIntegrationTest
                 .then().assertThat()
                 .statusCode(200)
                 .extract()
-                .as(TimeBlockSummaryResponseDto.class);
+                .as(TrailingStatisticsResponseDto.class);
 
-        assertThat(stats.getMeetingCount()).isEqualTo(3);
-        assertThat(stats.getTotalHours()).isEqualTo(15);
+        assertThat(stats.getTimeBlockSummaries()).hasSize(2);
+
+        List<TimeBlockSummaryResponseDto> summaries = stats.getTimeBlockSummaries();
+        assertThat(summaries.get(0).getTotalHours()).isEqualTo(4);
+        assertThat(summaries.get(0).getMeetingCount()).isEqualTo(1);
+
+        assertThat(summaries.get(1).getTotalHours()).isEqualTo(9);
+        assertThat(summaries.get(1).getMeetingCount()).isEqualTo(1);
     }
 
     @Test
-    public void testTrailingStatistics() {
+    public void testTimeBlockSummary() {
         Instant start = Instant.parse("2020-11-01T00:00:00.000Z");
         Instant end = Instant.parse("2020-11-18T00:00:00.000Z");
 
