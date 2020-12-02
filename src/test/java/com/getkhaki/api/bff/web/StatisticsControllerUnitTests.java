@@ -1,12 +1,12 @@
 package com.getkhaki.api.bff.web;
 
 import com.getkhaki.api.bff.domain.models.DepartmentStatisticsDm;
-import com.getkhaki.api.bff.domain.models.IntervalEnumDm;
+import com.getkhaki.api.bff.domain.models.IntervalDe;
 import com.getkhaki.api.bff.domain.models.OrganizerStatisticsDm;
 import com.getkhaki.api.bff.domain.models.TimeBlockSummaryDm;
 import com.getkhaki.api.bff.domain.services.StatisticsService;
 import com.getkhaki.api.bff.web.models.DepartmentStatisticsResponseDto;
-import com.getkhaki.api.bff.web.models.IntervalEnumDto;
+import com.getkhaki.api.bff.web.models.IntervalDte;
 import com.getkhaki.api.bff.web.models.OrganizerStatisticsResponseDto;
 import com.getkhaki.api.bff.web.models.OrganizersStatisticsResponseDto;
 import com.getkhaki.api.bff.web.models.TimeBlockSummaryResponseDto;
@@ -26,6 +26,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 public class StatisticsControllerUnitTests {
@@ -83,29 +85,20 @@ public class StatisticsControllerUnitTests {
 
     @Test
     public void getTimeBlockSummary() {
-        ZonedDateTime startTest = ZonedDateTime.parse("2020-11-01T00:00:00.000000-07:00[America/Denver]");
-        ZonedDateTime endTest = ZonedDateTime.parse("2020-11-12T12:22:40.274456-07:00[America/Denver]");
+        Instant startTest = Instant.parse("2020-11-01T00:00:00.000Z");
+        Instant endTest = Instant.parse("2020-11-30T00:00:00.000Z");
 
         TimeBlockSummaryResponseDto mockDto = new TimeBlockSummaryResponseDto(
-                UUID.randomUUID(),
-                IntervalEnumDto.Day,
-                1L,
-                1L,
                 1L,
                 1L
         );
 
         TimeBlockSummaryDm mockDm = new TimeBlockSummaryDm(
-                mockDto.getId(),
-                IntervalEnumDm.Day,
-                1L,
-                1L,
                 1L,
                 1L
-
         );
 
-        when(statisticsService.getTimeBlockSummary(any(ZonedDateTime.class), any(ZonedDateTime.class)))
+        when(statisticsService.getTimeBlockSummary(any(Instant.class), any(Instant.class)))
                 .thenReturn(mockDm);
         when(modelMapper.map(mockDm, TimeBlockSummaryResponseDto.class)).thenReturn(mockDto);
 
@@ -133,34 +126,24 @@ public class StatisticsControllerUnitTests {
         DepartmentStatisticsResponseDto departmentStatisticsResponseDto = new DepartmentStatisticsResponseDto(
                 UUID.randomUUID(),
                 "HR",
-                1L,
-                1L,
-                1L,
-                1L
+                1
         );
 
         List<DepartmentStatisticsResponseDto> mockDtoList = Lists.list(departmentStatisticsResponseDto);
-
-//        when(statisticsService.getPerDepartmentStatistics(any(ZonedDateTime.class), any(ZonedDateTime.class)))
-//                .thenReturn(mockDmList);
-//
-//        List<DepartmentStatisticsDao> departmentStatisticsResponseDtoList = underTest.getPerDepartmentStatistics(startTest, endTest);
-//        assertThat(departmentStatisticsResponseDtoList).isNotNull();
     }
 
 
     @Test
     public void getTrailingStatistics() {
-        ZonedDateTime startTest = ZonedDateTime.parse("2020-11-01T00:00:00.000000-07:00[America/Denver]");
-        ZonedDateTime endTest = ZonedDateTime.parse("2020-11-12T12:22:40.274456-07:00[America/Denver]");
+        Instant startTest = Instant.parse("2020-11-01T00:00:00.000Z");
         List<TimeBlockSummaryDm> timeBlockSummaryDmList = Lists.list(
-                new TimeBlockSummaryDm().setAverageCost(10).setId(UUID.randomUUID())
+                new TimeBlockSummaryDm().setMeetingCount(1).setTotalHours(1)
         );
-        when(statisticsService.getTrailingStatistics(startTest, endTest, IntervalEnumDm.Month))
+        when(statisticsService.getTrailingStatistics(startTest, IntervalDe.Month, 1))
                 .thenReturn(timeBlockSummaryDmList);
 
+        underTest.getTrailingStatistics(startTest, IntervalDe.Month, 1);
 
-//        TrailingStatisticsResponseDto trailingStatisticsResponseDto = underTest.getTrailingStatistics(startTest, endTest, IntervalEnumDao.Month);
-//        assertThat(trailingStatisticsResponseDto).isNotNull();
+        verify(statisticsService, times(1)).getTrailingStatistics(startTest, IntervalDe.Month, 1);
     }
 }

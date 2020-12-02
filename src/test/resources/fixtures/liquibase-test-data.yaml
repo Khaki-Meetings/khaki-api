@@ -21,11 +21,17 @@ databaseChangeLog:
       name: bettySmithS56NetEmailId
       value: 1435aea1b46d4acbb02078c5c64cf007
   - property:
+      name: fredSmithS56NetEmailId
+      value: 6fa9bebbde5b4ad684cf11bf8c1c12c4
+  - property:
       name: bobJonesCalendarEvent1ParticipantId
       value: 1c0e8ab0524f4c0ba540325e15940a7b
   - property:
       name: bettySmithCalendarEvent1ParticipantId
       value: bd9bb9baf6f04b6c8bdb69a831d93208
+  - property:
+      name: fredSmithCalendarEvent3ParticipantId
+      value: d115308089194e78806fe41993e9b53e
   - property:
       name: bobJonesCalendarEvent2ParticipantId
       value: 90ed9ee477074ccc94378881938e079d
@@ -45,14 +51,26 @@ databaseChangeLog:
       name: bettySmithPersonId
       value: c60f4b4b343640ae909de41a69111893
   - property:
-      name: bobSmithEmployeeId
+      name: fredSmithPersonId
+      value: 99c6541346344dabad08488c307680fa
+  - property:
+      name: bobJonesEmployeeId
       value: f66d66d77b404ffea38aaae70919a1ef
+  - property:
+      name: bettySmithEmployeeId
+      value: bdf6e53aed454e52b7a376b05f3f2728
+  - property:
+      name: fredSmithEmployeeId
+      value: a09aceedc7264709a138e74b558bfdfe
   - property:
       name: salaryGroup1Id
       value: 166d0d87b916430fb01f167b9701dd6c
   - property:
       name: hrDepartmentId
       value: 588d4af1b6fa42b18d7495d6cdf4201d
+  - property:
+      name: itDepartmentId
+      value: 47ea2e3e17f840a3b232d934895f8184
   - property:
       name: s56OrganizationId
       value: d713ace20d3043beb4badb973967d6d4
@@ -116,7 +134,7 @@ databaseChangeLog:
                   value: 2020-11-02 01:00+00
               - column:
                   name: end
-                  value: 2020-11-02 02:00+00
+                  value: 2020-11-02 04:00+00
               - column:
                   name: summary
                   value: event 3
@@ -162,6 +180,18 @@ databaseChangeLog:
               - column:
                   name: user
                   value: betty
+              - column:
+                  name: domain_id
+                  value: ${domainS56NetId}
+        - insert:
+            tableName: email_dao
+            columns:
+              - column:
+                  name: id
+                  value: ${fredSmithS56NetEmailId}
+              - column:
+                  name: user
+                  value: fred
               - column:
                   name: domain_id
                   value: ${domainS56NetId}
@@ -247,6 +277,18 @@ databaseChangeLog:
                   name: email_id
                   value: ${bobJonesS56NetEmailId}
         - insert:
+            tableName: calendar_event_participant_dao
+            columns:
+              - column:
+                  name: id
+                  value: ${fredSmithCalendarEvent3ParticipantId}
+              - column:
+                  name: calendar_event_id
+                  value: ${calendarEvent3Id}
+              - column:
+                  name: email_id
+                  value: ${fredSmithS56NetEmailId}
+        - insert:
             tableName: person_dao
             columns:
               - column:
@@ -271,6 +313,18 @@ databaseChangeLog:
                   name: last_name
                   value: Smith
         - insert:
+            tableName: person_dao
+            columns:
+              - column:
+                  name: id
+                  value: ${fredSmithPersonId}
+              - column:
+                  name: first_name
+                  value: Fred
+              - column:
+                  name: last_name
+                  value: Smith
+        - insert:
             tableName: email_dao_people
             columns:
               - column:
@@ -288,6 +342,15 @@ databaseChangeLog:
               - column:
                   name: people_id
                   value: ${bettySmithPersonId}
+        - insert:
+            tableName: email_dao_people
+            columns:
+              - column:
+                  name: emails_id
+                  value: ${fredSmithS56NetEmailId}
+              - column:
+                  name: people_id
+                  value: ${fredSmithPersonId}
         - insert:
             tableName: salary_group_dao
             columns:
@@ -331,17 +394,59 @@ databaseChangeLog:
                   name: organization_id
                   value: ${s56OrganizationId}
         - insert:
+            tableName: department_dao
+            columns:
+              - column:
+                  name: id
+                  value: ${itDepartmentId}
+              - column:
+                  name: name
+                  value: IT
+              - column:
+                  name: organization_id
+                  value: ${s56OrganizationId}
+        - insert:
             tableName: employee_dao
             columns:
               - column:
                   name: id
-                  value: ${bobSmithEmployeeId}
+                  value: ${bobJonesEmployeeId}
               - column:
                   name: department_id
                   value: ${hrDepartmentId}
               - column:
                   name: person_id
                   value: ${bobJonesPersonId}
+              - column:
+                  name: salary_group_id
+                  value: ${salaryGroup1Id}
+        - insert:
+            tableName: employee_dao
+            columns:
+              - column:
+                  name: id
+                  value: ${bettySmithEmployeeId}
+              - column:
+                  name: department_id
+                  value: ${itDepartmentId}
+              - column:
+                  name: person_id
+                  value: ${bettySmithPersonId}
+              - column:
+                  name: salary_group_id
+                  value: ${salaryGroup1Id}
+        - insert:
+            tableName: employee_dao
+            columns:
+              - column:
+                  name: id
+                  value: ${fredSmithEmployeeId}
+              - column:
+                  name: department_id
+                  value: ${itDepartmentId}
+              - column:
+                  name: person_id
+                  value: ${fredSmithPersonId}
               - column:
                   name: salary_group_id
                   value: ${salaryGroup1Id}

@@ -4,9 +4,11 @@ import com.getkhaki.api.bff.domain.models.*;
 import com.getkhaki.api.bff.domain.persistence.DepartmentStatisticsPersistenceInterface;
 import com.getkhaki.api.bff.domain.persistence.OrganizersStatisticsPersistenceInterface;
 import com.getkhaki.api.bff.domain.persistence.TimeBlockSummaryPersistenceInterface;
+import com.getkhaki.api.bff.web.models.IntervalDte;
 import org.assertj.core.util.Lists;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.ArgumentCaptor;
 
 import java.time.Instant;
 import java.time.ZonedDateTime;
@@ -18,21 +20,30 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-public class StatisticsServicesUnitTests {
+public class StatisticsServiceUnitTests {
 
     private StatisticsService underTest;
     private DepartmentStatisticsPersistenceInterface departmentStatisticsPersistenceService;
     private OrganizersStatisticsPersistenceInterface organizersStatisticsPersistenceService;
     private TimeBlockSummaryPersistenceInterface timeBlockSummaryPersistenceService;
+    private TimeBlockGeneratorFactory timeBlockGeneratorFactory;
 
     @BeforeEach
     public void setup() {
         departmentStatisticsPersistenceService = mock(DepartmentStatisticsPersistenceInterface.class);
         organizersStatisticsPersistenceService = mock(OrganizersStatisticsPersistenceInterface.class);
         timeBlockSummaryPersistenceService = mock(TimeBlockSummaryPersistenceInterface.class);
-        underTest = new StatisticsService(departmentStatisticsPersistenceService, organizersStatisticsPersistenceService, timeBlockSummaryPersistenceService);
+        timeBlockGeneratorFactory = mock(TimeBlockGeneratorFactory.class);
+        underTest = new StatisticsService(
+                departmentStatisticsPersistenceService,
+                organizersStatisticsPersistenceService,
+                timeBlockSummaryPersistenceService,
+                timeBlockGeneratorFactory
+        );
     }
 
     @Test
@@ -61,11 +72,11 @@ public class StatisticsServicesUnitTests {
 
 
         EmailDm emailDm = new EmailDm("test", new DomainDm("mail"));
-        ZonedDateTime startTest = ZonedDateTime.parse("2020-11-01T00:00:00.000000-07:00[America/Denver]");
-        ZonedDateTime endTest = ZonedDateTime.parse("2020-11-12T12:22:40.274456-07:00[America/Denver]");
+        Instant startTest = Instant.parse("2020-11-01T00:00:00.000Z");
+        Instant endTest = Instant.parse("2020-11-18T00:00:00.000Z");
 
         UUID id = UUID.randomUUID();
-        TimeBlockSummaryDm timeBlockSummaryDm = new TimeBlockSummaryDm(id, IntervalEnumDm.Day, 1, 1, 1, 1);
+        TimeBlockSummaryDm timeBlockSummaryDm = new TimeBlockSummaryDm(1, 1);
 
 
         when(timeBlockSummaryPersistenceService.getTimeBlockSummary(startTest, endTest)).thenReturn(timeBlockSummaryDm);
@@ -89,18 +100,40 @@ public class StatisticsServicesUnitTests {
     }
 
     @Test
-    public void test() {
-        ZonedDateTime startTest = ZonedDateTime.parse("2020-11-01T00:00:00.000000-07:00[America/Denver]");
-        ZonedDateTime endTest = ZonedDateTime.parse("2020-11-12T12:22:40.274456-07:00[America/Denver]");
-        UUID id = UUID.randomUUID();
-        TimeBlockSummaryDm timeBlockSummaryDm = new TimeBlockSummaryDm(id, IntervalEnumDm.Day, 1, 1, 1, 1);
-        List<TimeBlockSummaryDm> trailingListDm = Lists.list(timeBlockSummaryDm);
-        when(timeBlockSummaryPersistenceService.getTimeBlockSummary(startTest, endTest)).thenReturn(timeBlockSummaryDm);
-        when(timeBlockSummaryPersistenceService.getTrailingStatistics(startTest, endTest, IntervalEnumDm.Day)).thenReturn(trailingListDm);
-        List<TimeBlockSummaryDm> trailingStatisticsResponseDm = underTest.getTrailingStatistics(startTest, endTest, IntervalEnumDm.Day);
-        assertThat(trailingStatisticsResponseDm).isNotNull();
+    public void testTrailingStatisticsMonth() {
+        Instant startTest = Instant.parse("2020-11-01T00:00:00.000Z");
+        int count = 2;
+        IntervalDe interval = IntervalDe.Month;
 
+        ArgumentCaptor<Instant> startCaptor = ArgumentCaptor.forClass(Instant.class);
+        ArgumentCaptor<Instant> endCaptor = ArgumentCaptor.forClass(Instant.class);
+        when(timeBlockGeneratorFactory.get(any())).thenCallRealMethod();
+        when(timeBlockSummaryPersistenceService.getTimeBlockSummary(any(Instant.class), any(Instant.class)))
+                .thenReturn(new TimeBlockSummaryDm(1, 1));
 
+        underTest.getTrailingStatistics(startTest, interval, count);
+
+        verify(timeBlockSummaryPersistenceService, times(2))
+                .getTimeBlockSummary(startCaptor.capture(), endCaptor.capture());
+
+        List<Instant> allStarts = startCaptor.getAllValues();
+        List<Instant> allEnds = endCaptor.getAllValues();
+
+        Instant firstPassedStartInstant = allStarts.get(0);
+        Instant firstPassedEndInstant = allEnds.get(0);
+        Instant firstStartShouldBe = Instant.parse("2020-11-01T00:00:00.000Z");
+        Instant firstEndShouldBe = Instant.parse("2020-11-30T23:59:59.999Z");
+
+        assertThat(firstPassedStartInstant).isEqualTo(firstStartShouldBe);
+        assertThat(firstPassedEndInstant).isEqualTo(firstEndShouldBe);
+
+        Instant secondPassedStartInstant = allStarts.get(1);
+        Instant secondPassedEndInstant = allEnds.get(1);
+        Instant secondStartShouldBe = Instant.parse("2020-12-01T00:00:00.000Z");
+        Instant secondEndShouldBe = Instant.parse("2020-12-31T23:59:59.999Z");
+
+        assertThat(secondPassedStartInstant).isEqualTo(secondStartShouldBe);
+        assertThat(secondPassedEndInstant).isEqualTo(secondEndShouldBe);
     }
 
 }
