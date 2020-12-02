@@ -28,7 +28,12 @@ public class GoogleCalendarPersistanceServiceUnitTests {
     }
 
     @Test
-    public void test(){
+    public void getUsers(){
+
+    }
+
+    @Test
+    public void getEvents(){
 
     }
 }
