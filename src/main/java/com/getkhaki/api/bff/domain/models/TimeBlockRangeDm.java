@@ -5,11 +5,13 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
 
+import java.time.Instant;
+
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Accessors(chain = true)
-public class TimeBlockSummaryDm {
-    long totalHours;
-    long meetingCount;
+public class TimeBlockRangeDm {
+    Instant start;
+    Instant end;
 }

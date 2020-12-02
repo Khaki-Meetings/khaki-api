@@ -1,12 +1,12 @@
 package com.getkhaki.api.bff.web;
 
 import com.getkhaki.api.bff.domain.models.DepartmentStatisticsDm;
-import com.getkhaki.api.bff.domain.models.IntervalEnumDm;
+import com.getkhaki.api.bff.domain.models.IntervalDe;
 import com.getkhaki.api.bff.domain.models.OrganizerStatisticsDm;
 import com.getkhaki.api.bff.domain.models.TimeBlockSummaryDm;
 import com.getkhaki.api.bff.domain.services.StatisticsService;
 import com.getkhaki.api.bff.web.models.DepartmentStatisticsResponseDto;
-import com.getkhaki.api.bff.web.models.IntervalEnumDto;
+import com.getkhaki.api.bff.web.models.IntervalDte;
 import com.getkhaki.api.bff.web.models.OrganizerStatisticsResponseDto;
 import com.getkhaki.api.bff.web.models.OrganizersStatisticsResponseDto;
 import com.getkhaki.api.bff.web.models.TimeBlockSummaryResponseDto;
@@ -26,6 +26,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 public class StatisticsControllerUnitTests {
@@ -134,11 +136,14 @@ public class StatisticsControllerUnitTests {
     @Test
     public void getTrailingStatistics() {
         Instant startTest = Instant.parse("2020-11-01T00:00:00.000Z");
-        Instant endTest = Instant.parse("2020-11-18T00:00:00.000Z");
         List<TimeBlockSummaryDm> timeBlockSummaryDmList = Lists.list(
                 new TimeBlockSummaryDm().setMeetingCount(1).setTotalHours(1)
         );
-        when(statisticsService.getTrailingStatistics(startTest, endTest, IntervalEnumDm.Month))
+        when(statisticsService.getTrailingStatistics(startTest, IntervalDe.Month, 1))
                 .thenReturn(timeBlockSummaryDmList);
+
+        underTest.getTrailingStatistics(startTest, IntervalDe.Month, 1);
+
+        verify(statisticsService, times(1)).getTrailingStatistics(startTest, IntervalDe.Month, 1);
     }
 }

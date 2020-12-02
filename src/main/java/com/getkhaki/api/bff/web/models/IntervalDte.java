@@ -1,6 +1,6 @@
 package com.getkhaki.api.bff.web.models;
 
-public enum IntervalEnumDto {
+public enum IntervalDte {
     Day,
     Week,
     Month,
