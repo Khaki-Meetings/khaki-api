@@ -34,13 +34,4 @@ public class TimeBlockSummaryPersistenceService implements TimeBlockSummaryPersi
                 TimeBlockSummaryDm.class
         );
     }
-
-    @Override
-    public List<TimeBlockSummaryDm> getTrailingStatistics(Instant start, Instant end, IntervalEnumDm interval) {
-//        List<TimeBlockSummaryDao> daoList = timeBlockSummaryRepositoryInterface
-//                .findTimeBlockSummaryInRangeWithInterval(start, end, interval);
-//        return modelMapper.map(daoList, new TypeToken<List<TimeBlockSummaryDm>>() {}.getType());
-        throw new NotImplementedException();
-
-    }
 }

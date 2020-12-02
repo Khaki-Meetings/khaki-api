@@ -16,9 +16,9 @@ import java.util.OptionalInt;
 @Service
 public class StatisticsService {
 
-    private DepartmentStatisticsPersistenceInterface departmentStatisticsPersistenceService;
-    private OrganizersStatisticsPersistenceInterface organizersStatisticsPersistenceService;
-    private TimeBlockSummaryPersistenceInterface timeBlockSummaryPersistenceService;
+    private final DepartmentStatisticsPersistenceInterface departmentStatisticsPersistenceService;
+    private final OrganizersStatisticsPersistenceInterface organizersStatisticsPersistenceService;
+    private final TimeBlockSummaryPersistenceInterface timeBlockSummaryPersistenceService;
 
     public StatisticsService(
             DepartmentStatisticsPersistenceInterface departmentStatisticsPersistenceService,
@@ -42,8 +42,9 @@ public class StatisticsService {
         return this.timeBlockSummaryPersistenceService.getTimeBlockSummary(start, end);
     }
 
-    public List<TimeBlockSummaryDm> getTrailingStatistics(Instant start, Instant end, IntervalEnumDm interval) {
-        return this.timeBlockSummaryPersistenceService.getTrailingStatistics(start, end, interval);
+    public List<TimeBlockSummaryDm> getTrailingStatistics(Instant start, IntervalEnumDm interval, int count) {
+        Instant end = Instant.parse("2020-11-01T00:00:00.000Z");
+        return List.of(this.timeBlockSummaryPersistenceService.getTimeBlockSummary(start, end));
     }
 
 

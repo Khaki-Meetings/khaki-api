@@ -7,6 +7,7 @@ import com.getkhaki.api.bff.domain.persistence.TimeBlockSummaryPersistenceInterf
 import org.assertj.core.util.Lists;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.ArgumentCaptor;
 
 import java.time.Instant;
 import java.time.ZonedDateTime;
@@ -18,6 +19,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 public class StatisticsServiceUnitTests {
@@ -89,18 +91,36 @@ public class StatisticsServiceUnitTests {
     }
 
     @Test
-    public void test() {
+    public void testTrailingStatisticsMonth() {
         Instant startTest = Instant.parse("2020-11-01T00:00:00.000Z");
-        Instant endTest = Instant.parse("2020-11-18T00:00:00.000Z");
-        UUID id = UUID.randomUUID();
-        TimeBlockSummaryDm timeBlockSummaryDm = new TimeBlockSummaryDm(1, 1);
-        List<TimeBlockSummaryDm> trailingListDm = Lists.list(timeBlockSummaryDm);
-        when(timeBlockSummaryPersistenceService.getTimeBlockSummary(startTest, endTest)).thenReturn(timeBlockSummaryDm);
-        when(timeBlockSummaryPersistenceService.getTrailingStatistics(startTest, endTest, IntervalEnumDm.Day)).thenReturn(trailingListDm);
-        List<TimeBlockSummaryDm> trailingStatisticsResponseDm = underTest.getTrailingStatistics(startTest, endTest, IntervalEnumDm.Day);
-        assertThat(trailingStatisticsResponseDm).isNotNull();
+        int count = 2;
+        IntervalEnumDm interval = IntervalEnumDm.Month;
 
 
+        ArgumentCaptor<Instant> startCaptor = ArgumentCaptor.forClass(Instant.class);
+        ArgumentCaptor<Instant> endCaptor = ArgumentCaptor.forClass(Instant.class);
+        when(timeBlockSummaryPersistenceService.getTimeBlockSummary(any(Instant.class), any(Instant.class)))
+                .thenReturn(new TimeBlockSummaryDm(1, 1));
+
+        underTest.getTrailingStatistics(startTest, interval, count);
+
+        verify(timeBlockSummaryPersistenceService).getTimeBlockSummary(startCaptor.capture(), endCaptor.capture());
+
+        Instant firstPassedStartInstant = startCaptor.getValue();
+        Instant firstPassedEndInstant = endCaptor.getValue();
+        Instant firstStartShouldBe = Instant.parse("2020-11-01T00:00:00.000Z");
+        Instant firstEndShouldBe = Instant.parse("2020-11-30T23:59:59.999Z");
+
+        assertThat(firstPassedStartInstant).isEqualTo(firstStartShouldBe);
+        assertThat(firstPassedEndInstant).isEqualTo(firstEndShouldBe);
+
+        Instant secondPassedStartInstant = startCaptor.getValue();
+        Instant secondPassedEndInstant = endCaptor.getValue();
+        Instant secondStartShouldBe = Instant.parse("2020-12-01T00:00:00.000Z");
+        Instant secondEndShouldBe = Instant.parse("2020-12-31T23:59:59.999Z");
+
+        assertThat(secondPassedStartInstant).isEqualTo(secondStartShouldBe);
+        assertThat(secondPassedEndInstant).isEqualTo(secondEndShouldBe);
     }
 
 }
