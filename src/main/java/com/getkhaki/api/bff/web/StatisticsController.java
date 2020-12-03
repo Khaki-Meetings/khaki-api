@@ -13,6 +13,7 @@ import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeToken;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -26,6 +27,7 @@ import java.util.stream.Collectors;
 
 @RequestMapping("/statistics")
 @RestController
+@CrossOrigin(origins = "*")
 public class StatisticsController {
 
     private final StatisticsService statisticsService;
@@ -37,7 +39,13 @@ public class StatisticsController {
         this.modelMapper = modelMapper;
     }
 
-    @GetMapping("/organizersStatistics/{start}/{end}")
+
+    @GetMapping("/bla")
+    public String getBla() {
+        return "bla";
+    }
+
+    @GetMapping("/organizers/{start}/{end}")
     public OrganizersStatisticsResponseDto getOrganizersStatistics(
             @PathVariable @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) Instant start,
             @PathVariable @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) Instant end,
