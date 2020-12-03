@@ -8,6 +8,10 @@ import java.util.List;
 public class GoogleDirectoryRepository {
     private Directory client;
 
+    public GoogleDirectoryRepository(Directory client) {
+        this.client = client;
+    }
+
     public List<User> getUsers(String adminEmail){
         return List.of();
     }
