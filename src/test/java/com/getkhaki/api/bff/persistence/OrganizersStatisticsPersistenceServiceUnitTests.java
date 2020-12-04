@@ -6,6 +6,7 @@ import com.getkhaki.api.bff.persistence.models.DomainDao;
 import com.getkhaki.api.bff.persistence.models.EmailDao;
 import com.getkhaki.api.bff.persistence.models.PersonDao;
 import com.getkhaki.api.bff.persistence.repositories.OrganizerStatisticsRepositoryInterface;
+import com.getkhaki.api.bff.security.IAuthenticationFacade;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -16,9 +17,6 @@ import org.modelmapper.ModelMapper;
 import java.time.ZonedDateTime;
 import java.util.UUID;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.ArgumentMatchers.eq;
-
 @ExtendWith(MockitoExtension.class)
 public class OrganizersStatisticsPersistenceServiceUnitTests {
     private OrganizersStatisticsPersistenceService underTest;
@@ -28,9 +26,16 @@ public class OrganizersStatisticsPersistenceServiceUnitTests {
     @Mock
     private ModelMapper modelMapper;
 
+    @Mock
+    private IAuthenticationFacade mockAuthenticationFacade;
+
     @BeforeEach
     public void setup() {
-        underTest = new OrganizersStatisticsPersistenceService(OrganizerStatisticsRepositoryInterface, modelMapper);
+        underTest = new OrganizersStatisticsPersistenceService(
+                OrganizerStatisticsRepositoryInterface,
+                modelMapper,
+                mockAuthenticationFacade
+        );
     }
 
     @Test
@@ -48,8 +53,8 @@ public class OrganizersStatisticsPersistenceServiceUnitTests {
                 )
                 .setPerson(
                         new PersonDao()
-                        .setFirstName("Bob")
-                        .setLastName("Jones")
+                                .setFirstName("Bob")
+                                .setLastName("Jones")
                 )
                 .setUser("bob");
         email.setId(UUID.randomUUID());

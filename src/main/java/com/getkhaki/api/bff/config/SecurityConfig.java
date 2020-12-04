@@ -36,7 +36,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 //                .mvcMatchers("/statistics/organizers").authenticated()
 //                .mvcMatchers("/statistics/bla").authenticated()
 ////                .mvcMatchers("/api/private-scoped").hasAuthority("SCOPE_read:messages")
-////                .and().cors()
+                .and().cors()
                 .and()
                 .oauth2ResourceServer().jwt();
     }
