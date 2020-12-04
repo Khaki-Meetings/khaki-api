@@ -24,10 +24,10 @@ public class PersonPersistenceService implements PersonPersistenceInterface {
         String[] emailParts = email.split("@");
         assert emailParts.length == 2 : "Email could not be split";
 
-        return this.modelMapper.map(
-                this.personRepository.findDistinctByEmailsUserAndEmailsDomainName(emailParts[0], emailParts[1]),
-                PersonDm.class
-        );
+        PersonDao result = this.personRepository.findDistinctByEmailsUserAndEmailsDomainName(emailParts[0], emailParts[1]);
+        assert result != null : String.format("Person with email of %s not found", email);
+
+        return this.modelMapper.map(result, PersonDm.class);
     }
 
     @Override
