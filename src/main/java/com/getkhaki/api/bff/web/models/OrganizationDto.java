@@ -6,7 +6,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.Accessors;
 
-import java.time.Instant;
+import java.util.Set;
 import java.util.UUID;
 
 @Getter
@@ -14,18 +14,10 @@ import java.util.UUID;
 @NoArgsConstructor
 @AllArgsConstructor
 @Accessors(chain = true)
-public class PersonDto {
+public class OrganizationDto {
     UUID id;
 
-    String firstName;
+    String name;
 
-    String lastName;
-
-    String avatarUrl;
-
-    String email;
-
-    Boolean notify;
-
-    String department;
+    Set<PersonDto> members;
 }
