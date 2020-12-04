@@ -7,18 +7,18 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class PersonService {
-    private final PersonPersistenceInterface personPersistenceInterface;
+    private final PersonPersistenceInterface personPersistenceService;
 
     @Autowired
-    public PersonService(PersonPersistenceInterface personPersistenceInterface) {
-        this.personPersistenceInterface = personPersistenceInterface;
+    public PersonService(PersonPersistenceInterface personPersistenceService) {
+        this.personPersistenceService = personPersistenceService;
     }
 
     public PersonDm getPerson(String email) {
-        return this.personPersistenceInterface.getPerson(email);
+        return this.personPersistenceService.getPerson(email);
     }
 
     public PersonDm updatePerson(PersonDm personDm) {
-        return this.personPersistenceInterface.updatePerson(personDm);
+        return this.personPersistenceService.updatePerson(personDm);
     }
 }

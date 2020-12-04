@@ -7,14 +7,14 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class OrganizationService {
-    private final OrganizationPersistenceInterface organizationPersistenceInterface;
+    private final OrganizationPersistenceInterface organizationPersistenceService;
 
     @Autowired
-    public OrganizationService(OrganizationPersistenceInterface organizationPersistenceInterface) {
-        this.organizationPersistenceInterface = organizationPersistenceInterface;
+    public OrganizationService(OrganizationPersistenceInterface organizationPersistenceService) {
+        this.organizationPersistenceService = organizationPersistenceService;
     }
 
     public OrganizationDm getOrganization() {
-        return this.organizationPersistenceInterface.getOrganization();
+        return this.organizationPersistenceService.getOrganization();
     }
 }
