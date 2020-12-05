@@ -40,11 +40,6 @@ public class StatisticsController {
     }
 
 
-    @GetMapping("/bla")
-    public String getBla() {
-        return "bla";
-    }
-
     @GetMapping("/organizers/{start}/{end}")
     public OrganizersStatisticsResponseDto getOrganizersStatistics(
             @PathVariable Instant start,

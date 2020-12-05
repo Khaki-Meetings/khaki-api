@@ -56,7 +56,7 @@ public class StatisticsControllerIntegrationTests extends BaseJpaIntegrationTest
                 .orElseThrow();
         assertThat(bettyStats.getTotalCost()).isEqualTo(1282.5);
         assertThat(bettyStats.getTotalHours()).isEqualTo(9);
-        assertThat(bettyStats.getTotalMeetingCount()).isEqualTo(1);
+        assertThat(bettyStats.getTotalMeetings()).isEqualTo(1);
 
         OrganizerStatisticsResponseDto bobStats = stats.getOrganizersStatistics()
                 .stream()
@@ -64,7 +64,7 @@ public class StatisticsControllerIntegrationTests extends BaseJpaIntegrationTest
                 .findFirst()
                 .orElseThrow();
         assertThat(bobStats.getOrganizerEmail()).isEqualTo("bob@s56.net");
-        assertThat(bobStats.getTotalMeetingCount()).isEqualTo(1);
+        assertThat(bobStats.getTotalMeetings()).isEqualTo(1);
         assertThat(bobStats.getTotalHours()).isEqualTo(4);
         assertThat(bobStats.getTotalCost()).isEqualTo(380.0);
     }
