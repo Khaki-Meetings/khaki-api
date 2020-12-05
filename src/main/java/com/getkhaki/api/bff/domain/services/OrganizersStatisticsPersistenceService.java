@@ -4,15 +4,12 @@ import com.getkhaki.api.bff.domain.models.OrganizerStatisticsDm;
 import com.getkhaki.api.bff.domain.persistence.OrganizersStatisticsPersistenceInterface;
 import com.getkhaki.api.bff.persistence.models.views.OrganizerStatisticsView;
 import com.getkhaki.api.bff.persistence.repositories.OrganizerStatisticsRepositoryInterface;
-import com.getkhaki.api.bff.security.IAuthenticationFacade;
+import com.getkhaki.api.bff.security.AuthenticationFacade;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.oauth2.core.oidc.user.OidcUser;
 import org.springframework.stereotype.Service;
 
-import java.security.Principal;
 import java.time.Instant;
 import java.util.List;
 import java.util.OptionalInt;
@@ -24,12 +21,12 @@ public class OrganizersStatisticsPersistenceService implements OrganizersStatist
     private final ModelMapper modelMapper;
 
     private final OrganizerStatisticsRepositoryInterface organizerStatisticsRepository;
-    private final IAuthenticationFacade authenticationFacade;
+    private final AuthenticationFacade authenticationFacade;
 
     public OrganizersStatisticsPersistenceService(
             OrganizerStatisticsRepositoryInterface organizerStatisticsRepository,
             ModelMapper modelMapper,
-            IAuthenticationFacade authenticationFacade
+            AuthenticationFacade authenticationFacade
     ) {
         this.modelMapper = modelMapper;
         this.organizerStatisticsRepository = organizerStatisticsRepository;
