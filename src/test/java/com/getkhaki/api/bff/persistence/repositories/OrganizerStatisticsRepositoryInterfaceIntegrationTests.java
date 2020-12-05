@@ -1,6 +1,6 @@
 package com.getkhaki.api.bff.persistence.repositories;
 
-import com.getkhaki.api.bff.BaseJpaIntegrationTest;
+import com.getkhaki.api.bff.BaseIntegrationTest;
 import com.getkhaki.api.bff.persistence.models.views.OrganizerStatisticsView;
 import liquibase.exception.LiquibaseException;
 import org.junit.jupiter.api.Test;
@@ -14,7 +14,7 @@ import java.util.UUID;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @DataJpaTest
-public class OrganizerStatisticsRepositoryInterfaceIntegrationTests extends BaseJpaIntegrationTest {
+public class OrganizerStatisticsRepositoryInterfaceIntegrationTests extends BaseIntegrationTest {
     @Inject
     private OrganizerStatisticsRepositoryInterface underTest;
 

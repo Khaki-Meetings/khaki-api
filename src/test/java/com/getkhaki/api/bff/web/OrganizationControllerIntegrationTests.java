@@ -1,15 +1,12 @@
 package com.getkhaki.api.bff.web;
 
-import com.getkhaki.api.bff.BaseJpaIntegrationTest;
-import com.getkhaki.api.bff.web.models.PersonDto;
+import com.getkhaki.api.bff.BaseIntegrationTest;
 import io.restassured.module.mockmvc.RestAssuredMockMvc;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.web.server.LocalServerPort;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.web.context.WebApplicationContext;
-
-import java.util.UUID;
 
 import static io.restassured.RestAssured.given;
 import static io.restassured.http.ContentType.JSON;
@@ -18,7 +15,7 @@ import static org.hamcrest.Matchers.notNullValue;
 
 @ActiveProfiles(profiles = "test")
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-public class OrganizationControllerIntegrationTests extends BaseJpaIntegrationTest {
+public class OrganizationControllerIntegrationTests extends BaseIntegrationTest {
     @LocalServerPort
     private int port;
 
