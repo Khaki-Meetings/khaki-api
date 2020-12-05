@@ -4,6 +4,7 @@ import com.getkhaki.api.bff.domain.services.DepartmentService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.core.io.Resource;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -23,12 +24,12 @@ public class DepartmentControllerUnitTests {
     @Test
     public void importAsync() throws IOException {
         var mockInputStream = mock(InputStream.class);
-        var mockResource = mock(Resource.class);
+        var mockMultipartFile = mock(MultipartFile.class);
 
-        when(mockResource.getInputStream())
+        when(mockMultipartFile.getInputStream())
                 .thenReturn(mockInputStream);
 
-        this.underTest.importAsync(mockResource);
+        this.underTest.importAsync(mockMultipartFile);
 
         verify(this.departmentService).importAsync(mockInputStream);
     }

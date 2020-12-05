@@ -5,8 +5,11 @@ import io.restassured.module.mockmvc.RestAssuredMockMvc;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.web.server.LocalServerPort;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.web.context.WebApplicationContext;
+
+import java.io.IOException;
 
 import static io.restassured.RestAssured.given;
 
@@ -21,13 +24,10 @@ public class DepartmentControllerIntegrationTests extends BaseJpaIntegrationTest
     }
 
     @Test
-    public void importAsync() {
-        var csvContent = "firstName,lastName,email,department\r\nbob,dole,bob@dole.com,politicians";
-
+    public void importAsync() throws IOException {
         given()
                 .port(this.port)
-                .contentType("text/csv")
-                .body(csvContent)
+                .multiPart(new ClassPathResource("department-import.csv").getFile())
                 .when()
                 .post("/departments/import")
                 .then().assertThat()
