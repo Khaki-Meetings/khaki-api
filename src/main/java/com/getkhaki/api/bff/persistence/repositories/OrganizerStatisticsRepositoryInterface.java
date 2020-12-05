@@ -20,7 +20,7 @@ public interface OrganizerStatisticsRepositoryInterface extends JpaRepository<Ca
                     "       where organizerMeetHoursCepD.email = organizerCalendarEventParticipantDao.email " +
                     "           and organizerMeetHoursCepD.organizer = true " +
                     "           and organizerMeetHoursCepD.calendarEvent.start between :sDate and :eDate" +
-                    "   ) as totalMeetingCount," +
+                    "   ) as totalMeetings," +
                     "   (" +
                     "       select" +
                     "           sum(" +
@@ -69,12 +69,15 @@ public interface OrganizerStatisticsRepositoryInterface extends JpaRepository<Ca
                     "               and organizerTotalHourlyCostCepD.calendarEvent.start between :sDate and :eDate" +
                     "       ) / 2000)" +
                     "   ) as totalCost," +
-                    "   concat(organizerEmailDao.user, '@', organizerDomainDao.name) as organizerEmail " +
+                    "   concat(organizerEmailDao.user, '@', organizerDomainDao.name) as organizerEmail, " +
+                    "   concat(peopleDao.firstName) as organizerFirstName, " +
+                    "   concat(peopleDao.lastName) as organizerLastName " +
                     "from CalendarEventParticipantDao organizerCalendarEventParticipantDao " +
                     "   inner join organizerCalendarEventParticipantDao.email organizerEmailDao" +
                     "   inner join organizerEmailDao.domain organizerDomainDao" +
                     "   inner join organizerCalendarEventParticipantDao.calendarEvent organizerCalendarEvent " +
                     "   inner join organizerDomainDao.organizations tenant " +
+                    "   inner join organizerEmailDao.people peopleDao " +
                     "where :organizationId is not null" +
                     "   and organizerCalendarEventParticipantDao.organizer = true " +
                     "   and organizerCalendarEventParticipantDao.calendarEvent.start between :sDate and :eDate " +

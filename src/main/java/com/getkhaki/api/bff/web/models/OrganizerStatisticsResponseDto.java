@@ -9,7 +9,9 @@ import lombok.experimental.Accessors;
 @Accessors(chain = true)
 public class OrganizerStatisticsResponseDto {
     String organizerEmail;
-    int totalMeetingCount;
+    String organizerFirstName;
+    String organizerLastName;
+    int totalMeetings;
     int totalHours;
     Double totalCost;
 }

@@ -13,7 +13,9 @@ import lombok.experimental.Accessors;
 @Accessors(chain = true)
 public class OrganizerStatisticsDm {
     String organizerEmail;
-    int totalMeetingCount;
+    String organizerFirstName;
+    String organizerLastName;
+    int totalMeetings;
     Double totalCost;
     int totalHours;
 }

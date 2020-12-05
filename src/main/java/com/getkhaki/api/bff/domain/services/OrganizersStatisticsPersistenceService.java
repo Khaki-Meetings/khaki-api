@@ -9,6 +9,7 @@ import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.oauth2.core.oidc.user.OidcUser;
 import org.springframework.stereotype.Service;
 
 import java.security.Principal;
@@ -43,6 +44,9 @@ public class OrganizersStatisticsPersistenceService implements OrganizersStatist
         Authentication authentication = authenticationFacade.getAuthentication();
 
         String name = authentication.getName();
+
+//        Principal principal = authentication.getPrincipal();
+//        String tenantId = principal.getClaim("tenantId");
 
         return modelMapper.map(
                 organizerStatisticsViewList,

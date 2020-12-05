@@ -39,7 +39,10 @@ public class OrganizerStatisticsRepositoryInterfaceIntegrationTests extends Base
                 .orElseThrow();
         assertThat(bettyStats.getTotalCost()).isEqualTo(1282.5);
         assertThat(bettyStats.getTotalHours()).isEqualTo(9);
-        assertThat(bettyStats.getTotalMeetingCount()).isEqualTo(1);
+        assertThat(bettyStats.getTotalMeetings()).isEqualTo(1);
+        assertThat(bettyStats.getOrganizerFirstName()).isEqualTo("Betty");
+        assertThat(bettyStats.getOrganizerLastName()).isEqualTo("Smith");
+
 
         OrganizerStatisticsView bobStats = stats
                 .stream()
@@ -47,8 +50,10 @@ public class OrganizerStatisticsRepositoryInterfaceIntegrationTests extends Base
                 .findFirst()
                 .orElseThrow();
         assertThat(bobStats.getOrganizerEmail()).isEqualTo("bob@s56.net");
-        assertThat(bobStats.getTotalMeetingCount()).isEqualTo(1);
+        assertThat(bobStats.getTotalMeetings()).isEqualTo(1);
         assertThat(bobStats.getTotalHours()).isEqualTo(4);
         assertThat(bobStats.getTotalCost()).isEqualTo(380.0);
+        assertThat(bobStats.getOrganizerFirstName()).isEqualTo("Bob");
+        assertThat(bobStats.getOrganizerLastName()).isEqualTo("Jones");
     }
 }

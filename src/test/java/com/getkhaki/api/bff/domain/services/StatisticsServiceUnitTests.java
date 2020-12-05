@@ -53,6 +53,8 @@ public class StatisticsServiceUnitTests {
 
         OrganizerStatisticsDm organizerStatisticsDm = new OrganizerStatisticsDm(
                 "bob@bob.com",
+                "Bob",
+                "Jones",
                 1,
                 1.0,
                 1
