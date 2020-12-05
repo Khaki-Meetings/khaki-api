@@ -6,7 +6,7 @@ import com.getkhaki.api.bff.persistence.models.DomainDao;
 import com.getkhaki.api.bff.persistence.models.EmailDao;
 import com.getkhaki.api.bff.persistence.models.PersonDao;
 import com.getkhaki.api.bff.persistence.repositories.OrganizerStatisticsRepositoryInterface;
-import com.getkhaki.api.bff.security.IAuthenticationFacade;
+import com.getkhaki.api.bff.security.AuthenticationFacade;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -27,7 +27,7 @@ public class OrganizersStatisticsPersistenceServiceUnitTests {
     private ModelMapper modelMapper;
 
     @Mock
-    private IAuthenticationFacade mockAuthenticationFacade;
+    private AuthenticationFacade mockAuthenticationFacade;
 
     @BeforeEach
     public void setup() {
