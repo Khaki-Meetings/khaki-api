@@ -42,6 +42,9 @@ public class OrganizersStatisticsPersistenceService implements OrganizersStatist
 
         String name = authentication.getName();
 
+//        Principal principal = authentication.getPrincipal();
+//        String tenantId = principal.getClaim("tenantId");
+
         return modelMapper.map(
                 organizerStatisticsViewList,
                 new TypeToken<List<OrganizerStatisticsDm>>() {

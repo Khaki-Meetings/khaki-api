@@ -22,14 +22,14 @@ public class ModelMapperConfigIntegrationTests {
         OrganizerStatisticsDm mockDm1 = OrganizerStatisticsDm.builder()
                 .organizerEmail("bob@bob.com")
                 .totalCost(12.0)
-                .totalMeetingCount(123)
+                .totalMeetings(123)
                 .totalHours(194)
                 .build();
 
         OrganizerStatisticsResponseDto dto = underTest.map(mockDm1, OrganizerStatisticsResponseDto.class);
 
         assertThat(dto.getTotalCost()).isEqualTo(mockDm1.getTotalCost());
-        assertThat(dto.getTotalMeetingCount()).isEqualTo(mockDm1.getTotalMeetingCount());
+        assertThat(dto.getTotalMeetings()).isEqualTo(mockDm1.getTotalMeetings());
         assertThat(dto.getTotalHours()).isEqualTo(mockDm1.getTotalHours());
         assertThat(dto.getOrganizerEmail()).isEqualTo(mockDm1.getOrganizerEmail());
         assertThat(dto.getOrganizerEmail()).isEqualTo(mockDm1.getOrganizerEmail());
