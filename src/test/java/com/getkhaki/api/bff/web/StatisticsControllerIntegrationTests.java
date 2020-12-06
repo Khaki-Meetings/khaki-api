@@ -1,6 +1,7 @@
 package com.getkhaki.api.bff.web;
 
 import com.getkhaki.api.bff.BaseIntegrationTest;
+import com.getkhaki.api.bff.config.SessionTenant;
 import com.getkhaki.api.bff.web.models.DepartmentStatisticsResponseDto;
 import com.getkhaki.api.bff.web.models.DepartmentsStatisticsResponseDto;
 import com.getkhaki.api.bff.web.models.IntervalDte;
@@ -71,6 +72,7 @@ public class StatisticsControllerIntegrationTests extends BaseIntegrationTest {
                 end.toString();
 
         MvcResult result = mvc.perform(MockMvcRequestBuilders.get(url)
+                .header(SessionTenant.HEADER_KEY, "s56.net")
                 .with(jwt().jwt(getJWT()).authorities(new SimpleGrantedAuthority("admin"))))
                 .andExpect(status().isOk())
                 .andReturn();
@@ -198,7 +200,6 @@ public class StatisticsControllerIntegrationTests extends BaseIntegrationTest {
     }
 
     private static Jwt getJWT() {
-
         String tokenValue = "eyJraWQiOiJUVzhaWVZ0cTR1WlNMWkYyd2U2UVp5aG9GMDd0eUVpNE04cGJVa1pBOGpRIiwiYWxnIjoiUlMyNTYifQ.eyJ2ZXIiOjEsImp0aSI6IkFULnc3MHBxTXpJNl94bVJxNWdYalRKbmRrTGQtTDFqQlM0UFpmbC1ZSXZ3LTgiLCJpc3MiOiJodHRwczovL2Rldi01MDU5NTAub2t0YS5jb20vb2F1dGgyL2RlZmF1bHQiLCJhdWQiOiJhcGk6Ly9kZWZhdWx0IiwiaWF0IjoxNTk5NjY3MDk0LCJleHAiOjE1OTk2NzA2OTQsImNpZCI6IjBvYW00Z21uN3dUTTJqMTFXNHg2IiwidWlkIjoiMDB1dWhsOW50U1ZDSVppcnQ0eDYiLCJzY3AiOlsib3BlbmlkIiwicHJvZmlsZSIsImVtYWlsIl0sInN1YiI6Im1lQHByYXRobWVzaHBldGhrYXIuY29tIiwicm9sZXMiOlsiU3R1ZGVudCJdfQ.JvL3rWbc8DR66X6j_71YKIrqnu3rAGibi6wrBmkzwniICG-nixC2suFJ1KVHXZlY-YVA9Ylimr_iOi0guCn_9CyV9QzcJK2jqq5N4F-ragvvSODoKbPwGjTm7hnMCmt1xnrx-vz_vka4dzjmLgalqkcOB1r0wL4LAVjFJi9j5nWDe9ovB8eRsAcpseYoI96fkm5cExErgc2ayTOkyTLYGDIT3Je2QmDgzsepoKI5cpqrF1bCLJd3LcMcA0JLJctYQI9XpmYQuSBPyA3GdtH1ORX6_KBsjb58v7Lzy36etUlmMyTNmhXZqX1WwOi2SFgqPz_JJP7pcVmJnF9krbOfSw";
 
         Map<String, Object> headers = new HashMap<>();
@@ -212,6 +213,13 @@ public class StatisticsControllerIntegrationTests extends BaseIntegrationTest {
         List<String> roles = new ArrayList<>();
         roles.add("NGP_Learner");
         claims.put("roles", roles);
+        claims.put(
+                SessionTenant.CLAIMS_KEY,
+                Map.of(
+                        "s56.net",
+                        "d713ace2-0d30-43be-b4ba-db973967d6d4"
+                )
+        );
         List<String> scp = new ArrayList<>();
         scp.add("write");
         claims.put("scp", scp);
