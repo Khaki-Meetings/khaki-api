@@ -72,7 +72,7 @@ public class StatisticsControllerIntegrationTests extends BaseIntegrationTest {
                 end.toString();
 
         MvcResult result = mvc.perform(MockMvcRequestBuilders.get(url)
-                .header(SessionTenant.HEADER_KEY, "s56.net")
+                .header(SessionTenant.HEADER_KEY, "s56_net")
                 .with(jwt().jwt(getJWT()).authorities(new SimpleGrantedAuthority("admin"))))
                 .andExpect(status().isOk())
                 .andReturn();
@@ -216,7 +216,7 @@ public class StatisticsControllerIntegrationTests extends BaseIntegrationTest {
         claims.put(
                 SessionTenant.CLAIMS_KEY,
                 Map.of(
-                        "s56.net",
+                        "s56_net",
                         "d713ace2-0d30-43be-b4ba-db973967d6d4"
                 )
         );
