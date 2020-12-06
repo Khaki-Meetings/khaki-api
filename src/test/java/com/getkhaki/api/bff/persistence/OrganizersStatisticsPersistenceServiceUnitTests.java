@@ -1,6 +1,7 @@
 package com.getkhaki.api.bff.persistence;
 
 
+import com.getkhaki.api.bff.config.SessionTenant;
 import com.getkhaki.api.bff.domain.services.OrganizersStatisticsPersistenceService;
 import com.getkhaki.api.bff.persistence.models.DomainDao;
 import com.getkhaki.api.bff.persistence.models.EmailDao;
@@ -34,7 +35,7 @@ public class OrganizersStatisticsPersistenceServiceUnitTests {
         underTest = new OrganizersStatisticsPersistenceService(
                 OrganizerStatisticsRepositoryInterface,
                 modelMapper,
-                mockAuthenticationFacade
+                new SessionTenant()
         );
     }
 

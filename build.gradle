@@ -29,6 +29,7 @@ dependencies {
     implementation 'org.springframework.security:spring-security-oauth2-jose'
     implementation 'org.springframework.security:spring-security-config'
     implementation 'com.auth0:auth0:1.26.0'
+    testImplementation 'org.springframework.security:spring-security-test'
 
     implementation 'org.liquibase.ext:liquibase-hibernate5:4.1.0'
     implementation 'org.liquibase:liquibase-core:4.1.0'
