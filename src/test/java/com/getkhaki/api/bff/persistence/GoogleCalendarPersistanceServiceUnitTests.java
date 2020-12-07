@@ -1,9 +1,7 @@
 package com.getkhaki.api.bff.persistence;
 
 import com.getkhaki.api.bff.domain.models.CalendarEventDm;
-import com.getkhaki.api.bff.domain.services.OrganizersStatisticsPersistenceService;
 import com.getkhaki.api.bff.persistence.models.Calendar;
-import com.getkhaki.api.bff.persistence.models.TimeBlockSummaryDao;
 import com.getkhaki.api.bff.persistence.models.User;
 import com.getkhaki.api.bff.persistence.repositories.GoogleCalendarRepository;
 import com.getkhaki.api.bff.persistence.repositories.GoogleDirectoryRepository;
@@ -12,18 +10,15 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
-import org.mockito.invocation.InvocationOnMock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.mockito.stubbing.Answer;
 import org.modelmapper.ModelMapper;
-import static org.assertj.core.api.Assertions.assertThat;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
-import java.util.function.Consumer;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
