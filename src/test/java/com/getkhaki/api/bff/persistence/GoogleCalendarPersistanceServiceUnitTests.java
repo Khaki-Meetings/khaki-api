@@ -5,6 +5,7 @@ import com.getkhaki.api.bff.persistence.models.Calendar;
 import com.getkhaki.api.bff.persistence.models.User;
 import com.getkhaki.api.bff.persistence.repositories.GoogleCalendarRepository;
 import com.getkhaki.api.bff.persistence.repositories.GoogleDirectoryRepository;
+import com.google.api.services.calendar.model.Event;
 import org.assertj.core.util.Lists;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -13,6 +14,8 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.modelmapper.ModelMapper;
 
+import java.io.IOException;
+import java.security.GeneralSecurityException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -44,14 +47,18 @@ public class GoogleCalendarPersistanceServiceUnitTests {
 
         String adminEmail="";
 
-        Calendar calendar=new Calendar();
-        List<Calendar> calendarList=Lists.list(calendar);
+        Event event=new Event();
+        List<Event> calendarList=Lists.list(event);
         List<CalendarEventDm> calendarDmsList=new ArrayList<>();
         User user=new User("email");
         List<User> users= Lists.list(user);
 
-        when(googleCalendarRepository.getEvents(adminEmail)).thenReturn(calendarList);
-        when(modelMapper.map(calendar, CalendarEventDm.class)).thenReturn(new CalendarEventDm(UUID.randomUUID(),"","", LocalDateTime.now()));
+        try {
+            when(googleCalendarRepository.getEvents(adminEmail)).thenReturn(calendarList);
+        } catch (GeneralSecurityException | IOException e) {
+            e.printStackTrace();
+        }
+        when(modelMapper.map(event, CalendarEventDm.class)).thenReturn(new CalendarEventDm());
 
 
         /*Answer<Integer> answer = new Answer<>() {
@@ -64,12 +71,18 @@ public class GoogleCalendarPersistanceServiceUnitTests {
 //        when(googleDirectoryRepository.getUsers(adminEmail)).thenAnswer(answer);
 
         for (User userFound : users) {
-            googleCalendarRepository.getEvents(userFound.getEmail()).forEach(calendarFound -> {
-                assertThat(calendarFound).isNotNull();
-                CalendarEventDm dm=modelMapper.map(calendarFound,CalendarEventDm.class);
-                assertThat(dm).isNotNull();
-                calendarDmsList.add(dm);
-            });
+            try {
+                googleCalendarRepository.getEvents(userFound.getEmail()).forEach(calendarFound -> {
+                    assertThat(calendarFound).isNotNull();
+                    CalendarEventDm dm=modelMapper.map(calendarFound,CalendarEventDm.class);
+                    assertThat(dm).isNotNull();
+                    calendarDmsList.add(dm);
+                });
+            } catch (GeneralSecurityException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
 
        assertThat(calendarDmsList).isNotEmpty();
