@@ -1,51 +1,58 @@
 package com.getkhaki.api.bff.domain.services;
 
 import com.getkhaki.api.bff.domain.models.DepartmentStatisticsDm;
-import com.getkhaki.api.bff.domain.models.OrganizersStatisticsDm;
+import com.getkhaki.api.bff.domain.models.IntervalDe;
+import com.getkhaki.api.bff.domain.models.OrganizerStatisticsDm;
+import com.getkhaki.api.bff.domain.models.TimeBlockRangeDm;
 import com.getkhaki.api.bff.domain.models.TimeBlockSummaryDm;
 import com.getkhaki.api.bff.domain.persistence.DepartmentStatisticsPersistenceInterface;
 import com.getkhaki.api.bff.domain.persistence.OrganizersStatisticsPersistenceInterface;
 import com.getkhaki.api.bff.domain.persistence.TimeBlockSummaryPersistenceInterface;
-import com.getkhaki.api.bff.persistence.models.IntervalEnumDao;
 import org.springframework.stereotype.Service;
 
-import java.time.ZonedDateTime;
+import java.time.Instant;
 import java.util.List;
+import java.util.OptionalInt;
+import java.util.stream.Collectors;
 
 @Service
-public class StatisticsService implements OrganizersStatisticsPersistenceInterface, TimeBlockSummaryPersistenceInterface, DepartmentStatisticsPersistenceInterface {
+public class StatisticsService {
 
-    private DepartmentStatisticsPersistenceService departmentStatisticsPersistenceService;
-    private OrganizersStatisticsPersistenceService organizersStatisticsPersistenceService;
-    private  TimeBlockSummaryPersistenceService timeBlockSummaryPersistenceService;
+    private final DepartmentStatisticsPersistenceInterface departmentStatisticsPersistenceService;
+    private final OrganizersStatisticsPersistenceInterface organizersStatisticsPersistenceService;
+    private final TimeBlockSummaryPersistenceInterface timeBlockSummaryPersistenceService;
+    private final TimeBlockGeneratorFactory timeBlockGeneratorFactory;
 
-    public StatisticsService(DepartmentStatisticsPersistenceService departmentStatisticsPersistenceService,OrganizersStatisticsPersistenceService organizersStatisticsPersistenceService,TimeBlockSummaryPersistenceService timeBlockSummaryPersistenceService) {
-        this.departmentStatisticsPersistenceService=departmentStatisticsPersistenceService;
-        this.organizersStatisticsPersistenceService=organizersStatisticsPersistenceService;
-        this.timeBlockSummaryPersistenceService=timeBlockSummaryPersistenceService;
+    public StatisticsService(
+            DepartmentStatisticsPersistenceInterface departmentStatisticsPersistenceService,
+            OrganizersStatisticsPersistenceInterface organizersStatisticsPersistenceService,
+            TimeBlockSummaryPersistenceInterface timeBlockSummaryPersistenceService,
+            TimeBlockGeneratorFactory timeBlockGeneratorFactory) {
+        this.departmentStatisticsPersistenceService = departmentStatisticsPersistenceService;
+        this.organizersStatisticsPersistenceService = organizersStatisticsPersistenceService;
+        this.timeBlockSummaryPersistenceService = timeBlockSummaryPersistenceService;
+        this.timeBlockGeneratorFactory = timeBlockGeneratorFactory;
     }
 
-
-    @Override
-    public DepartmentStatisticsDm getPerDepartmentStatistics(ZonedDateTime start, ZonedDateTime end) {
-        return this.departmentStatisticsPersistenceService.getPerDepartmentStatistics(start,end);
-
+    public List<DepartmentStatisticsDm> getPerDepartmentStatistics(Instant start, Instant end) {
+        return this.departmentStatisticsPersistenceService.getPerDepartmentStatistics(start, end);
     }
 
-    @Override
-    public OrganizersStatisticsDm getOrganizerStatistics(String email) {
-        return this.organizersStatisticsPersistenceService.getOrganizerStatistics(email);
+    public List<OrganizerStatisticsDm> getOrganizersStatistics(Instant start, Instant end, OptionalInt count) {
+        return this.organizersStatisticsPersistenceService.getOrganizersStatistics(start, end, count);
     }
 
-    @Override
-    public TimeBlockSummaryDm getTimeBlockSummary(ZonedDateTime start, ZonedDateTime end) {
-        return this.timeBlockSummaryPersistenceService.getTimeBlockSummary(start,end);
+    public TimeBlockSummaryDm getTimeBlockSummary(Instant start, Instant end) {
+        return this.timeBlockSummaryPersistenceService.getTimeBlockSummary(start, end);
     }
 
-    @Override
-    public List<TimeBlockSummaryDm> getTrailingStatistics(ZonedDateTime start, ZonedDateTime end, IntervalEnumDao interval) {
-        return this.timeBlockSummaryPersistenceService.getTrailingStatistics(start,end,interval);
+    public List<TimeBlockSummaryDm> getTrailingStatistics(Instant start, IntervalDe interval, int count) {
+        TimeBlockGeneratorInterface timeBlockGenerator = timeBlockGeneratorFactory.get(interval);
+        List<TimeBlockRangeDm> timeBlockRangeList = timeBlockGenerator.generate(start, count);
+
+        return timeBlockRangeList
+                .stream()
+                .map(range -> timeBlockSummaryPersistenceService.getTimeBlockSummary(range.getStart(), range.getEnd()))
+                .collect(Collectors.toList());
     }
-
-
 }

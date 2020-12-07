@@ -2,35 +2,33 @@ package com.getkhaki.api.bff.domain.services;
 
 import com.getkhaki.api.bff.domain.models.TimeBlockSummaryDm;
 import com.getkhaki.api.bff.domain.persistence.TimeBlockSummaryPersistenceInterface;
-import com.getkhaki.api.bff.persistence.models.IntervalEnumDao;
 import com.getkhaki.api.bff.persistence.repositories.TimeBlockSummaryRepositoryInterface;
 import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.time.ZonedDateTime;
-import java.util.List;
+import java.time.Instant;
+import java.util.UUID;
 
 @Service
 public class TimeBlockSummaryPersistenceService implements TimeBlockSummaryPersistenceInterface {
     private final ModelMapper modelMapper;
 
-    public TimeBlockSummaryPersistenceService(ModelMapper modelMapper,TimeBlockSummaryRepositoryInterface timeBlockSummaryRepositoryInterface) {
+    public TimeBlockSummaryPersistenceService(ModelMapper modelMapper, TimeBlockSummaryRepositoryInterface timeBlockSummaryRepositoryInterface) {
         this.modelMapper = modelMapper;
-        this.timeBlockSummaryRepositoryInterface=timeBlockSummaryRepositoryInterface;
+        this.timeBlockSummaryRepositoryInterface = timeBlockSummaryRepositoryInterface;
     }
 
     private TimeBlockSummaryRepositoryInterface timeBlockSummaryRepositoryInterface;
 
     @Override
-    public TimeBlockSummaryDm getTimeBlockSummary(ZonedDateTime start, ZonedDateTime end) {
-        return modelMapper.map( timeBlockSummaryRepositoryInterface.findTimeBlockSummaryInRange(start,end),TimeBlockSummaryDm.class);
-    }
-
-    @Override
-    public List<TimeBlockSummaryDm> getTrailingStatistics(ZonedDateTime start, ZonedDateTime end, IntervalEnumDao interval) {
-
-        return modelMapper.map( timeBlockSummaryRepositoryInterface.findTimeBlockSummaryInRangeWithInterval(start,end,interval),List.class);
-
+    public TimeBlockSummaryDm getTimeBlockSummary(Instant start, Instant end) {
+        return modelMapper.map(
+                timeBlockSummaryRepositoryInterface.findTimeBlockSummaryInRange(
+                        start,
+                        end,
+                        UUID.fromString("d713ace2-0d30-43be-b4ba-db973967d6d4")
+                ),
+                TimeBlockSummaryDm.class
+        );
     }
 }

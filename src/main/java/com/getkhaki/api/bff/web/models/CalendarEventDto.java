@@ -6,7 +6,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.Accessors;
 
-import java.time.LocalDateTime;
+import java.time.Instant;
 import java.util.UUID;
 
 @Getter
@@ -21,5 +21,10 @@ public class CalendarEventDto {
 
     String summary;
 
-    LocalDateTime created;
+    Instant created;
+
+    Instant start;
+
+    Instant end;
+
 }
