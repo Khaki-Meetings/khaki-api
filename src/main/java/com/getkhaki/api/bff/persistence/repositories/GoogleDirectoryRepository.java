@@ -54,7 +54,7 @@ public class GoogleDirectoryRepository {
         if (users == null || users.size() == 0) {
             System.out.println("No users found.");
         } else {
-            System.out.println("Users:");
+            System.out.println("Users: ");
             for (User user : users) {
                 System.out.println(user.getName().getFullName());
             }
