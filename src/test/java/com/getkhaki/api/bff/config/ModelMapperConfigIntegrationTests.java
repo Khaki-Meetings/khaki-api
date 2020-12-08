@@ -32,6 +32,5 @@ public class ModelMapperConfigIntegrationTests {
         assertThat(dto.getTotalMeetings()).isEqualTo(mockDm1.getTotalMeetings());
         assertThat(dto.getTotalHours()).isEqualTo(mockDm1.getTotalHours());
         assertThat(dto.getOrganizerEmail()).isEqualTo(mockDm1.getOrganizerEmail());
-        assertThat(dto.getOrganizerEmail()).isEqualTo(mockDm1.getOrganizerEmail());
     }
 }

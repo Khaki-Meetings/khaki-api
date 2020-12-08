@@ -2,7 +2,6 @@ package com.getkhaki.api.bff.persistence;
 
 
 import com.getkhaki.api.bff.domain.models.TimeBlockSummaryDm;
-import com.getkhaki.api.bff.domain.services.TimeBlockSummaryPersistenceService;
 import com.getkhaki.api.bff.persistence.repositories.TimeBlockSummaryRepositoryInterface;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

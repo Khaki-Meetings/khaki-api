@@ -25,5 +25,4 @@ public class PersonDto {
 
     Boolean notify;
 
-    String department;
 }

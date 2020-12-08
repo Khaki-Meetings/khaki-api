@@ -1,6 +1,5 @@
 package com.getkhaki.api.bff.persistence;
 
-import com.getkhaki.api.bff.domain.services.DepartmentStatisticsPersistenceService;
 import com.getkhaki.api.bff.persistence.repositories.DepartmentStatisticsRepositoryInterface;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

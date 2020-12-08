@@ -3,7 +3,7 @@ package com.getkhaki.api.bff.web;
 import com.getkhaki.api.bff.domain.services.DepartmentService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.springframework.core.io.Resource;
+import org.modelmapper.ModelMapper;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
@@ -14,11 +14,13 @@ import static org.mockito.Mockito.*;
 public class DepartmentControllerUnitTests {
     private DepartmentController underTest;
     private DepartmentService departmentService;
+    private ModelMapper modelMapper;
 
     @BeforeEach
     public void setup() {
+        modelMapper = mock(ModelMapper.class);
         departmentService = mock(DepartmentService.class);
-        underTest = new DepartmentController(this.departmentService);
+        underTest = new DepartmentController(this.departmentService, modelMapper);
     }
 
     @Test

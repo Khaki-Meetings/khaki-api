@@ -6,16 +6,13 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.Accessors;
 
-import java.util.Set;
-import java.util.UUID;
+import java.util.List;
 
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Accessors(chain = true)
-public class OrganizationDto {
-    String name;
-
-    Set<PersonDto> members;
+public class DepartmentsResponseDto {
+    List<DepartmentDto> departments;
 }
