@@ -2,7 +2,6 @@ package com.getkhaki.api.bff.persistence.repositories;
 
 import com.getkhaki.api.bff.BaseJpaIntegrationTest;
 import com.getkhaki.api.bff.persistence.models.views.OrganizerStatisticsView;
-import liquibase.exception.LiquibaseException;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
@@ -18,11 +17,8 @@ public class OrganizerStatisticsRepositoryInterfaceIntegrationTests extends Base
     @Inject
     private OrganizerStatisticsRepositoryInterface underTest;
 
-    @Inject
-    private CalendarEventRepositoryInterface calendarEventRepository;
-
     @Test
-    public void queryTest() throws LiquibaseException {
+    public void queryTest() {
         Instant start = Instant.parse("2020-11-01T00:00:00.000Z");
         Instant end = Instant.parse("2020-11-08T00:00:00.000Z");
         List<OrganizerStatisticsView> stats = underTest.findAllOrganizerStatistics(
@@ -39,7 +35,10 @@ public class OrganizerStatisticsRepositoryInterfaceIntegrationTests extends Base
                 .orElseThrow();
         assertThat(bettyStats.getTotalCost()).isEqualTo(1282.5);
         assertThat(bettyStats.getTotalHours()).isEqualTo(9);
-        assertThat(bettyStats.getTotalMeetingCount()).isEqualTo(1);
+        assertThat(bettyStats.getTotalMeetings()).isEqualTo(1);
+        assertThat(bettyStats.getOrganizerFirstName()).isEqualTo("Betty");
+        assertThat(bettyStats.getOrganizerLastName()).isEqualTo("Smith");
+
 
         OrganizerStatisticsView bobStats = stats
                 .stream()
@@ -47,8 +46,10 @@ public class OrganizerStatisticsRepositoryInterfaceIntegrationTests extends Base
                 .findFirst()
                 .orElseThrow();
         assertThat(bobStats.getOrganizerEmail()).isEqualTo("bob@s56.net");
-        assertThat(bobStats.getTotalMeetingCount()).isEqualTo(1);
+        assertThat(bobStats.getTotalMeetings()).isEqualTo(1);
         assertThat(bobStats.getTotalHours()).isEqualTo(4);
         assertThat(bobStats.getTotalCost()).isEqualTo(380.0);
+        assertThat(bobStats.getOrganizerFirstName()).isEqualTo("Bob");
+        assertThat(bobStats.getOrganizerLastName()).isEqualTo("Jones");
     }
 }

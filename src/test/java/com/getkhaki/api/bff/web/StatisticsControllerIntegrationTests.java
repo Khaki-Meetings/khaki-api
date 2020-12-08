@@ -1,6 +1,7 @@
 package com.getkhaki.api.bff.web;
 
-import com.getkhaki.api.bff.BaseJpaIntegrationTest;
+import com.getkhaki.api.bff.BaseMvcIntegrationTest;
+import com.getkhaki.api.bff.config.SessionTenant;
 import com.getkhaki.api.bff.web.models.DepartmentStatisticsResponseDto;
 import com.getkhaki.api.bff.web.models.DepartmentsStatisticsResponseDto;
 import com.getkhaki.api.bff.web.models.IntervalDte;
@@ -8,10 +9,17 @@ import com.getkhaki.api.bff.web.models.OrganizerStatisticsResponseDto;
 import com.getkhaki.api.bff.web.models.OrganizersStatisticsResponseDto;
 import com.getkhaki.api.bff.web.models.TimeBlockSummaryResponseDto;
 import com.getkhaki.api.bff.web.models.TrailingStatisticsResponseDto;
-import io.restassured.module.mockmvc.RestAssuredMockMvc;
+import lombok.val;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.web.server.LocalServerPort;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.oauth2.jwt.Jwt;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
+import org.springframework.test.web.servlet.MvcResult;
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
 import java.time.Instant;
@@ -20,34 +28,26 @@ import java.util.List;
 import static io.restassured.RestAssured.given;
 import static io.restassured.http.ContentType.JSON;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.jwt;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-public class StatisticsControllerIntegrationTests extends BaseJpaIntegrationTest {
-    @LocalServerPort
-    private int port;
-
+@ExtendWith(SpringExtension.class)
+@AutoConfigureMockMvc
+public class StatisticsControllerIntegrationTests extends BaseMvcIntegrationTest {
     public StatisticsControllerIntegrationTests(WebApplicationContext webApplicationContext) {
-        RestAssuredMockMvc.webAppContextSetup(webApplicationContext);
+        super(webApplicationContext);
+        this.webApplicationContext = webApplicationContext;
     }
 
     @Test
-    public void testOrganizationStatistics() {
+    public void testOrganizationStatistics() throws Exception {
         Instant start = Instant.parse("2020-11-01T00:00:00.000Z");
         Instant end = Instant.parse("2020-11-08T00:00:00.000Z");
 
-        String url = "/statistics/organizersStatistics/" +
-                start.toString() +
-                "/" +
-                end.toString();
-        OrganizersStatisticsResponseDto stats = given()
-                .port(this.port)
-                .contentType(JSON)
-                .when()
-                .get(url)
-                .then().assertThat()
-                .statusCode(200)
-                .extract()
-                .as(OrganizersStatisticsResponseDto.class);
+        String url = String.format("/statistics/organizers/%s/%s", start, end);
+
+        OrganizersStatisticsResponseDto stats = getTypedResult(url, OrganizersStatisticsResponseDto.class);
 
         OrganizerStatisticsResponseDto bettyStats = stats.getOrganizersStatistics()
                 .stream()
@@ -56,7 +56,7 @@ public class StatisticsControllerIntegrationTests extends BaseJpaIntegrationTest
                 .orElseThrow();
         assertThat(bettyStats.getTotalCost()).isEqualTo(1282.5);
         assertThat(bettyStats.getTotalHours()).isEqualTo(9);
-        assertThat(bettyStats.getTotalMeetingCount()).isEqualTo(1);
+        assertThat(bettyStats.getTotalMeetings()).isEqualTo(1);
 
         OrganizerStatisticsResponseDto bobStats = stats.getOrganizersStatistics()
                 .stream()
@@ -64,29 +64,18 @@ public class StatisticsControllerIntegrationTests extends BaseJpaIntegrationTest
                 .findFirst()
                 .orElseThrow();
         assertThat(bobStats.getOrganizerEmail()).isEqualTo("bob@s56.net");
-        assertThat(bobStats.getTotalMeetingCount()).isEqualTo(1);
+        assertThat(bobStats.getTotalMeetings()).isEqualTo(1);
         assertThat(bobStats.getTotalHours()).isEqualTo(4);
         assertThat(bobStats.getTotalCost()).isEqualTo(380.0);
     }
 
     @Test
-    public void testDepartmentStatistics() {
+    public void testDepartmentStatistics() throws Exception {
         Instant start = Instant.parse("2020-11-01T00:00:00.000Z");
         Instant end = Instant.parse("2020-11-08T00:00:00.000Z");
 
-        String url = "/statistics/department/" +
-                start.toString() +
-                "/" +
-                end.toString();
-        DepartmentsStatisticsResponseDto stats = given()
-                .port(this.port)
-                .contentType(JSON)
-                .when()
-                .get(url)
-                .then().assertThat()
-                .statusCode(200)
-                .extract()
-                .as(DepartmentsStatisticsResponseDto.class);
+        String url = String.format("/statistics/department/%s/%s", start, end);
+        DepartmentsStatisticsResponseDto stats = getTypedResult(url, DepartmentsStatisticsResponseDto.class);
 
         DepartmentStatisticsResponseDto itDepartment = stats.getDepartmentsStatistics()
                 .stream()
@@ -104,26 +93,13 @@ public class StatisticsControllerIntegrationTests extends BaseJpaIntegrationTest
     }
 
     @Test
-    public void testTrailingStatistics() {
+    public void testTrailingStatistics() throws Exception {
         Instant start = Instant.parse("2020-11-01T00:00:00.000Z");
         int count = 2;
 
-        String url = String.format(
-                "/statistics/trailing/%s/%s/%d",
-                start.toString(),
-                IntervalDte.Day,
-                count
-        );
+        String url = String.format("/statistics/trailing/%s/%s/%d", start, IntervalDte.Day, count);
 
-        TrailingStatisticsResponseDto stats = given()
-                .port(this.port)
-                .contentType(JSON)
-                .when()
-                .get(url)
-                .then().assertThat()
-                .statusCode(200)
-                .extract()
-                .as(TrailingStatisticsResponseDto.class);
+        TrailingStatisticsResponseDto stats = getTypedResult(url, TrailingStatisticsResponseDto.class);
 
         assertThat(stats.getTimeBlockSummaries()).hasSize(2);
 
@@ -136,27 +112,15 @@ public class StatisticsControllerIntegrationTests extends BaseJpaIntegrationTest
     }
 
     @Test
-    public void testTimeBlockSummary() {
+    public void testTimeBlockSummary() throws Exception {
         Instant start = Instant.parse("2020-11-01T00:00:00.000Z");
         Instant end = Instant.parse("2020-11-18T00:00:00.000Z");
 
-        String url = "/statistics/summary/" +
-                start.toString() +
-                "/" +
-                end.toString();
-        TimeBlockSummaryResponseDto stats = given()
-                .port(this.port)
-                .contentType(JSON)
-                .when()
-                .get(url)
-                .then().assertThat()
-                .statusCode(200)
-                .extract()
-                .as(TimeBlockSummaryResponseDto.class);
+        String url = String.format("/statistics/summary/%s/%s", start, end);
+        val stats = getTypedResult(url, TimeBlockSummaryResponseDto.class);
 
         assertThat(stats.getMeetingCount()).isEqualTo(3);
         assertThat(stats.getTotalHours()).isEqualTo(15);
 
     }
-
 }

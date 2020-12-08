@@ -1,4 +1,4 @@
-package com.getkhaki.api.bff.domain.services;
+package com.getkhaki.api.bff.persistence;
 
 import com.getkhaki.api.bff.domain.models.DepartmentStatisticsDm;
 import com.getkhaki.api.bff.domain.persistence.DepartmentStatisticsPersistenceInterface;

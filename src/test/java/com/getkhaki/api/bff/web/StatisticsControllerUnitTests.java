@@ -6,7 +6,6 @@ import com.getkhaki.api.bff.domain.models.OrganizerStatisticsDm;
 import com.getkhaki.api.bff.domain.models.TimeBlockSummaryDm;
 import com.getkhaki.api.bff.domain.services.StatisticsService;
 import com.getkhaki.api.bff.web.models.DepartmentStatisticsResponseDto;
-import com.getkhaki.api.bff.web.models.IntervalDte;
 import com.getkhaki.api.bff.web.models.OrganizerStatisticsResponseDto;
 import com.getkhaki.api.bff.web.models.OrganizersStatisticsResponseDto;
 import com.getkhaki.api.bff.web.models.TimeBlockSummaryResponseDto;
@@ -54,13 +53,13 @@ public class StatisticsControllerUnitTests {
                 .setOrganizerEmail("bob@bob.com")
                 .setTotalCost(1.0)
                 .setTotalHours(1)
-                .setTotalMeetingCount(1);
+                .setTotalMeetings(1);
 
 
         OrganizerStatisticsDm mockDm = OrganizerStatisticsDm.builder()
                 .organizerEmail("bob@bob.com")
                 .totalCost(1.0)
-                .totalMeetingCount(1)
+                .totalMeetings(1)
                 .totalHours(1)
                 .build();
 
