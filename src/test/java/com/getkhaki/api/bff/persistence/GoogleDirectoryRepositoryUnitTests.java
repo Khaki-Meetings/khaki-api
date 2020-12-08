@@ -1,8 +1,8 @@
 package com.getkhaki.api.bff.persistence;
 
-import com.getkhaki.api.bff.persistence.models.Directory;
-import com.getkhaki.api.bff.persistence.models.User;
 import com.getkhaki.api.bff.persistence.repositories.GoogleDirectoryRepository;
+import com.google.api.services.admin.directory.Directory;
+import com.google.api.services.admin.directory.model.User;
 import org.assertj.core.util.Lists;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -10,6 +10,8 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.io.IOException;
+import java.security.GeneralSecurityException;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -33,22 +35,35 @@ public class GoogleDirectoryRepositoryUnitTests {
     @Test
     public void getUsers(){
 
-        String adminEmail="";
-        User user=new User("email");
-        List<User> users= Lists.list(user);
-        when(underTest.getUsers(adminEmail)).thenReturn(users);
+     /*   User: bob@workspacetest.dev
+        Password: XKVy<g8M
 
-        for (User underTestUser : underTest.getUsers(adminEmail)) {
-            assertThat(underTestUser).isNotNull();
-           assertThat(client.getUsers().contains(underTestUser)).isEqualTo(true);
+        User: harris@workspacetest.dev
+        Password: EUrM<2FH*/
+
+        String adminEmail="bob@workspacetest.dev";
+        User user=new User();
+        user.setPrimaryEmail("harris@workspacetest.dev");
+        user.setPassword("EUrM<2FH");
+        List<User> users= Lists.list(user);
+        try {
+            when(underTest.getUsers(adminEmail)).thenReturn(users);
+            for (User underTestUser : underTest.getUsers(adminEmail)) {
+                assertThat(underTestUser).isNotNull();
+                assertThat(users.contains(underTestUser)).isEqualTo(true);
+            }
+        } catch (GeneralSecurityException | IOException e) {
+            e.printStackTrace();
         }
 
 
+
+
     }
 
-    @Test
+    /*@Test
     public void getEvents(){
 
-    }
+    }*/
 }
 
