@@ -1,6 +1,6 @@
 package com.getkhaki.api.bff.persistence.repositories;
 
-import com.google.api.services.admin.directory.Directory;
+import com.google.api.services.directory.Directory;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

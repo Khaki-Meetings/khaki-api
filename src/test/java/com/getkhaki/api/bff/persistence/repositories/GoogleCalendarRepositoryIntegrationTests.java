@@ -8,12 +8,13 @@ import javax.inject.Inject;
 import static org.junit.platform.commons.util.Preconditions.notEmpty;
 
 @SpringBootTest
-public class GoogleDirectoryRepositoryIntegrationTests {
+public class GoogleCalendarRepositoryIntegrationTests {
     @Inject
-    private GoogleDirectoryRepository underTest;
+    private GoogleCalendarRepository underTest;
 
     @Test
-    public void getUsers() {
-        notEmpty(this.underTest.getUsers("casey@s56.net"), "getUsers should not return an empty list");
+    public void getEvents() {
+        notEmpty(this.underTest.getEvents("casey@s56.net", "casey@s56.net"),
+                "getEvents should not return an empty list");
     }
 }

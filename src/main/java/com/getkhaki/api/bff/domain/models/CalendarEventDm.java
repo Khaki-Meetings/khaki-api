@@ -1,9 +1,6 @@
 package com.getkhaki.api.bff.domain.models;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import lombok.experimental.Accessors;
 
 import java.time.Instant;
@@ -14,6 +11,7 @@ import java.util.UUID;
 @NoArgsConstructor
 @AllArgsConstructor
 @Accessors(chain = true)
+@Builder(toBuilder = true)
 public class CalendarEventDm {
     UUID id;
 
