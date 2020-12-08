@@ -43,20 +43,4 @@ public class CalendarEventControllerIntegrationTests {
                 .statusCode(200)
                 .body("id", notNullValue());
     }
-
-    //ToDo: Take a look on it again
-  /*  @Test
-    public void getEvents() {
-
-        given()
-                .port(this.port)
-                .contentType(JSON)
-                .body()
-                .when()
-                .get("/calendar-events")
-                .then().assertThat()
-                .statusCode(200)
-                .body();
-
-    }*/
 }

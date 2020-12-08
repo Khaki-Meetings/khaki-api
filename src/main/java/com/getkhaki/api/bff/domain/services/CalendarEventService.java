@@ -21,12 +21,10 @@ public class CalendarEventService {
         return calendarEventPersistence.createEvent(calendarEventDm);
     }
 
-
-    @Async("asyncExecutor")
+    @Async
     public void importAsync(String adminEmail) {
-
-//        this.calendarProviderPersistenceFactory.get().getEvents(adminEmail);
-
+        this.calendarProviderPersistenceFactory.get()
+                .getEvents(adminEmail)
+                .forEach(calendarEventPersistence::createEvent);
     }
-
 }
