@@ -1,11 +1,10 @@
-package com.getkhaki.api.bff.domain.services;
+package com.getkhaki.api.bff.persistence;
 
 import com.getkhaki.api.bff.config.SessionTenant;
 import com.getkhaki.api.bff.domain.models.OrganizerStatisticsDm;
 import com.getkhaki.api.bff.domain.persistence.OrganizersStatisticsPersistenceInterface;
 import com.getkhaki.api.bff.persistence.models.views.OrganizerStatisticsView;
 import com.getkhaki.api.bff.persistence.repositories.OrganizerStatisticsRepositoryInterface;
-import com.getkhaki.api.bff.security.AuthenticationFacade;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeToken;
 import org.springframework.stereotype.Service;
@@ -13,7 +12,6 @@ import org.springframework.stereotype.Service;
 import java.time.Instant;
 import java.util.List;
 import java.util.OptionalInt;
-import java.util.UUID;
 
 @Service
 public class OrganizersStatisticsPersistenceService implements OrganizersStatisticsPersistenceInterface {

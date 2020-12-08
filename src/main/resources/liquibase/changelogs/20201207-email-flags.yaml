@@ -1,0 +1,93 @@
+databaseChangeLog:
+  - changeSet:
+      id: 1607384070811-9
+      author: jacob (generated)
+      changes:
+        - createTable:
+            columns:
+              - column:
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                  name: email_dao_id
+                  type: BINARY(16)
+              - column:
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                  name: flags_id
+                  type: BINARY(16)
+            tableName: email_dao_flags
+  - changeSet:
+      id: 1607384070811-10
+      author: jacob (generated)
+      changes:
+        - createTable:
+            columns:
+              - column:
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                    primaryKeyName: flag_daoPK
+                  name: id
+                  type: BINARY(16)
+              - column:
+                  name: name
+                  type: VARCHAR(255)
+            tableName: flag_dao
+  - changeSet:
+      id: 1607384070811-11
+      author: jacob (generated)
+      changes:
+        - addUniqueConstraint:
+            columnNames: name
+            constraintName: UC_FLAG_DAONAME_COL
+            tableName: flag_dao
+  - changeSet:
+      id: 1607384070811-14
+      author: jacob (generated)
+      changes:
+        - addForeignKeyConstraint:
+            baseColumnNames: email_dao_id
+            baseTableName: email_dao_flags
+            constraintName: FK36h9lojyqn2398fu86vtp2h9n
+            deferrable: false
+            initiallyDeferred: false
+            referencedColumnNames: id
+            referencedTableName: email_dao
+            validate: true
+  - changeSet:
+      id: 1607384070811-15
+      author: jacob (generated)
+      changes:
+        - addForeignKeyConstraint:
+            baseColumnNames: flags_id
+            baseTableName: email_dao_flags
+            constraintName: FKoby88xnl38e5qnqcucohtip1s
+            deferrable: false
+            initiallyDeferred: false
+            referencedColumnNames: id
+            referencedTableName: flag_dao
+            validate: true
+  - property:
+      dbms: mariadb
+      name: ContactableFlagId
+      value: UNHEX(REPLACE(UUID(), "-", ""))
+  - property:
+      dbms: h2
+      name: ContactableFlagId
+      value: UUID()
+  - changeSet:
+      dbms: mariadb
+      id: flag-fixture-1
+      author: jacob (generated)
+      changes:
+        - insert:
+            tableName: flag_dao
+            columns:
+              - column:
+                  name: id
+                  valueComputed: ${ContactableFlagId}
+              - column:
+                  name: name
+                  value: Contactable

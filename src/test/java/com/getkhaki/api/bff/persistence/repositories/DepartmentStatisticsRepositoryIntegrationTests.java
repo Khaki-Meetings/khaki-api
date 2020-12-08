@@ -1,6 +1,6 @@
 package com.getkhaki.api.bff.persistence.repositories;
 
-import com.getkhaki.api.bff.BaseIntegrationTest;
+import com.getkhaki.api.bff.BaseJpaIntegrationTest;
 import com.getkhaki.api.bff.persistence.models.views.DepartmentStatisticsView;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
@@ -13,7 +13,7 @@ import java.util.UUID;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @DataJpaTest
-public class DepartmentStatisticsRepositoryIntegrationTests extends BaseIntegrationTest {
+public class DepartmentStatisticsRepositoryIntegrationTests extends BaseJpaIntegrationTest {
     @Inject
     private DepartmentStatisticsRepositoryInterface underTest;
 
