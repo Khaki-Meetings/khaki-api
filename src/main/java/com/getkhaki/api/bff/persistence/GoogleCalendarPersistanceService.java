@@ -1,6 +1,7 @@
 package com.getkhaki.api.bff.persistence;
 
 import com.getkhaki.api.bff.domain.models.CalendarEventDm;
+import com.getkhaki.api.bff.domain.persistence.CalendarProviderPersistenceInterface;
 import com.getkhaki.api.bff.persistence.repositories.GoogleCalendarRepository;
 import com.getkhaki.api.bff.persistence.repositories.GoogleDirectoryRepository;
 import com.google.api.services.calendar.model.Event;
@@ -12,7 +13,7 @@ import java.security.GeneralSecurityException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class GoogleCalendarPersistanceService {
+public class GoogleCalendarPersistanceService implements CalendarProviderPersistenceInterface {
 
     private final GoogleCalendarRepository googleCalendarRepository;
     private final GoogleDirectoryRepository googleDirectoryRepository;
@@ -24,6 +25,7 @@ public class GoogleCalendarPersistanceService {
         this.modelMapper = modelMapper;
     }
 
+    @Override
     public List<CalendarEventDm> getEvents(String adminEmail){
         try {
             List<CalendarEventDm> ret=new ArrayList<>();

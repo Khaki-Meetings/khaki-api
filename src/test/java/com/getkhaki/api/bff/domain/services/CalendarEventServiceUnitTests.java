@@ -2,7 +2,6 @@ package com.getkhaki.api.bff.domain.services;
 
 import com.getkhaki.api.bff.domain.models.CalendarEventDm;
 import com.getkhaki.api.bff.domain.persistence.CalendarEventPersistenceInterface;
-import com.getkhaki.api.bff.domain.persistence.CalendarProviderPersistenceFactory;
 import com.getkhaki.api.bff.domain.persistence.CalendarProviderPersistenceInterface;
 import org.assertj.core.util.Lists;
 import org.junit.jupiter.api.BeforeEach;
