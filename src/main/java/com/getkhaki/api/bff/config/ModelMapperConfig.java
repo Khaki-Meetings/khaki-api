@@ -2,6 +2,7 @@ package com.getkhaki.api.bff.config;
 
 import com.getkhaki.api.bff.domain.models.EmployeeDm;
 import com.getkhaki.api.bff.domain.models.OrganizerStatisticsDm;
+import com.getkhaki.api.bff.domain.models.PersonDm;
 import com.getkhaki.api.bff.persistence.models.EmailDao;
 import com.getkhaki.api.bff.persistence.models.EmployeeDao;
 import com.getkhaki.api.bff.persistence.models.FlagDao;
@@ -35,11 +36,12 @@ public class ModelMapperConfig {
                             mapper.map(
                                     src -> src.getPerson().getPrimaryEmail().getEmailString(),
                                     EmployeeDm::setEmail
-
                             );
 
+                            mapper.skip(EmployeeDm::setAvatarUrl);
                         }
                 );
+
         return modelMapper;
     }
 }

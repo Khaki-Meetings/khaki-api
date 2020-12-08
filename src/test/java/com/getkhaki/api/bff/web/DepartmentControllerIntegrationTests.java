@@ -1,6 +1,6 @@
 package com.getkhaki.api.bff.web;
 
-import com.getkhaki.api.bff.BaseIntegrationTest;
+import com.getkhaki.api.bff.BaseMvcIntegrationTest;
 import com.getkhaki.api.bff.web.models.DepartmentsResponseDto;
 import io.restassured.module.mockmvc.RestAssuredMockMvc;
 import lombok.val;
@@ -16,7 +16,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 @ActiveProfiles(profiles = "test")
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-public class DepartmentControllerIntegrationTests extends BaseIntegrationTest {
+public class DepartmentControllerIntegrationTests extends BaseMvcIntegrationTest {
     DepartmentControllerIntegrationTests(WebApplicationContext webApplicationContext) {
         super(webApplicationContext);
         RestAssuredMockMvc.webAppContextSetup(webApplicationContext);

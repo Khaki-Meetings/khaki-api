@@ -1,6 +1,6 @@
 package com.getkhaki.api.bff.persistence.repositories;
 
-import com.getkhaki.api.bff.BaseIntegrationTest;
+import com.getkhaki.api.bff.BaseJpaIntegrationTest;
 import com.getkhaki.api.bff.persistence.models.views.TimeBlockSummaryView;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
@@ -11,7 +11,7 @@ import java.time.Instant;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @DataJpaTest
-public class TimeBlockSummaryRepositoryIntegrationTests extends BaseIntegrationTest {
+public class TimeBlockSummaryRepositoryIntegrationTests extends BaseJpaIntegrationTest {
     @Inject
     private TimeBlockSummaryRepositoryInterface underTest;
 

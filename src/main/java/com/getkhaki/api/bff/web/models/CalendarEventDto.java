@@ -1,5 +1,6 @@
 package com.getkhaki.api.bff.web.models;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

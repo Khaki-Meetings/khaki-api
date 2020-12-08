@@ -2,11 +2,14 @@ package com.getkhaki.api.bff;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.getkhaki.api.bff.config.SessionTenant;
+import com.getkhaki.api.bff.web.models.OrganizationDto;
 import io.restassured.module.mockmvc.RestAssuredMockMvc;
 import liquibase.exception.LiquibaseException;
 import liquibase.integration.spring.SpringLiquibase;
+import lombok.val;
 import org.junit.jupiter.api.BeforeEach;
 import org.springframework.boot.web.server.LocalServerPort;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -31,10 +34,7 @@ import static org.springframework.security.test.web.servlet.request.SecurityMock
 import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-public abstract class BaseIntegrationTest {
-    @Inject
-    protected SpringLiquibase liquibase;
-
+public abstract class BaseMvcIntegrationTest extends BaseJpaIntegrationTest {
     @LocalServerPort
     protected int port;
 
@@ -43,18 +43,8 @@ public abstract class BaseIntegrationTest {
     protected WebApplicationContext webApplicationContext;
     protected MockMvc mvc;
 
-    protected BaseIntegrationTest() {
-    }
-
-    protected BaseIntegrationTest(WebApplicationContext webApplicationContext) {
+    protected BaseMvcIntegrationTest(WebApplicationContext webApplicationContext) {
         this.webApplicationContext = webApplicationContext;
-    }
-
-    @BeforeEach
-    public void setupLiquibase() throws LiquibaseException {
-        liquibase.setChangeLog("classpath:fixtures/liquibase-test-data.yaml");
-        liquibase.setShouldRun(true);
-        liquibase.afterPropertiesSet();
     }
 
     @BeforeEach
@@ -71,6 +61,18 @@ public abstract class BaseIntegrationTest {
         JavaTimeModule module = new JavaTimeModule();
         mapper.registerModule(module);
         return mapper.readValue(json, objectClass);
+    }
+
+    public static String asJsonString(final Object obj) {
+        try {
+            val timeModule = new JavaTimeModule();
+            final ObjectMapper mapper = new ObjectMapper();
+            mapper.registerModule(timeModule);
+            mapper.configure(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS, false);
+            return mapper.writeValueAsString(obj);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 
     protected static Jwt getJWT() {
@@ -101,7 +103,20 @@ public abstract class BaseIntegrationTest {
         return new Jwt(tokenValue, null, null, headers, claims);
     }
 
+    protected <T> T getTypedResult(String urlString, Class<T> type) throws Exception {
+        MvcResult result = getMvcResult(urlString);
+        return  (T) convertJSONStringToObject(
+                result.getResponse().getContentAsString(),
+                type
+        );
+
+    }
+
     protected MvcResult getMvcResult(String urlString) throws Exception {
+        val req =
+                MockMvcRequestBuilders.get(urlString)
+                        .header(SessionTenant.HEADER_KEY, "s56_net")
+                        .with(jwt().jwt(getJWT()).authorities(new SimpleGrantedAuthority("admin")));
         return mvc.perform(MockMvcRequestBuilders.get(urlString)
                 .header(SessionTenant.HEADER_KEY, "s56_net")
                 .with(jwt().jwt(getJWT()).authorities(new SimpleGrantedAuthority("admin"))))

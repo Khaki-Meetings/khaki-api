@@ -9,6 +9,7 @@ import javax.persistence.Entity;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Transient;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -20,7 +21,7 @@ public class PersonDao extends EntityBaseDao {
     String lastName;
 
     @ManyToMany(mappedBy = "people")
-    List<EmailDao> emails;
+    List<EmailDao> emails = new ArrayList<>();
 
     @OneToOne(mappedBy = "person")
     EmployeeDao employee;

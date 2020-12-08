@@ -5,13 +5,11 @@ import com.getkhaki.api.bff.domain.models.OrganizationDm;
 import com.getkhaki.api.bff.domain.persistence.OrganizationPersistenceInterface;
 import com.getkhaki.api.bff.persistence.models.OrganizationDao;
 import com.getkhaki.api.bff.persistence.repositories.OrganizationRepositoryInterface;
-import com.getkhaki.api.bff.security.AuthenticationFacade;
-import com.getkhaki.api.bff.web.models.OrganizationDto;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.oauth2.core.oidc.user.OidcUser;
 import org.springframework.stereotype.Service;
+
+import java.util.UUID;
 
 @Service
 public class OrganizationPersistenceService implements OrganizationPersistenceInterface {
@@ -32,6 +30,7 @@ public class OrganizationPersistenceService implements OrganizationPersistenceIn
 
     @Override
     public OrganizationDm getOrganization() {
+        UUID bla = sessionTenant.getTenantId();
         OrganizationDao organizationDao = this.organizationRepository.findById(sessionTenant.getTenantId())
                 .orElseThrow();
         OrganizationDm organizationDm = modelMapper.map(organizationDao, OrganizationDm.class);

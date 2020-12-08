@@ -1,6 +1,6 @@
 package com.getkhaki.api.bff.web;
 
-import com.getkhaki.api.bff.BaseIntegrationTest;
+import com.getkhaki.api.bff.BaseMvcIntegrationTest;
 import com.getkhaki.api.bff.web.models.EmployeesResponseDto;
 import lombok.val;
 import org.junit.jupiter.api.Test;
@@ -11,7 +11,7 @@ import org.springframework.web.context.WebApplicationContext;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-public class EmployeeControllerIntegrationTests extends BaseIntegrationTest {
+public class EmployeeControllerIntegrationTests extends BaseMvcIntegrationTest {
 
     public EmployeeControllerIntegrationTests(WebApplicationContext webApplicationContext) {
         super(webApplicationContext);
