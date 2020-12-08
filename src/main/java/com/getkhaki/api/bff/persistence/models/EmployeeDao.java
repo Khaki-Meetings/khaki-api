@@ -7,6 +7,7 @@ import lombok.experimental.Accessors;
 import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
+import javax.persistence.Transient;
 
 @Data
 @Entity
@@ -21,4 +22,6 @@ public class EmployeeDao extends EntityBaseDao {
 
     @OneToOne
     PersonDao person;
+
+
 }

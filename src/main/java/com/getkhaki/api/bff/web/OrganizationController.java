@@ -1,10 +1,13 @@
 package com.getkhaki.api.bff.web;
 
+import com.getkhaki.api.bff.domain.models.OrganizationDm;
 import com.getkhaki.api.bff.domain.services.OrganizationService;
 import com.getkhaki.api.bff.web.models.OrganizationDto;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 @RequestMapping("/organizations")
 @RestController
@@ -20,8 +23,8 @@ public class OrganizationController {
 
     @GetMapping
     public OrganizationDto getOrganization() {
-        return this.modelMapper.map(
-                organizationService.getOrganization(), OrganizationDto.class
-        );
+        OrganizationDm organizationDm = organizationService.getOrganization();
+        OrganizationDto organizationDto = this.modelMapper.map(organizationDm, OrganizationDto.class);
+        return organizationDto;
     }
 }

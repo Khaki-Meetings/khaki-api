@@ -1,8 +1,7 @@
 package com.getkhaki.api.bff.persistence.repositories;
 
-import com.getkhaki.api.bff.BaseIntegrationTest;
+import com.getkhaki.api.bff.BaseJpaIntegrationTest;
 import com.getkhaki.api.bff.persistence.models.views.OrganizerStatisticsView;
-import liquibase.exception.LiquibaseException;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
@@ -14,15 +13,12 @@ import java.util.UUID;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @DataJpaTest
-public class OrganizerStatisticsRepositoryInterfaceIntegrationTests extends BaseIntegrationTest {
+public class OrganizerStatisticsRepositoryInterfaceIntegrationTests extends BaseJpaIntegrationTest {
     @Inject
     private OrganizerStatisticsRepositoryInterface underTest;
 
-    @Inject
-    private CalendarEventRepositoryInterface calendarEventRepository;
-
     @Test
-    public void queryTest() throws LiquibaseException {
+    public void queryTest() {
         Instant start = Instant.parse("2020-11-01T00:00:00.000Z");
         Instant end = Instant.parse("2020-11-08T00:00:00.000Z");
         List<OrganizerStatisticsView> stats = underTest.findAllOrganizerStatistics(
