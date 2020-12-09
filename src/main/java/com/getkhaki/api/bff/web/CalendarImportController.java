@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RequestMapping("/calendar-imports")
 @RestController
+@CrossOrigin(origins = "*")
 public class CalendarImportController {
     private final CalendarEventService calendarEventService;
     private final ModelMapper modelMapper;

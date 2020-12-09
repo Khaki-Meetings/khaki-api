@@ -5,10 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.getkhaki.api.bff.config.SessionTenant;
-import com.getkhaki.api.bff.web.models.OrganizationDto;
 import io.restassured.module.mockmvc.RestAssuredMockMvc;
-import liquibase.exception.LiquibaseException;
-import liquibase.integration.spring.SpringLiquibase;
 import lombok.val;
 import org.junit.jupiter.api.BeforeEach;
 import org.springframework.boot.web.server.LocalServerPort;
@@ -22,7 +19,6 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.test.web.servlet.setup.MockMvcConfigurer;
 import org.springframework.web.context.WebApplicationContext;
 
-import javax.inject.Inject;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;

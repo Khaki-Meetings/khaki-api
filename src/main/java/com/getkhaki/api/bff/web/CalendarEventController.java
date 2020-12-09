@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RequestMapping("/calendar-events")
 @RestController
+@CrossOrigin(origins = "*")
 public class CalendarEventController {
     private final CalendarEventService calendarEventService;
     private final ModelMapper modelMapper;

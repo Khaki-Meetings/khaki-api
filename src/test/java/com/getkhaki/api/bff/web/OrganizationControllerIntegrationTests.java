@@ -1,12 +1,10 @@
 package com.getkhaki.api.bff.web;
 
 import com.getkhaki.api.bff.BaseMvcIntegrationTest;
-import com.getkhaki.api.bff.web.models.OrganizationDto;
+import com.getkhaki.api.bff.web.models.OrganizationResponseDto;
 import io.restassured.module.mockmvc.RestAssuredMockMvc;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.web.server.LocalServerPort;
-import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.web.context.WebApplicationContext;
 
 import static io.restassured.RestAssured.given;
@@ -24,7 +22,7 @@ public class OrganizationControllerIntegrationTests extends BaseMvcIntegrationTe
     @Test
     public void getOrganization() throws Exception {
         String url = "/organizations";
-        OrganizationDto organization = getTypedResult(url, OrganizationDto.class);
+        OrganizationResponseDto organization = getTypedResult(url, OrganizationResponseDto.class);
 
         assertThat(organization).isNotNull();
 
