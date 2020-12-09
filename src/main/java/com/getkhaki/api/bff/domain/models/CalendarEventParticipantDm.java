@@ -13,6 +13,6 @@ import lombok.experimental.Accessors;
 @Builder(toBuilder = true)
 public class CalendarEventParticipantDm {
     CalendarEventDm calendarEvent;
-    EmailDm email;
+    String email;
     boolean organizer;
 }

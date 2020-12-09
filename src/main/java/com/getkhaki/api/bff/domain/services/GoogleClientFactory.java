@@ -37,6 +37,7 @@ public class GoogleClientFactory {
         return GoogleNetHttpTransport.newTrustedTransport();
     }
 
+    @SuppressWarnings("deprecation")
     private GoogleCredential getCredentials(String adminEmail) throws IOException {
         return GoogleCredential.fromStream(
                 Application.class.getResourceAsStream("/khaki-api-service-account-key.json"))

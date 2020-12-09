@@ -2,8 +2,6 @@ package com.getkhaki.api.bff.domain.services;
 
 import com.getkhaki.api.bff.domain.models.CalendarEventDm;
 import com.getkhaki.api.bff.domain.models.CalendarEventParticipantDm;
-import com.getkhaki.api.bff.domain.models.DomainDm;
-import com.getkhaki.api.bff.domain.models.EmailDm;
 import com.google.api.services.calendar.model.Event;
 import lombok.val;
 import org.modelmapper.ModelMapper;
@@ -29,17 +27,9 @@ public class KhakiModelMapper extends ModelMapper {
         val attendees = source.getAttendees();
         if (attendees == null) {
             val organizer = source.getOrganizer();
-            String[] parts = organizer.getEmail().split("@");
-            if (parts.length != 2) {
-                return calendarEvent;
-            }
             participants = List.of(
                     new CalendarEventParticipantDm()
-                            .setEmail(
-                                    new EmailDm()
-                                            .setUser(parts[0])
-                                            .setDomain(new DomainDm().setName(parts[1]))
-                            )
+                            .setEmail(organizer.getEmail())
                             .setOrganizer(true)
                             .setCalendarEvent(calendarEvent)
             );
@@ -47,20 +37,10 @@ public class KhakiModelMapper extends ModelMapper {
             participants = source.getAttendees()
                     .stream()
                     .map(
-                            eventAttendee -> {
-                                String[] parts = eventAttendee.getEmail().split("@");
-                                if (parts.length != 2) {
-                                    return null;
-                                }
-                                return new CalendarEventParticipantDm()
-                                        .setEmail(
-                                                new EmailDm()
-                                                        .setUser(parts[0])
-                                                        .setDomain(new DomainDm().setName(parts[1]))
-                                        )
-                                        .setOrganizer((boolean) eventAttendee.getOrDefault("organizer", false))
-                                        .setCalendarEvent(calendarEvent);
-                            }
+                            eventAttendee -> new CalendarEventParticipantDm()
+                                    .setEmail(eventAttendee.getEmail())
+                                    .setOrganizer((boolean) eventAttendee.getOrDefault("organizer", false))
+                                    .setCalendarEvent(calendarEvent)
                     )
                     .filter(Objects::nonNull)
                     .collect(Collectors.toList());

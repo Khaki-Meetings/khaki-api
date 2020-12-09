@@ -31,5 +31,6 @@ public class CalendarEventDm {
 
     Instant end;
 
+    @Builder.Default
     List<CalendarEventParticipantDm> participants = new ArrayList<>();
 }

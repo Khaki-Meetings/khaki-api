@@ -251,6 +251,14 @@ databaseChangeLog:
             constraintName: UC_DOMAIN_DAONAME_COL
             tableName: domain_dao
   - changeSet:
+      id: 1606329848329-12.a
+      author: jacob
+      changes:
+        - addUniqueConstraint:
+            columnNames: person_id
+            constraintName: UC_PERSON_ID_COL
+            tableName: employee_dao
+  - changeSet:
       id: 1606329848329-13
       author: jacob (generated)
       changes:

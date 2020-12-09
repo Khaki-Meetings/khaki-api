@@ -34,7 +34,7 @@ public class DepartmentPersistenceService implements DepartmentPersistenceInterf
     }
 
     @Override
-    public DepartmentDm createDepartment(DepartmentDm departmentDm) {
+    public DepartmentDm upsert(DepartmentDm departmentDm) {
         val departmentDao = this.modelMapper.map(departmentDm, DepartmentDao.class);
         val organizationDao = organizationRepository.findById(sessionTenant.getTenantId());
         departmentDao.setOrganization(organizationDao.orElseThrow());

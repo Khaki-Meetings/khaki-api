@@ -7,11 +7,8 @@ import lombok.experimental.Accessors;
 import javax.persistence.*;
 import java.util.List;
 
-//@Data
-//@ToString(callSuper = true)
 @Entity
 @Accessors(chain = true)
-//@EqualsAndHashCode(callSuper = true)
 @Getter
 @Setter
 public class DomainDao extends EntityBaseDao {
@@ -30,14 +27,14 @@ public class DomainDao extends EntityBaseDao {
     @OneToMany(mappedBy = "domain")
     List<EmailDao> emails;
 
-//    @Transient
-//    OrganizationDao getOrganization() {
-//        return this.organizations.get(0);
-//    }
-//
-//    @Transient
-//    DomainDao setOrganization(OrganizationDao organization) {
-//        organizations.set(0, organization);
-//        return this;
-//    }
+    @Transient
+    OrganizationDao getOrganization() {
+        return this.organizations.get(0);
+    }
+
+    @Transient
+    DomainDao setOrganization(OrganizationDao organization) {
+        organizations.set(0, organization);
+        return this;
+    }
 }
