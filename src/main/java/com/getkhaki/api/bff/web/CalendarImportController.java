@@ -7,6 +7,7 @@ import javax.inject.Inject;
 
 @RestController
 @RequestMapping("/calendar-imports")
+@CrossOrigin(origins = "*")
 public class CalendarImportController {
     private final CalendarEventService calendarEventService;
 
