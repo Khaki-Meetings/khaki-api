@@ -2,6 +2,7 @@ package com.getkhaki.api.bff.domain.services;
 
 import com.getkhaki.api.bff.domain.models.DepartmentDm;
 import com.getkhaki.api.bff.domain.persistence.DepartmentPersistenceInterface;
+import com.getkhaki.api.bff.domain.persistence.EmployeePersistenceInterface;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
@@ -23,7 +24,11 @@ public class DepartmentService {
     @Async
     public void importAsync(InputStream csvInputStream) {
         this.csvFileService.read(csvInputStream)
-                .forEach(departmentPersistenceService::createDepartment);
+                .forEach(
+                        line -> {
+                            departmentPersistenceService.createDepartment(line);
+                        }
+                );
     }
 
     public List<DepartmentDm> getDepartments() {
