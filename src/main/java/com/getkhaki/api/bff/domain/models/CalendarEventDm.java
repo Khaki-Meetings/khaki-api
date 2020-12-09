@@ -1,9 +1,15 @@
 package com.getkhaki.api.bff.domain.models;
 
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import lombok.experimental.Accessors;
 
 import java.time.Instant;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 @Getter
@@ -24,4 +30,6 @@ public class CalendarEventDm {
     Instant start;
 
     Instant end;
+
+    List<CalendarEventParticipantDm> participants = new ArrayList<>();
 }
