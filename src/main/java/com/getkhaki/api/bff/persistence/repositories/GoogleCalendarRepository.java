@@ -5,15 +5,14 @@ import com.google.api.client.util.DateTime;
 import com.google.api.services.calendar.model.Event;
 import lombok.extern.apachecommons.CommonsLog;
 import lombok.val;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import javax.inject.Inject;
 import java.io.IOException;
 import java.security.GeneralSecurityException;
 import java.time.Instant;
-import java.time.ZonedDateTime;
 import java.time.temporal.ChronoUnit;
-import java.time.temporal.TemporalUnit;
 import java.util.Collections;
 import java.util.List;
 
@@ -22,6 +21,9 @@ import java.util.List;
 public class GoogleCalendarRepository {
     private final GoogleClientFactory googleClientFactory;
 
+    @Value("${com.getkhaki.api.bff.calendar-import-history-days:365}")
+    private int importHistoryDays;
+
     @Inject
     public GoogleCalendarRepository(GoogleClientFactory googleClientFactory) {
         this.googleClientFactory = googleClientFactory;
@@ -29,7 +31,7 @@ public class GoogleCalendarRepository {
 
     public List<Event> getEvents(String adminEmail, String userEmail) {
         try {
-            val yearAgo = Instant.now().plus(-30, ChronoUnit.DAYS);
+            val yearAgo = Instant.now().plus(-importHistoryDays, ChronoUnit.DAYS);
             val pastYear = new DateTime(ChronoUnit.MILLIS.between(Instant.EPOCH, yearAgo));
             return this.googleClientFactory.getCalendarClient(adminEmail)
                     .events()
