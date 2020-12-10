@@ -43,7 +43,7 @@ public class CalendarEventServiceUnitTests {
                 .setCreated(calendarEventDmInput.getCreated())
                 .setId(id);
 
-        when(calendarEventPersistence.createEvent(calendarEventDmInput)).thenReturn(calendarEventDmResponse);
+        when(calendarEventPersistence.upsert(calendarEventDmInput)).thenReturn(calendarEventDmResponse);
 
         CalendarEventDm ret = underTest.createEvent(calendarEventDmInput);
         assertThat(ret).isNotNull();
@@ -71,7 +71,7 @@ public class CalendarEventServiceUnitTests {
             List<CalendarEventDm> ret = new ArrayList<>();
 
             calendarEventDmList.forEach(
-                    calendarEventDm -> ret.add(calendarEventPersistence.createEvent(calendarEventDm))
+                    calendarEventDm -> ret.add(calendarEventPersistence.upsert(calendarEventDm))
             );
             assertThat(ret.size()).isEqualTo(calendarEventDmList.size());
             return ret.size();

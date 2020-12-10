@@ -28,5 +28,13 @@ public class CalendarEventParticipantDao extends EntityBaseDao {
     EmailDao email;
 
     @Column(nullable = true)
-    Boolean organizer;
+    Boolean organizer = null;
+
+    public CalendarEventParticipantDao setOrganizer(Boolean organizer) {
+        this.organizer = organizer;
+        if (organizer.equals(false)) {
+            this.organizer = null;
+        }
+        return this;
+    }
 }

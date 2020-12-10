@@ -5,6 +5,7 @@ import com.getkhaki.api.bff.domain.models.DepartmentDm;
 import com.getkhaki.api.bff.domain.persistence.DepartmentPersistenceInterface;
 import com.getkhaki.api.bff.persistence.models.DepartmentDao;
 import com.getkhaki.api.bff.persistence.repositories.DepartmentRepositoryInterface;
+import com.getkhaki.api.bff.persistence.repositories.EmployeeRepositoryInterface;
 import com.getkhaki.api.bff.persistence.repositories.OrganizationRepositoryInterface;
 import lombok.val;
 import org.modelmapper.ModelMapper;
@@ -18,17 +19,23 @@ import java.util.stream.Collectors;
 public class DepartmentPersistenceService implements DepartmentPersistenceInterface {
     private final DepartmentRepositoryInterface departmentRepository;
     private final OrganizationRepositoryInterface organizationRepository;
+    private final EmployeeRepositoryInterface employeeRepository;
+    private final PersonDaoService personDaoService;
     private final ModelMapper modelMapper;
     private final SessionTenant sessionTenant;
 
     @Autowired
     public DepartmentPersistenceService(
             DepartmentRepositoryInterface departmentRepository,
-            OrganizationRepositoryInterface organizationRepository, ModelMapper modelMapper,
+            OrganizationRepositoryInterface organizationRepository,
+            EmployeeRepositoryInterface employeeRepository, PersonDaoService personDaoService,
+            ModelMapper modelMapper,
             SessionTenant sessionTenant
     ) {
         this.departmentRepository = departmentRepository;
         this.organizationRepository = organizationRepository;
+        this.employeeRepository = employeeRepository;
+        this.personDaoService = personDaoService;
         this.modelMapper = modelMapper;
         this.sessionTenant = sessionTenant;
     }
@@ -36,9 +43,29 @@ public class DepartmentPersistenceService implements DepartmentPersistenceInterf
     @Override
     public DepartmentDm upsert(DepartmentDm departmentDm) {
         val departmentDao = this.modelMapper.map(departmentDm, DepartmentDao.class);
-        val organizationDao = organizationRepository.findById(sessionTenant.getTenantId());
-        departmentDao.setOrganization(organizationDao.orElseThrow());
-        return this.modelMapper.map(this.departmentRepository.save(departmentDao), DepartmentDm.class);
+        val organizationDao = organizationRepository
+                .findById(sessionTenant.getTenantId()).orElseThrow(() -> new RuntimeException("Organization required"));
+
+        departmentDao.setOrganization(organizationDao);
+
+        val departmentDaoOp = departmentRepository
+                .findDistinctByNameAndOrganization(departmentDm.getName(), organizationDao);
+        departmentDaoOp.ifPresent(department -> departmentDao.setId(department.getId()));
+        departmentRepository.save(departmentDao);
+
+        departmentDao.getEmployees()
+                .forEach(
+                        employeeDao -> {
+                            val savedPersonDao = personDaoService.upsert(employeeDao.getPerson());
+                            employeeDao.setPerson(savedPersonDao);
+                            employeeDao.setDepartment(departmentDao);
+
+                            employeeRepository.findDistinctByPerson(savedPersonDao)
+                                    .orElseGet(() -> employeeRepository.save(employeeDao));
+                        }
+                );
+
+        return this.modelMapper.map(departmentDao, DepartmentDm.class);
     }
 
     @Override

@@ -7,14 +7,18 @@ import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.getkhaki.api.bff.config.SessionTenant;
 import io.restassured.module.mockmvc.RestAssuredMockMvc;
 import lombok.val;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
+import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.security.oauth2.jwt.JwtClaimNames;
+import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.context.WebApplicationContext;
 
 import java.io.IOException;
@@ -28,6 +32,8 @@ import static org.springframework.security.test.web.servlet.request.SecurityMock
 import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+@AutoConfigureTestDatabase
+@Transactional
 public abstract class BaseMvcIntegrationTest extends BaseJpaIntegrationTest {
     protected UUID s56OrgUuid = UUID.fromString("d713ace2-0d30-43be-b4ba-db973967d6d4");
 
@@ -51,6 +57,11 @@ public abstract class BaseMvcIntegrationTest extends BaseJpaIntegrationTest {
         JavaTimeModule module = new JavaTimeModule();
         mapper.registerModule(module);
         return mapper.readValue(json, objectClass);
+    }
+
+    @AfterEach
+    public void clearDb() {
+
     }
 
     public static String asJsonString(final Object obj) {

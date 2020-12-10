@@ -35,6 +35,14 @@ databaseChangeLog:
                   type: VARCHAR(255)
             tableName: calendar_event_dao
   - changeSet:
+      id: UC_GOOGLE_CAL_ID
+      author: jacob
+      changes:
+        - addUniqueConstraint:
+            columnNames: google_calendar_id
+            constraintName: UC_GOOGLE_CAL_ID
+            tableName: calendar_event_dao
+  - changeSet:
       id: 1606329848329-2
       author: jacob (generated)
       changes:

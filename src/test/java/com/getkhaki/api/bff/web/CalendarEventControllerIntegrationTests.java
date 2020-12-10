@@ -4,13 +4,11 @@ import com.getkhaki.api.bff.BaseMvcIntegrationTest;
 import com.getkhaki.api.bff.config.SessionTenant;
 import com.getkhaki.api.bff.web.models.CalendarEventDto;
 import io.restassured.module.mockmvc.RestAssuredMockMvc;
-import lombok.val;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.test.web.servlet.MvcResult;
-import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
 import java.time.Instant;

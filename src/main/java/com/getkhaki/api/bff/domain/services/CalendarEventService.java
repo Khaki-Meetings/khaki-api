@@ -23,7 +23,7 @@ public class CalendarEventService {
     }
 
     public CalendarEventDm createEvent(CalendarEventDm calendarEventDm) {
-        return calendarEventPersistence.createEvent(calendarEventDm);
+        return calendarEventPersistence.upsert(calendarEventDm);
     }
 
     @Async
@@ -32,6 +32,6 @@ public class CalendarEventService {
                 .getEvents(adminEmail);
 //                .forEach(calendarEventPersistence::createEvent);
 //        events.forEach(calendarEventDm -> logger.debug(calendarEventDm.toString()));
-        events.forEach(calendarEventPersistence::createEvent);
+        events.forEach(calendarEventPersistence::upsert);
     }
 }

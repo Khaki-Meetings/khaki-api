@@ -1,9 +1,12 @@
 package com.getkhaki.api.bff.config;
 
+import com.getkhaki.api.bff.domain.models.CalendarEventParticipantDm;
 import com.getkhaki.api.bff.domain.models.EmployeeDm;
+import com.getkhaki.api.bff.persistence.models.CalendarEventParticipantDao;
 import com.getkhaki.api.bff.persistence.models.DomainDao;
 import com.getkhaki.api.bff.persistence.models.EmailDao;
 import com.getkhaki.api.bff.persistence.models.EmployeeDao;
+import org.modelmapper.Converter;
 import org.modelmapper.ModelMapper;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -18,6 +21,7 @@ public class ModelMapperConfig {
 
         daoToDmEmployee(modelMapper);
         dmToDaoEmployee(modelMapper);
+        dmToDaoCalendarEventParticipant(modelMapper);
 
         return modelMapper;
     }
@@ -51,26 +55,17 @@ public class ModelMapperConfig {
                             );
 
                             mapper.using(
-                                    ctx -> {
-                                        String emailString = (String) ctx.getSource();
-                                        String[] parts = emailString.split("@");
-                                        if (parts.length != 2) {
-                                            return List.of();
-                                        }
-                                        return List.of(
-                                                new EmailDao()
-                                                        .setUser(parts[0])
-                                                        .setDomain(new DomainDao().setName(parts[1]))
-                                        );
-                                    }
+                                    stringToEmailListConverter()
                             ).<List<EmailDao>>map(
                                     EmployeeDm::getEmail,
                                     (dest, val) -> dest.getPerson().setEmails(val)
                             );
+
                             mapper.<String>map(
                                     EmployeeDm::getFirstName,
                                     (dest, val) -> dest.getPerson().setFirstName(val)
                             );
+
                             mapper.<String>map(
                                     EmployeeDm::getLastName,
                                     (dest, val) -> dest.getPerson().setLastName(val)
@@ -78,5 +73,37 @@ public class ModelMapperConfig {
                         }
                 )
         ;
+    }
+
+    private void dmToDaoCalendarEventParticipant(ModelMapper modelMapper) {
+        modelMapper.typeMap(CalendarEventParticipantDm.class, CalendarEventParticipantDao.class)
+                .addMappings(
+                        mapper -> mapper.using(stringToEmailConverter())
+                                .map(
+                                        CalendarEventParticipantDm::getEmail,
+                                        CalendarEventParticipantDao::setEmail
+                                )
+                );
+    }
+
+    private Converter<?, ?> stringToEmailConverter() {
+        return ctx -> stringToEmail((String) ctx.getSource());
+    }
+
+    private Converter<?, ?> stringToEmailListConverter() {
+        return ctx -> {
+            EmailDao emailDao = stringToEmail((String) ctx.getSource());
+            return (emailDao == null) ? List.of() : List.of(emailDao);
+        };
+    }
+
+    private EmailDao stringToEmail(String emailString) {
+        String[] parts = emailString.split("@");
+        if (parts.length != 2) {
+            return null;
+        }
+        return new EmailDao()
+                .setUser(parts[0])
+                .setDomain(new DomainDao().setName(parts[1]));
     }
 }
