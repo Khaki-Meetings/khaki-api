@@ -19,5 +19,5 @@ public class DepartmentDm {
 
     String name;
 
-    List<PersonDm> members;
+    List<EmployeeDm> employees;
 }

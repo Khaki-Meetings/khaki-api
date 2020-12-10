@@ -1,7 +1,7 @@
 package com.getkhaki.api.bff.domain.services;
 
 import com.getkhaki.api.bff.domain.models.DepartmentDm;
-import com.getkhaki.api.bff.domain.models.PersonDm;
+import com.getkhaki.api.bff.domain.models.EmployeeDm;
 import com.getkhaki.api.bff.domain.models.csv.EmployeeCsvDm;
 import com.opencsv.bean.CsvToBean;
 import com.opencsv.bean.CsvToBeanBuilder;
@@ -35,11 +35,11 @@ public class CsvFileService {
                 .forEach(employeeCsvDm -> departmentMap.computeIfAbsent(
                         employeeCsvDm.getDepartment(), name -> DepartmentDm.builder()
                                 .name(name)
-                                .members(new ArrayList<>())
+                                .employees(new ArrayList<>())
                                 .build()
                         )
-                        .getMembers()
-                        .add(this.modelMapper.map(employeeCsvDm, PersonDm.class))
+                        .getEmployees()
+                        .add(this.modelMapper.map(employeeCsvDm, EmployeeDm.class))
                 );
 
         return departmentMap.values();

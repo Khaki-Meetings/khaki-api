@@ -1,6 +1,5 @@
-package com.getkhaki.api.bff.web;
+package com.getkhaki.api.bff.config.modelmapper;
 
-import com.getkhaki.api.bff.BaseModelMapperIntegrationTests;
 import com.getkhaki.api.bff.domain.models.CalendarEventDm;
 import com.getkhaki.api.bff.web.models.CalendarEventDto;
 import org.junit.jupiter.api.Test;
@@ -18,7 +17,7 @@ public class DtoToDmMapperIntegrationTests extends BaseModelMapperIntegrationTes
                 .setSummary("cignus")
                 .setCreated(Instant.now());
 
-        CalendarEventDm calendarEventDm = modelMapper.map(calendarEventDto, CalendarEventDm.class);
+        CalendarEventDm calendarEventDm = underTest.map(calendarEventDto, CalendarEventDm.class);
 
         assertThat(calendarEventDm).isNotNull();
         assertThat(calendarEventDm.getId()).isEqualTo(calendarEventDto.getId());

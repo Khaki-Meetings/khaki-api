@@ -1,13 +1,10 @@
-package com.getkhaki.api.bff.persistence;
+package com.getkhaki.api.bff.config.modelmapper;
 
-import com.getkhaki.api.bff.BaseModelMapperIntegrationTests;
 import com.getkhaki.api.bff.domain.models.CalendarEventDm;
 import com.getkhaki.api.bff.persistence.models.CalendarEventDao;
 import org.junit.jupiter.api.Test;
 
 import java.time.Instant;
-import java.time.LocalDateTime;
-import java.time.ZonedDateTime;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -20,7 +17,7 @@ public class DaoToDmMapperIntegrationTests extends BaseModelMapperIntegrationTes
                 .setCreated(Instant.now());
         calendarEventDao.setId(UUID.randomUUID());
 
-        CalendarEventDm calendarEventDm = modelMapper.map(calendarEventDao, CalendarEventDm.class);
+        CalendarEventDm calendarEventDm = underTest.map(calendarEventDao, CalendarEventDm.class);
 
         assertThat(calendarEventDm).isNotNull();
         assertThat(calendarEventDm.getId()).isEqualTo(calendarEventDao.getId());
