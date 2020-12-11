@@ -6,6 +6,8 @@ import com.getkhaki.api.bff.persistence.repositories.PersonRepositoryInterface;
 import lombok.val;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 class PersonDaoService {
     private final EmailDaoService emailDaoService;
@@ -25,11 +27,17 @@ class PersonDaoService {
         val savedEmail = emailDaoService.upsert(email);
 
         val personOp = personRepository.findDistinctByEmails(savedEmail);
-        personOp.ifPresent(personDao -> {
-            person.setId(personDao.getId());
-            person.setEmails(personDao.getEmails());
-            person.setEmployee(personDao.getEmployee());
-        });
+        personOp.ifPresentOrElse(
+                personDao -> {
+                    person.setId(personDao.getId());
+                    person.setEmails(personDao.getEmails());
+                    person.setEmployee(personDao.getEmployee());
+                },
+                () -> {
+                    savedEmail.setPerson(person);
+                    person.setEmails(List.of(savedEmail));
+                }
+        );
 
         return personRepository.save(person);
     }

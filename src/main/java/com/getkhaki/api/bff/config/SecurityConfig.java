@@ -16,7 +16,6 @@ import org.springframework.security.oauth2.jwt.JwtDecoders;
 import org.springframework.security.oauth2.jwt.JwtValidators;
 import org.springframework.security.oauth2.jwt.NimbusJwtDecoder;
 
-@EnableAsync
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(
         prePostEnabled = true,
@@ -35,10 +34,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http
                 .authorizeRequests()
                 .anyRequest().authenticated()
-////                .mvcMatchers("/statistics").permitAll()
-//                .mvcMatchers("/statistics/organizers").authenticated()
-//                .mvcMatchers("/statistics/bla").authenticated()
-////                .mvcMatchers("/api/private-scoped").hasAuthority("SCOPE_read:messages")
                 .and().cors()
                 .and()
                 .oauth2ResourceServer().jwt();
