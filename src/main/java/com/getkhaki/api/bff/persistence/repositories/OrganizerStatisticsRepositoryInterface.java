@@ -24,13 +24,11 @@ public interface OrganizerStatisticsRepositoryInterface extends JpaRepository<Ca
                     "   (" +
                     "       select" +
                     "           sum(" +
-                    "               CAST(" +
                     "                   timestampdiff(" +
                     "                       hour," +
                     "                       totalHoursParticipantsCepD.calendarEvent.start," +
                     "                       totalHoursParticipantsCepD.calendarEvent.end" +
-                    "                   ) as integer" +
-                    "               )" +
+                    "                   )" +
                     "           )" +
                     "       from CalendarEventParticipantDao organizerTotalHoursCepD" +
                     "           left join CalendarEventParticipantDao totalHoursParticipantsCepD " +
@@ -43,13 +41,11 @@ public interface OrganizerStatisticsRepositoryInterface extends JpaRepository<Ca
                     "       (" +
                     "           select" +
                     "               sum(" +
-                    "                   CAST(" +
                     "                      timestampdiff(" +
                     "                          hour," +
                     "                          participantsTotalHourlyCepD.calendarEvent.start," +
                     "                          participantsTotalHourlyCepD.calendarEvent.end" +
-                    "                      ) as integer" +
-                    "                   )" +
+                    "                      )" +
                     "               )" +
                     "           from CalendarEventParticipantDao organizerTotalHours2CepD" +
                     "               left join CalendarEventParticipantDao participantsTotalHourlyCepD " +
@@ -60,7 +56,7 @@ public interface OrganizerStatisticsRepositoryInterface extends JpaRepository<Ca
                     "       )" +
                     "       * " +
                     "       ((" +
-                    "           select sum(CAST(participantsSalaryGroupD.salary as double))" +
+                    "           select sum(participantsSalaryGroupD.salary)" +
                     "           from CalendarEventParticipantDao organizerTotalHourlyCostCepD" +
                     "               left join CalendarEventParticipantDao participantsTotalHourlyCostCepD " +
                     "                   on organizerTotalHourlyCostCepD.calendarEvent = participantsTotalHourlyCostCepD.calendarEvent " +
