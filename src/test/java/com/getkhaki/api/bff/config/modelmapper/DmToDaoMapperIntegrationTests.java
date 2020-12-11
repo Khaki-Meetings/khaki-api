@@ -1,6 +1,5 @@
-package com.getkhaki.api.bff.persistence;
+package com.getkhaki.api.bff.config.modelmapper;
 
-import com.getkhaki.api.bff.BaseModelMapperIntegrationTests;
 import com.getkhaki.api.bff.domain.models.CalendarEventDm;
 import com.getkhaki.api.bff.persistence.models.CalendarEventDao;
 import org.junit.jupiter.api.Test;
@@ -19,7 +18,7 @@ public class DmToDaoMapperIntegrationTests extends BaseModelMapperIntegrationTes
                 .setSummary("cignus")
                 .setCreated(Instant.now());
 
-        CalendarEventDao calendarEventDao = modelMapper.map(calendarEventDm, CalendarEventDao.class);
+        CalendarEventDao calendarEventDao = underTest.map(calendarEventDm, CalendarEventDao.class);
 
         assertThat(calendarEventDao).isNotNull();
         assertThat(calendarEventDao.getId()).isEqualTo(calendarEventDm.getId());

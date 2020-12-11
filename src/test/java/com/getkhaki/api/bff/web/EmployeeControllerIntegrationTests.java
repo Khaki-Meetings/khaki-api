@@ -5,12 +5,13 @@ import com.getkhaki.api.bff.web.models.EmployeesResponseDto;
 import lombok.val;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.web.context.WebApplicationContext;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@SpringBootTest
 public class EmployeeControllerIntegrationTests extends BaseMvcIntegrationTest {
 
     public EmployeeControllerIntegrationTests(WebApplicationContext webApplicationContext) {

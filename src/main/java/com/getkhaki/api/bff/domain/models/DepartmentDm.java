@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
 
 import java.util.List;
+import java.util.UUID;
 
 @Data
 @NoArgsConstructor
@@ -14,7 +15,9 @@ import java.util.List;
 @Accessors(chain = true)
 @Builder(toBuilder = true)
 public class DepartmentDm {
+    UUID id;
+
     String name;
 
-    List<PersonDm> members;
+    List<EmployeeDm> employees;
 }

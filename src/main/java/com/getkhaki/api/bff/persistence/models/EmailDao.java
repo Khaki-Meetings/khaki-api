@@ -2,6 +2,8 @@ package com.getkhaki.api.bff.persistence.models;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.Setter;
 import lombok.ToString;
 import lombok.experimental.Accessors;
 
@@ -18,11 +20,10 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
-@Data
-@ToString(callSuper = true)
 @Entity
 @Accessors(chain = true)
-@EqualsAndHashCode(callSuper = true)
+@Getter
+@Setter
 public class EmailDao extends EntityBaseDao {
     @Column(nullable = false)
     String user;
