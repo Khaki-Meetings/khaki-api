@@ -14,7 +14,6 @@ import org.springframework.stereotype.Service;
 public class CalendarEventService {
     private final CalendarEventPersistenceInterface calendarEventPersistence;
     private final CalendarProviderPersistenceFactory calendarProviderPersistenceFactory;
-    Logger logger = LoggerFactory.getLogger(GoogleCalendarPersistenceService.class);
 
     @Autowired
     public CalendarEventService(CalendarEventPersistenceInterface calendarEventPersistence, CalendarProviderPersistenceFactory calendarProviderPersistenceFactory) {

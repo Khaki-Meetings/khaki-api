@@ -24,11 +24,11 @@ public interface OrganizerStatisticsRepositoryInterface extends JpaRepository<Ca
                     "   (" +
                     "       select" +
                     "           sum(" +
-                    "               timestampdiff(" +
-                    "                   hour," +
-                    "                   totalHoursParticipantsCepD.calendarEvent.start," +
-                    "                   totalHoursParticipantsCepD.calendarEvent.end" +
-                    "               )" +
+                    "                   timestampdiff(" +
+                    "                       hour," +
+                    "                       totalHoursParticipantsCepD.calendarEvent.start," +
+                    "                       totalHoursParticipantsCepD.calendarEvent.end" +
+                    "                   )" +
                     "           )" +
                     "       from CalendarEventParticipantDao organizerTotalHoursCepD" +
                     "           left join CalendarEventParticipantDao totalHoursParticipantsCepD " +
@@ -41,11 +41,11 @@ public interface OrganizerStatisticsRepositoryInterface extends JpaRepository<Ca
                     "       (" +
                     "           select" +
                     "               sum(" +
-                    "                   timestampdiff(" +
-                    "                       hour," +
-                    "                       participantsTotalHourlyCepD.calendarEvent.start," +
-                    "                       participantsTotalHourlyCepD.calendarEvent.end" +
-                    "                   )" +
+                    "                      timestampdiff(" +
+                    "                          hour," +
+                    "                          participantsTotalHourlyCepD.calendarEvent.start," +
+                    "                          participantsTotalHourlyCepD.calendarEvent.end" +
+                    "                      )" +
                     "               )" +
                     "           from CalendarEventParticipantDao organizerTotalHours2CepD" +
                     "               left join CalendarEventParticipantDao participantsTotalHourlyCepD " +

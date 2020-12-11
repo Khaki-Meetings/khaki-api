@@ -3,6 +3,7 @@ package com.getkhaki.api.bff.config;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Profile;
+import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -33,10 +34,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http
                 .authorizeRequests()
                 .anyRequest().authenticated()
-////                .mvcMatchers("/statistics").permitAll()
-//                .mvcMatchers("/statistics/organizers").authenticated()
-//                .mvcMatchers("/statistics/bla").authenticated()
-////                .mvcMatchers("/api/private-scoped").hasAuthority("SCOPE_read:messages")
                 .and().cors()
                 .and()
                 .oauth2ResourceServer().jwt();
