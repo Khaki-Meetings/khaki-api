@@ -13,16 +13,14 @@ import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 import java.util.List;
 
-//@Data
 @Entity
 @Accessors(chain = true)
 @Table(uniqueConstraints = @UniqueConstraint(columnNames = {"name", "organization_id"}))
-//@EqualsAndHashCode(callSuper = true)
 @Getter
 @Setter
 public class DepartmentDao extends EntityBaseDao {
     String name;
-    @ManyToOne
+    @ManyToOne(optional = false)
     OrganizationDao organization;
 
     @OneToMany(mappedBy = "department")

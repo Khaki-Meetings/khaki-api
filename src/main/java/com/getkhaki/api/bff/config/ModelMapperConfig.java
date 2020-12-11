@@ -1,23 +1,17 @@
 package com.getkhaki.api.bff.config;
 
+import com.getkhaki.api.bff.domain.models.CalendarEventParticipantDm;
 import com.getkhaki.api.bff.domain.models.EmployeeDm;
-import com.getkhaki.api.bff.domain.models.OrganizerStatisticsDm;
-import com.getkhaki.api.bff.domain.models.PersonDm;
+import com.getkhaki.api.bff.persistence.models.CalendarEventParticipantDao;
+import com.getkhaki.api.bff.persistence.models.DomainDao;
 import com.getkhaki.api.bff.persistence.models.EmailDao;
 import com.getkhaki.api.bff.persistence.models.EmployeeDao;
-import com.getkhaki.api.bff.persistence.models.FlagDao;
-import com.getkhaki.api.bff.web.models.OrganizersStatisticsResponseDto;
-import lombok.val;
-import org.apache.logging.log4j.util.Strings;
 import org.modelmapper.Converter;
 import org.modelmapper.ModelMapper;
-import org.modelmapper.TypeMap;
-import org.modelmapper.TypeToken;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 import java.util.List;
-import java.util.Optional;
 
 @Configuration
 public class ModelMapperConfig {
@@ -25,6 +19,14 @@ public class ModelMapperConfig {
     public ModelMapper modelMapper() {
         ModelMapper modelMapper = new ModelMapper();
 
+        daoToDmEmployee(modelMapper);
+        dmToDaoEmployee(modelMapper);
+        dmToDaoCalendarEventParticipant(modelMapper);
+
+        return modelMapper;
+    }
+
+    private void daoToDmEmployee(ModelMapper modelMapper) {
         modelMapper.typeMap(EmployeeDao.class, EmployeeDm.class)
                 .addMappings(
                         mapper -> {
@@ -41,7 +43,67 @@ public class ModelMapperConfig {
                             mapper.skip(EmployeeDm::setAvatarUrl);
                         }
                 );
+    }
 
-        return modelMapper;
+    private void dmToDaoEmployee(ModelMapper modelMapper) {
+        modelMapper.typeMap(EmployeeDm.class, EmployeeDao.class)
+                .addMappings(
+                        mapper -> {
+                            mapper.<String>map(
+                                    EmployeeDm::getDepartment,
+                                    (dest, val) -> dest.getDepartment().setName(val)
+                            );
+
+                            mapper.using(
+                                    stringToEmailListConverter()
+                            ).<List<EmailDao>>map(
+                                    EmployeeDm::getEmail,
+                                    (dest, val) -> dest.getPerson().setEmails(val)
+                            );
+
+                            mapper.<String>map(
+                                    EmployeeDm::getFirstName,
+                                    (dest, val) -> dest.getPerson().setFirstName(val)
+                            );
+
+                            mapper.<String>map(
+                                    EmployeeDm::getLastName,
+                                    (dest, val) -> dest.getPerson().setLastName(val)
+                            );
+                        }
+                )
+        ;
+    }
+
+    private void dmToDaoCalendarEventParticipant(ModelMapper modelMapper) {
+        modelMapper.typeMap(CalendarEventParticipantDm.class, CalendarEventParticipantDao.class)
+                .addMappings(
+                        mapper -> mapper.using(stringToEmailConverter())
+                                .map(
+                                        CalendarEventParticipantDm::getEmail,
+                                        CalendarEventParticipantDao::setEmail
+                                )
+                );
+    }
+
+    private Converter<?, ?> stringToEmailConverter() {
+        return ctx -> stringToEmail((String) ctx.getSource());
+    }
+
+    private Converter<?, ?> stringToEmailListConverter() {
+        return ctx -> {
+            EmailDao emailDao = stringToEmail((String) ctx.getSource());
+            return (emailDao == null) ? List.of() : List.of(emailDao);
+        };
+    }
+
+    private EmailDao stringToEmail(String emailString) {
+        String[] parts = emailString.split("@");
+        if (parts.length != 2) {
+            return null;
+        }
+        return new EmailDao()
+                .setUser(parts[0])
+                .setDomain(new DomainDao().setName(parts[1]));
     }
 }

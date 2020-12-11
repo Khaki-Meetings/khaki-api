@@ -15,7 +15,10 @@ public class DepartmentService {
     private final DepartmentPersistenceInterface departmentPersistenceService;
 
     @Autowired
-    public DepartmentService(CsvFileService csvFileService, DepartmentPersistenceInterface departmentPersistenceService) {
+    public DepartmentService(
+            CsvFileService csvFileService,
+            DepartmentPersistenceInterface departmentPersistenceService
+    ) {
         this.csvFileService = csvFileService;
         this.departmentPersistenceService = departmentPersistenceService;
     }
@@ -23,10 +26,11 @@ public class DepartmentService {
     @Async
     public void importAsync(InputStream csvInputStream) {
         this.csvFileService.read(csvInputStream)
-                .forEach(departmentPersistenceService::createDepartment);
+                .forEach(departmentPersistenceService::upsert);
     }
 
     public List<DepartmentDm> getDepartments() {
         return departmentPersistenceService.getDepartments();
     }
+
 }

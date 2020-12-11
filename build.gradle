@@ -44,6 +44,11 @@ dependencies {
     implementation 'io.rest-assured:xml-path:4.3.1'
     implementation 'com.opencsv:opencsv:5.3'
 
+    implementation 'com.google.api-client:google-api-client:1.30.11'
+    implementation 'com.google.oauth-client:google-oauth-client-jetty:1.31.1'
+    implementation 'com.google.apis:google-api-services-admin-directory:directory_v1-rev20191003-1.30.8'
+    implementation 'com.google.apis:google-api-services-calendar:v3-rev305-1.23.0'
+
     testImplementation "org.mockito:mockito-core:2.+"
     testImplementation("org.assertj:assertj-core:3.17.2")
     testImplementation('org.springframework.boot:spring-boot-starter-test') {

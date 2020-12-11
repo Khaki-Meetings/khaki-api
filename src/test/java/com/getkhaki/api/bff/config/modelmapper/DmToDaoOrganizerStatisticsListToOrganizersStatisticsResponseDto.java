@@ -1,5 +1,6 @@
-package com.getkhaki.api.bff.config;
+package com.getkhaki.api.bff.config.modelmapper;
 
+import com.getkhaki.api.bff.config.ModelMapperConfig;
 import com.getkhaki.api.bff.domain.models.OrganizerStatisticsDm;
 import com.getkhaki.api.bff.web.models.OrganizerStatisticsResponseDto;
 import org.junit.jupiter.api.BeforeEach;
@@ -8,14 +9,7 @@ import org.modelmapper.ModelMapper;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class ModelMapperConfigIntegrationTests {
-
-    ModelMapper underTest;
-
-    @BeforeEach
-    public void setup() {
-        underTest = new ModelMapperConfig().modelMapper();
-    }
+public class DmToDaoOrganizerStatisticsListToOrganizersStatisticsResponseDto extends BaseModelMapperIntegrationTests {
 
     @Test
     public void organizerStatisticsListToOrganizersStatisticsResponseDto() {

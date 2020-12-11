@@ -2,7 +2,7 @@ package com.getkhaki.api.bff.web;
 
 import com.getkhaki.api.bff.domain.models.OrganizationDm;
 import com.getkhaki.api.bff.domain.services.OrganizationService;
-import com.getkhaki.api.bff.web.models.OrganizationDto;
+import com.getkhaki.api.bff.web.models.OrganizationResponseDto;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.modelmapper.ModelMapper;
@@ -27,15 +27,15 @@ public class OrganizationControllerUnitTests {
     @Test
     public void getOrganization() {
         var mockOrganizationDm = mock(OrganizationDm.class);
-        var mockOrganizationDto = mock(OrganizationDto.class);
+        var mockOrganizationDto = mock(OrganizationResponseDto.class);
 
         when(this.organizationService.getOrganization())
                 .thenReturn(mockOrganizationDm);
 
-        when(this.modelMapper.map(mockOrganizationDm, OrganizationDto.class))
+        when(this.modelMapper.map(mockOrganizationDm, OrganizationResponseDto.class))
                 .thenReturn(mockOrganizationDto);
 
-        OrganizationDto response = this.underTest.getOrganization();
+        OrganizationResponseDto response = this.underTest.getOrganization();
 
         assertSame(response, mockOrganizationDto);
     }
