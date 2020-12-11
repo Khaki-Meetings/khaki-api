@@ -5,24 +5,22 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.getkhaki.api.bff.config.SessionTenant;
-import com.getkhaki.api.bff.web.models.OrganizationDto;
 import io.restassured.module.mockmvc.RestAssuredMockMvc;
-import liquibase.exception.LiquibaseException;
-import liquibase.integration.spring.SpringLiquibase;
 import lombok.val;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
-import org.springframework.boot.web.server.LocalServerPort;
+import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.security.oauth2.jwt.JwtClaimNames;
+import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
-import org.springframework.test.web.servlet.setup.MockMvcConfigurer;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.context.WebApplicationContext;
 
-import javax.inject.Inject;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -34,10 +32,9 @@ import static org.springframework.security.test.web.servlet.request.SecurityMock
 import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+@AutoConfigureTestDatabase
+@Transactional
 public abstract class BaseMvcIntegrationTest extends BaseJpaIntegrationTest {
-    @LocalServerPort
-    protected int port;
-
     protected UUID s56OrgUuid = UUID.fromString("d713ace2-0d30-43be-b4ba-db973967d6d4");
 
     protected WebApplicationContext webApplicationContext;
@@ -50,7 +47,6 @@ public abstract class BaseMvcIntegrationTest extends BaseJpaIntegrationTest {
     @BeforeEach
     public void setupAuth() {
         RestAssuredMockMvc.webAppContextSetup(webApplicationContext);
-        MockMvcConfigurer thing = springSecurity();
         mvc = MockMvcBuilders.webAppContextSetup(webApplicationContext).apply(springSecurity()).build();
     }
 
@@ -61,6 +57,11 @@ public abstract class BaseMvcIntegrationTest extends BaseJpaIntegrationTest {
         JavaTimeModule module = new JavaTimeModule();
         mapper.registerModule(module);
         return mapper.readValue(json, objectClass);
+    }
+
+    @AfterEach
+    public void clearDb() {
+
     }
 
     public static String asJsonString(final Object obj) {
@@ -103,20 +104,14 @@ public abstract class BaseMvcIntegrationTest extends BaseJpaIntegrationTest {
         return new Jwt(tokenValue, null, null, headers, claims);
     }
 
+    @SuppressWarnings("unchecked")
     protected <T> T getTypedResult(String urlString, Class<T> type) throws Exception {
-        MvcResult result = getMvcResult(urlString);
-        return  (T) convertJSONStringToObject(
-                result.getResponse().getContentAsString(),
-                type
-        );
-
+        return  (T) convertJSONStringToObject(getMvcResult(urlString)
+                .getResponse()
+                .getContentAsString(), type);
     }
 
     protected MvcResult getMvcResult(String urlString) throws Exception {
-        val req =
-                MockMvcRequestBuilders.get(urlString)
-                        .header(SessionTenant.HEADER_KEY, "s56_net")
-                        .with(jwt().jwt(getJWT()).authorities(new SimpleGrantedAuthority("admin")));
         return mvc.perform(MockMvcRequestBuilders.get(urlString)
                 .header(SessionTenant.HEADER_KEY, "s56_net")
                 .with(jwt().jwt(getJWT()).authorities(new SimpleGrantedAuthority("admin"))))

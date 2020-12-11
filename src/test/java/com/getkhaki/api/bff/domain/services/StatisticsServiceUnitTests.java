@@ -71,9 +71,6 @@ public class StatisticsServiceUnitTests {
 
     @Test
     public void getTimeBlockSummary() {
-
-
-        EmailDm emailDm = new EmailDm("test", new DomainDm("mail"));
         Instant startTest = Instant.parse("2020-11-01T00:00:00.000Z");
         Instant endTest = Instant.parse("2020-11-18T00:00:00.000Z");
 
@@ -85,8 +82,6 @@ public class StatisticsServiceUnitTests {
 
         TimeBlockSummaryDm timeBlockSummaryResponseDto = underTest.getTimeBlockSummary(startTest, endTest);
         assertThat(timeBlockSummaryResponseDto).isNotNull();
-
-
     }
 
     @Test

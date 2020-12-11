@@ -14,6 +14,7 @@ import java.util.stream.Collectors;
 
 @RequestMapping("/departments")
 @RestController
+@CrossOrigin(origins = "*")
 public class DepartmentController {
     private final DepartmentService departmentService;
     public final ModelMapper modelMapper;

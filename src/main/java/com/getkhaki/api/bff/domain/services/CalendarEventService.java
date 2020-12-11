@@ -2,7 +2,10 @@ package com.getkhaki.api.bff.domain.services;
 
 import com.getkhaki.api.bff.domain.models.CalendarEventDm;
 import com.getkhaki.api.bff.domain.persistence.CalendarEventPersistenceInterface;
-import com.getkhaki.api.bff.domain.persistence.CalendarProviderPersistenceFactory;
+import com.getkhaki.api.bff.persistence.GoogleCalendarPersistenceService;
+import lombok.val;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
@@ -11,6 +14,7 @@ import org.springframework.stereotype.Service;
 public class CalendarEventService {
     private final CalendarEventPersistenceInterface calendarEventPersistence;
     private final CalendarProviderPersistenceFactory calendarProviderPersistenceFactory;
+    Logger logger = LoggerFactory.getLogger(GoogleCalendarPersistenceService.class);
 
     @Autowired
     public CalendarEventService(CalendarEventPersistenceInterface calendarEventPersistence, CalendarProviderPersistenceFactory calendarProviderPersistenceFactory) {
@@ -19,15 +23,15 @@ public class CalendarEventService {
     }
 
     public CalendarEventDm createEvent(CalendarEventDm calendarEventDm) {
-        return calendarEventPersistence.createEvent(calendarEventDm);
+        return calendarEventPersistence.upsert(calendarEventDm);
     }
 
-
-    @Async("asyncExecutor")
+    @Async
     public void importAsync(String adminEmail) {
-
-//        this.calendarProviderPersistenceFactory.get().getEvents(adminEmail);
-
+        this.calendarProviderPersistenceFactory.get()
+                .getEvents(adminEmail)
+                .stream()
+                .filter(calendarEventDm -> calendarEventDm.getParticipants().size() > 1)
+                .forEach(calendarEventPersistence::upsert);
     }
-
 }

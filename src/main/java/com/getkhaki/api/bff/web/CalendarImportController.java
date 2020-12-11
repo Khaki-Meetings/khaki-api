@@ -1,26 +1,22 @@
 package com.getkhaki.api.bff.web;
 
-import com.getkhaki.api.bff.domain.models.CalendarEventDm;
 import com.getkhaki.api.bff.domain.services.CalendarEventService;
-import com.getkhaki.api.bff.web.models.CalendarEventDto;
-import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-@RequestMapping("/calendar-imports")
+import javax.inject.Inject;
+
 @RestController
+@RequestMapping("/calendar-imports")
+@CrossOrigin(origins = "*")
 public class CalendarImportController {
     private final CalendarEventService calendarEventService;
-    private final ModelMapper modelMapper;
 
-    @Autowired
-    public CalendarImportController(CalendarEventService calendarEventService, ModelMapper modelMapper) {
+    @Inject
+    public CalendarImportController(CalendarEventService calendarEventService) {
         this.calendarEventService = calendarEventService;
-        this.modelMapper = modelMapper;
     }
 
-
-    @PostMapping
+    @PostMapping("/{adminEmail}")
     public void importAsync(@PathVariable String adminEmail) {
         this.calendarEventService.importAsync(adminEmail);
     }

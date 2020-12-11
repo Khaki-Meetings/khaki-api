@@ -1,6 +1,5 @@
 package com.getkhaki.api.bff.config.modelmapper;
 
-import com.getkhaki.api.bff.config.ModelMapperConfig;
 import com.getkhaki.api.bff.domain.models.EmployeeDm;
 import com.getkhaki.api.bff.persistence.models.DepartmentDao;
 import com.getkhaki.api.bff.persistence.models.DomainDao;
@@ -9,22 +8,14 @@ import com.getkhaki.api.bff.persistence.models.EmployeeDao;
 import com.getkhaki.api.bff.persistence.models.FlagDao;
 import com.getkhaki.api.bff.persistence.models.PersonDao;
 import lombok.val;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.modelmapper.ModelMapper;
 
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class EmployeeDaoToEmployeeDmIntegrationTest {
-    ModelMapper underTest;
-
-    @BeforeEach
-    public void setup() {
-        underTest = new ModelMapperConfig().modelMapper();
-    }
+public class DaoToDmEmployee extends BaseModelMapperIntegrationTests {
 
     @Test
     public void success() {

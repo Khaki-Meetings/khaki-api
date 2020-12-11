@@ -6,30 +6,20 @@ import com.getkhaki.api.bff.web.models.PersonDto;
 import io.restassured.module.mockmvc.RestAssuredMockMvc;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.web.server.LocalServerPort;
 import org.springframework.http.MediaType;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.web.servlet.MvcResult;
+import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.web.context.WebApplicationContext;
 
 import java.util.UUID;
 
-import static io.restassured.RestAssured.given;
-import static io.restassured.http.ContentType.JSON;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.notNullValue;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.jwt;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@ActiveProfiles(profiles = "test")
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@SpringBootTest
 public class PersonControllerIntegrationTests extends BaseMvcIntegrationTest {
-    @LocalServerPort
-    private int port;
-
     PersonControllerIntegrationTests(WebApplicationContext webApplicationContext) {
         super(webApplicationContext);
         RestAssuredMockMvc.webAppContextSetup(webApplicationContext);
@@ -50,9 +40,8 @@ public class PersonControllerIntegrationTests extends BaseMvcIntegrationTest {
 
         String bodyString = asJsonString(personDto);
 
-        String url = "/persons";
-        MvcResult result = mvc.perform(
-                post(url)
+        mvc.perform(
+                post("/persons")
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON)
                         .content(bodyString)

@@ -36,6 +36,8 @@ public class TenantHandler implements HandlerInterceptor {
         sessionTenant.setTenantName(tenantName);
 
         val claims = jwtToken.getClaims();
+
+        @SuppressWarnings("unchecked")
         val tenantIds = (Map<String, String>) claims.get(SessionTenant.CLAIMS_KEY);
 
         val tenantId = tenantIds.get(tenantName);

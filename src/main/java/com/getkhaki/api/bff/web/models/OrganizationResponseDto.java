@@ -14,8 +14,6 @@ import java.util.UUID;
 @NoArgsConstructor
 @AllArgsConstructor
 @Accessors(chain = true)
-public class OrganizationDto {
+public class OrganizationResponseDto {
     String name;
-
-    Set<PersonDto> members;
 }
