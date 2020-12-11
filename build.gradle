@@ -5,6 +5,9 @@ plugins {
     id 'java'
 }
 
+sourceCompatibility = 14
+targetCompatibility = 14
+
 group 'com.getkhaki'
 version '1.0-SNAPSHOT'
 
