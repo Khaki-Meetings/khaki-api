@@ -28,10 +28,10 @@ public class CalendarEventService {
 
     @Async
     public void importAsync(String adminEmail) {
-        val events = this.calendarProviderPersistenceFactory.get()
-                .getEvents(adminEmail);
-//                .forEach(calendarEventPersistence::createEvent);
-//        events.forEach(calendarEventDm -> logger.debug(calendarEventDm.toString()));
-        events.forEach(calendarEventPersistence::upsert);
+        this.calendarProviderPersistenceFactory.get()
+                .getEvents(adminEmail)
+                .stream()
+                .filter(calendarEventDm -> calendarEventDm.getParticipants().size() > 1)
+                .forEach(calendarEventPersistence::upsert);
     }
 }

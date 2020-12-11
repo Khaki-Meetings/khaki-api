@@ -30,7 +30,11 @@ public class EmailDaoService {
 
         email.setDomain(savedDomain);
         val emailOp = emailRepository.findDistinctByUserAndDomain_Id(email.getUser(), savedDomain.getId());
-        emailOp.ifPresent(emailDao -> email.setId(emailDao.getId()));
+        emailOp.ifPresent(emailDao -> {
+            email.setId(emailDao.getId());
+            email.setPeople(emailDao.getPeople());
+            email.setFlags(emailDao.getFlags());
+        });
         return emailRepository.save(email);
     }
 }

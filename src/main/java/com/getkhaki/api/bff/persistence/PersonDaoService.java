@@ -25,10 +25,15 @@ class PersonDaoService {
         }
 
         val savedEmail = emailDaoService.upsert(email);
+        savedEmail.setPerson(personDao);
         personDao.setEmails(List.of(savedEmail));
 
         val personOp = personRepository.findDistinctByEmails(savedEmail);
-        personOp.ifPresent(emailDao -> personDao.setId(personDao.getId()));
+        personOp.ifPresent(emailDao -> {
+            personDao.setId(personDao.getId());
+            personDao.setEmails(personDao.getEmails());
+            personDao.setEmployee(personDao.getEmployee());
+        });
 
         return personRepository.save(personDao);
     }

@@ -52,11 +52,6 @@ public class GoogleCalendarPersistenceService implements CalendarProviderPersist
             }
         }
 
-        /*.forEach(user -> this.googleCalendarRepository.getEvents(adminEmail, user.getPrimaryEmail())
-                        .forEach(event -> calendarEventDms.add(
-                                this.modelMapper.mapEventToCalendarEventDm(event)
-                        )));*/
-
         return calendarEventDms;
     }
 }
