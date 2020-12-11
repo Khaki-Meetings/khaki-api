@@ -41,10 +41,12 @@ public interface OrganizerStatisticsRepositoryInterface extends JpaRepository<Ca
                     "       (" +
                     "           select" +
                     "               sum(" +
-                    "                   timestampdiff(" +
-                    "                       hour," +
-                    "                       participantsTotalHourlyCepD.calendarEvent.start," +
-                    "                       participantsTotalHourlyCepD.calendarEvent.end" +
+                    "                   CAST(" +
+                    "                      timestampdiff(" +
+                    "                          hour," +
+                    "                          participantsTotalHourlyCepD.calendarEvent.start," +
+                    "                          participantsTotalHourlyCepD.calendarEvent.end" +
+                    "                      ) as integer" +
                     "                   )" +
                     "               )" +
                     "           from CalendarEventParticipantDao organizerTotalHours2CepD" +
