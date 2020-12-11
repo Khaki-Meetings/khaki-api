@@ -24,13 +24,13 @@ public interface OrganizerStatisticsRepositoryInterface extends JpaRepository<Ca
                     "   (" +
                     "       select" +
                     "           sum(" +
-                    "           CAST(" +
-                    "               timestampdiff(" +
-                    "                   hour," +
-                    "                   totalHoursParticipantsCepD.calendarEvent.start," +
-                    "                   totalHoursParticipantsCepD.calendarEvent.end" +
-                    "               ) as integer" +
-                    "           )" +
+                    "               CAST(" +
+                    "                   timestampdiff(" +
+                    "                       hour," +
+                    "                       totalHoursParticipantsCepD.calendarEvent.start," +
+                    "                       totalHoursParticipantsCepD.calendarEvent.end" +
+                    "                   ) as integer" +
+                    "               )" +
                     "           )" +
                     "       from CalendarEventParticipantDao organizerTotalHoursCepD" +
                     "           left join CalendarEventParticipantDao totalHoursParticipantsCepD " +
@@ -60,7 +60,7 @@ public interface OrganizerStatisticsRepositoryInterface extends JpaRepository<Ca
                     "       )" +
                     "       * " +
                     "       ((" +
-                    "           select sum(CAST(participantsSalaryGroupD.salary as float))" +
+                    "           select sum(CAST(participantsSalaryGroupD.salary as double))" +
                     "           from CalendarEventParticipantDao organizerTotalHourlyCostCepD" +
                     "               left join CalendarEventParticipantDao participantsTotalHourlyCostCepD " +
                     "                   on organizerTotalHourlyCostCepD.calendarEvent = participantsTotalHourlyCostCepD.calendarEvent " +
