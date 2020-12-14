@@ -1,6 +1,7 @@
 package com.getkhaki.api.bff.persistence;
 
 
+import com.getkhaki.api.bff.config.SessionTenant;
 import com.getkhaki.api.bff.domain.models.TimeBlockSummaryDm;
 import com.getkhaki.api.bff.persistence.repositories.TimeBlockSummaryRepositoryInterface;
 import org.junit.jupiter.api.BeforeEach;
@@ -26,7 +27,11 @@ public class TimeBlockSummaryPersistenceServiceUnitTests {
 
     @BeforeEach
     public void setup() {
-        underTest = new TimeBlockSummaryPersistenceService(modelMapper, timeBlockSummaryRepositoryInterface);
+        underTest = new TimeBlockSummaryPersistenceService(
+                modelMapper,
+                timeBlockSummaryRepositoryInterface,
+                new SessionTenant().setTenantId(UUID.fromString("d713ace2-0d30-43be-b4ba-db973967d6d4"))
+        );
     }
 
     @Test

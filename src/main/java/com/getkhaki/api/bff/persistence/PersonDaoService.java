@@ -6,6 +6,8 @@ import com.getkhaki.api.bff.persistence.repositories.PersonRepositoryInterface;
 import lombok.val;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 @Service
@@ -35,7 +37,9 @@ class PersonDaoService {
                 },
                 () -> {
                     savedEmail.setPerson(person);
-                    person.setEmails(List.of(savedEmail));
+                    val emailList = new ArrayList<EmailDao>();
+                    Collections.addAll(emailList, savedEmail);
+                    person.setEmails(emailList);
                 }
         );
 

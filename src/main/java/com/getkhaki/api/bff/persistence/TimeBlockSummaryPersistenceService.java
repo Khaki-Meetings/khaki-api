@@ -1,5 +1,6 @@
 package com.getkhaki.api.bff.persistence;
 
+import com.getkhaki.api.bff.config.SessionTenant;
 import com.getkhaki.api.bff.domain.models.TimeBlockSummaryDm;
 import com.getkhaki.api.bff.domain.persistence.TimeBlockSummaryPersistenceInterface;
 import com.getkhaki.api.bff.persistence.repositories.TimeBlockSummaryRepositoryInterface;
@@ -12,13 +13,15 @@ import java.util.UUID;
 @Service
 public class TimeBlockSummaryPersistenceService implements TimeBlockSummaryPersistenceInterface {
     private final ModelMapper modelMapper;
+    private final TimeBlockSummaryRepositoryInterface timeBlockSummaryRepositoryInterface;
+    private final SessionTenant sessionTenant;
 
-    public TimeBlockSummaryPersistenceService(ModelMapper modelMapper, TimeBlockSummaryRepositoryInterface timeBlockSummaryRepositoryInterface) {
+    public TimeBlockSummaryPersistenceService(ModelMapper modelMapper, TimeBlockSummaryRepositoryInterface timeBlockSummaryRepositoryInterface, SessionTenant sessionTenant) {
         this.modelMapper = modelMapper;
         this.timeBlockSummaryRepositoryInterface = timeBlockSummaryRepositoryInterface;
+        this.sessionTenant = sessionTenant;
     }
 
-    private TimeBlockSummaryRepositoryInterface timeBlockSummaryRepositoryInterface;
 
     @Override
     public TimeBlockSummaryDm getTimeBlockSummary(Instant start, Instant end) {
@@ -26,7 +29,7 @@ public class TimeBlockSummaryPersistenceService implements TimeBlockSummaryPersi
                 timeBlockSummaryRepositoryInterface.findTimeBlockSummaryInRange(
                         start,
                         end,
-                        UUID.fromString("d713ace2-0d30-43be-b4ba-db973967d6d4")
+                        sessionTenant.getTenantId()
                 ),
                 TimeBlockSummaryDm.class
         );
