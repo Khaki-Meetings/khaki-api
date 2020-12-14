@@ -7,6 +7,6 @@ public interface DepartmentStatisticsView {
 
     String getDepartmentName();
 
-    Integer getTotalHours();
+    Integer getTotalSeconds();
 
 }

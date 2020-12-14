@@ -12,14 +12,14 @@ public interface TimeBlockSummaryRepositoryInterface extends JpaRepository<Calen
     @Query(
             "select " +
                     "sum(" +
-                    "   timestampdiff(hour, calendarEvent.start, calendarEvent.end)" +
+                    "   timestampdiff(second, calendarEvent.start, calendarEvent.end)" +
                     "*" +
                     " (" +
                     "     select count(*) " +
                     "     from CalendarEventParticipantDao as cap_count " +
                     "     where cap_count.calendarEvent = calendarEvent" +
                     "     )" +
-                    ") as totalHours," +
+                    ") as totalSeconds," +
                     "count(calendarEventParticipant.calendarEvent) as meetingCount " +
                     "from OrganizationDao organization " +
                     "   inner join organization.departments as departments " +

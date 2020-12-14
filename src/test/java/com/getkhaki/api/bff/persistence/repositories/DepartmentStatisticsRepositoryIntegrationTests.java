@@ -2,6 +2,7 @@ package com.getkhaki.api.bff.persistence.repositories;
 
 import com.getkhaki.api.bff.BaseJpaIntegrationTest;
 import com.getkhaki.api.bff.persistence.models.views.DepartmentStatisticsView;
+import lombok.val;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
@@ -26,14 +27,16 @@ public class DepartmentStatisticsRepositoryIntegrationTests extends BaseJpaInteg
         DepartmentStatisticsView hrStats = ret.stream().filter(item -> item.getDepartmentName().equals("HR"))
                 .findFirst()
                 .orElseThrow();
+        val bla = hrStats.getDepartmentId();
+        val bla2 = hrStats.getTotalSeconds();
         assertThat(hrStats.getDepartmentId()).isNotNull();
-        assertThat(hrStats.getTotalHours()).isEqualTo(5);
+        assertThat(hrStats.getTotalSeconds()).isEqualTo(18000);
 
         DepartmentStatisticsView itStats = ret.stream().filter(item -> item.getDepartmentName().equals("IT"))
                 .findFirst()
                 .orElseThrow();
         assertThat(itStats.getDepartmentId()).isNotNull();
-        assertThat(itStats.getTotalHours()).isEqualTo(8);
+        assertThat(itStats.getTotalSeconds()).isEqualTo(28800);
     }
 
     @Test

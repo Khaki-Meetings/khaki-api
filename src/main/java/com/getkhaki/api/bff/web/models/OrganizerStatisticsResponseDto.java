@@ -11,7 +11,7 @@ public class OrganizerStatisticsResponseDto {
     String organizerEmail;
     String organizerFirstName;
     String organizerLastName;
-    int totalMeetings;
-    int totalHours;
+    Integer totalMeetings;
+    Integer totalSeconds;
     Double totalCost;
 }

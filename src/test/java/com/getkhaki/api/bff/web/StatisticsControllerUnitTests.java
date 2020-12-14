@@ -52,7 +52,7 @@ public class StatisticsControllerUnitTests {
         OrganizerStatisticsResponseDto organizerStatisticsResponseDto = new OrganizerStatisticsResponseDto()
                 .setOrganizerEmail("bob@bob.com")
                 .setTotalCost(1.0)
-                .setTotalHours(1)
+                .setTotalSeconds(1)
                 .setTotalMeetings(1);
 
 
@@ -60,7 +60,7 @@ public class StatisticsControllerUnitTests {
                 .organizerEmail("bob@bob.com")
                 .totalCost(1.0)
                 .totalMeetings(1)
-                .totalHours(1)
+                .totalSeconds(1)
                 .build();
 
         List<OrganizerStatisticsDm> dms = Lists.list(mockDm);
@@ -88,13 +88,13 @@ public class StatisticsControllerUnitTests {
         Instant endTest = Instant.parse("2020-11-30T00:00:00.000Z");
 
         TimeBlockSummaryResponseDto mockDto = new TimeBlockSummaryResponseDto(
-                1L,
-                1L
+                1,
+                1
         );
 
         TimeBlockSummaryDm mockDm = new TimeBlockSummaryDm(
-                1L,
-                1L
+                1,
+                1
         );
 
         when(statisticsService.getTimeBlockSummary(any(Instant.class), any(Instant.class)))
@@ -136,7 +136,7 @@ public class StatisticsControllerUnitTests {
     public void getTrailingStatistics() {
         Instant startTest = Instant.parse("2020-11-01T00:00:00.000Z");
         List<TimeBlockSummaryDm> timeBlockSummaryDmList = Lists.list(
-                new TimeBlockSummaryDm().setMeetingCount(1).setTotalHours(1)
+                new TimeBlockSummaryDm().setMeetingCount(1).setTotalSeconds(1)
         );
         when(statisticsService.getTrailingStatistics(startTest, IntervalDe.Month, 1))
                 .thenReturn(timeBlockSummaryDmList);

@@ -15,7 +15,7 @@ public class DepartmentStatisticsDm {
     UUID id;
     String department;
     long meetingCount;
-    long totalHours;
+    long totalSeconds;
     long totalCost;
     long averageCost;
 }

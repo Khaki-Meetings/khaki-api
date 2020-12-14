@@ -17,5 +17,5 @@ public class OrganizerStatisticsDm {
     String organizerLastName;
     int totalMeetings;
     Double totalCost;
-    int totalHours;
+    Integer totalSeconds;
 }

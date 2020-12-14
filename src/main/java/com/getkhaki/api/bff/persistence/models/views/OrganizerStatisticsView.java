@@ -9,7 +9,7 @@ public interface OrganizerStatisticsView {
 
     String getOrganizerLastName();
 
-    Integer getTotalHours();
+    Integer getTotalSeconds();
 
     Double getTotalCost();
 }
