@@ -2,9 +2,11 @@ package com.getkhaki.api.bff.config;
 
 import lombok.Getter;
 import lombok.Setter;
+import lombok.experimental.Accessors;
 
 import java.util.UUID;
 
+@Accessors(chain = true)
 @Getter
 @Setter
 public class SessionTenant {
