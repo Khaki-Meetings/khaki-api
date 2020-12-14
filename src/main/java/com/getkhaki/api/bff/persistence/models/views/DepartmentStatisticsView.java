@@ -7,6 +7,6 @@ public interface DepartmentStatisticsView {
 
     String getDepartmentName();
 
-    Integer getTotalSeconds();
+    Long getTotalSeconds();
 
 }

@@ -52,7 +52,7 @@ public class StatisticsControllerUnitTests {
         OrganizerStatisticsResponseDto organizerStatisticsResponseDto = new OrganizerStatisticsResponseDto()
                 .setOrganizerEmail("bob@bob.com")
                 .setTotalCost(1.0)
-                .setTotalSeconds(1)
+                .setTotalSeconds(1L)
                 .setTotalMeetings(1);
 
 
@@ -60,7 +60,7 @@ public class StatisticsControllerUnitTests {
                 .organizerEmail("bob@bob.com")
                 .totalCost(1.0)
                 .totalMeetings(1)
-                .totalSeconds(1)
+                .totalSeconds(1L)
                 .build();
 
         List<OrganizerStatisticsDm> dms = Lists.list(mockDm);
@@ -88,12 +88,12 @@ public class StatisticsControllerUnitTests {
         Instant endTest = Instant.parse("2020-11-30T00:00:00.000Z");
 
         TimeBlockSummaryResponseDto mockDto = new TimeBlockSummaryResponseDto(
-                1,
+                1L,
                 1
         );
 
         TimeBlockSummaryDm mockDm = new TimeBlockSummaryDm(
-                1,
+                1L,
                 1
         );
 
@@ -125,7 +125,7 @@ public class StatisticsControllerUnitTests {
         DepartmentStatisticsResponseDto departmentStatisticsResponseDto = new DepartmentStatisticsResponseDto(
                 UUID.randomUUID(),
                 "HR",
-                1
+                1L
         );
 
         List<DepartmentStatisticsResponseDto> mockDtoList = Lists.list(departmentStatisticsResponseDto);
@@ -136,7 +136,7 @@ public class StatisticsControllerUnitTests {
     public void getTrailingStatistics() {
         Instant startTest = Instant.parse("2020-11-01T00:00:00.000Z");
         List<TimeBlockSummaryDm> timeBlockSummaryDmList = Lists.list(
-                new TimeBlockSummaryDm().setMeetingCount(1).setTotalSeconds(1)
+                new TimeBlockSummaryDm().setMeetingCount(1).setTotalSeconds(1L)
         );
         when(statisticsService.getTrailingStatistics(startTest, IntervalDe.Month, 1))
                 .thenReturn(timeBlockSummaryDmList);

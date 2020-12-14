@@ -28,7 +28,7 @@ public class DepartmentStatisticsRepositoryIntegrationTests extends BaseJpaInteg
                 .findFirst()
                 .orElseThrow();
         val bla = hrStats.getDepartmentId();
-        val bla2 = hrStats.getTotalSeconds();
+        Long bla2 = hrStats.getTotalSeconds();
         assertThat(hrStats.getDepartmentId()).isNotNull();
         assertThat(hrStats.getTotalSeconds()).isEqualTo(18000);
 

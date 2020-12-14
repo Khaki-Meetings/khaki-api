@@ -15,5 +15,5 @@ import java.util.UUID;
 public class DepartmentStatisticsResponseDto {
     UUID id;
     String department;
-    Integer totalSeconds;
+    Long totalSeconds;
 }

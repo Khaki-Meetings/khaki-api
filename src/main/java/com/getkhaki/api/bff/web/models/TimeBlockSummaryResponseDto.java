@@ -10,6 +10,6 @@ import lombok.experimental.Accessors;
 @AllArgsConstructor
 @Accessors(chain = true)
 public class TimeBlockSummaryResponseDto {
-    Integer totalSeconds;
+    Long totalSeconds;
     Integer meetingCount;
 }

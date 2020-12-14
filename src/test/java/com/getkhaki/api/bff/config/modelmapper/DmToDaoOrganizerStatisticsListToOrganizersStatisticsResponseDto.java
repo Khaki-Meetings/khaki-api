@@ -14,7 +14,7 @@ public class DmToDaoOrganizerStatisticsListToOrganizersStatisticsResponseDto ext
                 .organizerEmail("bob@bob.com")
                 .totalCost(12.0)
                 .totalMeetings(123)
-                .totalSeconds(194)
+                .totalSeconds(194L)
                 .build();
 
         OrganizerStatisticsResponseDto dto = underTest.map(mockDm1, OrganizerStatisticsResponseDto.class);
