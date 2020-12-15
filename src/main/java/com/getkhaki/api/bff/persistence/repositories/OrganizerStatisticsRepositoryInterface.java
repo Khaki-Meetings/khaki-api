@@ -33,9 +33,11 @@ public interface OrganizerStatisticsRepositoryInterface extends JpaRepository<Ca
                     "       from CalendarEventParticipantDao organizerTotalSecondsCepD" +
                     "           left join CalendarEventParticipantDao totalSecondsParticipantsCepD " +
                     "               on organizerTotalSecondsCepD.calendarEvent = totalSecondsParticipantsCepD.calendarEvent " +
+                    "           inner join totalSecondsParticipantsCepD.email.domain.organizations as organizationTotalSeconds" +
                     "       where organizerTotalSecondsCepD.email = organizerCalendarEventParticipantDao.email" +
                     "           and organizerTotalSecondsCepD.organizer = true" +
                     "           and organizerTotalSecondsCepD.calendarEvent.start between :sDate and :eDate" +
+                    "           and organizationTotalSeconds.id = :tenantId" +
                     "   ) as totalSeconds," +
                     "   (" +
                     "       (" +
@@ -50,9 +52,11 @@ public interface OrganizerStatisticsRepositoryInterface extends JpaRepository<Ca
                     "           from CalendarEventParticipantDao organizerTotalSeconds2CepD" +
                     "               left join CalendarEventParticipantDao participantsTotalSecondsCepD " +
                     "                   on organizerTotalSeconds2CepD.calendarEvent = participantsTotalSecondsCepD.calendarEvent " +
+                    "               inner join participantsTotalSecondsCepD.email.domain.organizations as organizationTotalSeconds" +
                     "           where organizerTotalSeconds2CepD.email = organizerCalendarEventParticipantDao.email" +
                     "               and organizerTotalSeconds2CepD.organizer = true" +
                     "               and organizerTotalSeconds2CepD.calendarEvent.start between :sDate and :eDate" +
+                    "               and organizationTotalSeconds.id = :tenantId" +
                     "       )" +
                     "       * " +
                     "       ((" +
@@ -78,10 +82,10 @@ public interface OrganizerStatisticsRepositoryInterface extends JpaRepository<Ca
                     "   inner join organizerCalendarEventParticipantDao.calendarEvent organizerCalendarEvent " +
                     "   inner join organizerDomainDao.organizations tenant " +
                     "   inner join organizerEmailDao.people peopleDao " +
-                    "where tenant.id = :organizationId" +
+                    "where tenant.id = :tenantId" +
                     "   and organizerCalendarEventParticipantDao.organizer = true " +
                     "   and organizerCalendarEventParticipantDao.calendarEvent.start between :sDate and :eDate " +
                     "group by organizerCalendarEventParticipantDao.email"
     )
-    List<OrganizerStatisticsView> findAllOrganizerStatistics(Instant sDate, Instant eDate, UUID organizationId);
+    List<OrganizerStatisticsView> findAllOrganizerStatistics(Instant sDate, Instant eDate, UUID tenantId);
 }

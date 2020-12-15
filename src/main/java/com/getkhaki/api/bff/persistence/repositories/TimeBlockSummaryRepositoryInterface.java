@@ -17,7 +17,11 @@ public interface TimeBlockSummaryRepositoryInterface extends JpaRepository<Calen
                     " (" +
                     "     select count(*) " +
                     "     from CalendarEventParticipantDao as cap_count " +
-                    "     where cap_count.calendarEvent = calendarEvent" +
+                    "       inner join cap_count.email as email_count" +
+                    "       inner join email_count.domain as domain_count" +
+                    "       inner join domain_count.organizations as org_count" +
+                    "     where cap_count.calendarEvent = calendarEvent " +
+                    "       and org_count.id = :tenantId" +
                     "     )" +
                     ") as totalSeconds," +
                     "count(calendarEventParticipant.calendarEvent) as meetingCount " +

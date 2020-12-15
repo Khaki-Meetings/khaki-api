@@ -24,8 +24,14 @@ databaseChangeLog:
       name: fredSmithS56NetEmailId
       value: 6fa9bebbde5b4ad684cf11bf8c1c12c4
   - property:
+      name: billyJoelOrg12112ComEmailId
+      value: b180223893ab479496520a1900af0b6c
+  - property:
       name: bobJonesCalendarEvent1ParticipantId
       value: 1c0e8ab0524f4c0ba540325e15940a7b
+  - property:
+      name: billyJoelOrg1CalendarEvent1ParticipantId
+      value: 4b4cf68e3aa34a05a6693e41e5503a19
   - property:
       name: bettySmithCalendarEvent1ParticipantId
       value: bd9bb9baf6f04b6c8bdb69a831d93208
@@ -75,8 +81,8 @@ databaseChangeLog:
       name: s56OrganizationId
       value: d713ace20d3043beb4badb973967d6d4
   - property:
-      name: kellerSoftOrganizationId
-      value: 098374839d834db69e1f5baf00ac302d
+      name: 2112OrganizationId
+      value: 03163307d51546ffbe572965f4ce58f3
   - changeSet:
       id: test-data-1
       author: jacob (generated)
@@ -199,6 +205,18 @@ databaseChangeLog:
                   name: domain_id
                   value: ${domainS56NetId}
         - insert:
+            tableName: email_dao
+            columns:
+              - column:
+                  name: id
+                  value: ${billyJoelOrg12112ComEmailId}
+              - column:
+                  name: user
+                  value: billy
+              - column:
+                  name: domain_id
+                  value: ${domain2112ComId}
+        - insert:
             tableName: calendar_event_participant_dao
             columns:
               - column:
@@ -213,6 +231,18 @@ databaseChangeLog:
               - column:
                   name: organizer
                   value: true
+        - insert:
+            tableName: calendar_event_participant_dao
+            columns:
+              - column:
+                  name: id
+                  value: ${billyJoelOrg1CalendarEvent1ParticipantId}
+              - column:
+                  name: calendar_event_id
+                  value: ${org1CalendarEvent1Id}
+              - column:
+                  name: email_id
+                  value: ${billyJoelOrg12112ComEmailId}
         - insert:
             tableName: calendar_event_participant_dao
             columns:
@@ -376,6 +406,15 @@ databaseChangeLog:
                   name: name
                   value: S56
         - insert:
+            tableName: organization_dao
+            columns:
+              - column:
+                  name: id
+                  value: ${2112OrganizationId}
+              - column:
+                  name: name
+                  value: 2112
+        - insert:
             tableName: domain_dao_organizations
             columns:
               - column:
@@ -384,6 +423,15 @@ databaseChangeLog:
               - column:
                   name: organizations_id
                   value: ${s56OrganizationId}
+        - insert:
+            tableName: domain_dao_organizations
+            columns:
+              - column:
+                  name: domains_id
+                  value: ${domain2112ComId}
+              - column:
+                  name: organizations_id
+                  value: ${2112OrganizationId}
         - insert:
             tableName: department_dao
             columns:
