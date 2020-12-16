@@ -2,10 +2,7 @@ package com.getkhaki.api.bff.domain.services;
 
 import com.getkhaki.api.bff.domain.models.CalendarEventDm;
 import com.getkhaki.api.bff.domain.persistence.CalendarEventPersistenceInterface;
-import com.getkhaki.api.bff.persistence.GoogleCalendarPersistenceService;
-import lombok.val;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import com.getkhaki.api.bff.domain.persistence.OrganizationPersistenceInterface;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
@@ -14,11 +11,17 @@ import org.springframework.stereotype.Service;
 public class CalendarEventService {
     private final CalendarEventPersistenceInterface calendarEventPersistence;
     private final CalendarProviderPersistenceFactory calendarProviderPersistenceFactory;
+    private final OrganizationPersistenceInterface organizationPersistenceService;
 
     @Autowired
-    public CalendarEventService(CalendarEventPersistenceInterface calendarEventPersistence, CalendarProviderPersistenceFactory calendarProviderPersistenceFactory) {
+    public CalendarEventService(
+            CalendarEventPersistenceInterface calendarEventPersistence,
+            CalendarProviderPersistenceFactory calendarProviderPersistenceFactory,
+            OrganizationPersistenceInterface organizationPersistenceService
+    ) {
         this.calendarEventPersistence = calendarEventPersistence;
         this.calendarProviderPersistenceFactory = calendarProviderPersistenceFactory;
+        this.organizationPersistenceService = organizationPersistenceService;
     }
 
     public CalendarEventDm createEvent(CalendarEventDm calendarEventDm) {
@@ -32,5 +35,13 @@ public class CalendarEventService {
                 .stream()
                 .filter(calendarEventDm -> calendarEventDm.getParticipants().size() > 1)
                 .forEach(calendarEventPersistence::upsert);
+    }
+
+    public void importCron() {
+        organizationPersistenceService
+                .getImportEnabledOrganizations()
+                .forEach(
+                        organizationDm -> importAsync(organizationDm.getAdminEmail())
+                );
     }
 }

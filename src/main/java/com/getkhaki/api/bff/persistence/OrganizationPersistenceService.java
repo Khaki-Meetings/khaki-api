@@ -9,6 +9,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Set;
 import java.util.UUID;
 
 @Service
@@ -33,5 +34,10 @@ public class OrganizationPersistenceService implements OrganizationPersistenceIn
         OrganizationDao organizationDao = this.organizationRepository.findById(sessionTenant.getTenantId())
                 .orElseThrow();
         return modelMapper.map(organizationDao, OrganizationDm.class);
+    }
+
+    @Override
+    public Set<OrganizationDm> getImportEnabledOrganizations() {
+        return null;
     }
 }
