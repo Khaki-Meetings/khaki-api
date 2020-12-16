@@ -27,7 +27,7 @@ public class DepartmentController {
 
     @PostMapping("/import")
     public void importAsync(@RequestParam("file") MultipartFile csvFile) throws IOException {
-        this.departmentService.importAsync(csvFile.getInputStream());
+        this.departmentService.csvImport(csvFile.getInputStream());
     }
 
     @GetMapping

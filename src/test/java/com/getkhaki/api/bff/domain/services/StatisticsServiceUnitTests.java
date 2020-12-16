@@ -1,10 +1,12 @@
 package com.getkhaki.api.bff.domain.services;
 
-import com.getkhaki.api.bff.domain.models.*;
+import com.getkhaki.api.bff.domain.models.DepartmentStatisticsDm;
+import com.getkhaki.api.bff.domain.models.IntervalDe;
+import com.getkhaki.api.bff.domain.models.OrganizerStatisticsDm;
+import com.getkhaki.api.bff.domain.models.TimeBlockSummaryDm;
 import com.getkhaki.api.bff.domain.persistence.DepartmentStatisticsPersistenceInterface;
 import com.getkhaki.api.bff.domain.persistence.OrganizersStatisticsPersistenceInterface;
 import com.getkhaki.api.bff.domain.persistence.TimeBlockSummaryPersistenceInterface;
-import com.getkhaki.api.bff.web.models.IntervalDte;
 import org.assertj.core.util.Lists;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -57,7 +59,7 @@ public class StatisticsServiceUnitTests {
                 "Jones",
                 1,
                 1.0,
-                1
+                1L
         );
         when(organizersStatisticsPersistenceService.getOrganizersStatistics(eq(startTest), eq(endTest), any(OptionalInt.class)))
                 .thenReturn(Lists.list(organizerStatisticsDm));
@@ -75,7 +77,7 @@ public class StatisticsServiceUnitTests {
         Instant endTest = Instant.parse("2020-11-18T00:00:00.000Z");
 
         UUID id = UUID.randomUUID();
-        TimeBlockSummaryDm timeBlockSummaryDm = new TimeBlockSummaryDm(1, 1);
+        TimeBlockSummaryDm timeBlockSummaryDm = new TimeBlockSummaryDm(1L, 1);
 
 
         when(timeBlockSummaryPersistenceService.getTimeBlockSummary(startTest, endTest)).thenReturn(timeBlockSummaryDm);
@@ -90,7 +92,7 @@ public class StatisticsServiceUnitTests {
         ZonedDateTime endTest = ZonedDateTime.parse("2020-11-12T12:22:40.274456-07:00[America/Denver]");
 
         UUID id = UUID.randomUUID();
-        DepartmentStatisticsDm departmentStatisticsDm = new DepartmentStatisticsDm(id, "department", 1, 1, 1, 1);
+        DepartmentStatisticsDm departmentStatisticsDm = new DepartmentStatisticsDm(id, "department", 1L, 1L, 1L, 1L);
 //        when(departmentStatisticsPersistenceService.getPerDepartmentStatistics(startTest, endTest)).thenReturn(departmentStatisticsDm);
 //        DepartmentStatisticsDm departmentStatisticsResponseDmList = underTest.getPerDepartmentStatistics(startTest, endTest);
 //        assertThat(departmentStatisticsResponseDmList).isNotNull();
@@ -106,7 +108,7 @@ public class StatisticsServiceUnitTests {
         ArgumentCaptor<Instant> endCaptor = ArgumentCaptor.forClass(Instant.class);
         when(timeBlockGeneratorFactory.get(any())).thenCallRealMethod();
         when(timeBlockSummaryPersistenceService.getTimeBlockSummary(any(Instant.class), any(Instant.class)))
-                .thenReturn(new TimeBlockSummaryDm(1, 1));
+                .thenReturn(new TimeBlockSummaryDm(1L, 1));
 
         underTest.getTrailingStatistics(startTest, interval, count);
 
@@ -119,15 +121,15 @@ public class StatisticsServiceUnitTests {
         Instant firstPassedStartInstant = allStarts.get(0);
         Instant firstPassedEndInstant = allEnds.get(0);
         Instant firstStartShouldBe = Instant.parse("2020-11-01T00:00:00.000Z");
-        Instant firstEndShouldBe = Instant.parse("2020-11-30T23:59:59.999Z");
+        Instant firstEndShouldBe = Instant.parse("2020-11-30T23:59:59Z");
 
         assertThat(firstPassedStartInstant).isEqualTo(firstStartShouldBe);
         assertThat(firstPassedEndInstant).isEqualTo(firstEndShouldBe);
 
         Instant secondPassedStartInstant = allStarts.get(1);
         Instant secondPassedEndInstant = allEnds.get(1);
-        Instant secondStartShouldBe = Instant.parse("2020-12-01T00:00:00.000Z");
-        Instant secondEndShouldBe = Instant.parse("2020-12-31T23:59:59.999Z");
+        Instant secondStartShouldBe = Instant.parse("2020-10-01T00:00:00Z");
+        Instant secondEndShouldBe = Instant.parse("2020-10-30T23:59:59Z");
 
         assertThat(secondPassedStartInstant).isEqualTo(secondStartShouldBe);
         assertThat(secondPassedEndInstant).isEqualTo(secondEndShouldBe);

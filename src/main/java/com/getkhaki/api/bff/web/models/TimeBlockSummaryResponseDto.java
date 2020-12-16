@@ -5,13 +5,11 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
 
-import java.util.UUID;
-
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Accessors(chain = true)
 public class TimeBlockSummaryResponseDto {
-    long totalHours;
-    long meetingCount;
+    Long totalSeconds;
+    Integer meetingCount;
 }

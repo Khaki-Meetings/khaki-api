@@ -45,7 +45,7 @@ public class StatisticsControllerIntegrationTests extends BaseMvcIntegrationTest
                 .findFirst()
                 .orElseThrow();
         assertThat(bettyStats.getTotalCost()).isEqualTo(1282.5);
-        assertThat(bettyStats.getTotalHours()).isEqualTo(9);
+        assertThat(bettyStats.getTotalSeconds()).isEqualTo(9 * 3600);
         assertThat(bettyStats.getTotalMeetings()).isEqualTo(1);
 
         OrganizerStatisticsResponseDto bobStats = stats.getOrganizersStatistics()
@@ -55,7 +55,7 @@ public class StatisticsControllerIntegrationTests extends BaseMvcIntegrationTest
                 .orElseThrow();
         assertThat(bobStats.getOrganizerEmail()).isEqualTo("bob@s56.net");
         assertThat(bobStats.getTotalMeetings()).isEqualTo(1);
-        assertThat(bobStats.getTotalHours()).isEqualTo(4);
+        assertThat(bobStats.getTotalSeconds()).isEqualTo(4 * 3600);
         assertThat(bobStats.getTotalCost()).isEqualTo(380.0);
     }
 
@@ -72,19 +72,19 @@ public class StatisticsControllerIntegrationTests extends BaseMvcIntegrationTest
                 .filter(stat -> stat.getDepartment().equals("IT"))
                 .findFirst()
                 .orElseThrow();
-        assertThat(itDepartment.getTotalHours()).isEqualTo(8);
+        assertThat(itDepartment.getTotalSeconds()).isEqualTo(8 * 3600);
 
         DepartmentStatisticsResponseDto hrDepartment = stats.getDepartmentsStatistics()
                 .stream()
                 .filter(stat -> stat.getDepartment().equals("HR"))
                 .findFirst()
                 .orElseThrow();
-        assertThat(itDepartment.getTotalHours()).isEqualTo(8);
+        assertThat(itDepartment.getTotalSeconds()).isEqualTo(8 * 3600);
     }
 
     @Test
     public void testTrailingStatistics() throws Exception {
-        Instant start = Instant.parse("2020-11-01T00:00:00.000Z");
+        Instant start = Instant.parse("2020-11-02T00:00:00.000Z");
         int count = 2;
 
         String url = String.format("/statistics/trailing/%s/%s/%d", start, IntervalDte.Day, count);
@@ -94,10 +94,10 @@ public class StatisticsControllerIntegrationTests extends BaseMvcIntegrationTest
         assertThat(stats.getTimeBlockSummaries()).hasSize(2);
 
         List<TimeBlockSummaryResponseDto> summaries = stats.getTimeBlockSummaries();
-        assertThat(summaries.get(0).getTotalHours()).isEqualTo(4);
+        assertThat(summaries.get(0).getTotalSeconds()).isEqualTo(32400L);
         assertThat(summaries.get(0).getMeetingCount()).isEqualTo(1);
 
-        assertThat(summaries.get(1).getTotalHours()).isEqualTo(9);
+        assertThat(summaries.get(1).getTotalSeconds()).isEqualTo(14400L);
         assertThat(summaries.get(1).getMeetingCount()).isEqualTo(1);
     }
 
@@ -110,7 +110,7 @@ public class StatisticsControllerIntegrationTests extends BaseMvcIntegrationTest
         val stats = getTypedResult(url, TimeBlockSummaryResponseDto.class);
 
         assertThat(stats.getMeetingCount()).isEqualTo(3);
-        assertThat(stats.getTotalHours()).isEqualTo(15);
+        assertThat(stats.getTotalSeconds()).isEqualTo(54000);
 
     }
 }

@@ -14,8 +14,8 @@ import java.util.UUID;
 public class DepartmentStatisticsDm {
     UUID id;
     String department;
-    long meetingCount;
-    long totalHours;
-    long totalCost;
-    long averageCost;
+    Long meetingCount;
+    Long totalSeconds;
+    Long totalCost;
+    Long averageCost;
 }

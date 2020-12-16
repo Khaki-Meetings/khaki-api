@@ -16,11 +16,11 @@ public interface DepartmentStatisticsRepositoryInterface extends JpaRepository<D
                     "department.name as departmentName," +
                     "sum(" +
                     "   timestampdiff(" +
-                    "       hour," +
+                    "       second," +
                     "       calendarEvent.start," +
                     "       calendarEvent.end" +
                     "   )" +
-                    ") as totalHours " +
+                    ") as totalSeconds " +
                     "from DepartmentDao department " +
                     "   inner join department.organization organization" +
                     "   inner join department.employees employees" +

@@ -22,10 +22,10 @@ public class TimeBlockSummaryRepositoryIntegrationTests extends BaseJpaIntegrati
 
         TimeBlockSummaryView view = underTest.findTimeBlockSummaryInRange(start, end, s56OrgUuid);
 
-        Long hours = view.getTotalHours();
+        Long seconds = view.getTotalSeconds();
         Long count = view.getMeetingCount();
 
-        assertThat(hours).isEqualTo(15);
+        assertThat(seconds).isEqualTo(54000);
         assertThat(count).isEqualTo(3);
     }
 }

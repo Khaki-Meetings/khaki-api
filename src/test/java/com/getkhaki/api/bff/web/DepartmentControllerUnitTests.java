@@ -33,6 +33,6 @@ public class DepartmentControllerUnitTests {
 
         this.underTest.importAsync(mockMultipartFile);
 
-        verify(this.departmentService).importAsync(mockInputStream);
+        verify(this.departmentService).csvImport(mockInputStream);
     }
 }

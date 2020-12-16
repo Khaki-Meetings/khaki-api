@@ -23,7 +23,7 @@ public abstract class BaseTimeBlockGenerator implements TimeBlockGeneratorInterf
 
         List<TimeBlockRangeDm> timeBlockRangeList = new ArrayList<>();
         Instant newStart = start.atZone(ZoneOffset.UTC).toInstant();
-        Instant newEnd = addUnit(newStart).minus(1, ChronoUnit.MILLIS);
+        Instant newEnd = addUnit(newStart).minus(1, ChronoUnit.SECONDS);
         for (int i = 0; i < count; i++) {
             timeBlockRangeList.add(
                     new TimeBlockRangeDm()
@@ -31,12 +31,14 @@ public abstract class BaseTimeBlockGenerator implements TimeBlockGeneratorInterf
                             .setEnd(newEnd)
             );
 
-            newStart = addUnit(newStart);
-            newEnd = addUnit(newStart).minus(1, ChronoUnit.MILLIS);
+            newStart = minusUnit(newStart);
+            newEnd = minusUnit(newEnd);
         }
 
         return timeBlockRangeList;
     }
 
     abstract public Instant addUnit(Instant instant);
+
+    abstract public Instant minusUnit(Instant instant);
 }

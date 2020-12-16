@@ -60,38 +60,5 @@ public class OrganizersStatisticsPersistenceServiceUnitTests {
         email.setId(UUID.randomUUID());
         email.getDomain().setId(UUID.randomUUID());
         email.getPerson().setId(UUID.randomUUID());
-
-//        OrganizerStatisticsDao organizerStatisticsDao = new OrganizerStatisticsDao()
-//                .setEmail("bob@bob.com")
-//                .setTotalCost(233)
-//                .setTotalMeetings(23)
-//                .setTotalHours(23);
-//        organizerStatisticsDao.setId(UUID.randomUUID());
-//
-//        OrganizerStatisticsDm organizerStatisticsDm = new OrganizerStatisticsDm(
-//                OrganizerDm.builder()
-//                        .email(email.getUser() + "@" + email.getDomain().getName())
-//                        .name(email.getPerson().getFirstName() + " " + email.getPerson().getLastName())
-//                        .build(),
-//                organizerStatisticsDao.getTotalMeetings(),
-//                organizerStatisticsDao.getTotalCost(),
-//                organizerStatisticsDao.getTotalHours()
-//        );
-//
-//        List<OrganizerStatisticsDao> organizerStatisticsDaoList = Lists.list(organizerStatisticsDao);
-//        List<OrganizerStatisticsDm> organizerStatisticsDmList = Lists.list(organizerStatisticsDm);
-//        when(
-//                modelMapper.map(
-//                        organizerStatisticsDaoList,
-//                        new TypeToken<List<OrganizerStatisticsDm>>() {}.getType()
-//                )
-//        ).thenReturn(organizerStatisticsDmList);
-
-//        when(organizersStatisticsRepositoryInterface.findOrganizersStatistics(eq(startTest), eq(endTest), eq(count)))
-//                .thenReturn(organizerStatisticsDaoList);
-//
-//        List<OrganizerStatisticsDm> ret = underTest.getOrganizersStatistics(startTest, endTest, count);
-//
-//        assertThat(ret).isNotNull();
     }
 }
