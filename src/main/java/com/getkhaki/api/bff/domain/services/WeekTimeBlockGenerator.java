@@ -11,4 +11,11 @@ public class WeekTimeBlockGenerator extends BaseTimeBlockGenerator {
                 .plus(1, ChronoUnit.WEEKS)
                 .toInstant();
     }
+
+    @Override
+    public Instant minusUnit(Instant instant) {
+        return instant.atOffset(ZoneOffset.UTC)
+                .minus(1, ChronoUnit.WEEKS)
+                .toInstant();
+    }
 }
