@@ -26,12 +26,12 @@ public class DayTimeBlockGeneratorUnitTests {
 
         assertThat(timeBlockList).hasSize(count);
         Instant firstStart = Instant.parse("2020-11-01T00:00:00.000Z");
-        Instant firstEnd = Instant.parse("2020-11-01T23:59:59.999Z");
+        Instant firstEnd = Instant.parse("2020-11-01T23:59:59Z");
         assertThat(timeBlockList.get(0).getStart()).isEqualTo(firstStart);
         assertThat(timeBlockList.get(0).getEnd()).isEqualTo(firstEnd);
 
-        Instant secondStart = Instant.parse("2020-11-02T00:00:00.000Z");
-        Instant secondEnd = Instant.parse("2020-11-02T23:59:59.999Z");
+        Instant secondStart = Instant.parse("2020-10-31T00:00:00Z");
+        Instant secondEnd = Instant.parse("2020-10-31T23:59:59Z");
         assertThat(timeBlockList.get(1).getStart()).isEqualTo(secondStart);
         assertThat(timeBlockList.get(1).getEnd()).isEqualTo(secondEnd);
     }
