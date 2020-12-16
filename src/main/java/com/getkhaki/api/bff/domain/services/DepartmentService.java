@@ -23,8 +23,7 @@ public class DepartmentService {
         this.departmentPersistenceService = departmentPersistenceService;
     }
 
-    @Async
-    public void importAsync(InputStream csvInputStream) {
+    public void csvImport(InputStream csvInputStream) {
         this.csvFileService.read(csvInputStream)
                 .forEach(departmentPersistenceService::upsert);
     }

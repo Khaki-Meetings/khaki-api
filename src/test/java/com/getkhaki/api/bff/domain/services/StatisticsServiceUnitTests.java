@@ -121,15 +121,15 @@ public class StatisticsServiceUnitTests {
         Instant firstPassedStartInstant = allStarts.get(0);
         Instant firstPassedEndInstant = allEnds.get(0);
         Instant firstStartShouldBe = Instant.parse("2020-11-01T00:00:00.000Z");
-        Instant firstEndShouldBe = Instant.parse("2020-11-30T23:59:59.999Z");
+        Instant firstEndShouldBe = Instant.parse("2020-11-30T23:59:59Z");
 
         assertThat(firstPassedStartInstant).isEqualTo(firstStartShouldBe);
         assertThat(firstPassedEndInstant).isEqualTo(firstEndShouldBe);
 
         Instant secondPassedStartInstant = allStarts.get(1);
         Instant secondPassedEndInstant = allEnds.get(1);
-        Instant secondStartShouldBe = Instant.parse("2020-12-01T00:00:00.000Z");
-        Instant secondEndShouldBe = Instant.parse("2020-12-31T23:59:59.999Z");
+        Instant secondStartShouldBe = Instant.parse("2020-10-01T00:00:00Z");
+        Instant secondEndShouldBe = Instant.parse("2020-10-30T23:59:59Z");
 
         assertThat(secondPassedStartInstant).isEqualTo(secondStartShouldBe);
         assertThat(secondPassedEndInstant).isEqualTo(secondEndShouldBe);

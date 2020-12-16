@@ -30,10 +30,8 @@ public class OrganizationPersistenceService implements OrganizationPersistenceIn
 
     @Override
     public OrganizationDm getOrganization() {
-        UUID bla = sessionTenant.getTenantId();
         OrganizationDao organizationDao = this.organizationRepository.findById(sessionTenant.getTenantId())
                 .orElseThrow();
-        OrganizationDm organizationDm = modelMapper.map(organizationDao, OrganizationDm.class);
-        return organizationDm;
+        return modelMapper.map(organizationDao, OrganizationDm.class);
     }
 }
