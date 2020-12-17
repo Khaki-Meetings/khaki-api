@@ -1,6 +1,7 @@
 package com.getkhaki.api.bff.persistence;
 
 import com.getkhaki.api.bff.config.SessionTenant;
+import com.getkhaki.api.bff.domain.models.FlagDe;
 import com.getkhaki.api.bff.domain.models.OrganizationDm;
 import com.getkhaki.api.bff.domain.persistence.OrganizationPersistenceInterface;
 import com.getkhaki.api.bff.persistence.models.OrganizationDao;
@@ -11,6 +12,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.Set;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
 public class OrganizationPersistenceService implements OrganizationPersistenceInterface {
@@ -38,6 +40,12 @@ public class OrganizationPersistenceService implements OrganizationPersistenceIn
 
     @Override
     public Set<OrganizationDm> getImportEnabledOrganizations() {
-        return null;
+        return organizationRepository
+                .findDistinctByFlagsNameNotContaining(FlagDe.DisableImport.toString())
+                .stream()
+                .map(
+                        organizationDao -> modelMapper.map(organizationDao, OrganizationDm.class)
+                )
+                .collect(Collectors.toSet());
     }
 }
