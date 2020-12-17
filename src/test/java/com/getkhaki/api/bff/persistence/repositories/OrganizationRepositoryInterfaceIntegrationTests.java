@@ -5,6 +5,7 @@ import com.getkhaki.api.bff.domain.models.FlagDe;
 import com.getkhaki.api.bff.persistence.models.OrganizationDao;
 import lombok.val;
 import org.junit.jupiter.api.Test;
+import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
 import javax.inject.Inject;
 import java.util.UUID;
@@ -13,6 +14,7 @@ import java.util.stream.Stream;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+@DataJpaTest
 public class OrganizationRepositoryInterfaceIntegrationTests extends BaseJpaIntegrationTest {
     @Inject
     private OrganizationRepositoryInterface underTest;

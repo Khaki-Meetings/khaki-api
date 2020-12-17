@@ -25,8 +25,6 @@ public class OrganizationPersistenceServiceUnitTests {
     private OrganizationRepositoryInterface organizationRepository;
     @Mock
     private ModelMapper modelMapper;
-    @Mock
-    private SessionTenant sessionTenant;
 
     @InjectMocks
     private OrganizationPersistenceService underTest;
