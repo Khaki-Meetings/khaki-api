@@ -1,0 +1,46 @@
+databaseChangeLog:
+  - changeSet:
+      id: 1608166013285-12
+      author: jacob (generated)
+      changes:
+        - createTable:
+            columns:
+              - column:
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                  name: organization_dao_id
+                  type: BINARY(16)
+              - column:
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                  name: flags_id
+                  type: BINARY(16)
+            tableName: organization_dao_flags
+  - changeSet:
+      id: 1608166013285-17
+      author: jacob (generated)
+      changes:
+        - addForeignKeyConstraint:
+            baseColumnNames: organization_dao_id
+            baseTableName: organization_dao_flags
+            constraintName: FKbt41c5anwmyy7uxhhnw8b4aal
+            deferrable: false
+            initiallyDeferred: false
+            referencedColumnNames: id
+            referencedTableName: organization_dao
+            validate: true
+  - changeSet:
+      id: 1608166013285-18
+      author: jacob (generated)
+      changes:
+        - addForeignKeyConstraint:
+            baseColumnNames: flags_id
+            baseTableName: organization_dao_flags
+            constraintName: FKeknut0tdqj6bkmliiq3ihe8pu
+            deferrable: false
+            initiallyDeferred: false
+            referencedColumnNames: id
+            referencedTableName: flag_dao
+            validate: true

@@ -71,14 +71,13 @@ databaseChangeLog:
             validate: true
   - property:
       dbms: mariadb
-      name: ContactableFlagId
+      name: uuidGenerator
       value: UNHEX(REPLACE(UUID(), "-", ""))
   - property:
       dbms: h2
-      name: ContactableFlagId
+      name: uuidGenerator
       value: UUID()
   - changeSet:
-      dbms: mariadb
       id: flag-fixture-1
       author: jacob (generated)
       changes:
@@ -87,7 +86,20 @@ databaseChangeLog:
             columns:
               - column:
                   name: id
-                  valueComputed: ${ContactableFlagId}
+                  valueComputed: ${uuidGenerator}
               - column:
                   name: name
                   value: Contactable
+  - changeSet:
+      id: flag-fixture-2
+      author: jacob
+      changes:
+        - insert:
+            tableName: flag_dao
+            columns:
+              - column:
+                  name: id
+                  valueComputed: ${uuidGenerator}
+              - column:
+                  name: name
+                  value: DisableImport

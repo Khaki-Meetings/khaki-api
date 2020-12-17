@@ -16,6 +16,7 @@ import java.util.List;
 @Accessors(chain = true)
 @EqualsAndHashCode(callSuper = true)
 public class CalendarEventDao extends EntityBaseDao {
+    @Column(unique = true)
     String googleCalendarId;
 
     @Column(nullable = false)
