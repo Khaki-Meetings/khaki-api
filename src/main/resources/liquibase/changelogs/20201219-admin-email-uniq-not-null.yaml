@@ -1,0 +1,83 @@
+databaseChangeLog:
+- changeSet:
+    id: 1608420661769-1
+    author: jacob (generated)
+    changes:
+    - addNotNullConstraint:
+        columnDataType: binary(16)
+        columnName: admin_email_id
+        tableName: organization_dao
+        validate: true
+- changeSet:
+    id: 1608420661769-2
+    author: jacob (generated)
+    changes:
+    - dropDefaultValue:
+        columnDataType: varchar(255)
+        columnName: first_name
+        tableName: person_dao
+- changeSet:
+    id: 1608420661769-3
+    author: jacob (generated)
+    changes:
+    - dropDefaultValue:
+        columnDataType: varchar(255)
+        columnName: google_calendar_id
+        tableName: calendar_event_dao
+- changeSet:
+    id: 1608420661769-4
+    author: jacob (generated)
+    changes:
+    - dropDefaultValue:
+        columnDataType: varchar(255)
+        columnName: last_name
+        tableName: person_dao
+- changeSet:
+    id: 1608420661769-5
+    author: jacob (generated)
+    changes:
+    - dropDefaultValue:
+        columnDataType: varchar(255)
+        columnName: name
+        tableName: department_dao
+- changeSet:
+    id: 1608420661769-6
+    author: jacob (generated)
+    changes:
+    - dropDefaultValue:
+        columnDataType: varchar(255)
+        columnName: name
+        tableName: domain_dao
+- changeSet:
+    id: 1608420661769-7
+    author: jacob (generated)
+    changes:
+    - dropDefaultValue:
+        columnDataType: varchar(255)
+        columnName: name
+        tableName: flag_dao
+- changeSet:
+    id: 1608420661769-8
+    author: jacob (generated)
+    changes:
+    - dropDefaultValue:
+        columnDataType: varchar(255)
+        columnName: name
+        tableName: organization_dao
+- changeSet:
+    id: 1608420661769-9
+    author: jacob (generated)
+    changes:
+    - dropDefaultValue:
+        columnDataType: boolean
+        columnName: organizer
+        tableName: calendar_event_participant_dao
+- changeSet:
+    id: 1608420661769-10
+    author: jacob (generated)
+    changes:
+    - dropDefaultValue:
+        columnDataType: varchar(255)
+        columnName: role
+        tableName: salary_group_dao
+

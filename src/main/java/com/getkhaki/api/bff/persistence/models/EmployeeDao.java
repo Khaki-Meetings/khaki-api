@@ -19,10 +19,10 @@ public class EmployeeDao extends EntityBaseDao {
     @ManyToOne
     SalaryGroupDao salaryGroup;
 
-    @ManyToOne
+    @ManyToOne(optional = false)
     DepartmentDao department;
 
-    @OneToOne
+    @OneToOne(optional = false)
     PersonDao person;
 
 
