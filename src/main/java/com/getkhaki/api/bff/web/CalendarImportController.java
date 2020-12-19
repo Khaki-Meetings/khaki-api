@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.inject.Inject;
 import java.time.Instant;
+import java.time.temporal.ChronoUnit;
 import java.util.Optional;
 
 @RestController
@@ -28,7 +29,7 @@ public class CalendarImportController {
 
     @PostMapping("/{adminEmail}")
     public void importAsync(@PathVariable String adminEmail) {
-        val timeAgo = Instant.now();
+        val timeAgo = Instant.now().minus(importMinutes, ChronoUnit.MINUTES);
         this.calendarEventService.importAsync(adminEmail, timeAgo);
     }
 }
