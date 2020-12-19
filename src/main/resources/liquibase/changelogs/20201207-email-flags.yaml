@@ -69,14 +69,7 @@ databaseChangeLog:
             referencedColumnNames: id
             referencedTableName: flag_dao
             validate: true
-  - property:
-      dbms: mariadb
-      name: uuidGenerator
-      value: UNHEX(REPLACE(UUID(), "-", ""))
-  - property:
-      dbms: h2
-      name: uuidGenerator
-      value: UUID()
+
   - changeSet:
       id: flag-fixture-1
       author: jacob (generated)

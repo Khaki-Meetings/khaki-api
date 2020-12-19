@@ -1,7 +1,19 @@
 databaseChangeLog:
+  - property:
+      dbms: mariadb
+      name: uuidGenerator
+      value: UNHEX(REPLACE(UUID(), '-', ''))
+  - property:
+      dbms: h2
+      name: uuidGenerator
+      value: UUID()
   - include:
       file: liquibase/changelogs/20201115-init.yaml
   - include:
       file: liquibase/changelogs/20201207-email-flags.yaml
   - include:
       file: liquibase/changelogs/20201216-org-flags.yaml
+  - include:
+      file: liquibase/changelogs/20201217-admin-email.yaml
+  - include:
+      file: liquibase/changelogs/20201218-khaki-org.yaml

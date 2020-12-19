@@ -1,8 +1,7 @@
 package com.getkhaki.api.bff.persistence;
 
-import com.getkhaki.api.bff.config.SessionTenant;
+import com.getkhaki.api.bff.config.interceptors.models.SessionTenant;
 import com.getkhaki.api.bff.persistence.repositories.DepartmentStatisticsRepositoryInterface;
-import liquibase.pro.packaged.S;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

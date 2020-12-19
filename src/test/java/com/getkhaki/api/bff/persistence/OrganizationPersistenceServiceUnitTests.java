@@ -1,7 +1,5 @@
 package com.getkhaki.api.bff.persistence;
 
-import com.getkhaki.api.bff.config.SessionTenant;
-import com.getkhaki.api.bff.domain.models.FlagDe;
 import com.getkhaki.api.bff.domain.models.OrganizationDm;
 import com.getkhaki.api.bff.persistence.models.OrganizationDao;
 import com.getkhaki.api.bff.persistence.repositories.OrganizationRepositoryInterface;
@@ -41,8 +39,7 @@ public class OrganizationPersistenceServiceUnitTests {
         ).collect(Collectors.toSet());
 
         val dmSetItr = dmOrgSet.iterator();
-        when(organizationRepository.findDistinctByFlagsNameNotContaining(FlagDe.DisableImport.toString()))
-                .thenReturn(daoOrgSet);
+//        when(organizationRepository.findAll();
 
         daoOrgSet.forEach(
                 organizationDao -> when(modelMapper.map(organizationDao, OrganizationDm.class))

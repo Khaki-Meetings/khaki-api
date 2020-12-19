@@ -14,7 +14,6 @@ import org.mockito.stubbing.Answer;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.UUID;
@@ -25,7 +24,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.argThat;
 import static org.mockito.Mockito.doNothing;
-import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.times;
@@ -47,7 +45,7 @@ public class CalendarEventServiceUnitTests {
                 calendarEventPersistence,
                 calendarProviderPersistenceFactory,
                 organizationPersistenceService
-        );
+                );
 
         underTest = spy(calendarEventService);
     }
@@ -98,13 +96,13 @@ public class CalendarEventServiceUnitTests {
             assertThat(ret.size()).isEqualTo(calendarEventDmList.size());
             return ret.size();
         };
-        when(calendarProviderPersistenceInterface.getEvents("email")).thenAnswer(answer);
+        when(calendarProviderPersistenceInterface.getEvents(any(), any())).thenAnswer(answer);
         assertThat(calendarEventDmList).isNotEmpty();
     }
 
     @Test
     public void importCronTest() {
-        doNothing().when(underTest).importAsync(any(String.class));
+        doNothing().when(underTest).importAsync(any(String.class), any());
         Set<OrganizationDm> orgs = Stream.of(
                 new OrganizationDm().setName("Working Man").setAdminEmail("joe@workingman.com"),
                 new OrganizationDm().setName("Kid Gloves").setAdminEmail("joe@kidgloves.com")
@@ -114,6 +112,6 @@ public class CalendarEventServiceUnitTests {
 
         when(organizationPersistenceService.getImportEnabledOrganizations()).thenReturn(orgs);
         underTest.importCron();
-        verify(underTest, times(orgs.size())).importAsync(argThat(adminEmails::contains));
+        verify(underTest, times(orgs.size())).importAsync(argThat(adminEmails::contains), any());
     }
 }

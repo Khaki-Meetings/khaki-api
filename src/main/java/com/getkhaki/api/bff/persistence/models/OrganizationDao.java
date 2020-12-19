@@ -7,8 +7,10 @@ import lombok.experimental.Accessors;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import java.util.List;
 import java.util.Set;
 
@@ -19,7 +21,10 @@ import java.util.Set;
 public class OrganizationDao extends EntityBaseDao {
     String name;
 
-    @ManyToMany(cascade = CascadeType.ALL)
+    @OneToOne(optional = false)
+    EmailDao adminEmail;
+
+    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     Set<FlagDao> flags;
 
     @ManyToMany(mappedBy = "organizations")
