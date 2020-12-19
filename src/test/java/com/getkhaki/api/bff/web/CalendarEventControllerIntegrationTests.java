@@ -1,7 +1,7 @@
 package com.getkhaki.api.bff.web;
 
 import com.getkhaki.api.bff.BaseMvcIntegrationTest;
-import com.getkhaki.api.bff.config.SessionTenant;
+import com.getkhaki.api.bff.config.interceptors.models.SessionTenant;
 import com.getkhaki.api.bff.web.models.CalendarEventDto;
 import io.restassured.module.mockmvc.RestAssuredMockMvc;
 import org.junit.jupiter.api.Test;
@@ -48,5 +48,4 @@ public class CalendarEventControllerIntegrationTests extends BaseMvcIntegrationT
                 .andExpect(status().isOk())
                 .andReturn();
     }
-
 }

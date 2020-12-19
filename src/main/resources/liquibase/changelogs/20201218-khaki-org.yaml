@@ -1,0 +1,91 @@
+databaseChangeLog:
+  - property:
+      dbms: h2
+      name: khakiOrganizationId
+      value: cast(replace('A13AE40C-3F0B-11EB-9482-12D3C93CAB33', '-','') as raw(16))
+  - property:
+      dbms: mariadb
+      name: khakiOrganizationId
+      value: UNHEX(REPLACE('A13AE40C-3F0B-11EB-9482-12D3C93CAB33', '-', ''))
+  - property:
+      dbms: h2
+      name: khakiDomainId
+      value: cast(replace('5b676bb8-e978-432b-90a2-b3c6367c04ec', '-','') as raw(16))
+  - property:
+      dbms: mariadb
+      name: khakiDomainId
+      value: UNHEX(REPLACE('5b676bb8-e978-432b-90a2-b3c6367c04ec', '-', ''))
+  - property:
+      dbms: h2
+      name: jeffAtKhakiEmailId
+      value: cast(replace('c1ee70dc-358b-4d60-9bac-07700760bbfc', '-','') as raw(16))
+  - property:
+      dbms: mariadb
+      name: jeffAtKhakiEmailId
+      value: UNHEX(REPLACE('c1ee70dc-358b-4d60-9bac-07700760bbfc', '-', ''))
+  - changeSet:
+      id: org-fixture-khaki-domain
+      author: jacob
+      preConditions:
+        - onFail: MARK_RAN
+      changes:
+        - insert:
+            tableName: domain_dao
+            columns:
+              - column:
+                  name: id
+                  valueComputed: ${khakiDomainId}
+              - column:
+                  name: name
+                  value: getkhaki.com
+  - changeSet:
+      id: org-fixture-khaki-admin-email
+      author: jacob
+      preConditions:
+        - onFail: MARK_RAN
+      changes:
+        - insert:
+            tableName: email_dao
+            columns:
+              - column:
+                  name: id
+                  valueComputed: ${jeffAtKhakiEmailId}
+              - column:
+                  name: domain_id
+                  valueComputed: ${khakiDomainId}
+              - column:
+                  name: user
+                  value: jeff
+  - changeSet:
+      id: org-fixture-khaki-org
+      author: jacob
+      preConditions:
+        - onFail: MARK_RAN
+      changes:
+        - insert:
+            tableName: organization_dao
+            columns:
+              - column:
+                  name: id
+                  valueComputed: ${khakiOrganizationId}
+              - column:
+                  name: name
+                  value: Khaki
+              - column:
+                  name: admin_email_id
+                  valueComputed: ${jeffAtKhakiEmailId}
+  - changeSet:
+      id: org-fixture-khaki-domain-org
+      author: jacob
+      preConditions:
+        - onFail: MARK_RAN
+      changes:
+        - insert:
+            tableName: domain_dao_organizations
+            columns:
+              - column:
+                  name: domains_id
+                  valueComputed: ${khakiDomainId}
+              - column:
+                  name: organizations_id
+                  valueComputed: ${khakiOrganizationId}

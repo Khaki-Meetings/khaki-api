@@ -1,6 +1,6 @@
 package com.getkhaki.api.bff.persistence;
 
-import com.getkhaki.api.bff.config.SessionTenant;
+import com.getkhaki.api.bff.config.interceptors.models.SessionTenant;
 import com.getkhaki.api.bff.domain.models.EmployeeDm;
 import com.getkhaki.api.bff.domain.persistence.EmployeePersistenceInterface;
 import com.getkhaki.api.bff.persistence.repositories.EmployeeRepositoryInterface;

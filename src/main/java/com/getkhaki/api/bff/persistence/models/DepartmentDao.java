@@ -14,8 +14,8 @@ import javax.persistence.UniqueConstraint;
 import java.util.List;
 
 @Entity
-@Accessors(chain = true)
 @Table(uniqueConstraints = @UniqueConstraint(columnNames = {"name", "organization_id"}))
+@Accessors(chain = true)
 @Getter
 @Setter
 public class DepartmentDao extends EntityBaseDao {

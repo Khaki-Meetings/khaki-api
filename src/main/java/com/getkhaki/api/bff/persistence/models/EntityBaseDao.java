@@ -1,14 +1,18 @@
 package com.getkhaki.api.bff.persistence.models;
 
-import lombok.Data;
-import lombok.experimental.Accessors;
+import lombok.Getter;
+import lombok.Setter;
 
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.MappedSuperclass;
 import java.util.UUID;
 
-@Data
 @MappedSuperclass
-@Accessors
+@Getter
+@Setter
 public class EntityBaseDao {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)

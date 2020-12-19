@@ -1,6 +1,6 @@
 package com.getkhaki.api.bff.handlers;
 
-import com.getkhaki.api.bff.config.SessionTenant;
+import com.getkhaki.api.bff.config.interceptors.models.SessionTenant;
 import com.getkhaki.api.bff.security.AuthenticationFacade;
 import lombok.val;
 import org.springframework.security.core.Authentication;
@@ -23,8 +23,8 @@ public class TenantHandler implements HandlerInterceptor {
     @Override
     public boolean preHandle(
             HttpServletRequest request,
-            HttpServletResponse response,
-            Object handler
+            @SuppressWarnings("NullableProblems") HttpServletResponse response,
+            @SuppressWarnings("NullableProblems") Object handler
     ) throws RuntimeException {
         Authentication authentication = authenticationFacade.getAuthentication();
         val jwtToken = (Jwt) authentication.getCredentials();
@@ -37,11 +37,14 @@ public class TenantHandler implements HandlerInterceptor {
 
         val claims = jwtToken.getClaims();
 
-        @SuppressWarnings("unchecked")
-        val tenantIds = (Map<String, String>) claims.get(SessionTenant.CLAIMS_KEY);
+        if (claims.containsKey(SessionTenant.CLAIMS_KEY)) {
+            val tenantIds = claims.get(SessionTenant.CLAIMS_KEY);
+            if (tenantIds instanceof Map) {
+                @SuppressWarnings("unchecked") final String tenantId = ((Map<String, String>) tenantIds).get(tenantName);
+                sessionTenant.setTenantId(UUID.fromString(tenantId));
+            }
+        }
 
-        val tenantId = tenantIds.get(tenantName);
-        sessionTenant.setTenantId(UUID.fromString(tenantId));
 
         return true;
     }
