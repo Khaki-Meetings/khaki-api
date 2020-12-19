@@ -1,7 +1,7 @@
 package com.getkhaki.api.bff.persistence.models;
 
-import lombok.Data;
-import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.Setter;
 import lombok.experimental.Accessors;
 
 import javax.persistence.Column;
@@ -11,11 +11,12 @@ import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 
-@Data
 @Entity
 @Accessors(chain = true)
-@EqualsAndHashCode(callSuper = true)
+@Getter
+@Setter
 public class CalendarEventDao extends EntityBaseDao {
+    @Column(unique = true)
     String googleCalendarId;
 
     @Column(nullable = false)

@@ -14,6 +14,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -36,13 +37,13 @@ public class GoogleCalendarPersistenceService implements CalendarProviderPersist
     }
 
     @Override
-    public List<CalendarEventDm> getEvents(String adminEmail) {
+    public List<CalendarEventDm> getEvents(String adminEmail, Instant timeAgo) {
         var calendarEventDms = new ArrayList<CalendarEventDm>();
 
         List<User> users = this.googleDirectoryRepository.getUsers(adminEmail);
 
         for (User user : users) {
-            List<Event> events = this.googleCalendarRepository.getEvents(adminEmail, user.getPrimaryEmail());
+            List<Event> events = this.googleCalendarRepository.getEvents(adminEmail, user.getPrimaryEmail(), timeAgo);
 
             for (Event event : events) {
                 if (event.getStart().getDateTime() != null) {

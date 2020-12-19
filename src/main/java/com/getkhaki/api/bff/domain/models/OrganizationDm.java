@@ -14,5 +14,7 @@ import java.util.Set;
 public class OrganizationDm {
     String name;
 
+    String adminEmail;
+
     Set<DepartmentDm> departments;
 }

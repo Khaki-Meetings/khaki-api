@@ -11,15 +11,15 @@ import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 
 @Entity
-@Accessors(chain = true)
-@Getter
-@Setter
 @Table(
         uniqueConstraints = {
                 @UniqueConstraint(columnNames = {"calendar_event_id", "email_id"}),
                 @UniqueConstraint(columnNames = {"calendar_event_id", "organizer"}),
         }
 )
+@Accessors(chain = true)
+@Getter
+@Setter
 public class CalendarEventParticipantDao extends EntityBaseDao {
     @ManyToOne(optional = false)
     CalendarEventDao calendarEvent;

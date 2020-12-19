@@ -1,6 +1,6 @@
 package com.getkhaki.api.bff.persistence;
 
-import com.getkhaki.api.bff.config.SessionTenant;
+import com.getkhaki.api.bff.config.interceptors.models.SessionTenant;
 import com.getkhaki.api.bff.domain.models.DepartmentDm;
 import com.getkhaki.api.bff.domain.persistence.DepartmentPersistenceInterface;
 import com.getkhaki.api.bff.persistence.models.DepartmentDao;
