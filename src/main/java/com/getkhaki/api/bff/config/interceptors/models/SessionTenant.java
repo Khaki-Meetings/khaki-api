@@ -1,4 +1,4 @@
-package com.getkhaki.api.bff.config;
+package com.getkhaki.api.bff.config.interceptors.models;
 
 import lombok.Getter;
 import lombok.Setter;

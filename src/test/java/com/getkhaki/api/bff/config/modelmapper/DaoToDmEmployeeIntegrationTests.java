@@ -15,7 +15,7 @@ import java.util.stream.Stream;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class DaoToDmEmployee extends BaseModelMapperIntegrationTests {
+public class DaoToDmEmployeeIntegrationTests extends BaseModelMapperIntegrationTests {
 
     @Test
     public void success() {

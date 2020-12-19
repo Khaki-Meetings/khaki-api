@@ -1,5 +1,6 @@
-package com.getkhaki.api.bff.config;
+package com.getkhaki.api.bff.config.interceptors;
 
+import com.getkhaki.api.bff.config.interceptors.models.SessionTenant;
 import com.getkhaki.api.bff.handlers.TenantHandler;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

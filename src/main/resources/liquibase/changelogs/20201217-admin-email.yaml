@@ -1,0 +1,25 @@
+databaseChangeLog:
+- changeSet:
+    id: 1608235236526-12
+    author: jacob (generated)
+    changes:
+    - addColumn:
+        columns:
+        - column:
+            name: admin_email_id
+            type: BINARY(16)
+        tableName: organization_dao
+- changeSet:
+    id: 1608235236526-17
+    author: jacob (generated)
+    changes:
+    - addForeignKeyConstraint:
+        baseColumnNames: admin_email_id
+        baseTableName: organization_dao
+        constraintName: FKlvgscbrp19ncdju6kfoxaxhwf
+        deferrable: false
+        initiallyDeferred: false
+        referencedColumnNames: id
+        referencedTableName: email_dao
+        validate: true
+

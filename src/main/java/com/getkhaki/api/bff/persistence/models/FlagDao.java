@@ -1,17 +1,16 @@
 package com.getkhaki.api.bff.persistence.models;
 
-import lombok.AccessLevel;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.Setter;
 import lombok.experimental.Accessors;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 
-@Data
 @Entity
 @Accessors(chain = true)
-@EqualsAndHashCode(callSuper = true)
+@Getter
+@Setter
 public class FlagDao extends EntityBaseDao {
     public final static String CONTACTABLE = "Contactable";
 
