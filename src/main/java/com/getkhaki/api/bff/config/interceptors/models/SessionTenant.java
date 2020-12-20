@@ -12,6 +12,7 @@ import java.util.UUID;
 public class SessionTenant {
     public static final String HEADER_KEY = "KHAKI-TENANT";
     public static final String CLAIMS_KEY = "https://getkhaki.com/tenantIds";
+    public static final String CLAIMS_EMAIL_KEY = "https://getkhaki.com/email";
     private UUID tenantId;
     private String tenantName;
 }

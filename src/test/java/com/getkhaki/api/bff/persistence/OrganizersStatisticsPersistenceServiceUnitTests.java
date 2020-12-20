@@ -59,6 +59,5 @@ public class OrganizersStatisticsPersistenceServiceUnitTests {
                 .setUser("bob");
         email.setId(UUID.randomUUID());
         email.getDomain().setId(UUID.randomUUID());
-        email.getPerson().setId(UUID.randomUUID());
     }
 }

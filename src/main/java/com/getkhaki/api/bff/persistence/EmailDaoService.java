@@ -1,11 +1,14 @@
 package com.getkhaki.api.bff.persistence;
 
+import com.getkhaki.api.bff.persistence.models.DomainDao;
 import com.getkhaki.api.bff.persistence.models.EmailDao;
 import com.getkhaki.api.bff.persistence.repositories.DomainRepositoryInterface;
 import com.getkhaki.api.bff.persistence.repositories.EmailRepositoryInterface;
 import com.sun.istack.NotNull;
 import lombok.val;
 import org.springframework.stereotype.Service;
+
+import java.util.Optional;
 
 @Service
 public class EmailDaoService {
@@ -16,6 +19,16 @@ public class EmailDaoService {
     public EmailDaoService(EmailRepositoryInterface emailRepository, DomainRepositoryInterface domainRepository) {
         this.emailRepository = emailRepository;
         this.domainRepository = domainRepository;
+    }
+
+    public EmailDao upsertByEmailString(String emailString) {
+        val emailDao = Optional.of(emailString)
+                .map(email -> {
+                    String[] parts = email.split("@");
+                    return new EmailDao().setUser(parts[0]).setDomain(new DomainDao().setName(parts[1]));
+                })
+                .orElseThrow();
+        return upsert(emailDao);
     }
 
     public EmailDao upsert(@NotNull EmailDao email) {

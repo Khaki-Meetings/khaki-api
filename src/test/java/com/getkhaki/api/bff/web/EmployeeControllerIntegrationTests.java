@@ -2,6 +2,7 @@ package com.getkhaki.api.bff.web;
 
 import com.getkhaki.api.bff.BaseMvcIntegrationTest;
 import com.getkhaki.api.bff.web.models.EmployeesResponseDto;
+import com.getkhaki.api.bff.web.models.UserProfileResponseDto;
 import lombok.SneakyThrows;
 import lombok.val;
 import org.junit.jupiter.api.Test;
@@ -52,5 +53,27 @@ public class EmployeeControllerIntegrationTests extends BaseMvcIntegrationTest {
     public void success_getEmployee() {
         String url = "/employees/userProfile";
         MvcResult result = getMvcResult(url);
+
+        UserProfileResponseDto userProfileResponseDto = (UserProfileResponseDto) convertJSONStringToObject(
+                result.getResponse().getContentAsString(),
+                UserProfileResponseDto.class
+        );
+
+        assertThat(userProfileResponseDto.getFirstName()).isEqualTo("Bob");
+    }
+
+    @Test
+    @SneakyThrows
+    public void success_getEmployeeWithoutPerson() {
+        String url = "/employees/userProfile";
+        MvcResult result = getMvcResult(url, "john@news.com");
+
+        UserProfileResponseDto userProfileResponseDto = (UserProfileResponseDto) convertJSONStringToObject(
+                result.getResponse().getContentAsString(),
+                UserProfileResponseDto.class
+        );
+
+        assertThat(userProfileResponseDto.getFirstName()).isNullOrEmpty();
+        assertThat(userProfileResponseDto.getEmail()).isEqualTo("john@news.com");
     }
 }

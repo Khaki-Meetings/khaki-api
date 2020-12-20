@@ -76,6 +76,10 @@ public abstract class BaseMvcIntegrationTest extends BaseJpaIntegrationTest {
     }
 
     protected static Jwt getJWT() {
+        return getJWT("bob@s56.net");
+    }
+
+    protected static Jwt getJWT(String email) {
         String tokenValue = "eyJraWQiOiJUVzhaWVZ0cTR1WlNMWkYyd2U2UVp5aG9GMDd0eUVpNE04cGJVa1pBOGpRIiwiYWxnIjoiUlMyNTYifQ.eyJ2ZXIiOjEsImp0aSI6IkFULnc3MHBxTXpJNl94bVJxNWdYalRKbmRrTGQtTDFqQlM0UFpmbC1ZSXZ3LTgiLCJpc3MiOiJodHRwczovL2Rldi01MDU5NTAub2t0YS5jb20vb2F1dGgyL2RlZmF1bHQiLCJhdWQiOiJhcGk6Ly9kZWZhdWx0IiwiaWF0IjoxNTk5NjY3MDk0LCJleHAiOjE1OTk2NzA2OTQsImNpZCI6IjBvYW00Z21uN3dUTTJqMTFXNHg2IiwidWlkIjoiMDB1dWhsOW50U1ZDSVppcnQ0eDYiLCJzY3AiOlsib3BlbmlkIiwicHJvZmlsZSIsImVtYWlsIl0sInN1YiI6Im1lQHByYXRobWVzaHBldGhrYXIuY29tIiwicm9sZXMiOlsiU3R1ZGVudCJdfQ.JvL3rWbc8DR66X6j_71YKIrqnu3rAGibi6wrBmkzwniICG-nixC2suFJ1KVHXZlY-YVA9Ylimr_iOi0guCn_9CyV9QzcJK2jqq5N4F-ragvvSODoKbPwGjTm7hnMCmt1xnrx-vz_vka4dzjmLgalqkcOB1r0wL4LAVjFJi9j5nWDe9ovB8eRsAcpseYoI96fkm5cExErgc2ayTOkyTLYGDIT3Je2QmDgzsepoKI5cpqrF1bCLJd3LcMcA0JLJctYQI9XpmYQuSBPyA3GdtH1ORX6_KBsjb58v7Lzy36etUlmMyTNmhXZqX1WwOi2SFgqPz_JJP7pcVmJnF9krbOfSw";
 
         Map<String, Object> headers = new HashMap<>();
@@ -96,6 +100,7 @@ public abstract class BaseMvcIntegrationTest extends BaseJpaIntegrationTest {
                         "d713ace2-0d30-43be-b4ba-db973967d6d4"
                 )
         );
+        claims.put(SessionTenant.CLAIMS_EMAIL_KEY, email);
         List<String> scp = new ArrayList<>();
         scp.add("write");
         claims.put("scp", scp);
@@ -109,11 +114,14 @@ public abstract class BaseMvcIntegrationTest extends BaseJpaIntegrationTest {
                 .getResponse()
                 .getContentAsString(), type);
     }
-
     protected MvcResult getMvcResult(String urlString) throws Exception {
+        return getMvcResult(urlString, "bob@s56.net");
+    }
+
+    protected MvcResult getMvcResult(String urlString, String email) throws Exception {
         return mvc.perform(MockMvcRequestBuilders.get(urlString)
                 .header(SessionTenant.HEADER_KEY, "s56_net")
-                .with(jwt().jwt(getJWT()).authorities(new SimpleGrantedAuthority("admin"))))
+                .with(jwt().jwt(getJWT(email)).authorities(new SimpleGrantedAuthority("admin"))))
                 .andExpect(status().isOk())
                 .andReturn();
     }

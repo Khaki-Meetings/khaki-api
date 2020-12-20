@@ -1,10 +1,7 @@
 package com.getkhaki.api.bff.persistence.models;
 
-import lombok.Data;
-import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
-import lombok.ToString;
 import lombok.experimental.Accessors;
 
 import javax.persistence.Column;
@@ -46,8 +43,8 @@ public class EmailDao extends EntityBaseDao {
     }
 
     @Transient
-    public PersonDao getPerson() {
-        return getPeople().get(0);
+    public Optional<PersonDao> getPerson() {
+        return getPeople().stream().findFirst();
     }
 
     @Transient
