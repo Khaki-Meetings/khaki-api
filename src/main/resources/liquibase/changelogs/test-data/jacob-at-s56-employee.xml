@@ -6,6 +6,7 @@
       http://www.liquibase.org/xml/ns/pro http://www.liquibase.org/xml/ns/pro/liquibase-pro-4.0.xsd">
     <property name="jacobAtS56NetEmployeeId" value="unhex(replace('1420bf5d-16ae-4166-82b3-a56d162a0497', '-', ''))"
               dbms="mariadb"/>
+    <include file="liquibase/changelogs/test-data/jacob-at-s56-person.xml"/>
     <include file="liquibase/changelogs/test-data/jacob-at-s56-email.xml"/>
     <include file="liquibase/changelogs/test-data/s56-org.xml"/>
     <include file="liquibase/changelogs/test-data/s56-domain.xml"/>

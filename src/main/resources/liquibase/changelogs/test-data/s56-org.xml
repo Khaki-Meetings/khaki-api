@@ -21,7 +21,7 @@
         <insert tableName="organization_dao">
             <column name="id" valueComputed="${s56OrgId}"/>
             <column name="name" value="S56"/>
-            <column name="admin_email_id" valueComputed="${jacobAtS56NetId}"/>
+            <column name="admin_email_id" valueComputed="(select ed.id from email_dao ed inner join domain_dao dd on ed.domain_id = dd.id where ed.user = '${jacobAtS56NetUserName}' and dd.name = '${s56DomainName}')"/>
         </insert>
         <insert tableName="domain_dao_organizations">
             <column name="domains_id" valueComputed="(select id from domain_dao where name = '${s56DomainName}')"/>
