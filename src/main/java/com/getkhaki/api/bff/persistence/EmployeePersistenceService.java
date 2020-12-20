@@ -63,16 +63,31 @@ public class EmployeePersistenceService implements EmployeePersistenceInterface 
         val principal = (Jwt) authentication.getPrincipal();
 
         val emailDao = emailDaoService.upsertByEmailString(principal.getClaim(SessionTenant.CLAIMS_EMAIL_KEY));
-        val employeeDao = emailDao
-                .getPerson()
-                .orElse(new PersonDao()
-                        .setEmployee(
-                                new EmployeeDao()
-                                        .setDepartment(new DepartmentDao().setOrganization(new OrganizationDao()))
-                        )
-                        .setEmails(List.of(emailDao))
-                );
+        emailDao.getPerson().ifPresentOrElse(
+                personDao -> {
+                    Optional.of(personDao.getEmployee())
+                            .ifPresentOrElse(
+                                    employeeDao -> {
+                                    },
+                                    () -> {
+                                        personDao.setEmployee(
+                                                new EmployeeDao()
+                                                        .setDepartment(new DepartmentDao().setOrganization(new OrganizationDao()))
+                                        );
+                                    }
+                            );
+                },
+                () -> {
+                    val person = new PersonDao()
+                            .setEmployee(
+                                    new EmployeeDao()
+                                            .setDepartment(new DepartmentDao().setOrganization(new OrganizationDao()))
+                            )
+                            .setEmails(List.of(emailDao));
+                    emailDao.setPerson(person);
+                }
+        );
 
-        return modelMapper.map(employeeDao, EmployeeDm.class);
+        return modelMapper.map(emailDao.getPerson().orElseThrow().getEmployee(), EmployeeDm.class);
     }
 }

@@ -49,8 +49,9 @@ public class EmployeeController {
 
     @GetMapping("/userProfile")
     public UserProfileResponseDto getUserProfile() {
+        val employeeDm = employeePersistenceService.getAuthedEmployee();
         return modelMapper.map(
-                employeePersistenceService.getAuthedEmployee(),
+                employeeDm,
                 UserProfileResponseDto.class
         );
     }
