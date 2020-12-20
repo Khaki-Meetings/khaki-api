@@ -1,0 +1,25 @@
+<?xml version="1.1" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xmlns:pro="http://www.liquibase.org/xml/ns/pro"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.0.xsd
+      http://www.liquibase.org/xml/ns/pro http://www.liquibase.org/xml/ns/pro/liquibase-pro-4.0.xsd">
+    <property name="s56ItDepartmentId" value="unhex(replace(uuid(), '-', ''))"
+              dbms="mariadb"/>
+    <property name="s56ItDepartmentName" value="IT"/>
+    <include file="liquibase/changelogs/test-data/s56-org.xml"/>
+    <changeSet id="s56ItDepartment1" author="jacob">
+        <preConditions onFail="MARK_RAN">
+            <sqlCheck expectedResult="0">
+                select count(*) from department_dao dd
+                inner join organization_dao od on dd.organization_id = od.id
+                where dd.name = '${s56ItDepartmentName}' and od.id = ${s56OrgId};
+            </sqlCheck>
+        </preConditions>
+        <insert tableName="department_dao">
+            <column name="id" valueComputed="${s56ItDepartmentId}"/>
+            <column name="name" valueComputed="'${s56ItDepartmentName}'"/>
+            <column name="organization_id" valueComputed="${s56OrgId}" />
+        </insert>
+    </changeSet>
+</databaseChangeLog>

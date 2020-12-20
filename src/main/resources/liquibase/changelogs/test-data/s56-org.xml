@@ -1,0 +1,31 @@
+<?xml version="1.1" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xmlns:pro="http://www.liquibase.org/xml/ns/pro"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.0.xsd
+      http://www.liquibase.org/xml/ns/pro http://www.liquibase.org/xml/ns/pro/liquibase-pro-4.0.xsd">
+    <property name="s56OrgId" value="unhex(replace('d713ace2-0d30-43be-b4ba-db973967d6d4', '-', ''))"
+              dbms="mariadb"/>
+    <include file="liquibase/changelogs/test-data/s56-domain.xml"/>
+    <include file="liquibase/changelogs/test-data/jacob-at-s56-email.xml"/>
+    <changeSet id="s56Org1" author="jacob">
+        <preConditions onFail="MARK_RAN">
+            <sqlCheck expectedResult="0">
+                select count(*) from organization_dao where id = ${s56OrgId}
+            </sqlCheck>
+            <sqlCheck expectedResult="0">
+                select count(*) from domain_dao_organizations
+                where domains_id = ${domainS56NetId} and organizations_id = ${s56OrgId}
+            </sqlCheck>
+        </preConditions>
+        <insert tableName="organization_dao">
+            <column name="id" valueComputed="${s56OrgId}"/>
+            <column name="name" value="S56"/>
+            <column name="admin_email_id" valueComputed="${jacobAtS56NetId}"/>
+        </insert>
+        <insert tableName="domain_dao_organizations">
+            <column name="domains_id" valueComputed="(select id from domain_dao where name = '${s56DomainName}')"/>
+            <column name="organizations_id" valueComputed="${s56OrgId}"/>
+        </insert>
+    </changeSet>
+</databaseChangeLog>

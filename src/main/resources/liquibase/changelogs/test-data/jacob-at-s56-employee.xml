@@ -1,0 +1,39 @@
+<?xml version="1.1" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xmlns:pro="http://www.liquibase.org/xml/ns/pro"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.0.xsd
+      http://www.liquibase.org/xml/ns/pro http://www.liquibase.org/xml/ns/pro/liquibase-pro-4.0.xsd">
+    <property name="jacobAtS56NetEmployeeId" value="unhex(replace('1420bf5d-16ae-4166-82b3-a56d162a0497', '-', ''))"
+              dbms="mariadb"/>
+    <include file="liquibase/changelogs/test-data/jacob-at-s56-email.xml"/>
+    <include file="liquibase/changelogs/test-data/s56-org.xml"/>
+    <include file="liquibase/changelogs/test-data/s56-domain.xml"/>
+    <include file="liquibase/changelogs/test-data/s56-it-department.xml"/>
+    <changeSet id="jacobAtS56NetEmployee1" author="jacob">
+        <preConditions onFail="MARK_RAN">
+            <sqlCheck expectedResult="0">
+                select count(*) from employee_dao ed
+                inner join person_dao pd on ed.person_id = pd.id
+                inner join email_dao_people edp on pd.id = edp.people_id
+                inner join email_dao e on edp.emails_id = e.id
+                inner join domain_dao dd on e.domain_id = dd.id
+                inner join domain_dao_organizations ddo on dd.id = ddo.domains_id
+                inner join organization_dao od on ddo.organizations_id = od.id
+                where e.user = '${jacobAtS56NetUserName}' and dd.name = '{s56DomainName}'
+                and od.id = ${s56OrgId};
+            </sqlCheck>
+        </preConditions>
+        <insert tableName="employee_dao">
+            <column name="id" valueComputed="${jacobAtS56NetEmployeeId}"/>
+            <column
+                    name="department_id"
+                    valueComputed="(select dd.id from department_dao dd inner join organization_dao od on dd.organization_id = od.id where dd.name = '${s56ItDepartmentName}' and od.id = ${s56OrgId})"
+            />
+            <column
+                    name="person_id"
+                    valueComputed="(select pd.id from person_dao pd inner join email_dao_people edp on pd.id = edp.people_id inner join email_dao e on edp.emails_id = e.id inner join domain_dao dd on e.domain_id = dd.id inner join domain_dao_organizations ddo on dd.id = ddo.domains_id inner join organization_dao od on ddo.organizations_id = od.id where e.user = '${jacobAtS56NetUserName}' and dd.name = '${s56DomainName}' and od.id = ${s56OrgId})"
+            />
+        </insert>
+    </changeSet>
+</databaseChangeLog>

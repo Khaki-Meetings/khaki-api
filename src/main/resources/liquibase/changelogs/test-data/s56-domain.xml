@@ -1,0 +1,20 @@
+<?xml version="1.1" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog  xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                    xmlns:pro="http://www.liquibase.org/xml/ns/pro"
+                    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.0.xsd
+      http://www.liquibase.org/xml/ns/pro http://www.liquibase.org/xml/ns/pro/liquibase-pro-4.0.xsd">
+    <property name="domainS56NetId" value="unhex('927a7c4ee31849a58f445ab8e337124a')"/>
+    <property name="s56DomainName" value="s56.net"/>
+    <changeSet id="s56-domain-1" author="jacob">
+        <preConditions onFail="MARK_RAN">
+            <sqlCheck expectedResult="0">
+                select count(*) from domain_dao where name = 's56.net'
+            </sqlCheck>
+        </preConditions>
+        <insert tableName="domain_dao">
+            <column name="id" valueComputed="${domainS56NetId}"/>
+            <column name="name" valueComputed="'${s56DomainName}'"/>
+        </insert>
+    </changeSet>
+</databaseChangeLog>

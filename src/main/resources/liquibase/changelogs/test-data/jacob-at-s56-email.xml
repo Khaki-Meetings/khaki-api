@@ -1,0 +1,24 @@
+<?xml version="1.1" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xmlns:pro="http://www.liquibase.org/xml/ns/pro"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.0.xsd
+      http://www.liquibase.org/xml/ns/pro http://www.liquibase.org/xml/ns/pro/liquibase-pro-4.0.xsd">
+    <property name="jacobAtS56NetId" value="unhex(replace('99fbceaa-3ba9-4016-8e44-d33b8963c10d', '-', ''))"
+              dbms="mariadb"/>
+    <property name="jacobAtS56NetUserName" value="jacob"/>
+    <include file="liquibase/changelogs/test-data/s56-domain.xml"/>
+    <changeSet id="jacobAtS56Email1" author="jacob">
+        <preConditions onFail="MARK_RAN">
+            <sqlCheck expectedResult="0">
+                select count(*) from email_dao inner join domain_dao on email_dao.domain_id = domain_dao.id
+                where user = 'jacob' and domain_dao.name = '${s56DomainName}'
+            </sqlCheck>
+        </preConditions>
+        <insert tableName="email_dao">
+            <column name="id" valueComputed="${jacobAtS56NetId}"/>
+            <column name="user" valueComputed="'${jacobAtS56NetUserName}'"/>
+            <column name="domain_id" valueComputed="(select id from domain_dao where name = '${s56DomainName}')"/>
+        </insert>
+    </changeSet>
+</databaseChangeLog>
