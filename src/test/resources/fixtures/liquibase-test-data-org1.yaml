@@ -405,6 +405,9 @@ databaseChangeLog:
               - column:
                   name: name
                   value: S56
+              - column:
+                  name: admin_email_id
+                  value: ${fredSmithS56NetEmailId}
         - insert:
             tableName: organization_dao
             columns:
@@ -414,6 +417,9 @@ databaseChangeLog:
               - column:
                   name: name
                   value: 2112
+              - column:
+                  name: admin_email_id
+                  value: ${billyJoelOrg12112ComEmailId}
         - insert:
             tableName: domain_dao_organizations
             columns:

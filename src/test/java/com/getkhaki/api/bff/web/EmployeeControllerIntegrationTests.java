@@ -2,6 +2,7 @@ package com.getkhaki.api.bff.web;
 
 import com.getkhaki.api.bff.BaseMvcIntegrationTest;
 import com.getkhaki.api.bff.web.models.EmployeesResponseDto;
+import lombok.SneakyThrows;
 import lombok.val;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -43,5 +44,13 @@ public class EmployeeControllerIntegrationTests extends BaseMvcIntegrationTest {
         assertThat(bobJones.getDepartment()).isEqualTo("HR");
         assertThat(bobJones.getFirstName()).isEqualTo("Bob");
         assertThat(bobJones.getLastName()).isEqualTo("Jones");
+    }
+
+
+    @Test
+    @SneakyThrows
+    public void success_getEmployee() {
+        String url = "/employees/userProfile";
+        MvcResult result = getMvcResult(url);
     }
 }

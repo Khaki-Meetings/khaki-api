@@ -19,4 +19,5 @@ import lombok.experimental.SuperBuilder;
 @SuperBuilder
 public class EmployeeDm extends PersonDm {
     String department;
+    String companyName;
 }

@@ -6,6 +6,7 @@ import com.getkhaki.api.bff.persistence.models.DomainDao;
 import com.getkhaki.api.bff.persistence.models.EmailDao;
 import com.getkhaki.api.bff.persistence.models.EmployeeDao;
 import com.getkhaki.api.bff.persistence.models.FlagDao;
+import com.getkhaki.api.bff.persistence.models.OrganizationDao;
 import com.getkhaki.api.bff.persistence.models.PersonDao;
 import lombok.val;
 import org.junit.jupiter.api.Test;
@@ -21,7 +22,11 @@ public class DaoToDmEmployeeIntegrationTests extends BaseModelMapperIntegrationT
     public void success() {
         val employeeDao = new EmployeeDao()
                 .setDepartment(
-                        new DepartmentDao().setName("HR")
+                        new DepartmentDao()
+                                .setName("HR")
+                                .setOrganization(
+                                        new OrganizationDao().setName("Red Star")
+                                )
                 )
                 .setPerson(
                         new PersonDao()
@@ -43,6 +48,8 @@ public class DaoToDmEmployeeIntegrationTests extends BaseModelMapperIntegrationT
 
         val employeeDm = underTest.map(employeeDao, EmployeeDm.class);
 
+        assertThat(employeeDm.getCompanyName()).isEqualTo(employeeDao.getDepartment().getOrganization().getName());
+        assertThat(employeeDm.getDepartment()).isEqualTo(employeeDao.getDepartment().getName());
         assertThat(employeeDm.getDepartment()).isEqualTo(employeeDao.getDepartment().getName());
         assertThat(employeeDm.getFirstName()).isEqualTo(employeeDao.getPerson().getFirstName());
         assertThat(employeeDm.getLastName()).isEqualTo(employeeDao.getPerson().getLastName());

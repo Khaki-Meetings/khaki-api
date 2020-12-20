@@ -372,6 +372,9 @@ databaseChangeLog:
               - column:
                   name: name
                   value: Keller Software
+              - column:
+                  name: admin_email_id
+                  value: ${fredSmithKellerSoftEmailId}
         - insert:
             tableName: domain_dao_organizations
             columns:

@@ -47,7 +47,7 @@ public class CalendarEventService {
                 .forEach(calendarEventPersistence::upsert);
     }
 
-    @Scheduled(fixedDelay = 3600000)
+//    @Scheduled(fixedDelay = 3600000)
     public void importCron() {
         log.info("RUNNING IMPORT");
         val timeAgo = Instant.now().minus(importCronMinutes, ChronoUnit.MINUTES);

@@ -1,8 +1,10 @@
 package com.getkhaki.api.bff.web;
 
+import com.getkhaki.api.bff.domain.persistence.EmployeePersistenceInterface;
 import com.getkhaki.api.bff.domain.services.EmployeeService;
 import com.getkhaki.api.bff.web.models.EmployeeDto;
 import com.getkhaki.api.bff.web.models.EmployeesResponseDto;
+import com.getkhaki.api.bff.web.models.UserProfileResponseDto;
 import lombok.val;
 import org.modelmapper.ModelMapper;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -18,10 +20,16 @@ import java.util.stream.Collectors;
 public class EmployeeController {
     private final ModelMapper modelMapper;
     private final EmployeeService employeeService;
+    private final EmployeePersistenceInterface employeePersistenceService;
 
-    public EmployeeController(ModelMapper modelMapper, EmployeeService employeeService) {
+    public EmployeeController(
+            ModelMapper modelMapper,
+            EmployeeService employeeService,
+            EmployeePersistenceInterface employeePersistenceService
+    ) {
         this.modelMapper = modelMapper;
         this.employeeService = employeeService;
+        this.employeePersistenceService = employeePersistenceService;
     }
 
     @GetMapping()
@@ -30,12 +38,20 @@ public class EmployeeController {
 
         employeesResponseDto.setEmployees(
                 this.employeeService
-                .getEmployees()
-                .stream()
-                .map(employeeDm -> this.modelMapper.map(employeeDm, EmployeeDto.class))
-                .collect(Collectors.toList())
+                        .getEmployees()
+                        .stream()
+                        .map(employeeDm -> this.modelMapper.map(employeeDm, EmployeeDto.class))
+                        .collect(Collectors.toList())
         );
 
         return employeesResponseDto;
+    }
+
+    @GetMapping("/userProfile")
+    public UserProfileResponseDto getUserProfile() {
+        return modelMapper.map(
+                employeePersistenceService.getAuthedEmployee(),
+                UserProfileResponseDto.class
+        );
     }
 }
