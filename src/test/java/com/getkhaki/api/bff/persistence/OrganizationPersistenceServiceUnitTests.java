@@ -11,6 +11,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.modelmapper.ModelMapper;
 
+import java.util.ArrayList;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -39,7 +40,7 @@ public class OrganizationPersistenceServiceUnitTests {
         ).collect(Collectors.toSet());
 
         val dmSetItr = dmOrgSet.iterator();
-//        when(organizationRepository.findAll();
+        when(organizationRepository.findAll()).thenReturn(new ArrayList<>(daoOrgSet));
 
         daoOrgSet.forEach(
                 organizationDao -> when(modelMapper.map(organizationDao, OrganizationDm.class))
