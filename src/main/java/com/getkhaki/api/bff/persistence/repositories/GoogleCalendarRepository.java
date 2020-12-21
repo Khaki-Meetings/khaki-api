@@ -29,6 +29,7 @@ public class GoogleCalendarRepository {
                 .list(userEmail)
                 .setTimeMin(pastYear)
                 .setTimeMax(new DateTime(Instant.now().toEpochMilli()))
+                .setMaxResults(2500) // this is the max google will return
                 .setSingleEvents(true)
                 .execute()
                 .getItems();

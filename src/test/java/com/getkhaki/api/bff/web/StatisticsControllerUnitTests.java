@@ -4,6 +4,7 @@ import com.getkhaki.api.bff.domain.models.DepartmentStatisticsDm;
 import com.getkhaki.api.bff.domain.models.IntervalDe;
 import com.getkhaki.api.bff.domain.models.OrganizerStatisticsDm;
 import com.getkhaki.api.bff.domain.models.TimeBlockSummaryDm;
+import com.getkhaki.api.bff.domain.persistence.OrganizersStatisticsPersistenceInterface;
 import com.getkhaki.api.bff.domain.services.StatisticsService;
 import com.getkhaki.api.bff.web.models.DepartmentStatisticsResponseDto;
 import com.getkhaki.api.bff.web.models.OrganizerStatisticsResponseDto;
@@ -12,6 +13,9 @@ import com.getkhaki.api.bff.web.models.TimeBlockSummaryResponseDto;
 import org.assertj.core.util.Lists;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeToken;
 
@@ -29,17 +33,20 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+@ExtendWith(MockitoExtension.class)
 public class StatisticsControllerUnitTests {
     private StatisticsController underTest;
 
+    @Mock
     private StatisticsService statisticsService;
+    @Mock
     private ModelMapper modelMapper;
+    @Mock
+    private OrganizersStatisticsPersistenceInterface organizersStatisticsPersistenceService;
 
     @BeforeEach
     public void setup() {
-        statisticsService = mock(StatisticsService.class);
-        modelMapper = mock(ModelMapper.class);
-        underTest = new StatisticsController(this.statisticsService, this.modelMapper);
+        underTest = new StatisticsController(this.statisticsService, organizersStatisticsPersistenceService, this.modelMapper);
     }
 
     @Test
@@ -65,16 +72,22 @@ public class StatisticsControllerUnitTests {
 
         List<OrganizerStatisticsDm> dms = Lists.list(mockDm);
         List<OrganizerStatisticsResponseDto> dtos = Lists.list(organizerStatisticsResponseDto);
-        when(statisticsService.getOrganizersStatistics(eq(startTest), eq(endTest), any(OptionalInt.class)))
-                .thenReturn(dms);
+        when(
+                organizersStatisticsPersistenceService
+                        .getOrganizersStatistics(
+                                eq(startTest),
+                                eq(endTest),
+                                any(OptionalInt.class),
+                                any(OptionalInt.class)
+                        )
+        ).thenReturn(dms);
+
         when(modelMapper.map(dms, new TypeToken<List<OrganizerStatisticsResponseDto>>() {
         }.getType()))
                 .thenReturn(dtos);
 
-//        OrganizersStatisticsResponseDto organizersStatisticsResponseDto = underTest
-//                .getOrganizersStatistics(startTest, endTest, OptionalInt.empty());
         OrganizersStatisticsResponseDto organizersStatisticsResponseDto = underTest
-                .getOrganizersStatistics(startTest, endTest, OptionalInt.empty());
+                .getOrganizersStatistics(startTest, endTest, OptionalInt.empty(), OptionalInt.empty());
         assertThat(organizersStatisticsResponseDto).isNotNull();
         assertThat(organizersStatisticsResponseDto.getOrganizersStatistics().size()).isEqualTo(1);
         assertThat(organizersStatisticsResponseDto.getOrganizersStatistics().get(0))

@@ -30,6 +30,7 @@ public class GoogleDirectoryRepository {
                     .users()
                     .list()
                     .setDomain(emailParts[1])
+                    .setMaxResults(500)
                     .execute()
                     .getUsers();
         } catch (GeneralSecurityException | IOException e) {

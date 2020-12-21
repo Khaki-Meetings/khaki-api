@@ -2,6 +2,7 @@ package com.getkhaki.api.bff.web;
 
 import com.getkhaki.api.bff.domain.models.IntervalDe;
 import com.getkhaki.api.bff.domain.models.OrganizerStatisticsDm;
+import com.getkhaki.api.bff.domain.persistence.OrganizersStatisticsPersistenceInterface;
 import com.getkhaki.api.bff.domain.services.StatisticsService;
 import com.getkhaki.api.bff.web.models.DepartmentStatisticsResponseDto;
 import com.getkhaki.api.bff.web.models.DepartmentsStatisticsResponseDto;
@@ -30,11 +31,13 @@ import java.util.stream.Collectors;
 public class StatisticsController {
 
     private final StatisticsService statisticsService;
+    private final OrganizersStatisticsPersistenceInterface organizersStatisticsPersistenceService;
     private final ModelMapper modelMapper;
 
     @Autowired
-    public StatisticsController(StatisticsService statisticsService, ModelMapper modelMapper) {
+    public StatisticsController(StatisticsService statisticsService, OrganizersStatisticsPersistenceInterface organizersStatisticsPersistenceService, ModelMapper modelMapper) {
         this.statisticsService = statisticsService;
+        this.organizersStatisticsPersistenceService = organizersStatisticsPersistenceService;
         this.modelMapper = modelMapper;
     }
 
@@ -43,10 +46,11 @@ public class StatisticsController {
     public OrganizersStatisticsResponseDto getOrganizersStatistics(
             @PathVariable Instant start,
             @PathVariable Instant end,
-            @RequestParam(required = false) OptionalInt optionalCount
+            @RequestParam(required = false) OptionalInt optionalCount,
+            @RequestParam(required = false) OptionalInt page
     ) {
-        List<OrganizerStatisticsDm> organizerStatisticsDmList = statisticsService
-                .getOrganizersStatistics(start, end, optionalCount);
+        List<OrganizerStatisticsDm> organizerStatisticsDmList = organizersStatisticsPersistenceService
+                .getOrganizersStatistics(start, end, optionalCount, page);
         OrganizersStatisticsResponseDto ret = new OrganizersStatisticsResponseDto();
         ret.setOrganizersStatistics(
                 modelMapper.map(

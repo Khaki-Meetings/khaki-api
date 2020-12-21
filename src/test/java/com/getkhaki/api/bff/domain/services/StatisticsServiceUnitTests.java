@@ -30,45 +30,19 @@ public class StatisticsServiceUnitTests {
 
     private StatisticsService underTest;
     private DepartmentStatisticsPersistenceInterface departmentStatisticsPersistenceService;
-    private OrganizersStatisticsPersistenceInterface organizersStatisticsPersistenceService;
     private TimeBlockSummaryPersistenceInterface timeBlockSummaryPersistenceService;
     private TimeBlockGeneratorFactory timeBlockGeneratorFactory;
 
     @BeforeEach
     public void setup() {
         departmentStatisticsPersistenceService = mock(DepartmentStatisticsPersistenceInterface.class);
-        organizersStatisticsPersistenceService = mock(OrganizersStatisticsPersistenceInterface.class);
         timeBlockSummaryPersistenceService = mock(TimeBlockSummaryPersistenceInterface.class);
         timeBlockGeneratorFactory = mock(TimeBlockGeneratorFactory.class);
         underTest = new StatisticsService(
                 departmentStatisticsPersistenceService,
-                organizersStatisticsPersistenceService,
                 timeBlockSummaryPersistenceService,
                 timeBlockGeneratorFactory
         );
-    }
-
-    @Test
-    public void getOrganizersStatistics() {
-        Instant startTest = Instant.parse("2020-11-01T00:00:00.000Z");
-        Instant endTest = Instant.parse("2020-11-12T00:00:00.000Z");
-
-        OrganizerStatisticsDm organizerStatisticsDm = new OrganizerStatisticsDm(
-                "bob@bob.com",
-                "Bob",
-                "Jones",
-                1,
-                1.0,
-                1L
-        );
-        when(organizersStatisticsPersistenceService.getOrganizersStatistics(eq(startTest), eq(endTest), any(OptionalInt.class)))
-                .thenReturn(Lists.list(organizerStatisticsDm));
-
-        List<OrganizerStatisticsDm> organizersStatistics = underTest.getOrganizersStatistics(startTest, endTest, OptionalInt.empty());
-        assertThat(organizersStatistics).isNotNull();
-        assertThat(organizersStatistics.size()).isEqualTo(1);
-        assertThat(organizersStatistics.get(0)).isEqualTo(organizerStatisticsDm);
-
     }
 
     @Test

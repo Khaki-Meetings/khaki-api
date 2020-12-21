@@ -6,5 +6,5 @@ import java.util.List;
 import java.util.OptionalInt;
 
 public interface OrganizersStatisticsPersistenceInterface {
-    List<OrganizerStatisticsDm> getOrganizersStatistics(Instant start, Instant end, OptionalInt count);
+    List<OrganizerStatisticsDm> getOrganizersStatistics(Instant start, Instant end, OptionalInt count, OptionalInt page);
 }

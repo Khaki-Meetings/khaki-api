@@ -9,6 +9,7 @@ import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeToken;
 import org.springframework.stereotype.Service;
 
+import javax.swing.text.html.Option;
 import java.time.Instant;
 import java.util.List;
 import java.util.OptionalInt;
@@ -33,7 +34,7 @@ public class OrganizersStatisticsPersistenceService implements OrganizersStatist
     }
 
     @Override
-    public List<OrganizerStatisticsDm> getOrganizersStatistics(Instant start, Instant end, OptionalInt count) {
+    public List<OrganizerStatisticsDm> getOrganizersStatistics(Instant start, Instant end, OptionalInt count, OptionalInt page) {
         List<OrganizerStatisticsView> organizerStatisticsViewList = organizerStatisticsRepository
                 .findAllOrganizerStatistics(start, end, sessionTenant.getTenantId());
 

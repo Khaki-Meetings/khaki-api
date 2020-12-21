@@ -19,27 +19,20 @@ import java.util.stream.Collectors;
 public class StatisticsService {
 
     private final DepartmentStatisticsPersistenceInterface departmentStatisticsPersistenceService;
-    private final OrganizersStatisticsPersistenceInterface organizersStatisticsPersistenceService;
     private final TimeBlockSummaryPersistenceInterface timeBlockSummaryPersistenceService;
     private final TimeBlockGeneratorFactory timeBlockGeneratorFactory;
 
     public StatisticsService(
             DepartmentStatisticsPersistenceInterface departmentStatisticsPersistenceService,
-            OrganizersStatisticsPersistenceInterface organizersStatisticsPersistenceService,
             TimeBlockSummaryPersistenceInterface timeBlockSummaryPersistenceService,
             TimeBlockGeneratorFactory timeBlockGeneratorFactory) {
         this.departmentStatisticsPersistenceService = departmentStatisticsPersistenceService;
-        this.organizersStatisticsPersistenceService = organizersStatisticsPersistenceService;
         this.timeBlockSummaryPersistenceService = timeBlockSummaryPersistenceService;
         this.timeBlockGeneratorFactory = timeBlockGeneratorFactory;
     }
 
     public List<DepartmentStatisticsDm> getPerDepartmentStatistics(Instant start, Instant end) {
         return this.departmentStatisticsPersistenceService.getPerDepartmentStatistics(start, end);
-    }
-
-    public List<OrganizerStatisticsDm> getOrganizersStatistics(Instant start, Instant end, OptionalInt count) {
-        return this.organizersStatisticsPersistenceService.getOrganizersStatistics(start, end, count);
     }
 
     public TimeBlockSummaryDm getTimeBlockSummary(Instant start, Instant end) {

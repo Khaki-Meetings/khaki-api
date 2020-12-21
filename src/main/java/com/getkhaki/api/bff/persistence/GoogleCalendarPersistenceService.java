@@ -8,16 +8,11 @@ import com.getkhaki.api.bff.persistence.repositories.GoogleDirectoryRepository;
 import com.google.api.services.calendar.model.Event;
 import com.google.api.services.directory.model.User;
 import lombok.extern.apachecommons.CommonsLog;
-import lombok.val;
-import org.modelmapper.ModelMapper;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 @CommonsLog
@@ -42,8 +37,10 @@ public class GoogleCalendarPersistenceService implements CalendarProviderPersist
 
         List<User> users = this.googleDirectoryRepository.getUsers(adminEmail);
 
+        var totalEvents = 0;
         for (User user : users) {
             List<Event> events = this.googleCalendarRepository.getEvents(adminEmail, user.getPrimaryEmail(), timeAgo);
+            totalEvents += events.size();
 
             for (Event event : events) {
                 if (event.getStart().getDateTime() != null) {
