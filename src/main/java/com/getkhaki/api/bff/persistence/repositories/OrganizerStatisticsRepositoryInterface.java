@@ -2,6 +2,8 @@ package com.getkhaki.api.bff.persistence.repositories;
 
 import com.getkhaki.api.bff.persistence.models.CalendarEventParticipantDao;
 import com.getkhaki.api.bff.persistence.models.views.OrganizerStatisticsView;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
@@ -87,5 +89,5 @@ public interface OrganizerStatisticsRepositoryInterface extends JpaRepository<Ca
                     "   and organizerCalendarEventParticipantDao.calendarEvent.start between :sDate and :eDate " +
                     "group by organizerCalendarEventParticipantDao.email"
     )
-    List<OrganizerStatisticsView> findAllOrganizerStatistics(Instant sDate, Instant eDate, UUID tenantId);
+    Page<OrganizerStatisticsView> findAllOrganizerStatistics(Instant sDate, Instant eDate, UUID tenantId, Pageable pageable);
 }

@@ -7,6 +7,8 @@ import com.getkhaki.api.bff.persistence.models.views.OrganizerStatisticsView;
 import com.getkhaki.api.bff.persistence.repositories.OrganizerStatisticsRepositoryInterface;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeToken;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import javax.swing.text.html.Option;
@@ -34,13 +36,13 @@ public class OrganizersStatisticsPersistenceService implements OrganizersStatist
     }
 
     @Override
-    public List<OrganizerStatisticsDm> getOrganizersStatistics(Instant start, Instant end, OptionalInt count, OptionalInt page) {
-        List<OrganizerStatisticsView> organizerStatisticsViewList = organizerStatisticsRepository
-                .findAllOrganizerStatistics(start, end, sessionTenant.getTenantId());
+    public Page<OrganizerStatisticsDm> getOrganizersStatistics(Instant start, Instant end, Pageable pageable) {
+        Page<OrganizerStatisticsView> organizerStatisticsViewList = organizerStatisticsRepository
+                .findAllOrganizerStatistics(start, end, sessionTenant.getTenantId(), pageable);
 
         return modelMapper.map(
                 organizerStatisticsViewList,
-                new TypeToken<List<OrganizerStatisticsDm>>() {
+                new TypeToken<Page<OrganizerStatisticsDm>>() {
                 }.getType()
         );
     }

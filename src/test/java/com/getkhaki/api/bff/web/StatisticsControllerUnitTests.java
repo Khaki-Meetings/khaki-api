@@ -18,6 +18,8 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeToken;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 
 import java.time.Instant;
 import java.time.ZonedDateTime;
@@ -70,15 +72,14 @@ public class StatisticsControllerUnitTests {
                 .totalSeconds(1L)
                 .build();
 
-        List<OrganizerStatisticsDm> dms = Lists.list(mockDm);
+        PageImpl<OrganizerStatisticsDm> dms = new PageImpl<>(Lists.list(mockDm));
         List<OrganizerStatisticsResponseDto> dtos = Lists.list(organizerStatisticsResponseDto);
         when(
                 organizersStatisticsPersistenceService
                         .getOrganizersStatistics(
                                 eq(startTest),
                                 eq(endTest),
-                                any(OptionalInt.class),
-                                any(OptionalInt.class)
+                                any(Pageable.class)
                         )
         ).thenReturn(dms);
 
@@ -87,7 +88,7 @@ public class StatisticsControllerUnitTests {
                 .thenReturn(dtos);
 
         OrganizersStatisticsResponseDto organizersStatisticsResponseDto = underTest
-                .getOrganizersStatistics(startTest, endTest, OptionalInt.empty(), OptionalInt.empty());
+                .getOrganizersStatistics(startTest, endTest, null);
         assertThat(organizersStatisticsResponseDto).isNotNull();
         assertThat(organizersStatisticsResponseDto.getOrganizersStatistics().size()).isEqualTo(1);
         assertThat(organizersStatisticsResponseDto.getOrganizersStatistics().get(0))
