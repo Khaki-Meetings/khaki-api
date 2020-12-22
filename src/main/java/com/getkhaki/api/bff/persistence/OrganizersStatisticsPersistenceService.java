@@ -40,11 +40,7 @@ public class OrganizersStatisticsPersistenceService implements OrganizersStatist
         Page<OrganizerStatisticsView> organizerStatisticsViewList = organizerStatisticsRepository
                 .findAllOrganizerStatistics(start, end, sessionTenant.getTenantId(), pageable);
 
-        return modelMapper.map(
-                organizerStatisticsViewList,
-                new TypeToken<Page<OrganizerStatisticsDm>>() {
-                }.getType()
-        );
+        return organizerStatisticsViewList.map(dao -> modelMapper.map(dao, OrganizerStatisticsDm.class));
     }
 
 

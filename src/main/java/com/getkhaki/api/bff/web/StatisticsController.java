@@ -45,22 +45,14 @@ public class StatisticsController {
 
 
     @GetMapping("/organizers/{start}/{end}")
-    public OrganizersStatisticsResponseDto getOrganizersStatistics(
+    public Page<OrganizerStatisticsResponseDto> getOrganizersStatistics(
             @PathVariable Instant start,
             @PathVariable Instant end,
             Pageable pageable
     ) {
         Page<OrganizerStatisticsDm> organizerStatisticsDmList = organizersStatisticsPersistenceService
                 .getOrganizersStatistics(start, end, pageable);
-        OrganizersStatisticsResponseDto ret = new OrganizersStatisticsResponseDto();
-        ret.setOrganizersStatistics(
-                modelMapper.map(
-                        organizerStatisticsDmList,
-                        new TypeToken<Page<OrganizerStatisticsResponseDto>>() {
-                        }.getType()
-                )
-        );
-        return ret;
+        return organizerStatisticsDmList.map(dm -> modelMapper.map(dm, OrganizerStatisticsResponseDto.class));
     }
 
 
