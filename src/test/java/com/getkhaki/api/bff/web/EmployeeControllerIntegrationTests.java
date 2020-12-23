@@ -1,13 +1,14 @@
 package com.getkhaki.api.bff.web;
 
 import com.getkhaki.api.bff.BaseMvcIntegrationTest;
-import com.getkhaki.api.bff.web.models.EmployeesResponseDto;
+import com.getkhaki.api.bff.web.models.EmployeeDto;
 import com.getkhaki.api.bff.web.models.UserProfileResponseDto;
 import lombok.SneakyThrows;
 import lombok.val;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.annotation.DirtiesContext;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.web.context.WebApplicationContext;
 
@@ -22,31 +23,27 @@ public class EmployeeControllerIntegrationTests extends BaseMvcIntegrationTest {
 
     @Test
     public void getEmployees() throws Exception {
-        String url = "/employees";
-        MvcResult result = getMvcResult(url);
-
+        MvcResult result = getMvcResult("/employees");
         assertThat(result).isNotNull();
-        EmployeesResponseDto employeesResponseDto = (EmployeesResponseDto) convertJSONStringToObject(
+
+        Page<EmployeeDto> response = (Page<EmployeeDto>) convertJSONStringToObject(
                 result.getResponse().getContentAsString(),
-                EmployeesResponseDto.class
+                PageImpl.class
         );
 
-        assertThat(employeesResponseDto).isNotNull();
-        assertThat(employeesResponseDto.getEmployees()).hasSize(3);
+        assertThat(response).isNotNull();
+        assertThat(response.getTotalElements()).isEqualTo(3);
 
-        val bobJones = employeesResponseDto
-                .getEmployees()
+        val bobJones = response
                 .stream()
-                .filter(
-                        employeeDto -> employeeDto.getEmail().equals("bob@s56.net")
-                )
+                .filter(employeeDto -> employeeDto.getEmail().equals("bob@s56.net"))
                 .findFirst()
                 .orElseThrow();
+
         assertThat(bobJones.getDepartment()).isEqualTo("HR");
         assertThat(bobJones.getFirstName()).isEqualTo("Bob");
         assertThat(bobJones.getLastName()).isEqualTo("Jones");
     }
-
 
     @Test
     @SneakyThrows

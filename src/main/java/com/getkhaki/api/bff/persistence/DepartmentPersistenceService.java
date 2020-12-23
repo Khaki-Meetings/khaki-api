@@ -10,6 +10,8 @@ import com.getkhaki.api.bff.persistence.repositories.OrganizationRepositoryInter
 import lombok.val;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -69,14 +71,11 @@ public class DepartmentPersistenceService implements DepartmentPersistenceInterf
     }
 
     @Override
-    public List<DepartmentDm> getDepartments() {
+    public Page<DepartmentDm> getDepartments(Pageable pageable) {
         return departmentRepository
-                .findDistinctByOrganizationId(sessionTenant.getTenantId())
-                .stream()
-                .map(
-                        departmentDao -> modelMapper.map(departmentDao, DepartmentDm.class)
-                )
-                .collect(Collectors.toList());
+                .findDistinctByOrganizationId(
+                        sessionTenant.getTenantId(), pageable)
+                .map(departmentDao ->
+                        modelMapper.map(departmentDao, DepartmentDm.class));
     }
-
 }

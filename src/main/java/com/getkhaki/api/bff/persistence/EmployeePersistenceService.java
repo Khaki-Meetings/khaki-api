@@ -4,8 +4,6 @@ import com.getkhaki.api.bff.config.interceptors.models.SessionTenant;
 import com.getkhaki.api.bff.domain.models.EmployeeDm;
 import com.getkhaki.api.bff.domain.persistence.EmployeePersistenceInterface;
 import com.getkhaki.api.bff.persistence.models.DepartmentDao;
-import com.getkhaki.api.bff.persistence.models.DomainDao;
-import com.getkhaki.api.bff.persistence.models.EmailDao;
 import com.getkhaki.api.bff.persistence.models.EmployeeDao;
 import com.getkhaki.api.bff.persistence.models.OrganizationDao;
 import com.getkhaki.api.bff.persistence.models.PersonDao;
@@ -14,6 +12,8 @@ import com.getkhaki.api.bff.persistence.repositories.EmployeeRepositoryInterface
 import com.getkhaki.api.bff.security.AuthenticationFacade;
 import lombok.val;
 import org.modelmapper.ModelMapper;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.stereotype.Service;
 
@@ -47,14 +47,10 @@ public class EmployeePersistenceService implements EmployeePersistenceInterface 
     }
 
     @Override
-    public List<EmployeeDm> getEmployees() {
+    public Page<EmployeeDm> getEmployees(Pageable pageable) {
         return this.employeeRepository
-                .findDistinctByDepartment_OrganizationId(sessionTenant.getTenantId())
-                .stream()
-                .map(
-                        employeeDao -> modelMapper.map(employeeDao, EmployeeDm.class)
-                )
-                .collect(Collectors.toList());
+                .findDistinctByDepartment_OrganizationId(sessionTenant.getTenantId(), pageable)
+                .map(employeeDao -> modelMapper.map(employeeDao, EmployeeDm.class));
     }
 
     @Override
