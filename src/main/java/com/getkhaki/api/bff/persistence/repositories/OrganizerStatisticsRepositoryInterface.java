@@ -2,6 +2,8 @@ package com.getkhaki.api.bff.persistence.repositories;
 
 import com.getkhaki.api.bff.persistence.models.CalendarEventParticipantDao;
 import com.getkhaki.api.bff.persistence.models.views.OrganizerStatisticsView;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
@@ -13,7 +15,7 @@ import java.util.UUID;
 @Repository
 public interface OrganizerStatisticsRepositoryInterface extends JpaRepository<CalendarEventParticipantDao, UUID> {
     @Query(
-            "select " +
+            value = "select " +
                     "   (" +
                     "       select count(organizerMeetSecondsCepD.id) " +
                     "       from CalendarEventParticipantDao organizerMeetSecondsCepD " +
@@ -85,7 +87,17 @@ public interface OrganizerStatisticsRepositoryInterface extends JpaRepository<Ca
                     "where tenant.id = :tenantId" +
                     "   and organizerCalendarEventParticipantDao.organizer = true " +
                     "   and organizerCalendarEventParticipantDao.calendarEvent.start between :sDate and :eDate " +
-                    "group by organizerCalendarEventParticipantDao.email"
+                    "group by organizerCalendarEventParticipantDao.email",
+            countQuery = "select count(distinct cepd.email)" +
+                    " from CalendarEventParticipantDao cepd" +
+                    "   inner join cepd.calendarEvent ced" +
+                    "   inner join cepd.email ed" +
+                    "   inner join ed.people" +
+                    "   inner join ed.domain dd" +
+                    "   inner join dd.organizations org " +
+                    "where org.id = :tenantId" +
+                    "   and ced.start between :sDate and :eDate" +
+                    "   and cepd.organizer = true"
     )
-    List<OrganizerStatisticsView> findAllOrganizerStatistics(Instant sDate, Instant eDate, UUID tenantId);
+    Page<OrganizerStatisticsView> findAllOrganizerStatistics(Instant sDate, Instant eDate, UUID tenantId, Pageable pageable);
 }

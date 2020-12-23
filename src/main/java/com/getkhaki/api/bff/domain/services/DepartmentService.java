@@ -3,6 +3,8 @@ package com.getkhaki.api.bff.domain.services;
 import com.getkhaki.api.bff.domain.models.DepartmentDm;
 import com.getkhaki.api.bff.domain.persistence.DepartmentPersistenceInterface;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
@@ -15,10 +17,7 @@ public class DepartmentService {
     private final DepartmentPersistenceInterface departmentPersistenceService;
 
     @Autowired
-    public DepartmentService(
-            CsvFileService csvFileService,
-            DepartmentPersistenceInterface departmentPersistenceService
-    ) {
+    public DepartmentService(CsvFileService csvFileService, DepartmentPersistenceInterface departmentPersistenceService) {
         this.csvFileService = csvFileService;
         this.departmentPersistenceService = departmentPersistenceService;
     }
@@ -28,8 +27,7 @@ public class DepartmentService {
                 .forEach(departmentPersistenceService::upsert);
     }
 
-    public List<DepartmentDm> getDepartments() {
-        return departmentPersistenceService.getDepartments();
+    public Page<DepartmentDm> getDepartments(Pageable pageable) {
+        return departmentPersistenceService.getDepartments(pageable);
     }
-
 }

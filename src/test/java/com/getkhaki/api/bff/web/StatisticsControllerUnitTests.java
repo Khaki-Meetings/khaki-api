@@ -8,7 +8,6 @@ import com.getkhaki.api.bff.domain.persistence.OrganizersStatisticsPersistenceIn
 import com.getkhaki.api.bff.domain.services.StatisticsService;
 import com.getkhaki.api.bff.web.models.DepartmentStatisticsResponseDto;
 import com.getkhaki.api.bff.web.models.OrganizerStatisticsResponseDto;
-import com.getkhaki.api.bff.web.models.OrganizersStatisticsResponseDto;
 import com.getkhaki.api.bff.web.models.TimeBlockSummaryResponseDto;
 import org.assertj.core.util.Lists;
 import org.junit.jupiter.api.BeforeEach;
@@ -17,18 +16,19 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.modelmapper.ModelMapper;
-import org.modelmapper.TypeToken;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 
 import java.time.Instant;
 import java.time.ZonedDateTime;
 import java.util.List;
-import java.util.OptionalInt;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
-import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -54,15 +54,6 @@ public class StatisticsControllerUnitTests {
         Instant startTest = Instant.parse("2020-11-01T00:00:00.000Z");
         Instant endTest = Instant.parse("2020-11-30T00:00:00.000Z");
 
-        String email = "bob@bob.com";
-        String name = "Bob";
-        OrganizerStatisticsResponseDto organizerStatisticsResponseDto = new OrganizerStatisticsResponseDto()
-                .setOrganizerEmail("bob@bob.com")
-                .setTotalCost(1.0)
-                .setTotalSeconds(1L)
-                .setTotalMeetings(1);
-
-
         OrganizerStatisticsDm mockDm = OrganizerStatisticsDm.builder()
                 .organizerEmail("bob@bob.com")
                 .totalCost(1.0)
@@ -70,29 +61,32 @@ public class StatisticsControllerUnitTests {
                 .totalSeconds(1L)
                 .build();
 
-        List<OrganizerStatisticsDm> dms = Lists.list(mockDm);
-        List<OrganizerStatisticsResponseDto> dtos = Lists.list(organizerStatisticsResponseDto);
-        when(
-                organizersStatisticsPersistenceService
-                        .getOrganizersStatistics(
-                                eq(startTest),
-                                eq(endTest),
-                                any(OptionalInt.class),
-                                any(OptionalInt.class)
-                        )
-        ).thenReturn(dms);
+        PageImpl<OrganizerStatisticsDm> dms = new PageImpl<>(Lists.list(mockDm));
 
-        when(modelMapper.map(dms, new TypeToken<List<OrganizerStatisticsResponseDto>>() {
-        }.getType()))
-                .thenReturn(dtos);
+        when(organizersStatisticsPersistenceService.getOrganizersStatistics(
+                eq(startTest), eq(endTest), any(Pageable.class)
+        )).thenReturn(dms);
 
-        OrganizersStatisticsResponseDto organizersStatisticsResponseDto = underTest
-                .getOrganizersStatistics(startTest, endTest, OptionalInt.empty(), OptionalInt.empty());
-        assertThat(organizersStatisticsResponseDto).isNotNull();
-        assertThat(organizersStatisticsResponseDto.getOrganizersStatistics().size()).isEqualTo(1);
-        assertThat(organizersStatisticsResponseDto.getOrganizersStatistics().get(0))
-                .isEqualTo(organizerStatisticsResponseDto);
+        var dto = OrganizerStatisticsResponseDto.builder()
+                .organizerEmail("bob@bob.com")
+                .totalCost(1.0)
+                .totalSeconds(1L)
+                .totalMeetings(1)
+                .build();
 
+        Page<OrganizerStatisticsResponseDto> page = new PageImpl<>(
+                List.of(dto)
+        );
+
+        when(modelMapper.map(mockDm, OrganizerStatisticsResponseDto.class))
+                .thenReturn(dto);
+
+        Page<OrganizerStatisticsResponseDto> response = underTest
+                .getOrganizersStatistics(startTest, endTest, PageRequest.of(0,1));
+
+        assertThat(response).isNotNull();
+        assertThat(response.getTotalElements()).isEqualTo(1);
+        assertThat(response.get().findFirst().get()).isEqualTo(dto);
     }
 
     @Test

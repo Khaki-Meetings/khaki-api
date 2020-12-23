@@ -13,6 +13,8 @@ import com.getkhaki.api.bff.web.models.TrailingStatisticsResponseDto;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeToken;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -43,25 +45,14 @@ public class StatisticsController {
 
 
     @GetMapping("/organizers/{start}/{end}")
-    public OrganizersStatisticsResponseDto getOrganizersStatistics(
+    public Page<OrganizerStatisticsResponseDto> getOrganizersStatistics(
             @PathVariable Instant start,
             @PathVariable Instant end,
-            @RequestParam(required = false) OptionalInt optionalCount,
-            @RequestParam(required = false) OptionalInt page
+            Pageable pageable
     ) {
-        List<OrganizerStatisticsDm> organizerStatisticsDmList = organizersStatisticsPersistenceService
-                .getOrganizersStatistics(start, end, optionalCount, page);
-        OrganizersStatisticsResponseDto ret = new OrganizersStatisticsResponseDto();
-        ret.setOrganizersStatistics(
-                modelMapper.map(
-                        organizerStatisticsDmList,
-                        new TypeToken<List<OrganizerStatisticsResponseDto>>() {
-                        }.getType()
-                )
-        );
-        ret.setPage(1);
-        ret.setCount(optionalCount);
-        return ret;
+        Page<OrganizerStatisticsDm> organizerStatisticsDmList = organizersStatisticsPersistenceService
+                .getOrganizersStatistics(start, end, pageable);
+        return organizerStatisticsDmList.map(dm -> modelMapper.map(dm, OrganizerStatisticsResponseDto.class));
     }
 
 

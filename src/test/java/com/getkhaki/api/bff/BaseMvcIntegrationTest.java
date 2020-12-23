@@ -35,7 +35,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @Transactional
 public abstract class BaseMvcIntegrationTest extends BaseJpaIntegrationTest {
     protected UUID s56OrgUuid = UUID.fromString("d713ace2-0d30-43be-b4ba-db973967d6d4");
-
     protected WebApplicationContext webApplicationContext;
     protected MockMvc mvc;
 
@@ -114,6 +113,7 @@ public abstract class BaseMvcIntegrationTest extends BaseJpaIntegrationTest {
                 .getResponse()
                 .getContentAsString(), type);
     }
+
     protected MvcResult getMvcResult(String urlString) throws Exception {
         return getMvcResult(urlString, "bob@s56.net");
     }
