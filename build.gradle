@@ -81,7 +81,7 @@ if (gradle.startParameter.taskNames.contains('diffChangeLog') && !project.ext.ha
 
 def changeLogFileName
 if (project.ext.has('changeLogFile')) {
-    changeLogFileName = "liquibase/changelogs/${project.ext.changeLogFile}"
+    changeLogFileName = "${project.ext.changeLogFile}"
 } else {
     changeLogFileName = "liquibase/master-changelog.yaml"
 }
