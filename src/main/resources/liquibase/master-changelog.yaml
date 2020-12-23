@@ -19,3 +19,5 @@ databaseChangeLog:
       file: liquibase/changelogs/20201218-khaki-org.yaml
   - include:
       file: liquibase/changelogs/20201219-admin-email-uniq-not-null.yaml
+  - include:
+      file: liquibase/changelogs/20201222-summary-length.xml

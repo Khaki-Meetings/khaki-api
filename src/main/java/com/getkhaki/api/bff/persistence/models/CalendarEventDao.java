@@ -19,7 +19,7 @@ public class CalendarEventDao extends EntityBaseDao {
     @Column(unique = true)
     String googleCalendarId;
 
-    @Column(nullable = false)
+    @Column(nullable = false, length = 65535, columnDefinition = "TEXT")
     String summary;
 
     @Column(nullable = false)
