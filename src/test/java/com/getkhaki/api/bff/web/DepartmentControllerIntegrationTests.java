@@ -2,29 +2,26 @@ package com.getkhaki.api.bff.web;
 
 import com.getkhaki.api.bff.BaseMvcIntegrationTest;
 import com.getkhaki.api.bff.config.interceptors.models.SessionTenant;
-import com.getkhaki.api.bff.web.models.DepartmentDto;
 import io.restassured.module.mockmvc.RestAssuredMockMvc;
 import lombok.val;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.Pageable;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.test.web.servlet.MvcResult;
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.Collections;
-import java.util.List;
 import java.util.Objects;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.hamcrest.Matchers.*;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.jwt;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.multipart;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
@@ -65,21 +62,13 @@ public class DepartmentControllerIntegrationTests extends BaseMvcIntegrationTest
 
     @Test
     public void getDepartments() throws Exception {
-        MvcResult result = getMvcResult("/departments");
-        assertThat(result).isNotNull();
-
-        Page<DepartmentDto> response = (Page<DepartmentDto>) convertJSONStringToObject(
-                result.getResponse().getContentAsString(),
-                PageImpl.class
-        );
-
-        assertThat(response).isNotNull();
-
-        val foundDepartments = response
-                .stream()
-                .filter(departmentDto -> departmentDto.getName().matches("HR|IT"))
-                .count();
-
-        assertThat(foundDepartments).isEqualTo(2);
+        mvc.perform(MockMvcRequestBuilders.get("/departments")
+                .header(SessionTenant.HEADER_KEY, "s56_net")
+                .with(jwt().jwt(getJWT("bob@s56.net")).authorities(new SimpleGrantedAuthority("admin"))))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.content.length()").value(2))
+                .andExpect(jsonPath("$.content[0].name").value(
+                        either(is("HR")).or(is("IT")))
+                );
     }
 }
