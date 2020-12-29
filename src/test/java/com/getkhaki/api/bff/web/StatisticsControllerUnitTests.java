@@ -4,7 +4,9 @@ import com.getkhaki.api.bff.domain.models.DepartmentStatisticsDm;
 import com.getkhaki.api.bff.domain.models.IntervalDe;
 import com.getkhaki.api.bff.domain.models.OrganizerStatisticsDm;
 import com.getkhaki.api.bff.domain.models.TimeBlockSummaryDm;
+import com.getkhaki.api.bff.domain.persistence.DepartmentStatisticsPersistenceInterface;
 import com.getkhaki.api.bff.domain.persistence.OrganizersStatisticsPersistenceInterface;
+import com.getkhaki.api.bff.domain.persistence.TimeBlockSummaryPersistenceInterface;
 import com.getkhaki.api.bff.domain.services.StatisticsService;
 import com.getkhaki.api.bff.web.models.DepartmentStatisticsResponseDto;
 import com.getkhaki.api.bff.web.models.OrganizerStatisticsResponseDto;
@@ -43,10 +45,20 @@ public class StatisticsControllerUnitTests {
     private ModelMapper modelMapper;
     @Mock
     private OrganizersStatisticsPersistenceInterface organizersStatisticsPersistenceService;
+    @Mock
+    private TimeBlockSummaryPersistenceInterface timeBlockSummaryPersistenceService;
+    @Mock
+    private DepartmentStatisticsPersistenceInterface departmentStatisticsPersistenceService;
 
     @BeforeEach
     public void setup() {
-        underTest = new StatisticsController(this.statisticsService, organizersStatisticsPersistenceService, this.modelMapper);
+        underTest = new StatisticsController(
+                this.statisticsService,
+                organizersStatisticsPersistenceService,
+                timeBlockSummaryPersistenceService,
+                departmentStatisticsPersistenceService,
+                this.modelMapper
+        );
     }
 
     @Test
@@ -82,7 +94,7 @@ public class StatisticsControllerUnitTests {
                 .thenReturn(dto);
 
         Page<OrganizerStatisticsResponseDto> response = underTest
-                .getOrganizersStatistics(startTest, endTest, PageRequest.of(0,1));
+                .getOrganizersStatistics(startTest, endTest, PageRequest.of(0, 1));
 
         assertThat(response).isNotNull();
         assertThat(response.getTotalElements()).isEqualTo(1);

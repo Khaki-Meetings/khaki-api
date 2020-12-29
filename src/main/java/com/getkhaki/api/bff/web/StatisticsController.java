@@ -2,12 +2,13 @@ package com.getkhaki.api.bff.web;
 
 import com.getkhaki.api.bff.domain.models.IntervalDe;
 import com.getkhaki.api.bff.domain.models.OrganizerStatisticsDm;
+import com.getkhaki.api.bff.domain.persistence.DepartmentStatisticsPersistenceInterface;
 import com.getkhaki.api.bff.domain.persistence.OrganizersStatisticsPersistenceInterface;
+import com.getkhaki.api.bff.domain.persistence.TimeBlockSummaryPersistenceInterface;
 import com.getkhaki.api.bff.domain.services.StatisticsService;
 import com.getkhaki.api.bff.web.models.DepartmentStatisticsResponseDto;
 import com.getkhaki.api.bff.web.models.DepartmentsStatisticsResponseDto;
 import com.getkhaki.api.bff.web.models.OrganizerStatisticsResponseDto;
-import com.getkhaki.api.bff.web.models.OrganizersStatisticsResponseDto;
 import com.getkhaki.api.bff.web.models.TimeBlockSummaryResponseDto;
 import com.getkhaki.api.bff.web.models.TrailingStatisticsResponseDto;
 import org.modelmapper.ModelMapper;
@@ -19,12 +20,10 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.time.Instant;
 import java.util.List;
-import java.util.OptionalInt;
 import java.util.stream.Collectors;
 
 @RequestMapping("/statistics")
@@ -34,12 +33,21 @@ public class StatisticsController {
 
     private final StatisticsService statisticsService;
     private final OrganizersStatisticsPersistenceInterface organizersStatisticsPersistenceService;
+    private final TimeBlockSummaryPersistenceInterface timeBlockSummaryPersistenceService;
+    private final DepartmentStatisticsPersistenceInterface departmentStatisticsPersistenceService;
     private final ModelMapper modelMapper;
 
-    @Autowired
-    public StatisticsController(StatisticsService statisticsService, OrganizersStatisticsPersistenceInterface organizersStatisticsPersistenceService, ModelMapper modelMapper) {
+    public StatisticsController(
+            StatisticsService statisticsService,
+            OrganizersStatisticsPersistenceInterface organizersStatisticsPersistenceService,
+            TimeBlockSummaryPersistenceInterface timeBlockSummaryPersistenceService,
+            DepartmentStatisticsPersistenceInterface departmentStatisticsPersistenceService,
+            ModelMapper modelMapper
+    ) {
         this.statisticsService = statisticsService;
         this.organizersStatisticsPersistenceService = organizersStatisticsPersistenceService;
+        this.timeBlockSummaryPersistenceService = timeBlockSummaryPersistenceService;
+        this.departmentStatisticsPersistenceService = departmentStatisticsPersistenceService;
         this.modelMapper = modelMapper;
     }
 

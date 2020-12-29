@@ -24,7 +24,7 @@ public class OrganizerStatisticsRepositoryInterfaceIntegrationTests extends Base
         Instant start = Instant.parse("2020-11-01T00:00:00.000Z");
         Instant end = Instant.parse("2020-11-10T00:00:00.000Z");
         Pageable pageable = PageRequest.of(0,2);
-        Page<OrganizerStatisticsView> stats = underTest.findAllOrganizerStatistics(
+        Page<OrganizerStatisticsView> stats = underTest.findExternalOrganizerStatistics(
                 start,
                 end,
                 UUID.fromString("d713ace2-0d30-43be-b4ba-db973967d6d4"),

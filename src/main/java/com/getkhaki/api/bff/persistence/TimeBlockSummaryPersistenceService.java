@@ -25,7 +25,7 @@ public class TimeBlockSummaryPersistenceService implements TimeBlockSummaryPersi
     @Override
     public TimeBlockSummaryDm getTimeBlockSummary(Instant start, Instant end) {
         return modelMapper.map(
-                timeBlockSummaryRepositoryInterface.findTimeBlockSummaryInRange(
+                timeBlockSummaryRepositoryInterface.findExternalTimeBlockSummaryInRange(
                         start,
                         end,
                         sessionTenant.getTenantId()
