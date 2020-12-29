@@ -28,7 +28,7 @@ public class DepartmentStatisticsPersistenceService implements DepartmentStatist
 
     @Override
     public List<DepartmentStatisticsDm> getPerDepartmentStatistics(Instant start, Instant end) {
-        List<DepartmentStatisticsView> daos = departmentStatisticsRepositoryInterface.findAllDepartmentStatisticsInRange(
+        List<DepartmentStatisticsView> daos = departmentStatisticsRepositoryInterface.findExternalDepartmentStatisticsInRange(
                 start,
                 end,
                 sessionTenant.getTenantId()
