@@ -24,7 +24,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import javax.swing.text.html.Option;
 import java.time.Instant;
 import java.util.List;
 import java.util.Optional;
@@ -97,12 +96,16 @@ public class StatisticsController {
     public DepartmentsStatisticsResponseDto getPerDepartmentStatistics(
             @PathVariable Instant start,
             @PathVariable Instant end,
-            @RequestParam(required = false) StatisticsFilterDte filter
+            @RequestParam(required = false) Optional<StatisticsFilterDte> filter
     ) {
         DepartmentsStatisticsResponseDto ret = new DepartmentsStatisticsResponseDto();
         ret.setDepartmentsStatistics(
                 modelMapper.map(
-                        statisticsService.getPerDepartmentStatistics(start, end),
+                        departmentStatisticsPersistenceService.getPerDepartmentStatistics(
+                                start,
+                                end,
+                                modelMapper.map(filter.orElse(StatisticsFilterDte.External), StatisticsFilterDe.class)
+                        ),
                         new TypeToken<List<DepartmentStatisticsResponseDto>>() {
                         }.getType()
                 )

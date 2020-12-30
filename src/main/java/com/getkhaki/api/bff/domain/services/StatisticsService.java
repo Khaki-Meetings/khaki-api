@@ -29,10 +29,6 @@ public class StatisticsService {
         this.timeBlockGeneratorFactory = timeBlockGeneratorFactory;
     }
 
-    public List<DepartmentStatisticsDm> getPerDepartmentStatistics(Instant start, Instant end) {
-        return this.departmentStatisticsPersistenceService.getPerDepartmentStatistics(start, end);
-    }
-
     public List<TimeBlockSummaryDm> getTrailingStatistics(
             Instant start,
             IntervalDe interval,

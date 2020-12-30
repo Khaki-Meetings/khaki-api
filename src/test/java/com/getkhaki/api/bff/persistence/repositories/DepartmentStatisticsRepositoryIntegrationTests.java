@@ -27,8 +27,6 @@ public class DepartmentStatisticsRepositoryIntegrationTests extends BaseJpaInteg
         DepartmentStatisticsView hrStats = ret.stream().filter(item -> item.getDepartmentName().equals("HR"))
                 .findFirst()
                 .orElseThrow();
-        val bla = hrStats.getDepartmentId();
-        Long bla2 = hrStats.getTotalSeconds();
         assertThat(hrStats.getDepartmentId()).isNotNull();
         assertThat(hrStats.getTotalSeconds()).isEqualTo(25200);
 
@@ -48,8 +46,6 @@ public class DepartmentStatisticsRepositoryIntegrationTests extends BaseJpaInteg
         DepartmentStatisticsView hrStats = ret.stream().filter(item -> item.getDepartmentName().equals("HR"))
                 .findFirst()
                 .orElseThrow();
-        val bla = hrStats.getDepartmentId();
-        Long bla2 = hrStats.getTotalSeconds();
         assertThat(hrStats.getDepartmentId()).isNotNull();
         assertThat(hrStats.getTotalSeconds()).isEqualTo(14400);
 

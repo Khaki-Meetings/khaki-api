@@ -100,7 +100,7 @@ public class StatisticsControllerUnitTests {
 
         assertThat(response).isNotNull();
         assertThat(response.getTotalElements()).isEqualTo(1);
-        assertThat(response.get().findFirst().get()).isEqualTo(dto);
+        assertThat(response.get().findFirst().orElseThrow()).isEqualTo(dto);
     }
 
     @Test
@@ -157,7 +157,7 @@ public class StatisticsControllerUnitTests {
 
         List<DepartmentStatisticsResponseDto> mockDtoList = Lists.list(departmentStatisticsResponseDto);
         var ret = underTest.getPerDepartmentStatistics(
-                startTest, endTest, StatisticsFilterDte.External
+                startTest, endTest, Optional.of(StatisticsFilterDte.External)
         );
     }
 

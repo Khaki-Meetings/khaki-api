@@ -39,9 +39,20 @@ public class OrganizersStatisticsPersistenceService implements OrganizersStatist
             Pageable pageable,
             StatisticsFilterDe filterDe
     ) {
-        Page<OrganizerStatisticsView> organizerStatisticsViewList = organizerStatisticsRepository
-                .findExternalOrganizerStatistics(start, end, sessionTenant.getTenantId(), pageable);
+        Page<OrganizerStatisticsView> organizerStatisticsViewList;
+        switch (filterDe) {
+            case Internal:
+                organizerStatisticsViewList = organizerStatisticsRepository
+                        .findInternalOrganizerStatistics(start, end, sessionTenant.getTenantId(), pageable);
+                break;
+            case External:
+                organizerStatisticsViewList = organizerStatisticsRepository
+                        .findExternalOrganizerStatistics(start, end, sessionTenant.getTenantId(), pageable);
+                break;
+            default:
+                throw new RuntimeException("invalid filter: " + filterDe);
 
+        }
         return organizerStatisticsViewList.map(dao -> modelMapper.map(dao, OrganizerStatisticsDm.class));
     }
 

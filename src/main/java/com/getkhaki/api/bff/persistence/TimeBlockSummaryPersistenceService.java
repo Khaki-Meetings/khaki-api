@@ -4,6 +4,7 @@ import com.getkhaki.api.bff.config.interceptors.models.SessionTenant;
 import com.getkhaki.api.bff.domain.models.StatisticsFilterDe;
 import com.getkhaki.api.bff.domain.models.TimeBlockSummaryDm;
 import com.getkhaki.api.bff.domain.persistence.TimeBlockSummaryPersistenceInterface;
+import com.getkhaki.api.bff.persistence.models.views.TimeBlockSummaryView;
 import com.getkhaki.api.bff.persistence.repositories.TimeBlockSummaryRepositoryInterface;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
@@ -25,12 +26,27 @@ public class TimeBlockSummaryPersistenceService implements TimeBlockSummaryPersi
 
     @Override
     public TimeBlockSummaryDm getTimeBlockSummary(Instant start, Instant end, StatisticsFilterDe filterDe) {
-        return modelMapper.map(
-                timeBlockSummaryRepositoryInterface.findExternalTimeBlockSummaryInRange(
+        TimeBlockSummaryView timeBlockSummaryView;
+        switch (filterDe) {
+            case External:
+                timeBlockSummaryView = timeBlockSummaryRepositoryInterface.findExternalTimeBlockSummaryInRange(
                         start,
                         end,
                         sessionTenant.getTenantId()
-                ),
+                );
+                break;
+            case Internal:
+                timeBlockSummaryView = timeBlockSummaryRepositoryInterface.findInternalTimeBlockSummaryInRange(
+                        start,
+                        end,
+                        sessionTenant.getTenantId()
+                );
+                break;
+            default:
+                throw new RuntimeException("invalid filter: " + filterDe);
+        }
+        return modelMapper.map(
+                timeBlockSummaryView,
                 TimeBlockSummaryDm.class
         );
     }

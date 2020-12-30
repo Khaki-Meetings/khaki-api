@@ -2,6 +2,7 @@ package com.getkhaki.api.bff.persistence;
 
 import com.getkhaki.api.bff.config.interceptors.models.SessionTenant;
 import com.getkhaki.api.bff.domain.models.DepartmentStatisticsDm;
+import com.getkhaki.api.bff.domain.models.StatisticsFilterDe;
 import com.getkhaki.api.bff.domain.persistence.DepartmentStatisticsPersistenceInterface;
 import com.getkhaki.api.bff.persistence.models.views.DepartmentStatisticsView;
 import com.getkhaki.api.bff.persistence.repositories.DepartmentStatisticsRepositoryInterface;
@@ -17,28 +18,45 @@ import java.util.List;
 public class DepartmentStatisticsPersistenceService implements DepartmentStatisticsPersistenceInterface {
 
     private final ModelMapper modelMapper;
-    private DepartmentStatisticsRepositoryInterface departmentStatisticsRepositoryInterface;
+    private final DepartmentStatisticsRepositoryInterface departmentStatisticsRepository;
     private final SessionTenant sessionTenant;
 
     public DepartmentStatisticsPersistenceService(ModelMapper modelMapper, DepartmentStatisticsRepositoryInterface departmentStatisticsRepositoryInterface, SessionTenant sessionTenant) {
         this.modelMapper = modelMapper;
-        this.departmentStatisticsRepositoryInterface = departmentStatisticsRepositoryInterface;
+        this.departmentStatisticsRepository = departmentStatisticsRepositoryInterface;
         this.sessionTenant = sessionTenant;
     }
 
     @Override
-    public List<DepartmentStatisticsDm> getPerDepartmentStatistics(Instant start, Instant end) {
-        List<DepartmentStatisticsView> daos = departmentStatisticsRepositoryInterface.findExternalDepartmentStatisticsInRange(
-                start,
-                end,
-                sessionTenant.getTenantId()
-        );
+    public List<DepartmentStatisticsDm> getPerDepartmentStatistics(
+            Instant start,
+            Instant end,
+            StatisticsFilterDe filterDe
+    ) {
+        List<DepartmentStatisticsView> daoList;
+        switch (filterDe) {
+            case External:
+                daoList = departmentStatisticsRepository.findExternalDepartmentStatisticsInRange(
+                        start,
+                        end,
+                        sessionTenant.getTenantId()
+                );
+                break;
+            case Internal:
+                daoList = departmentStatisticsRepository.findInternalDepartmentStatisticsInRange(
+                        start,
+                        end,
+                        sessionTenant.getTenantId()
+                );
+                break;
+            default:
+                throw new RuntimeException("invalid filter" + filterDe);
+        }
 
-        List<DepartmentStatisticsDm> dms = modelMapper.map(
-                daos,
+        return modelMapper.map(
+                daoList,
                 new TypeToken<List<DepartmentStatisticsResponseDto>>() {
                 }.getType()
         );
-        return dms;
     }
 }
