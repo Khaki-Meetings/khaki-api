@@ -50,13 +50,11 @@ public class StatisticsControllerIntegrationTests extends BaseMvcIntegrationTest
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.content.length()").value(2))
                 .andExpect(jsonPath("$.content[?(@.organizerFirstName == 'Betty')]").exists())
-                .andExpect(jsonPath("$.content[?(@.organizerFirstName == 'Betty')].totalCost").value(1282.5))
                 .andExpect(jsonPath("$.content[?(@.organizerFirstName == 'Betty')].totalSeconds").value(9 * 3600))
                 .andExpect(jsonPath("$.content[?(@.organizerFirstName == 'Betty')].totalMeetings").value(1))
                 .andExpect(jsonPath("$.content[?(@.organizerFirstName == 'Bob')]").exists())
-                .andExpect(jsonPath("$.content[?(@.organizerFirstName == 'Bob')].totalCost").value(380.0))
-                .andExpect(jsonPath("$.content[?(@.organizerFirstName == 'Bob')].totalSeconds").value(4 * 3600))
-                .andExpect(jsonPath("$.content[?(@.organizerFirstName == 'Bob')].totalMeetings").value(1));
+                .andExpect(jsonPath("$.content[?(@.organizerFirstName == 'Bob')].totalSeconds").value(18000))
+                .andExpect(jsonPath("$.content[?(@.organizerFirstName == 'Bob')].totalMeetings").value(2));
     }
 
     @Test
@@ -97,8 +95,8 @@ public class StatisticsControllerIntegrationTests extends BaseMvcIntegrationTest
         assertThat(summaries.get(0).getTotalSeconds()).isEqualTo(32400L);
         assertThat(summaries.get(0).getMeetingCount()).isEqualTo(1);
 
-        assertThat(summaries.get(1).getTotalSeconds()).isEqualTo(14400L);
-        assertThat(summaries.get(1).getMeetingCount()).isEqualTo(1);
+        assertThat(summaries.get(1).getTotalSeconds()).isEqualTo(18000L);
+        assertThat(summaries.get(1).getMeetingCount()).isEqualTo(2);
     }
 
     @Test
@@ -109,8 +107,8 @@ public class StatisticsControllerIntegrationTests extends BaseMvcIntegrationTest
         String url = String.format("/statistics/summary/%s/%s", start, end);
         val stats = getTypedResult(url, TimeBlockSummaryResponseDto.class);
 
-        assertThat(stats.getMeetingCount()).isEqualTo(3);
-        assertThat(stats.getTotalSeconds()).isEqualTo(54000);
+        assertThat(stats.getMeetingCount()).isEqualTo(4);
+        assertThat(stats.getTotalSeconds()).isEqualTo(57600);
 
     }
 }

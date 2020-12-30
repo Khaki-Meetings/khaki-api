@@ -1,6 +1,7 @@
 package com.getkhaki.api.bff.persistence;
 
 import com.getkhaki.api.bff.config.interceptors.models.SessionTenant;
+import com.getkhaki.api.bff.domain.models.StatisticsFilterDe;
 import com.getkhaki.api.bff.domain.models.TimeBlockSummaryDm;
 import com.getkhaki.api.bff.domain.persistence.TimeBlockSummaryPersistenceInterface;
 import com.getkhaki.api.bff.persistence.repositories.TimeBlockSummaryRepositoryInterface;
@@ -23,7 +24,7 @@ public class TimeBlockSummaryPersistenceService implements TimeBlockSummaryPersi
 
 
     @Override
-    public TimeBlockSummaryDm getTimeBlockSummary(Instant start, Instant end) {
+    public TimeBlockSummaryDm getTimeBlockSummary(Instant start, Instant end, StatisticsFilterDe filterDe) {
         return modelMapper.map(
                 timeBlockSummaryRepositoryInterface.findExternalTimeBlockSummaryInRange(
                         start,
