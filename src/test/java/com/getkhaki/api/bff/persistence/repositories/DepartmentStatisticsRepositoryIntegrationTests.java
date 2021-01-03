@@ -19,31 +19,48 @@ public class DepartmentStatisticsRepositoryIntegrationTests extends BaseJpaInteg
     private DepartmentStatisticsRepositoryInterface underTest;
 
     @Test
-    public void findStatsInRage() {
+    public void findExternalStatsInRage() {
         Instant start = Instant.parse("2020-11-01T00:00:00.000Z");
-        Instant end = Instant.parse("2020-11-08T00:00:00.000Z");
-        List<DepartmentStatisticsView> ret = underTest.findAllDepartmentStatisticsInRange(start, end, s56OrgUuid);
+        Instant end = Instant.parse("2020-11-30T00:00:00.000Z");
+        List<DepartmentStatisticsView> ret = underTest.findExternalDepartmentStatisticsInRange(start, end, s56OrgUuid);
 
         DepartmentStatisticsView hrStats = ret.stream().filter(item -> item.getDepartmentName().equals("HR"))
                 .findFirst()
                 .orElseThrow();
-        val bla = hrStats.getDepartmentId();
-        Long bla2 = hrStats.getTotalSeconds();
         assertThat(hrStats.getDepartmentId()).isNotNull();
-        assertThat(hrStats.getTotalSeconds()).isEqualTo(18000);
+        assertThat(hrStats.getTotalSeconds()).isEqualTo(25200);
 
         DepartmentStatisticsView itStats = ret.stream().filter(item -> item.getDepartmentName().equals("IT"))
                 .findFirst()
                 .orElseThrow();
         assertThat(itStats.getDepartmentId()).isNotNull();
-        assertThat(itStats.getTotalSeconds()).isEqualTo(28800);
+        assertThat(itStats.getTotalSeconds()).isEqualTo(32400);
+    }
+
+    @Test
+    public void findInternalStatsInRage() {
+        Instant start = Instant.parse("2020-11-01T00:00:00.000Z");
+        Instant end = Instant.parse("2020-11-30T00:00:00.000Z");
+        List<DepartmentStatisticsView> ret = underTest.findInternalDepartmentStatisticsInRange(start, end, s56OrgUuid);
+
+        DepartmentStatisticsView hrStats = ret.stream().filter(item -> item.getDepartmentName().equals("HR"))
+                .findFirst()
+                .orElseThrow();
+        assertThat(hrStats.getDepartmentId()).isNotNull();
+        assertThat(hrStats.getTotalSeconds()).isEqualTo(14400);
+
+        DepartmentStatisticsView itStats = ret.stream().filter(item -> item.getDepartmentName().equals("IT"))
+                .findFirst()
+                .orElseThrow();
+        assertThat(itStats.getDepartmentId()).isNotNull();
+        assertThat(itStats.getTotalSeconds()).isEqualTo(25200);
     }
 
     @Test
     public void findNothingWithWrongOrgId() {
         Instant start = Instant.parse("2020-11-01T00:00:00.000Z");
         Instant end = Instant.parse("2020-11-08T00:00:00.000Z");
-        List<DepartmentStatisticsView> ret = underTest.findAllDepartmentStatisticsInRange(
+        List<DepartmentStatisticsView> ret = underTest.findExternalDepartmentStatisticsInRange(
                 start,
                 end,
                 UUID.randomUUID()

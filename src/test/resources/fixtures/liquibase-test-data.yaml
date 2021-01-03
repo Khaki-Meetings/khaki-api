@@ -1,5 +1,0 @@
-databaseChangeLog:
-  - include:
-      file: fixtures/liquibase-test-data-org1.yaml
-  - include:
-      file: fixtures/liquibase-test-data-org2.yaml
