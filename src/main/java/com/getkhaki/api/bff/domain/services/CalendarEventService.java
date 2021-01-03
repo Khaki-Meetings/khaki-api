@@ -1,11 +1,15 @@
 package com.getkhaki.api.bff.domain.services;
 
 import com.getkhaki.api.bff.domain.models.CalendarEventDm;
+import com.getkhaki.api.bff.domain.models.EmployeeDm;
 import com.getkhaki.api.bff.domain.persistence.CalendarEventPersistenceInterface;
 import com.getkhaki.api.bff.domain.persistence.OrganizationPersistenceInterface;
+import com.getkhaki.api.bff.persistence.models.views.CalendarEventsWithAttendeesView;
 import lombok.extern.apachecommons.CommonsLog;
 import lombok.val;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
@@ -56,5 +60,9 @@ public class CalendarEventService {
                 .forEach(
                         organizationDm -> importAsync(organizationDm.getAdminEmail(), timeAgo)
                 );
+    }
+
+    public Page<CalendarEventsWithAttendeesView> getCalendarEventsAttendees(Pageable pageable) {
+        return calendarEventPersistence.getCalendarEventsAttendees(pageable);
     }
 }

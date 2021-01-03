@@ -1,5 +1,6 @@
 package com.getkhaki.api.bff.domain.models;
 
+import com.getkhaki.api.bff.persistence.models.CalendarEventDao;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;

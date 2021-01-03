@@ -13,6 +13,4 @@ import java.util.UUID;
 @Repository
 public interface CalendarEventParticipantRepositoryInterface extends JpaRepository<CalendarEventParticipantDao, UUID> {
     Optional<CalendarEventParticipantDao> findDistinctByCalendarEventAndEmail(CalendarEventDao calendarEvent, EmailDao email);
-
-    Set<CalendarEventParticipantDao> findDistinctByCalendarEvent(CalendarEventDao calendarEvent);
 }
