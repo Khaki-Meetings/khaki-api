@@ -7,12 +7,11 @@ import lombok.extern.apachecommons.CommonsLog;
 import lombok.val;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Async;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
-import java.util.Optional;
+import java.util.concurrent.atomic.AtomicInteger;
 
 @CommonsLog
 @Service
@@ -40,14 +39,36 @@ public class CalendarEventService {
 
     @Async
     public void importAsync(String adminEmail, Instant timeAgo) {
-        this.calendarProviderPersistenceFactory.get()
+        log.info(
+                String.format(
+                        "import started at %s for %s, back to %s",
+                        Instant.now(),
+                        adminEmail,
+                        timeAgo
+                )
+        );
+        val filteredEvents = this.calendarProviderPersistenceFactory.get()
                 .getEvents(adminEmail, timeAgo)
                 .stream()
-                .filter(calendarEventDm -> calendarEventDm.getParticipants().size() > 1)
-                .forEach(calendarEventPersistence::upsert);
+                .filter(calendarEventDm -> calendarEventDm.getParticipants().size() > 1);
+
+        AtomicInteger count = new AtomicInteger();
+        filteredEvents.forEach(event -> {
+            count.getAndIncrement();
+            calendarEventPersistence.upsert(event);
+        });
+        log.info(
+                String.format(
+                        "import completed at %s for %s, back to %s. Upserted %s",
+                        Instant.now(),
+                        adminEmail,
+                        timeAgo.toString(),
+                        count
+                )
+        );
     }
 
-//    @Scheduled(fixedDelay = 3600000)
+    //    @Scheduled(fixedDelay = 3600000)
     public void importCron() {
         log.info("RUNNING IMPORT");
         val timeAgo = Instant.now().minus(importCronMinutes, ChronoUnit.MINUTES);
