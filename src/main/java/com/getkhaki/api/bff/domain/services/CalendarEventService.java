@@ -7,6 +7,7 @@ import lombok.extern.apachecommons.CommonsLog;
 import lombok.val;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Async;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
@@ -68,7 +69,7 @@ public class CalendarEventService {
         );
     }
 
-    //    @Scheduled(fixedDelay = 3600000)
+    @Scheduled(fixedDelay = 3600000)
     public void importCron() {
         log.info("RUNNING IMPORT");
         val timeAgo = Instant.now().minus(importCronMinutes, ChronoUnit.MINUTES);
