@@ -1,11 +1,11 @@
 package com.getkhaki.api.bff.domain.persistence;
 
 import com.getkhaki.api.bff.domain.models.EmployeeDm;
-
-import java.util.List;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 public interface EmployeePersistenceInterface {
-    List<EmployeeDm> getEmployees();
+    Page<EmployeeDm> getEmployees(Pageable pageable);
 
     EmployeeDm getAuthedEmployee();
 }

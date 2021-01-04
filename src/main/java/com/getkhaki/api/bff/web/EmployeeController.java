@@ -3,16 +3,15 @@ package com.getkhaki.api.bff.web;
 import com.getkhaki.api.bff.domain.persistence.EmployeePersistenceInterface;
 import com.getkhaki.api.bff.domain.services.EmployeeService;
 import com.getkhaki.api.bff.web.models.EmployeeDto;
-import com.getkhaki.api.bff.web.models.EmployeesResponseDto;
 import com.getkhaki.api.bff.web.models.UserProfileResponseDto;
 import lombok.val;
 import org.modelmapper.ModelMapper;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
-import java.util.stream.Collectors;
 
 @RequestMapping("/employees")
 @RestController
@@ -33,18 +32,10 @@ public class EmployeeController {
     }
 
     @GetMapping()
-    public EmployeesResponseDto getEmployees() {
-        val employeesResponseDto = new EmployeesResponseDto();
-
-        employeesResponseDto.setEmployees(
-                this.employeeService
-                        .getEmployees()
-                        .stream()
-                        .map(employeeDm -> this.modelMapper.map(employeeDm, EmployeeDto.class))
-                        .collect(Collectors.toList())
-        );
-
-        return employeesResponseDto;
+    public Page<EmployeeDto> getEmployees(Pageable pageable) {
+        return this.employeeService
+                .getEmployees(pageable)
+                .map(employeeDm -> this.modelMapper.map(employeeDm, EmployeeDto.class));
     }
 
     @GetMapping("/userProfile")

@@ -2,17 +2,16 @@ package com.getkhaki.api.bff.persistence;
 
 import com.getkhaki.api.bff.config.interceptors.models.SessionTenant;
 import com.getkhaki.api.bff.domain.models.OrganizerStatisticsDm;
+import com.getkhaki.api.bff.domain.models.StatisticsFilterDe;
 import com.getkhaki.api.bff.domain.persistence.OrganizersStatisticsPersistenceInterface;
 import com.getkhaki.api.bff.persistence.models.views.OrganizerStatisticsView;
 import com.getkhaki.api.bff.persistence.repositories.OrganizerStatisticsRepositoryInterface;
 import org.modelmapper.ModelMapper;
-import org.modelmapper.TypeToken;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import javax.swing.text.html.Option;
 import java.time.Instant;
-import java.util.List;
-import java.util.OptionalInt;
 
 @Service
 public class OrganizersStatisticsPersistenceService implements OrganizersStatisticsPersistenceInterface {
@@ -34,15 +33,27 @@ public class OrganizersStatisticsPersistenceService implements OrganizersStatist
     }
 
     @Override
-    public List<OrganizerStatisticsDm> getOrganizersStatistics(Instant start, Instant end, OptionalInt count, OptionalInt page) {
-        List<OrganizerStatisticsView> organizerStatisticsViewList = organizerStatisticsRepository
-                .findAllOrganizerStatistics(start, end, sessionTenant.getTenantId());
+    public Page<OrganizerStatisticsDm> getOrganizersStatistics(
+            Instant start,
+            Instant end,
+            Pageable pageable,
+            StatisticsFilterDe filterDe
+    ) {
+        Page<OrganizerStatisticsView> organizerStatisticsViewList;
+        switch (filterDe) {
+            case Internal:
+                organizerStatisticsViewList = organizerStatisticsRepository
+                        .findInternalOrganizerStatistics(start, end, sessionTenant.getTenantId(), pageable);
+                break;
+            case External:
+                organizerStatisticsViewList = organizerStatisticsRepository
+                        .findExternalOrganizerStatistics(start, end, sessionTenant.getTenantId(), pageable);
+                break;
+            default:
+                throw new RuntimeException("invalid filter: " + filterDe);
 
-        return modelMapper.map(
-                organizerStatisticsViewList,
-                new TypeToken<List<OrganizerStatisticsDm>>() {
-                }.getType()
-        );
+        }
+        return organizerStatisticsViewList.map(dao -> modelMapper.map(dao, OrganizerStatisticsDm.class));
     }
 
 

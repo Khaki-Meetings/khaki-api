@@ -2,7 +2,6 @@ package com.getkhaki.api.bff.web;
 
 import com.getkhaki.api.bff.BaseMvcIntegrationTest;
 import com.getkhaki.api.bff.config.interceptors.models.SessionTenant;
-import com.getkhaki.api.bff.web.models.DepartmentsResponseDto;
 import io.restassured.module.mockmvc.RestAssuredMockMvc;
 import lombok.val;
 import org.junit.jupiter.api.Test;
@@ -10,6 +9,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.test.web.servlet.MvcResult;
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
 import java.nio.file.Files;
@@ -18,9 +18,10 @@ import java.nio.file.Paths;
 import java.util.Objects;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.hamcrest.Matchers.*;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.jwt;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.multipart;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
@@ -34,7 +35,7 @@ public class DepartmentControllerIntegrationTests extends BaseMvcIntegrationTest
     public void importAsync() throws Exception {
         ClassLoader classLoader = getClass().getClassLoader();
         Path filePath = Paths.get(
-                Objects.requireNonNull(classLoader.getResource("department-import.csv")).getFile()
+                Objects.requireNonNull(classLoader.getResource("s56-department-import.csv")).getFile()
         );
 
         MockMultipartFile csvMultipart = new MockMultipartFile(
@@ -61,22 +62,13 @@ public class DepartmentControllerIntegrationTests extends BaseMvcIntegrationTest
 
     @Test
     public void getDepartments() throws Exception {
-        MvcResult result = getMvcResult("/departments");
-        assertThat(result).isNotNull();
-
-        DepartmentsResponseDto employeesResponseDto = (DepartmentsResponseDto) convertJSONStringToObject(
-                result.getResponse().getContentAsString(),
-                DepartmentsResponseDto.class
-        );
-
-        assertThat(employeesResponseDto).isNotNull();
-
-        val foundDepartments = employeesResponseDto
-                .getDepartments()
-                .stream()
-                .filter(departmentDto -> departmentDto.getName().matches("HR|IT"))
-                .count();
-
-        assertThat(foundDepartments).isEqualTo(2);
+        mvc.perform(MockMvcRequestBuilders.get("/departments")
+                .header(SessionTenant.HEADER_KEY, "s56_net")
+                .with(jwt().jwt(getJWT("bob@s56.net")).authorities(new SimpleGrantedAuthority("admin"))))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.content.length()").value(2))
+                .andExpect(jsonPath("$.content[0].name").value(
+                        either(is("HR")).or(is("IT")))
+                );
     }
 }

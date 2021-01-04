@@ -1,17 +1,26 @@
 package com.getkhaki.api.bff.web;
 
 import com.getkhaki.api.bff.BaseMvcIntegrationTest;
-import com.getkhaki.api.bff.web.models.EmployeesResponseDto;
+import com.getkhaki.api.bff.config.interceptors.models.SessionTenant;
+import com.getkhaki.api.bff.web.models.EmployeeDto;
 import com.getkhaki.api.bff.web.models.UserProfileResponseDto;
 import lombok.SneakyThrows;
 import lombok.val;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.annotation.DirtiesContext;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.test.web.servlet.MvcResult;
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.hamcrest.Matchers.either;
+import static org.hamcrest.Matchers.is;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.jwt;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest
 public class EmployeeControllerIntegrationTests extends BaseMvcIntegrationTest {
@@ -22,31 +31,17 @@ public class EmployeeControllerIntegrationTests extends BaseMvcIntegrationTest {
 
     @Test
     public void getEmployees() throws Exception {
-        String url = "/employees";
-        MvcResult result = getMvcResult(url);
+        MvcResult result = getMvcResult("/employees");
 
-        assertThat(result).isNotNull();
-        EmployeesResponseDto employeesResponseDto = (EmployeesResponseDto) convertJSONStringToObject(
-                result.getResponse().getContentAsString(),
-                EmployeesResponseDto.class
-        );
-
-        assertThat(employeesResponseDto).isNotNull();
-        assertThat(employeesResponseDto.getEmployees()).hasSize(3);
-
-        val bobJones = employeesResponseDto
-                .getEmployees()
-                .stream()
-                .filter(
-                        employeeDto -> employeeDto.getEmail().equals("bob@s56.net")
-                )
-                .findFirst()
-                .orElseThrow();
-        assertThat(bobJones.getDepartment()).isEqualTo("HR");
-        assertThat(bobJones.getFirstName()).isEqualTo("Bob");
-        assertThat(bobJones.getLastName()).isEqualTo("Jones");
+        mvc.perform(MockMvcRequestBuilders.get("/employees")
+                .header(SessionTenant.HEADER_KEY, "s56_net")
+                .with(jwt().jwt(getJWT("bob@s56.net")).authorities(new SimpleGrantedAuthority("admin"))))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.content.length()").value(3))
+                .andExpect(jsonPath("$.content[?(@.firstName == 'Bob')]").exists())
+                .andExpect(jsonPath("$.content[?(@.firstName == 'Bob')].lastName").value("Jones"))
+                .andExpect(jsonPath("$.content[?(@.firstName == 'Bob')].department").value("HR"));
     }
-
 
     @Test
     @SneakyThrows
