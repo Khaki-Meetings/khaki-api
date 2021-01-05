@@ -10,7 +10,10 @@ import org.springframework.stereotype.Service;
 import java.time.Instant;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.Future;
+import java.util.function.IntFunction;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Service
 public class StatisticsService {
@@ -41,7 +44,7 @@ public class StatisticsService {
                 )
                 .collect(Collectors.toList());
 
-        var foo = CompletableFuture.allOf(futures).join();
+        var foo = CompletableFuture.allOf(futures.toArray(CompletableFuture[]::new)).join();
 
         return futures.stream()
                 .map(CompletableFuture::join)

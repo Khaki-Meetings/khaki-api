@@ -40,14 +40,14 @@ public class StatisticsServiceUnitTests {
         ArgumentCaptor<Instant> endCaptor = ArgumentCaptor.forClass(Instant.class);
 
         when(timeBlockGeneratorFactory.get(any())).thenCallRealMethod();
-        when(
-                timeBlockSummaryPersistenceService.getTimeBlockSummary(
-                        any(Instant.class),
-                        any(Instant.class),
-                        any(StatisticsFilterDe.class)
-                )
-        )
-                .thenReturn(new TimeBlockSummaryDm(1L, 1));
+//        when(
+//                timeBlockSummaryPersistenceService.getTimeBlockSummary(
+//                        any(Instant.class),
+//                        any(Instant.class),
+//                        any(StatisticsFilterDe.class)
+//                )
+//        )
+//                .thenReturn(new TimeBlockSummaryDm(1L, 1));
 
         underTest.getTrailingStatistics(startTest, interval, count, StatisticsFilterDe.Internal);
 

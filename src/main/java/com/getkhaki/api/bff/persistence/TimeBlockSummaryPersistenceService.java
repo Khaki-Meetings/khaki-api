@@ -12,7 +12,7 @@ import org.springframework.scheduling.annotation.AsyncResult;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
-import java.util.concurrent.Future;
+import java.util.concurrent.CompletableFuture;
 
 @Service
 public class TimeBlockSummaryPersistenceService implements TimeBlockSummaryPersistenceInterface {
@@ -28,7 +28,7 @@ public class TimeBlockSummaryPersistenceService implements TimeBlockSummaryPersi
 
     @Async
     @Override
-    public Future<TimeBlockSummaryDm> getTimeBlockSummary(Instant start, Instant end, StatisticsFilterDe filterDe) {
+    public CompletableFuture<TimeBlockSummaryDm> getTimeBlockSummary(Instant start, Instant end, StatisticsFilterDe filterDe) {
         TimeBlockSummaryView timeBlockSummaryView;
 
         switch (filterDe) {
@@ -52,7 +52,7 @@ public class TimeBlockSummaryPersistenceService implements TimeBlockSummaryPersi
                 throw new RuntimeException("invalid filter: " + filterDe);
         }
 
-        return new AsyncResult<>(modelMapper.map(
+        return CompletableFuture.supplyAsync(() -> modelMapper.map(
                 timeBlockSummaryView,
                 TimeBlockSummaryDm.class
         ));
