@@ -3,7 +3,6 @@ package com.getkhaki.api.bff.domain.services;
 import com.getkhaki.api.bff.domain.models.IntervalDe;
 import com.getkhaki.api.bff.domain.models.StatisticsFilterDe;
 import com.getkhaki.api.bff.domain.models.TimeBlockSummaryDm;
-import com.getkhaki.api.bff.domain.persistence.DepartmentStatisticsPersistenceInterface;
 import com.getkhaki.api.bff.domain.persistence.TimeBlockSummaryPersistenceInterface;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -14,25 +13,18 @@ import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 public class StatisticsServiceUnitTests {
-
     private StatisticsService underTest;
-    private DepartmentStatisticsPersistenceInterface departmentStatisticsPersistenceService;
     private TimeBlockSummaryPersistenceInterface timeBlockSummaryPersistenceService;
     private TimeBlockGeneratorFactory timeBlockGeneratorFactory;
 
     @BeforeEach
     public void setup() {
-        departmentStatisticsPersistenceService = mock(DepartmentStatisticsPersistenceInterface.class);
         timeBlockSummaryPersistenceService = mock(TimeBlockSummaryPersistenceInterface.class);
         timeBlockGeneratorFactory = mock(TimeBlockGeneratorFactory.class);
         underTest = new StatisticsService(
-                departmentStatisticsPersistenceService,
                 timeBlockSummaryPersistenceService,
                 timeBlockGeneratorFactory
         );
@@ -46,6 +38,7 @@ public class StatisticsServiceUnitTests {
 
         ArgumentCaptor<Instant> startCaptor = ArgumentCaptor.forClass(Instant.class);
         ArgumentCaptor<Instant> endCaptor = ArgumentCaptor.forClass(Instant.class);
+
         when(timeBlockGeneratorFactory.get(any())).thenCallRealMethod();
         when(
                 timeBlockSummaryPersistenceService.getTimeBlockSummary(
@@ -80,5 +73,4 @@ public class StatisticsServiceUnitTests {
         assertThat(secondPassedStartInstant).isEqualTo(secondStartShouldBe);
         assertThat(secondPassedEndInstant).isEqualTo(secondEndShouldBe);
     }
-
 }

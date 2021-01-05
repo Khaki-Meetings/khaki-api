@@ -7,9 +7,12 @@ import com.getkhaki.api.bff.domain.persistence.TimeBlockSummaryPersistenceInterf
 import com.getkhaki.api.bff.persistence.models.views.TimeBlockSummaryView;
 import com.getkhaki.api.bff.persistence.repositories.TimeBlockSummaryRepositoryInterface;
 import org.modelmapper.ModelMapper;
+import org.springframework.scheduling.annotation.Async;
+import org.springframework.scheduling.annotation.AsyncResult;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
+import java.util.concurrent.Future;
 
 @Service
 public class TimeBlockSummaryPersistenceService implements TimeBlockSummaryPersistenceInterface {
@@ -23,10 +26,11 @@ public class TimeBlockSummaryPersistenceService implements TimeBlockSummaryPersi
         this.sessionTenant = sessionTenant;
     }
 
-
+    @Async
     @Override
-    public TimeBlockSummaryDm getTimeBlockSummary(Instant start, Instant end, StatisticsFilterDe filterDe) {
+    public Future<TimeBlockSummaryDm> getTimeBlockSummary(Instant start, Instant end, StatisticsFilterDe filterDe) {
         TimeBlockSummaryView timeBlockSummaryView;
+
         switch (filterDe) {
             case External:
                 timeBlockSummaryView = timeBlockSummaryRepositoryInterface.findExternalTimeBlockSummaryInRange(
@@ -34,6 +38,7 @@ public class TimeBlockSummaryPersistenceService implements TimeBlockSummaryPersi
                         end,
                         sessionTenant.getTenantId()
                 );
+
                 break;
             case Internal:
                 timeBlockSummaryView = timeBlockSummaryRepositoryInterface.findInternalTimeBlockSummaryInRange(
@@ -41,13 +46,15 @@ public class TimeBlockSummaryPersistenceService implements TimeBlockSummaryPersi
                         end,
                         sessionTenant.getTenantId()
                 );
+
                 break;
             default:
                 throw new RuntimeException("invalid filter: " + filterDe);
         }
-        return modelMapper.map(
+
+        return new AsyncResult<>(modelMapper.map(
                 timeBlockSummaryView,
                 TimeBlockSummaryDm.class
-        );
+        ));
     }
 }
