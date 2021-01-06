@@ -12,8 +12,8 @@ import java.time.Instant;
 @AllArgsConstructor
 @Accessors(chain = true)
 public class TimeBlockSummaryDm {
-    Instant start;
-    Instant end;
     Long totalSeconds;
     Integer meetingCount;
+    Instant start;
+    Instant end;
 }

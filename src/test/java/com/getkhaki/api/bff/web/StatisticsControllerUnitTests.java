@@ -110,18 +110,22 @@ public class StatisticsControllerUnitTests {
 
         TimeBlockSummaryResponseDto mockDto = new TimeBlockSummaryResponseDto(
                 1L,
-                1
+                1,
+                Instant.now(),
+                Instant.now()
         );
 
         TimeBlockSummaryDm mockDm = new TimeBlockSummaryDm(
                 1L,
-                1
+                1,
+                Instant.now(),
+                Instant.now()
         );
 
         when(modelMapper.map(StatisticsFilterDte.External, StatisticsFilterDe.class))
                 .thenReturn(StatisticsFilterDe.External);
-//        when(timeBlockSummaryPersistenceService.getTimeBlockSummary(any(Instant.class), any(Instant.class), any()))
-//                .thenReturn(mockDm);
+        when(timeBlockSummaryPersistenceService.getTimeBlockSummary(any(Instant.class), any(Instant.class), any()))
+                .thenReturn(mockDm);
         when(modelMapper.map(mockDm, TimeBlockSummaryResponseDto.class)).thenReturn(mockDto);
 
         TimeBlockSummaryResponseDto timeBlockSummaryResponseDto = underTest.getTimeBlockSummary(
