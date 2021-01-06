@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.Instant;
 import java.util.List;
+import java.util.Random;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 import java.util.stream.Collectors;
@@ -44,39 +45,19 @@ public class StatisticsService {
         TimeBlockGeneratorInterface timeBlockGenerator = timeBlockGeneratorFactory.get(interval);
         List<TimeBlockRangeDm> timeBlockRangeList = timeBlockGenerator.generate(start, count);
 
-        log.fatal("STARTING ALL: " + Thread.currentThread().getName());
         UUID tenantId = sessionTenant.getTenantId();
         var futures = timeBlockRangeList
                 .stream()
                 .map(
-                        range -> {
-//                            ExecutorService executor = Executors.newSingleThreadExecutor();
-//                            Future<TimeBlockSummaryDm> ret =
-//                                    executor.submit(() -> {
-//                                        return timeBlockSummaryPersistenceService
-//                                                .getTimeBlockSummary(range.getStart(), range.getEnd(), filterDe);
-//                                    });
-
-                            var ret = supplyAsync(() -> {
-                                log.fatal("STARTING: " + Thread.currentThread().getName());
-                                var foo = timeBlockSummaryPersistenceService
-                                        .getTimeBlockSummary(
-                                                range.getStart(),
-                                                range.getEnd(),
-                                                filterDe,
-                                                tenantId
-                                        );
-                                log.fatal("DONE" + Thread.currentThread().getName());
-                                return foo;
-                            });
-
-                            return ret;
-                        }
+                        range -> supplyAsync(() -> timeBlockSummaryPersistenceService
+                                .getTimeBlockSummary(
+                                        range.getStart(),
+                                        range.getEnd(),
+                                        filterDe,
+                                        tenantId
+                                ))
                 )
                 .collect(Collectors.toList());
-        log.fatal("DONE ALL: " + Thread.currentThread().getName());
-
-        CompletableFuture.allOf(futures.toArray(CompletableFuture[]::new)).join();
 
         return futures.stream()
                 .map(CompletableFuture::join)
