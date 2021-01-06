@@ -6,6 +6,7 @@ import com.getkhaki.api.bff.domain.models.TimeBlockSummaryDm;
 import com.getkhaki.api.bff.domain.persistence.TimeBlockSummaryPersistenceInterface;
 import com.getkhaki.api.bff.persistence.models.views.TimeBlockSummaryView;
 import com.getkhaki.api.bff.persistence.repositories.TimeBlockSummaryRepositoryInterface;
+import lombok.val;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
@@ -55,6 +56,9 @@ public class TimeBlockSummaryPersistenceService implements TimeBlockSummaryPersi
                 throw new RuntimeException("invalid filter: " + filterDe);
         }
 
-        return modelMapper.map(timeBlockSummaryView, TimeBlockSummaryDm.class);
+        val dm = modelMapper.map(timeBlockSummaryView, TimeBlockSummaryDm.class);
+        dm.setEnd(end);
+        dm.setStart(start);
+        return dm;
     }
 }
