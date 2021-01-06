@@ -6,10 +6,12 @@ import com.getkhaki.api.bff.domain.models.TimeBlockSummaryDm;
 import com.getkhaki.api.bff.domain.persistence.TimeBlockSummaryPersistenceInterface;
 import com.getkhaki.api.bff.persistence.models.views.TimeBlockSummaryView;
 import com.getkhaki.api.bff.persistence.repositories.TimeBlockSummaryRepositoryInterface;
+import lombok.val;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
+import java.util.UUID;
 
 @Service
 public class TimeBlockSummaryPersistenceService implements TimeBlockSummaryPersistenceInterface {
@@ -23,31 +25,40 @@ public class TimeBlockSummaryPersistenceService implements TimeBlockSummaryPersi
         this.sessionTenant = sessionTenant;
     }
 
-
     @Override
     public TimeBlockSummaryDm getTimeBlockSummary(Instant start, Instant end, StatisticsFilterDe filterDe) {
+        return getTimeBlockSummary(start, end, filterDe, sessionTenant.getTenantId());
+
+    }
+
+    @Override
+    public TimeBlockSummaryDm getTimeBlockSummary(Instant start, Instant end, StatisticsFilterDe filterDe, UUID tenantId) {
         TimeBlockSummaryView timeBlockSummaryView;
+
         switch (filterDe) {
             case External:
                 timeBlockSummaryView = timeBlockSummaryRepositoryInterface.findExternalTimeBlockSummaryInRange(
                         start,
                         end,
-                        sessionTenant.getTenantId()
+                        tenantId
                 );
+
                 break;
             case Internal:
                 timeBlockSummaryView = timeBlockSummaryRepositoryInterface.findInternalTimeBlockSummaryInRange(
                         start,
                         end,
-                        sessionTenant.getTenantId()
+                        tenantId
                 );
+
                 break;
             default:
                 throw new RuntimeException("invalid filter: " + filterDe);
         }
-        return modelMapper.map(
-                timeBlockSummaryView,
-                TimeBlockSummaryDm.class
-        );
+
+        val timeBlockSummaryDm = modelMapper.map(timeBlockSummaryView, TimeBlockSummaryDm.class);
+        timeBlockSummaryDm.setEnd(end);
+        timeBlockSummaryDm.setStart(start);
+        return timeBlockSummaryDm;
     }
 }
