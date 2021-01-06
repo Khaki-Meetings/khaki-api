@@ -1,8 +1,8 @@
 package com.getkhaki.api.bff.domain.services;
 
+import com.getkhaki.api.bff.config.interceptors.models.SessionTenant;
 import com.getkhaki.api.bff.domain.models.IntervalDe;
 import com.getkhaki.api.bff.domain.models.StatisticsFilterDe;
-import com.getkhaki.api.bff.domain.models.TimeBlockSummaryDm;
 import com.getkhaki.api.bff.domain.persistence.TimeBlockSummaryPersistenceInterface;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -13,7 +13,10 @@ import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 public class StatisticsServiceUnitTests {
     private StatisticsService underTest;
@@ -26,7 +29,8 @@ public class StatisticsServiceUnitTests {
         timeBlockGeneratorFactory = mock(TimeBlockGeneratorFactory.class);
         underTest = new StatisticsService(
                 timeBlockSummaryPersistenceService,
-                timeBlockGeneratorFactory
+                timeBlockGeneratorFactory,
+                new SessionTenant()
         );
     }
 

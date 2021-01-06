@@ -7,12 +7,10 @@ import com.getkhaki.api.bff.domain.persistence.TimeBlockSummaryPersistenceInterf
 import com.getkhaki.api.bff.persistence.models.views.TimeBlockSummaryView;
 import com.getkhaki.api.bff.persistence.repositories.TimeBlockSummaryRepositoryInterface;
 import org.modelmapper.ModelMapper;
-import org.springframework.scheduling.annotation.Async;
-import org.springframework.scheduling.annotation.AsyncResult;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
-import java.util.concurrent.CompletableFuture;
+import java.util.UUID;
 
 @Service
 public class TimeBlockSummaryPersistenceService implements TimeBlockSummaryPersistenceInterface {
@@ -26,9 +24,14 @@ public class TimeBlockSummaryPersistenceService implements TimeBlockSummaryPersi
         this.sessionTenant = sessionTenant;
     }
 
-    @Async
     @Override
-    public CompletableFuture<TimeBlockSummaryDm> getTimeBlockSummary(Instant start, Instant end, StatisticsFilterDe filterDe) {
+    public TimeBlockSummaryDm getTimeBlockSummary(Instant start, Instant end, StatisticsFilterDe filterDe) {
+        return getTimeBlockSummary(start, end, filterDe, sessionTenant.getTenantId());
+
+    }
+
+    @Override
+    public TimeBlockSummaryDm getTimeBlockSummary(Instant start, Instant end, StatisticsFilterDe filterDe, UUID tenantId) {
         TimeBlockSummaryView timeBlockSummaryView;
 
         switch (filterDe) {
@@ -36,7 +39,7 @@ public class TimeBlockSummaryPersistenceService implements TimeBlockSummaryPersi
                 timeBlockSummaryView = timeBlockSummaryRepositoryInterface.findExternalTimeBlockSummaryInRange(
                         start,
                         end,
-                        sessionTenant.getTenantId()
+                        tenantId
                 );
 
                 break;
@@ -44,7 +47,7 @@ public class TimeBlockSummaryPersistenceService implements TimeBlockSummaryPersi
                 timeBlockSummaryView = timeBlockSummaryRepositoryInterface.findInternalTimeBlockSummaryInRange(
                         start,
                         end,
-                        sessionTenant.getTenantId()
+                        tenantId
                 );
 
                 break;
@@ -52,9 +55,6 @@ public class TimeBlockSummaryPersistenceService implements TimeBlockSummaryPersi
                 throw new RuntimeException("invalid filter: " + filterDe);
         }
 
-        return CompletableFuture.supplyAsync(() -> modelMapper.map(
-                timeBlockSummaryView,
-                TimeBlockSummaryDm.class
-        ));
+        return modelMapper.map(timeBlockSummaryView, TimeBlockSummaryDm.class);
     }
 }

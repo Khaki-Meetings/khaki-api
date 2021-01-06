@@ -4,9 +4,9 @@ import com.getkhaki.api.bff.domain.models.StatisticsFilterDe;
 import com.getkhaki.api.bff.domain.models.TimeBlockSummaryDm;
 
 import java.time.Instant;
-import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.Future;
+import java.util.UUID;
 
 public interface TimeBlockSummaryPersistenceInterface {
-    CompletableFuture<TimeBlockSummaryDm> getTimeBlockSummary(Instant start, Instant end, StatisticsFilterDe filterDe);
+    TimeBlockSummaryDm getTimeBlockSummary(Instant start, Instant end, StatisticsFilterDe filterDe);
+    TimeBlockSummaryDm getTimeBlockSummary(Instant start, Instant end, StatisticsFilterDe filterDe, UUID tenantId);
 }
