@@ -39,7 +39,6 @@ public class TimeBlockSummaryPersistenceServiceUnitTests {
         ZonedDateTime startTest = ZonedDateTime.parse("2020-11-01T00:00:00.000000-07:00[America/Denver]");
         ZonedDateTime endTest = ZonedDateTime.parse("2020-11-12T12:22:40.274456-07:00[America/Denver]");
         UUID id = UUID.randomUUID();
-        TimeBlockSummaryDm timeBlockSummaryDm = new TimeBlockSummaryDm(1L, 1);
     }
 
     @Test

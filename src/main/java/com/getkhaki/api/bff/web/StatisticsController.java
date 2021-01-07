@@ -7,33 +7,23 @@ import com.getkhaki.api.bff.domain.persistence.DepartmentStatisticsPersistenceIn
 import com.getkhaki.api.bff.domain.persistence.OrganizersStatisticsPersistenceInterface;
 import com.getkhaki.api.bff.domain.persistence.TimeBlockSummaryPersistenceInterface;
 import com.getkhaki.api.bff.domain.services.StatisticsService;
-import com.getkhaki.api.bff.web.models.DepartmentStatisticsResponseDto;
-import com.getkhaki.api.bff.web.models.DepartmentsStatisticsResponseDto;
-import com.getkhaki.api.bff.web.models.OrganizerStatisticsResponseDto;
-import com.getkhaki.api.bff.web.models.StatisticsFilterDte;
-import com.getkhaki.api.bff.web.models.TimeBlockSummaryResponseDto;
-import com.getkhaki.api.bff.web.models.TrailingStatisticsResponseDto;
+import com.getkhaki.api.bff.web.models.*;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeToken;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.time.Instant;
 import java.util.List;
 import java.util.Optional;
+import java.util.concurrent.ExecutionException;
 import java.util.stream.Collectors;
 
-@RequestMapping("/statistics")
 @RestController
 @CrossOrigin(origins = "*")
+@RequestMapping("/statistics")
 public class StatisticsController {
-
     private final StatisticsService statisticsService;
     private final OrganizersStatisticsPersistenceInterface organizersStatisticsPersistenceService;
     private final TimeBlockSummaryPersistenceInterface timeBlockSummaryPersistenceService;
@@ -54,7 +44,6 @@ public class StatisticsController {
         this.modelMapper = modelMapper;
     }
 
-
     @GetMapping("/organizers/{start}/{end}")
     public Page<OrganizerStatisticsResponseDto> getOrganizersStatistics(
             @PathVariable Instant start,
@@ -63,15 +52,10 @@ public class StatisticsController {
             Pageable pageable
     ) {
         Page<OrganizerStatisticsDm> organizerStatisticsDmList = organizersStatisticsPersistenceService
-                .getOrganizersStatistics(
-                        start,
-                        end,
-                        pageable,
-                        modelMapper.map(
-                                filter.orElse(StatisticsFilterDte.External),
-                                StatisticsFilterDe.class
-                        )
+                .getOrganizersStatistics(start, end, pageable, modelMapper.map(
+                        filter.orElse(StatisticsFilterDte.External), StatisticsFilterDe.class)
                 );
+
         return organizerStatisticsDmList.map(dm -> modelMapper.map(dm, OrganizerStatisticsResponseDto.class));
     }
 
@@ -82,10 +66,11 @@ public class StatisticsController {
             @PathVariable Instant end,
             @RequestParam(required = false) Optional<StatisticsFilterDte> filter
     ) {
-        var filterDe = modelMapper.map(
+        StatisticsFilterDe filterDe = modelMapper.map(
                 filter.orElse(StatisticsFilterDte.External),
                 StatisticsFilterDe.class
         );
+
         return modelMapper.map(
                 timeBlockSummaryPersistenceService.getTimeBlockSummary(start, end, filterDe),
                 TimeBlockSummaryResponseDto.class
@@ -99,15 +84,13 @@ public class StatisticsController {
             @RequestParam(required = false) Optional<StatisticsFilterDte> filter
     ) {
         DepartmentsStatisticsResponseDto ret = new DepartmentsStatisticsResponseDto();
+
         ret.setDepartmentsStatistics(
                 modelMapper.map(
-                        departmentStatisticsPersistenceService.getPerDepartmentStatistics(
-                                start,
-                                end,
-                                modelMapper.map(filter.orElse(StatisticsFilterDte.External), StatisticsFilterDe.class)
+                        departmentStatisticsPersistenceService.getPerDepartmentStatistics(start, end, modelMapper.map(
+                                filter.orElse(StatisticsFilterDte.External), StatisticsFilterDe.class)
                         ),
-                        new TypeToken<List<DepartmentStatisticsResponseDto>>() {
-                        }.getType()
+                        new TypeToken<List<DepartmentStatisticsResponseDto>>() {}.getType()
                 )
         );
 
@@ -122,21 +105,16 @@ public class StatisticsController {
             @RequestParam(required = false) Optional<StatisticsFilterDte> filter
     ) {
         TrailingStatisticsResponseDto ret = new TrailingStatisticsResponseDto();
-        ret.setTimeBlockSummaries(statisticsService
-                .getTrailingStatistics(start, interval, count, modelMapper.map(
-                        filter.orElse(StatisticsFilterDte.External),
-                        StatisticsFilterDe.class
-                        )
+
+        ret.setTimeBlockSummaries(
+                statisticsService.getTrailingStatistics(start, interval, count, modelMapper.map(
+                        filter.orElse(StatisticsFilterDte.External), StatisticsFilterDe.class)
                 )
                 .stream()
-                .map(
-                        stat -> modelMapper.map(stat, TimeBlockSummaryResponseDto.class)
-                )
+                .map(stat -> modelMapper.map(stat, TimeBlockSummaryResponseDto.class))
                 .collect(Collectors.toList())
         );
 
         return ret;
     }
-
-
 }
