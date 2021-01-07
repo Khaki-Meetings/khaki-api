@@ -110,12 +110,16 @@ public class StatisticsControllerUnitTests {
 
         TimeBlockSummaryResponseDto mockDto = new TimeBlockSummaryResponseDto(
                 1L,
-                1
+                1,
+                Instant.now(),
+                Instant.now()
         );
 
         TimeBlockSummaryDm mockDm = new TimeBlockSummaryDm(
                 1L,
-                1
+                1,
+                Instant.now(),
+                Instant.now()
         );
 
         when(modelMapper.map(StatisticsFilterDte.External, StatisticsFilterDe.class))
