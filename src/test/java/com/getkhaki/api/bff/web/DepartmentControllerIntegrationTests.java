@@ -35,7 +35,7 @@ public class DepartmentControllerIntegrationTests extends BaseMvcIntegrationTest
     public void importAsync() throws Exception {
         ClassLoader classLoader = getClass().getClassLoader();
         Path filePath = Paths.get(
-                Objects.requireNonNull(classLoader.getResource("department-import.csv")).getFile()
+                Objects.requireNonNull(classLoader.getResource("s56-department-import.csv")).getFile()
         );
 
         MockMultipartFile csvMultipart = new MockMultipartFile(

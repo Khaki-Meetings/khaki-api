@@ -1,0 +1,32 @@
+<?xml version="1.1" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xmlns:pro="http://www.liquibase.org/xml/ns/pro"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.0.xsd
+      http://www.liquibase.org/xml/ns/pro http://www.liquibase.org/xml/ns/pro/liquibase-pro-4.0.xsd">
+
+    <property name="crossOrgCalEventId" value="unhex(replace('3754dcbf-195d-40fd-af52-73a5d75aa378', '-', ''))"
+              dbms="mariadb"/>
+    <property name="crossOrgCalEventId" value="regexp_replace('3754dcbf-195d-40fd-af52-73a5d75aa378', '-', '')" dbms="h2"/>
+    <changeSet id="cross-org-meeting-1" author="jacob">
+        <insert tableName="calendar_event_dao">
+            <column name="id" valueComputed="${crossOrgCalEventId}"/>
+            <column name="summary" value="cross org meeting"/>
+            <column name="created" value="2020-11-01T09:00:00.000Z" />
+            <column name="start" value="2020-11-01T09:00:00.000Z" />
+            <column name="end" value="2020-11-01T10:00:00.000Z" />
+            <column name="google_calendar_id" value="my call 1" />
+        </insert>
+        <insert tableName="calendar_event_participant_dao">
+            <column name="id" valueComputed="${uuidGenerated}"/>
+            <column name="calendar_event_id" valueComputed="${crossOrgCalEventId}"/>
+            <column name="email_id" value="${bobJonesS56NetEmailId}"/>
+            <column name="organizer" value="1"/>
+        </insert>
+        <insert tableName="calendar_event_participant_dao">
+            <column name="id" valueComputed="${uuidGenerated}"/>
+            <column name="calendar_event_id" valueComputed="${crossOrgCalEventId}"/>
+            <column name="email_id" value="${bobJonesKellerSoftEmailId}"/>
+        </insert>
+    </changeSet>
+</databaseChangeLog>

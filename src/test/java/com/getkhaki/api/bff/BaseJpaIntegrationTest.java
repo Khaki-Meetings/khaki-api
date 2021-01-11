@@ -19,7 +19,7 @@ public abstract class BaseJpaIntegrationTest {
 
     @BeforeEach
     public void setupLiquibase() throws LiquibaseException {
-        liquibase.setChangeLog("classpath:fixtures/liquibase-test-data.yaml");
+        liquibase.setChangeLog("classpath:fixtures/liquibase-test-data.xml");
         liquibase.setShouldRun(true);
         liquibase.afterPropertiesSet();
     }
