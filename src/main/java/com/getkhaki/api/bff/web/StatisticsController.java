@@ -117,4 +117,15 @@ public class StatisticsController {
 
         return ret;
     }
+
+    @GetMapping("/individual/{start}/{interval}")
+    public TimeBlockSummaryResponseDto getIndividualStatistics(
+            @PathVariable Instant start,
+            @PathVariable IntervalDe interval,
+            @RequestParam(required = false) Optional<StatisticsFilterDte> filter
+    ) {
+        TimeBlockSummaryResponseDto ret = new TimeBlockSummaryResponseDto();
+
+        return ret;
+    }
 }

@@ -6,6 +6,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
 import java.time.Instant;
+import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 public interface TimeBlockSummaryRepositoryInterface extends JpaRepository<CalendarEventDao, UUID> {
@@ -77,4 +79,59 @@ public interface TimeBlockSummaryRepositoryInterface extends JpaRepository<Calen
                     "   )"
     )
     TimeBlockSummaryView findInternalTimeBlockSummaryInRange(Instant sDate, Instant eDate, UUID tenantId);
+
+
+//    select pd.first_name,
+//    count(cepd.calendar_event_id) as totalMeetings,
+//       (
+//    select sum(timestampdiff(second, ced.start, ced.end))
+//    from calendar_event_dao where calendar_event_dao.id = ced.id
+//       )                             as totalSeconds
+//
+//    from person_dao pd
+//    inner join email_dao_people edp on pd.id = edp.people_id
+//    inner join email_dao ed on edp.emails_id = ed.id
+//    inner join domain_dao dd on ed.domain_id = dd.id
+//    inner join domain_dao_organizations ddo on dd.id = ddo.domains_id
+//    inner join organization_dao od on ddo.organizations_id = od.id
+//    inner join calendar_event_participant_dao cepd on ed.id = cepd.email_id
+//    inner join calendar_event_dao ced on cepd.calendar_event_id = ced.id
+//    where od.name = 'S56'
+//    group by pd.id
+//    ;
+
+
+    @Query(
+            "select person.firstName, " +
+                    "(" +
+                    "   select sum(timestampdiff(second, innerCalendarEvent.start, innerCalendarEvent.end))" +
+                    "   from CalendarEventDao innerCalendarEvent" +
+                    "   where innerCalendarEvent.id = calendarEvent.id" +
+                    ") as totalSeconds," +
+                    "count(calendarEvent) as meetingCount " +
+                    "from PersonDao person " +
+                    "   inner join person.emails as emails" +
+                    "   inner join emails.domain.organizations organization" +
+                    "   inner join CalendarEventParticipantDao calendarEventParticipants" +
+                    "       on calendarEventParticipants.email.id = emails.id" +
+                    "   inner join calendarEventParticipants.calendarEvent calendarEvent " +
+                    "where organization.id = :tenantId " +
+                    "   and person.id = :personId " +
+                    "   and calendarEvent.start between :sDate and :eDate " +
+                    "group by calendarEvent"
+    )
+    List<TimeBlockSummaryView> findIndividualExternalTimeBlockSummaryInRange(
+            UUID personId,
+            Instant sDate,
+            Instant eDate,
+            UUID tenantId
+    );
+
+//    @Query("select 2 as totalSeconds, 4 as meetingCount from PersonDao")
+//    TimeBlockSummaryView findIndividualInternalTimeBlockSummaryInRange(
+//            UUID personId,
+//            Instant sDate,
+//            Instant eDate,
+//            UUID tenantId
+//    );
 }
