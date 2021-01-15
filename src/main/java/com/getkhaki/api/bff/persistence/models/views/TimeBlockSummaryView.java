@@ -5,7 +5,7 @@ import java.util.UUID;
 
 public interface TimeBlockSummaryView {
     UUID getPersonId();
-    UUID getFirstName();
+    String getFirstName();
     Long getTotalSeconds();
     Long getMeetingCount();
 }

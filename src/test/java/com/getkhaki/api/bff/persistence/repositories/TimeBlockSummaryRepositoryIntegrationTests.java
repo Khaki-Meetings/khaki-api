@@ -49,9 +49,17 @@ public class TimeBlockSummaryRepositoryIntegrationTests extends BaseJpaIntegrati
         Instant start = Instant.parse("2020-11-01T00:00:00.000Z");
         Instant end = Instant.parse("2020-11-10T00:00:00.000Z");
 
-        UUID bobUuid = UUID.fromString("580cf117-aee1-433e-90ed-51c23a9b6e47");
+        UUID bobUuid = UUID.fromString("f66d66d7-7b40-4ffe-a38a-aae70919a1ef");
 
         var view = underTest.findIndividualExternalTimeBlockSummaryInRange(bobUuid, start, end, s56OrgUuid);
+
+                    var a = view.getPersonId();
+                    var e = view.getFirstName();
+                    var b = view.getTotalSeconds();
+                    var c = view.getMeetingCount();
+                    var d = view.getFirstName();
+
+        var foo = 1;
     }
 
     @Test

@@ -80,30 +80,26 @@ public interface TimeBlockSummaryRepositoryInterface extends JpaRepository<Calen
     TimeBlockSummaryView findInternalTimeBlockSummaryInRange(Instant sDate, Instant eDate, UUID tenantId);
 
     @Query(
-            "select person.firstName, " +
-                    "(" +
-                    "   select sum(timestampdiff(second, innerCalendarEvent.start, innerCalendarEvent.end))" +
-                    "   from CalendarEventDao innerCalendarEvent" +
-                    "   where innerCalendarEvent.id = calendarEvent.id" +
-                    ") as totalSeconds," +
-                    "count(calendarEvent) as meetingCount " +
-                    "from PersonDao person " +
-                    "   inner join person.emails as emails" +
-                    "   inner join emails.domain.organizations organization" +
-                    "   inner join CalendarEventParticipantDao calendarEventParticipants" +
-                    "       on calendarEventParticipants.email.id = emails.id" +
-                    "   inner join calendarEventParticipants.calendarEvent calendarEvent " +
-                    "where organization.id = :tenantId " +
-                    "   and person.id = :personId " +
+            "select email.user as firstName," +
+                    "   count(calendarEvent) as meetingCount, " +
+                    "   sum(timestampdiff(second, calendarEvent.start, calendarEvent.end)) as totalSeconds " +
+                    "from CalendarEventDao as calendarEvent " +
+                    "   inner join calendarEvent.participants as participants " +
+                    "   inner join participants.email as email " +
+                    "   inner join email.domain.organizations as organization " +
+                    "   inner join email.people as people " +
+                    "   inner join people.employee as employee " +
+                    "where employee.id = :personId " +
+                    "   and  organization.id = :tenantId " +
                     "   and calendarEvent.start between :sDate and :eDate " +
-                    "group by calendarEvent"
+                    "group by email"
     )
     TimeBlockSummaryView findIndividualExternalTimeBlockSummaryInRange(
             UUID personId, Instant sDate, Instant eDate, UUID tenantId
     );
 
-    @Query
-    TimeBlockSummaryView findIndividualInternalTimeBlockSummaryInRange(
-            UUID personId, Instant sDate, Instant eDate, UUID tenantId
-    );
+//    @Query
+//    TimeBlockSummaryView findIndividualInternalTimeBlockSummaryInRange(
+//            UUID personId, Instant sDate, Instant eDate, UUID tenantId
+//    );
 }

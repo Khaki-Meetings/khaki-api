@@ -77,10 +77,31 @@ public class TimeBlockSummaryPersistenceService implements TimeBlockSummaryPersi
 
                 break;
             case Internal:
-                timeBlockSummaryView = timeBlockSummaryRepositoryInterface.findIndividualInternalTimeBlockSummaryInRange(
-                        personId, start, end, sessionTenant.getTenantId()
-                );
+//                timeBlockSummaryView = timeBlockSummaryRepositoryInterface.findIndividualInternalTimeBlockSummaryInRange(
+//                        personId, start, end, sessionTenant.getTenantId()
+//                );
 
+                timeBlockSummaryView = new TimeBlockSummaryView() {
+                    @Override
+                    public UUID getPersonId() {
+                        return null;
+                    }
+
+                    @Override
+                    public String getFirstName() {
+                        return null;
+                    }
+
+                    @Override
+                    public Long getTotalSeconds() {
+                        return null;
+                    }
+
+                    @Override
+                    public Long getMeetingCount() {
+                        return null;
+                    }
+                };
                 break;
             default:
                 throw new RuntimeException("invalid filter: " + filterDe);
