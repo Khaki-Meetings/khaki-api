@@ -28,11 +28,14 @@ public interface CalendarEventRepositoryInterface extends JpaRepository<Calendar
                 "       calendar_event_participant_dao, " +
                 "       email_dao," +
                 "       email_dao_people," +
-                "       person_dao  " +
+                "       person_dao, " +
+                "       domain_dao_organizations " +
                 " where calendar_event_participant_dao.calendar_event_id = calendar_event_dao.id " +
                 "   and calendar_event_participant_dao.email_id = email_dao.id " +
                 "   and email_dao.id = email_dao_people.emails_id " +
-                "   and person_dao.id = email_dao_people.people_id "
+                "   and person_dao.id = email_dao_people.people_id " +
+                "   and domain_dao_organizations.domains_id = email_dao.domain_id " +
+                "   and domain_dao_organizations.organizations_id = :tenantId "
             , nativeQuery = true
     )
     Page<CalendarEventsWithAttendeesViewInterface> getCalendarEventsAttendees(UUID tenantId, Pageable pageable);
