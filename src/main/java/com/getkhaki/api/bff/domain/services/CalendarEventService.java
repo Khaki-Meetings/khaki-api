@@ -105,9 +105,9 @@ public class CalendarEventService {
         return buffer.toString();
     }
 
-    public Page<CalendarEventsWithAttendeesResponseDto> getCalendarEventsAttendees(Pageable pageable) {
+    public Page<CalendarEventsWithAttendeesResponseDto> getCalendarEventsAttendees(Instant sDate, Instant eDate, Pageable pageable) {
 
-        Page<CalendarEventsWithAttendeesViewInterface> page = calendarEventPersistence.getCalendarEventsAttendees(pageable);
+        Page<CalendarEventsWithAttendeesViewInterface> page = calendarEventPersistence.getCalendarEventsAttendees(sDate, eDate, pageable);
 
         List<CalendarEventsWithAttendeesResponseDto> newContent = new ArrayList<CalendarEventsWithAttendeesResponseDto>();
 

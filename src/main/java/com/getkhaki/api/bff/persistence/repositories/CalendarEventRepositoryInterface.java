@@ -8,6 +8,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
+import java.time.Instant;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -35,9 +36,10 @@ public interface CalendarEventRepositoryInterface extends JpaRepository<Calendar
                 "   and email_dao.id = email_dao_people.emails_id " +
                 "   and person_dao.id = email_dao_people.people_id " +
                 "   and domain_dao_organizations.domains_id = email_dao.domain_id " +
+                "   and calendar_event_dao.start between :sDate and :eDate " +
                 "   and domain_dao_organizations.organizations_id = :tenantId "
             , nativeQuery = true
     )
-    Page<CalendarEventsWithAttendeesViewInterface> getCalendarEventsAttendees(UUID tenantId, Pageable pageable);
+    Page<CalendarEventsWithAttendeesViewInterface> getCalendarEventsAttendees(UUID tenantId, Instant sDate, Instant eDate, Pageable pageable);
 
 }

@@ -15,6 +15,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.time.Instant;
+
 @Service
 @CommonsLog
 public class CalendarEventPersistenceService implements CalendarEventPersistenceInterface {
@@ -70,9 +72,9 @@ public class CalendarEventPersistenceService implements CalendarEventPersistence
     }
 
     @Override
-    public Page<CalendarEventsWithAttendeesViewInterface> getCalendarEventsAttendees(Pageable pageable) {
+    public Page<CalendarEventsWithAttendeesViewInterface> getCalendarEventsAttendees(Instant sDate, Instant eDate, Pageable pageable) {
         return calendarEventRepository
-                .getCalendarEventsAttendees(sessionTenant.getTenantId(), pageable)
+                .getCalendarEventsAttendees(sessionTenant.getTenantId(), sDate, eDate, pageable)
                 .map(calendarEventDm -> modelMapper.map(calendarEventDm, CalendarEventsWithAttendeesViewInterface.class));
     }
 }

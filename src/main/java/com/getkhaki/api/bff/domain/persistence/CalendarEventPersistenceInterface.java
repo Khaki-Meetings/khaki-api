@@ -5,8 +5,10 @@ import com.getkhaki.api.bff.persistence.models.views.CalendarEventsWithAttendees
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
+import java.time.Instant;
+
 public interface CalendarEventPersistenceInterface {
     CalendarEventDm upsert(CalendarEventDm calendarEventDm);
 
-    Page<CalendarEventsWithAttendeesViewInterface> getCalendarEventsAttendees(Pageable pageable);
+    Page<CalendarEventsWithAttendeesViewInterface> getCalendarEventsAttendees(Instant sDate, Instant eDate, Pageable pageable);
 }

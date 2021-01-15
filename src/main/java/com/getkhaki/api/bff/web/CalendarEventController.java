@@ -9,6 +9,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.Instant;
+
 @RequestMapping("/calendar-events")
 @RestController
 @CrossOrigin(origins = "*")
@@ -29,10 +31,11 @@ public class CalendarEventController {
         return modelMapper.map(calendarEventDmReturn, CalendarEventDto.class);
     }
 
-    @GetMapping
-    public Page<CalendarEventsWithAttendeesResponseDto> getCalendarEventsAttendees(Pageable pageable) {
+    @GetMapping("/{start}/{end}")
+    public Page<CalendarEventsWithAttendeesResponseDto> getCalendarEventsAttendees(@PathVariable Instant start,
+    @PathVariable Instant end, Pageable pageable) {
         Page<CalendarEventsWithAttendeesResponseDto> calendarEventsWithAttendeesDmList = calendarEventService
-                .getCalendarEventsAttendees(pageable);
+                .getCalendarEventsAttendees(start, end, pageable);
         return calendarEventsWithAttendeesDmList.map(dm -> modelMapper.map(dm, CalendarEventsWithAttendeesResponseDto.class));
     }
 }
