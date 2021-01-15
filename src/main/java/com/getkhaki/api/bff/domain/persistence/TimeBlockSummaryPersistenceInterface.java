@@ -9,5 +9,5 @@ import java.util.UUID;
 public interface TimeBlockSummaryPersistenceInterface {
     TimeBlockSummaryDm getTimeBlockSummary(Instant start, Instant end, StatisticsFilterDe filterDe);
     TimeBlockSummaryDm getTimeBlockSummary(Instant start, Instant end, StatisticsFilterDe filterDe, UUID tenantId);
-    TimeBlockSummaryDm getIndividualTimeBlockSummary(UUID personId, Instant start, Instant end, StatisticsFilterDe statsFilter);
+    TimeBlockSummaryDm getIndividualTimeBlockSummary(UUID employeeId, Instant start, Instant end, StatisticsFilterDe statsFilter);
 }

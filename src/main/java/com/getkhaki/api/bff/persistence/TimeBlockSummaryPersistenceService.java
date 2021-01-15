@@ -65,43 +65,21 @@ public class TimeBlockSummaryPersistenceService implements TimeBlockSummaryPersi
 
     @Override
     public TimeBlockSummaryDm getIndividualTimeBlockSummary(
-            UUID personId, Instant start, Instant end, StatisticsFilterDe filterDe
+            UUID employeeId, Instant start, Instant end, StatisticsFilterDe filterDe
     ) {
         TimeBlockSummaryView timeBlockSummaryView;
 
         switch (filterDe) {
             case External:
                 timeBlockSummaryView = timeBlockSummaryRepositoryInterface.findIndividualExternalTimeBlockSummaryInRange(
-                        personId, start, end, sessionTenant.getTenantId()
+                        employeeId, start, end, sessionTenant.getTenantId()
                 );
 
                 break;
             case Internal:
-//                timeBlockSummaryView = timeBlockSummaryRepositoryInterface.findIndividualInternalTimeBlockSummaryInRange(
-//                        personId, start, end, sessionTenant.getTenantId()
-//                );
-
-                timeBlockSummaryView = new TimeBlockSummaryView() {
-                    @Override
-                    public UUID getPersonId() {
-                        return null;
-                    }
-
-                    @Override
-                    public String getFirstName() {
-                        return null;
-                    }
-
-                    @Override
-                    public Long getTotalSeconds() {
-                        return null;
-                    }
-
-                    @Override
-                    public Long getMeetingCount() {
-                        return null;
-                    }
-                };
+                timeBlockSummaryView = timeBlockSummaryRepositoryInterface.findIndividualInternalTimeBlockSummaryInRange(
+                        employeeId, start, end, sessionTenant.getTenantId()
+                );
                 break;
             default:
                 throw new RuntimeException("invalid filter: " + filterDe);

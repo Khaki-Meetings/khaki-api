@@ -33,9 +33,7 @@ import java.util.UUID;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 public class StatisticsControllerUnitTests {
@@ -183,5 +181,51 @@ public class StatisticsControllerUnitTests {
         verify(
                 statisticsService, times(1)
         ).getTrailingStatistics(startTest, IntervalDe.Month, 1, StatisticsFilterDe.External);
+    }
+
+    @Test
+    public void getIndividualStatistics() {
+        var employeeId = UUID.randomUUID();
+        var start = Instant.now();
+        var end = Instant.now();
+        var externalFilterDte = Optional.of(StatisticsFilterDte.External);
+        var internalFilterDte = Optional.of(StatisticsFilterDte.Internal);
+        var externalFilterDe = StatisticsFilterDe.External;
+        var internalFilterDe = StatisticsFilterDe.Internal;
+        var externalTimeBlockSummaryDm = mock(TimeBlockSummaryDm.class);
+        var internalTimeBlockSummaryDm = mock(TimeBlockSummaryDm.class);
+        var externalTimeBlockSummaryResponseDto = mock(TimeBlockSummaryResponseDto.class);
+        var internalTimeBlockSummaryResponseDto = mock(TimeBlockSummaryResponseDto.class);
+
+        when(modelMapper.map(StatisticsFilterDte.External, StatisticsFilterDe.class))
+                .thenReturn(externalFilterDe);
+
+        when(modelMapper.map(StatisticsFilterDte.Internal, StatisticsFilterDe.class))
+                .thenReturn(internalFilterDe);
+
+        when(modelMapper.map(StatisticsFilterDte.Internal, StatisticsFilterDe.class))
+                .thenReturn(StatisticsFilterDe.Internal);
+
+        when(timeBlockSummaryPersistenceService.getIndividualTimeBlockSummary(employeeId, start, end, externalFilterDe))
+                .thenReturn(externalTimeBlockSummaryDm);
+
+        when(timeBlockSummaryPersistenceService.getIndividualTimeBlockSummary(employeeId, start, end, internalFilterDe))
+                .thenReturn(internalTimeBlockSummaryDm);
+
+        when(modelMapper.map(externalTimeBlockSummaryDm, TimeBlockSummaryResponseDto.class))
+                .thenReturn(externalTimeBlockSummaryResponseDto);
+
+        when(modelMapper.map(internalTimeBlockSummaryDm, TimeBlockSummaryResponseDto.class))
+                .thenReturn(internalTimeBlockSummaryResponseDto);
+
+        TimeBlockSummaryResponseDto externalResult = this.underTest.getIndividualStatistics(
+                employeeId, start, end, externalFilterDte);
+
+        assertThat(externalResult).isEqualTo(externalTimeBlockSummaryResponseDto);
+
+        TimeBlockSummaryResponseDto internalResult = this.underTest.getIndividualStatistics(
+                employeeId, start, end, internalFilterDte);
+
+        assertThat(internalResult).isEqualTo(internalTimeBlockSummaryResponseDto);
     }
 }

@@ -51,18 +51,26 @@ public class TimeBlockSummaryRepositoryIntegrationTests extends BaseJpaIntegrati
 
         UUID bobUuid = UUID.fromString("f66d66d7-7b40-4ffe-a38a-aae70919a1ef");
 
-        var view = underTest.findIndividualExternalTimeBlockSummaryInRange(bobUuid, start, end, s56OrgUuid);
+        TimeBlockSummaryView view = underTest.findIndividualExternalTimeBlockSummaryInRange(bobUuid, start, end, s56OrgUuid);
 
-                    var a = view.getPersonId();
-                    var e = view.getFirstName();
-                    var b = view.getTotalSeconds();
-                    var c = view.getMeetingCount();
-                    var d = view.getFirstName();
-
-        var foo = 1;
+        assertThat(view.getPersonId()).isEqualTo(UUID.fromString("580cf117-aee1-433e-90ed-51c23a9b6e47"));
+        assertThat(view.getFirstName()).isEqualTo("bob");
+        assertThat(view.getTotalSeconds()).isEqualTo(25200);
+        assertThat(view.getMeetingCount()).isEqualTo(4);
     }
 
     @Test
     public void testIndividualInternalFindBlockSummaryInRange() {
+        Instant start = Instant.parse("2020-11-01T00:00:00.000Z");
+        Instant end = Instant.parse("2020-11-10T00:00:00.000Z");
+
+        UUID bobUuid = UUID.fromString("f66d66d7-7b40-4ffe-a38a-aae70919a1ef");
+
+        TimeBlockSummaryView view = underTest.findIndividualInternalTimeBlockSummaryInRange(bobUuid, start, end, s56OrgUuid);
+
+        assertThat(view.getPersonId()).isEqualTo(UUID.fromString("580cf117-aee1-433e-90ed-51c23a9b6e47"));
+        assertThat(view.getFirstName()).isEqualTo("bob");
+        assertThat(view.getTotalSeconds()).isEqualTo(14400);
+        assertThat(view.getMeetingCount()).isEqualTo(2);
     }
 }
