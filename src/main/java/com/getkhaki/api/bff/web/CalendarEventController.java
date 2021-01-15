@@ -1,17 +1,13 @@
 package com.getkhaki.api.bff.web;
 
 import com.getkhaki.api.bff.domain.models.CalendarEventDm;
-import com.getkhaki.api.bff.persistence.models.views.CalendarEventsWithAttendeesView;
-import com.getkhaki.api.bff.web.models.CalendarEventDto;
+import com.getkhaki.api.bff.web.models.*;
 import com.getkhaki.api.bff.domain.services.CalendarEventService;
-import com.getkhaki.api.bff.web.models.EmployeeDto;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RequestMapping("/calendar-events")
 @RestController
@@ -34,9 +30,9 @@ public class CalendarEventController {
     }
 
     @GetMapping
-    public Page<CalendarEventsWithAttendeesView> getCalendarEventsAttendees(Pageable pageable) {
-        return calendarEventService
-                .getCalendarEventsAttendees(pageable)
-                .map(calendarEventDm -> this.modelMapper.map(calendarEventDm, CalendarEventsWithAttendeesView.class));
+    public Page<CalendarEventsWithAttendeesResponseDto> getCalendarEventsAttendees(Pageable pageable) {
+        Page<CalendarEventsWithAttendeesResponseDto> calendarEventsWithAttendeesDmList = calendarEventService
+                .getCalendarEventsAttendees(pageable);
+        return calendarEventsWithAttendeesDmList.map(dm -> modelMapper.map(dm, CalendarEventsWithAttendeesResponseDto.class));
     }
 }

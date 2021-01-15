@@ -4,7 +4,7 @@ import com.getkhaki.api.bff.config.interceptors.models.SessionTenant;
 import com.getkhaki.api.bff.domain.models.CalendarEventDm;
 import com.getkhaki.api.bff.domain.persistence.CalendarEventPersistenceInterface;
 import com.getkhaki.api.bff.persistence.models.CalendarEventDao;
-import com.getkhaki.api.bff.persistence.models.views.CalendarEventsWithAttendeesView;
+import com.getkhaki.api.bff.persistence.models.views.CalendarEventsWithAttendeesViewInterface;
 import com.getkhaki.api.bff.persistence.repositories.CalendarEventParticipantRepositoryInterface;
 import com.getkhaki.api.bff.persistence.repositories.CalendarEventRepositoryInterface;
 import lombok.extern.apachecommons.CommonsLog;
@@ -13,7 +13,6 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -71,10 +70,9 @@ public class CalendarEventPersistenceService implements CalendarEventPersistence
     }
 
     @Override
-    public Page<CalendarEventsWithAttendeesView> getCalendarEventsAttendees(Pageable pageable) {
-        Page<CalendarEventsWithAttendeesView> x = calendarEventRepository
+    public Page<CalendarEventsWithAttendeesViewInterface> getCalendarEventsAttendees(Pageable pageable) {
+        return calendarEventRepository
                 .getCalendarEventsAttendees(sessionTenant.getTenantId(), pageable)
-                .map(calendarEventDm -> modelMapper.map(calendarEventDm, CalendarEventsWithAttendeesView.class));
-        return x;
+                .map(calendarEventDm -> modelMapper.map(calendarEventDm, CalendarEventsWithAttendeesViewInterface.class));
     }
 }

@@ -7,6 +7,8 @@ import com.getkhaki.api.bff.persistence.repositories.PersonRepositoryInterface;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 public class PersonPersistenceService implements PersonPersistenceInterface {
@@ -38,4 +40,13 @@ public class PersonPersistenceService implements PersonPersistenceInterface {
                 ), PersonDm.class
         );
     }
+
+    @Override
+    public Set<PersonDm> getPersonsByCalendarEvent(String calendarEventId) {
+        return this.personRepository.findDistinctByCalendarEvent(calendarEventId)
+            .stream()
+            .map(person -> modelMapper.map(person, PersonDm.class))
+            .collect(Collectors.toSet());
+    }
+
 }
