@@ -19,7 +19,11 @@ public class TimeBlockSummaryPersistenceService implements TimeBlockSummaryPersi
     private final TimeBlockSummaryRepositoryInterface timeBlockSummaryRepositoryInterface;
     private final SessionTenant sessionTenant;
 
-    public TimeBlockSummaryPersistenceService(ModelMapper modelMapper, TimeBlockSummaryRepositoryInterface timeBlockSummaryRepositoryInterface, SessionTenant sessionTenant) {
+    public TimeBlockSummaryPersistenceService(
+            ModelMapper modelMapper,
+            TimeBlockSummaryRepositoryInterface timeBlockSummaryRepositoryInterface,
+            SessionTenant sessionTenant
+    ) {
         this.modelMapper = modelMapper;
         this.timeBlockSummaryRepositoryInterface = timeBlockSummaryRepositoryInterface;
         this.sessionTenant = sessionTenant;
@@ -38,17 +42,13 @@ public class TimeBlockSummaryPersistenceService implements TimeBlockSummaryPersi
         switch (filterDe) {
             case External:
                 timeBlockSummaryView = timeBlockSummaryRepositoryInterface.findExternalTimeBlockSummaryInRange(
-                        start,
-                        end,
-                        tenantId
+                        start, end, tenantId
                 );
 
                 break;
             case Internal:
                 timeBlockSummaryView = timeBlockSummaryRepositoryInterface.findInternalTimeBlockSummaryInRange(
-                        start,
-                        end,
-                        tenantId
+                        start, end, tenantId
                 );
 
                 break;
@@ -59,6 +59,36 @@ public class TimeBlockSummaryPersistenceService implements TimeBlockSummaryPersi
         val timeBlockSummaryDm = modelMapper.map(timeBlockSummaryView, TimeBlockSummaryDm.class);
         timeBlockSummaryDm.setEnd(end);
         timeBlockSummaryDm.setStart(start);
+
+        return timeBlockSummaryDm;
+    }
+
+    @Override
+    public TimeBlockSummaryDm getIndividualTimeBlockSummary(
+            UUID employeeId, Instant start, Instant end, StatisticsFilterDe filterDe
+    ) {
+        TimeBlockSummaryView timeBlockSummaryView;
+
+        switch (filterDe) {
+            case External:
+                timeBlockSummaryView = timeBlockSummaryRepositoryInterface.findIndividualExternalTimeBlockSummaryInRange(
+                        employeeId, start, end, sessionTenant.getTenantId()
+                );
+
+                break;
+            case Internal:
+                timeBlockSummaryView = timeBlockSummaryRepositoryInterface.findIndividualInternalTimeBlockSummaryInRange(
+                        employeeId, start, end, sessionTenant.getTenantId()
+                );
+                break;
+            default:
+                throw new RuntimeException("invalid filter: " + filterDe);
+        }
+
+        val timeBlockSummaryDm = modelMapper.map(timeBlockSummaryView, TimeBlockSummaryDm.class);
+        timeBlockSummaryDm.setEnd(end);
+        timeBlockSummaryDm.setStart(start);
+
         return timeBlockSummaryDm;
     }
 }
