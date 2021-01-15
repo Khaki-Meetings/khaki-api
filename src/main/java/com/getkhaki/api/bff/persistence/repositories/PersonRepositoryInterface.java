@@ -32,4 +32,21 @@ public interface PersonRepositoryInterface extends JpaRepository<PersonDao, UUID
     )
     List<PersonDao> findDistinctByCalendarEvent(String calendarEventId);
 
+    @Query(
+            value = "select id as id, " +
+                    "       first_name as firstName, " +
+                    "       last_name as lastName " +
+                    "  from person_dao pd " +
+                    " where exists ( " +
+                    "   select 'x' " +
+                    "   from calendar_event_participant_dao cepd," +
+                    "        email_dao_people edp " +
+                    "   where cepd.email_id = edp.emails_id " +
+                    "   and edp.people_id = pd.id " +
+                    "   and cepd.organizer = true " +
+                    "   and cepd.calendar_event_id = unhex(:calendarEventId) )",
+            nativeQuery = true
+    )
+    PersonDao findOrganizerByCalendarEvent(String calendarEventId);
+
 }

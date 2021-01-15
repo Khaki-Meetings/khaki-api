@@ -9,4 +9,6 @@ public interface PersonPersistenceInterface {
     PersonDm updatePerson(PersonDm personDm);
 
     Set<PersonDm> getPersonsByCalendarEvent(String calendarEventId);
+
+    PersonDm getOrganizerByCalendarEvent(String calendarEventId);
 }

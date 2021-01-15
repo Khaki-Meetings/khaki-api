@@ -20,4 +20,5 @@ public class CalendarEventsWithAttendeesResponseDto {
     Instant start;
     Instant end;
     List<PersonDto> participants;
+    PersonDto organizer;
 }

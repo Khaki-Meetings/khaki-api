@@ -1,6 +1,7 @@
 package com.getkhaki.api.bff.domain.services;
 
 import com.getkhaki.api.bff.domain.models.CalendarEventDm;
+import com.getkhaki.api.bff.domain.models.PersonDm;
 import com.getkhaki.api.bff.domain.persistence.CalendarEventPersistenceInterface;
 import com.getkhaki.api.bff.domain.persistence.OrganizationPersistenceInterface;
 import com.getkhaki.api.bff.domain.persistence.PersonPersistenceInterface;
@@ -119,6 +120,10 @@ public class CalendarEventService {
             dto.setCreated(event.getCreated());
             dto.setStart(event.getStart());
             dto.setEnd(event.getEnd());
+            PersonDm organizer = personPersistenceService.getOrganizerByCalendarEvent(eventId);
+            if (organizer != null) {
+                dto.setOrganizer(this.modelMapper.map(organizer, PersonDto.class));
+            }
             dto.setParticipants(
                     personPersistenceService.getPersonsByCalendarEvent(eventId)
                         .stream()

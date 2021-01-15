@@ -49,4 +49,12 @@ public class PersonPersistenceService implements PersonPersistenceInterface {
             .collect(Collectors.toSet());
     }
 
+    @Override
+    public PersonDm getOrganizerByCalendarEvent(String calendarEventId) {
+        PersonDao personDao = this.personRepository.findOrganizerByCalendarEvent(calendarEventId);
+        if (personDao != null) {
+            return this.modelMapper.map(personDao, PersonDm.class);
+        }
+        return null;
+    }
 }
