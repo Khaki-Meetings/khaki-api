@@ -45,7 +45,7 @@ public class CalendarEventServiceUnitTests {
         calendarProviderPersistenceFactory = mock(CalendarProviderPersistenceFactory.class);
         organizationPersistenceService = mock(OrganizationPersistenceInterface.class);
         personPersistenceInterface = mock(PersonPersistenceInterface.class);
-        val calendarEventService = new CalendarEventService(
+        CalendarEventService calendarEventService = new CalendarEventService(
                 calendarEventPersistence,
                 calendarProviderPersistenceFactory,
                 organizationPersistenceService,

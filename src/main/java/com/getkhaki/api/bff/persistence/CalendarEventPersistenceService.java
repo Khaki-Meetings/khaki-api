@@ -9,6 +9,7 @@ import com.getkhaki.api.bff.persistence.repositories.CalendarEventParticipantRep
 import com.getkhaki.api.bff.persistence.repositories.CalendarEventRepositoryInterface;
 import lombok.extern.apachecommons.CommonsLog;
 import lombok.val;
+import org.apache.commons.lang3.StringUtils;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -72,9 +73,15 @@ public class CalendarEventPersistenceService implements CalendarEventPersistence
     }
 
     @Override
-    public Page<CalendarEventsWithAttendeesViewInterface> getCalendarEventsAttendees(Instant sDate, Instant eDate, Pageable pageable) {
+    public Page<CalendarEventsWithAttendeesViewInterface> getCalendarEventsAttendees(Instant sDate, Instant eDate,
+                                                                                     String organizer, Pageable pageable) {
+        if (!StringUtils.isBlank(organizer)) {
+            return calendarEventRepository
+                    .getCalendarEventsAttendees(sessionTenant.getTenantId(), sDate, eDate, organizer, pageable)
+                    .map(calendarEventDm -> modelMapper.map(calendarEventDm, CalendarEventsWithAttendeesViewInterface.class));
+        }
         return calendarEventRepository
-                .getCalendarEventsAttendees(sessionTenant.getTenantId(), sDate, eDate, pageable)
+                .getCalendarEventsAttendeesWithoutOrganizer(sessionTenant.getTenantId(), sDate, eDate, pageable)
                 .map(calendarEventDm -> modelMapper.map(calendarEventDm, CalendarEventsWithAttendeesViewInterface.class));
     }
 }

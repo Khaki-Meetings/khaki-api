@@ -10,5 +10,6 @@ import java.time.Instant;
 public interface CalendarEventPersistenceInterface {
     CalendarEventDm upsert(CalendarEventDm calendarEventDm);
 
-    Page<CalendarEventsWithAttendeesViewInterface> getCalendarEventsAttendees(Instant sDate, Instant eDate, Pageable pageable);
+    Page<CalendarEventsWithAttendeesViewInterface> getCalendarEventsAttendees(
+            Instant sDate, Instant eDate, String organizer, Pageable pageable);
 }

@@ -105,9 +105,10 @@ public class CalendarEventService {
         return buffer.toString();
     }
 
-    public Page<CalendarEventsWithAttendeesResponseDto> getCalendarEventsAttendees(Instant sDate, Instant eDate, Pageable pageable) {
+    public Page<CalendarEventsWithAttendeesResponseDto> getCalendarEventsAttendees(Instant sDate, Instant eDate,
+               String organizer, Pageable pageable) {
 
-        Page<CalendarEventsWithAttendeesViewInterface> page = calendarEventPersistence.getCalendarEventsAttendees(sDate, eDate, pageable);
+        Page<CalendarEventsWithAttendeesViewInterface> page = calendarEventPersistence.getCalendarEventsAttendees(sDate, eDate, organizer, pageable);
 
         List<CalendarEventsWithAttendeesResponseDto> newContent = new ArrayList<CalendarEventsWithAttendeesResponseDto>();
 
@@ -120,9 +121,9 @@ public class CalendarEventService {
             dto.setCreated(event.getCreated());
             dto.setStart(event.getStart());
             dto.setEnd(event.getEnd());
-            PersonDm organizer = personPersistenceService.getOrganizerByCalendarEvent(eventId);
-            if (organizer != null) {
-                dto.setOrganizer(this.modelMapper.map(organizer, PersonDto.class));
+            PersonDm eventOrganizer = personPersistenceService.getOrganizerByCalendarEvent(eventId);
+            if (eventOrganizer != null) {
+                dto.setOrganizer(this.modelMapper.map(eventOrganizer, PersonDto.class));
             }
             dto.setParticipants(
                     personPersistenceService.getPersonsByCalendarEvent(eventId)

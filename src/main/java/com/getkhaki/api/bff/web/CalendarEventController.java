@@ -32,10 +32,13 @@ public class CalendarEventController {
     }
 
     @GetMapping("/{start}/{end}")
-    public Page<CalendarEventsWithAttendeesResponseDto> getCalendarEventsAttendees(@PathVariable Instant start,
-    @PathVariable Instant end, Pageable pageable) {
+    public Page<CalendarEventsWithAttendeesResponseDto> getCalendarEventsAttendees(
+        @PathVariable Instant start,
+        @PathVariable Instant end,
+        @RequestParam(required = false) String organizer,
+        Pageable pageable) {
         Page<CalendarEventsWithAttendeesResponseDto> calendarEventsWithAttendeesDmList = calendarEventService
-                .getCalendarEventsAttendees(start, end, pageable);
+                .getCalendarEventsAttendees(start, end, organizer, pageable);
         return calendarEventsWithAttendeesDmList.map(dm -> modelMapper.map(dm, CalendarEventsWithAttendeesResponseDto.class));
     }
 }
