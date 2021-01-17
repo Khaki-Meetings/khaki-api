@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.*;
 import java.time.Instant;
 import java.util.List;
 import java.util.Optional;
-import java.util.concurrent.ExecutionException;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @RestController
@@ -58,7 +58,6 @@ public class StatisticsController {
 
         return organizerStatisticsDmList.map(dm -> modelMapper.map(dm, OrganizerStatisticsResponseDto.class));
     }
-
 
     @GetMapping("/summary/{start}/{end}")
     public TimeBlockSummaryResponseDto getTimeBlockSummary(
@@ -116,5 +115,23 @@ public class StatisticsController {
         );
 
         return ret;
+    }
+
+    @GetMapping("/individual/{employeeId}/{start}/{end}")
+    public TimeBlockSummaryResponseDto getIndividualStatistics(
+            @PathVariable UUID employeeId,
+            @PathVariable Instant start,
+            @PathVariable Instant end,
+            @RequestParam(required = false) Optional<StatisticsFilterDte> filter
+    ) {
+        StatisticsFilterDe filterDe = modelMapper.map(
+                filter.orElse(StatisticsFilterDte.External),
+                StatisticsFilterDe.class
+        );
+
+        return modelMapper.map(
+                timeBlockSummaryPersistenceService.getIndividualTimeBlockSummary(employeeId, start, end, filterDe),
+                TimeBlockSummaryResponseDto.class
+        );
     }
 }

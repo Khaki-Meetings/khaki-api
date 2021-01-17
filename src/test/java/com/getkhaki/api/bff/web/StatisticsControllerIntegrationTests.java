@@ -20,6 +20,7 @@ import org.springframework.web.context.WebApplicationContext;
 
 import java.time.Instant;
 import java.util.List;
+import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.jwt;
@@ -79,8 +80,8 @@ public class StatisticsControllerIntegrationTests extends BaseMvcIntegrationTest
     public void testDepartmentStatisticsDefault() throws Exception {
         Instant start = Instant.parse("2020-11-01T00:00:00.000Z");
         Instant end = Instant.parse("2020-11-30T00:00:00.000Z");
-
         String url = String.format("/statistics/department/%s/%s", start, end);
+
         DepartmentsStatisticsResponseDto stats = getTypedResult(url, DepartmentsStatisticsResponseDto.class);
 
         DepartmentStatisticsResponseDto itDepartment = stats.getDepartmentsStatistics()
@@ -88,6 +89,7 @@ public class StatisticsControllerIntegrationTests extends BaseMvcIntegrationTest
                 .filter(stat -> stat.getDepartment().equals("IT"))
                 .findFirst()
                 .orElseThrow();
+
         assertThat(itDepartment.getTotalSeconds()).isEqualTo(32400);
 
         DepartmentStatisticsResponseDto hrDepartment = stats.getDepartmentsStatistics()
@@ -95,6 +97,7 @@ public class StatisticsControllerIntegrationTests extends BaseMvcIntegrationTest
                 .filter(stat -> stat.getDepartment().equals("HR"))
                 .findFirst()
                 .orElseThrow();
+
         assertThat(hrDepartment.getTotalSeconds()).isEqualTo(25200);
     }
 
@@ -102,8 +105,8 @@ public class StatisticsControllerIntegrationTests extends BaseMvcIntegrationTest
     public void testDepartmentStatisticsInternal() throws Exception {
         Instant start = Instant.parse("2020-11-01T00:00:00.000Z");
         Instant end = Instant.parse("2020-11-30T00:00:00.000Z");
-
         String url = String.format("/statistics/department/%s/%s?filter=" + StatisticsFilterDte.Internal, start, end);
+
         DepartmentsStatisticsResponseDto stats = getTypedResult(url, DepartmentsStatisticsResponseDto.class);
 
         DepartmentStatisticsResponseDto itDepartment = stats.getDepartmentsStatistics()
@@ -111,6 +114,7 @@ public class StatisticsControllerIntegrationTests extends BaseMvcIntegrationTest
                 .filter(stat -> stat.getDepartment().equals("IT"))
                 .findFirst()
                 .orElseThrow();
+
         assertThat(itDepartment.getTotalSeconds()).isEqualTo(25200);
 
         DepartmentStatisticsResponseDto hrDepartment = stats.getDepartmentsStatistics()
@@ -118,6 +122,7 @@ public class StatisticsControllerIntegrationTests extends BaseMvcIntegrationTest
                 .filter(stat -> stat.getDepartment().equals("HR"))
                 .findFirst()
                 .orElseThrow();
+
         assertThat(hrDepartment.getTotalSeconds()).isEqualTo(14400);
     }
 
@@ -125,7 +130,6 @@ public class StatisticsControllerIntegrationTests extends BaseMvcIntegrationTest
     public void testTrailingStatisticsDefault() throws Exception {
         Instant start = Instant.parse("2020-11-02T00:00:00.000Z");
         int count = 2;
-
         String url = String.format("/statistics/trailing/%s/%s/%d", start, IntervalDte.Day, count);
 
         TrailingStatisticsResponseDto stats = getTypedResult(url, TrailingStatisticsResponseDto.class);
@@ -133,9 +137,9 @@ public class StatisticsControllerIntegrationTests extends BaseMvcIntegrationTest
         assertThat(stats.getTimeBlockSummaries()).hasSize(2);
 
         List<TimeBlockSummaryResponseDto> summaries = stats.getTimeBlockSummaries();
+
         assertThat(summaries.get(0).getTotalSeconds()).isEqualTo(32400L);
         assertThat(summaries.get(0).getMeetingCount()).isEqualTo(1);
-
         assertThat(summaries.get(1).getTotalSeconds()).isEqualTo(18000L);
         assertThat(summaries.get(1).getMeetingCount()).isEqualTo(2);
     }
@@ -144,56 +148,63 @@ public class StatisticsControllerIntegrationTests extends BaseMvcIntegrationTest
     public void testTrailingStatisticsInternal() throws Exception {
         Instant start = Instant.parse("2020-11-02T00:00:00.000Z");
         int count = 2;
-
-        String url = String.format(
-                "/statistics/trailing/%s/%s/%d?filter=%s",
-                start,
-                IntervalDte.Day,
-                count,
-                StatisticsFilterDte.Internal
-        );
+        String url = String.format("/statistics/trailing/%s/%s/%d?filter=%s", start, IntervalDte.Day, count,
+                StatisticsFilterDte.Internal);
 
         TrailingStatisticsResponseDto stats = getTypedResult(url, TrailingStatisticsResponseDto.class);
 
         assertThat(stats.getTimeBlockSummaries()).hasSize(2);
 
         List<TimeBlockSummaryResponseDto> summaries = stats.getTimeBlockSummaries();
+
         assertThat(summaries.get(0).getTotalSeconds()).isEqualTo(32400L);
         assertThat(summaries.get(0).getMeetingCount()).isEqualTo(1);
-
         assertThat(summaries.get(1).getTotalSeconds()).isNull();
         assertThat(summaries.get(1).getMeetingCount()).isEqualTo(0);
     }
-
 
     @Test
     public void testTimeBlockSummaryDefault() throws Exception {
         Instant start = Instant.parse("2020-11-01T00:00:00.000Z");
         Instant end = Instant.parse("2020-11-18T00:00:00.000Z");
-
         String url = String.format("/statistics/summary/%s/%s", start, end);
+
         val stats = getTypedResult(url, TimeBlockSummaryResponseDto.class);
 
         assertThat(stats.getMeetingCount()).isEqualTo(4);
         assertThat(stats.getTotalSeconds()).isEqualTo(57600);
-
     }
 
     @Test
     public void testTimeBlockSummaryInternal() throws Exception {
         Instant start = Instant.parse("2020-11-01T00:00:00.000Z");
         Instant end = Instant.parse("2020-11-18T00:00:00.000Z");
+        String url = String.format("/statistics/summary/%s/%s?filter=%s", start, end, StatisticsFilterDte.Internal);
 
-        String url = String.format(
-                "/statistics/summary/%s/%s?filter=%s",
-                start,
-                end,
-                StatisticsFilterDte.Internal
-        );
         val stats = getTypedResult(url, TimeBlockSummaryResponseDto.class);
 
         assertThat(stats.getMeetingCount()).isEqualTo(2);
         assertThat(stats.getTotalSeconds()).isEqualTo(39600);
+    }
 
+    @Test
+    public void getIndividualStatistics() throws Exception {
+        var employeeId = UUID.fromString("f66d66d7-7b40-4ffe-a38a-aae70919a1ef");
+        var start = Instant.parse("2020-11-01T00:00:00.000Z");
+        var end = Instant.parse("2020-11-08T00:00:00.000Z");
+        var url = String.format("/statistics/individual/%s/%s/%s", employeeId, start, end);
+
+        mvc.perform(MockMvcRequestBuilders.get(url)
+                .header(SessionTenant.HEADER_KEY, "s56_net")
+                .with(jwt().jwt(getJWT("bob@s56.net")).authorities(new SimpleGrantedAuthority("admin"))))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.totalSeconds").exists())
+                .andExpect(jsonPath("$.totalSeconds").value(21600))
+                .andExpect(jsonPath("$.meetingCount").exists())
+                .andExpect(jsonPath("$.meetingCount").value(3))
+                .andExpect(jsonPath("$.start").exists())
+                .andExpect(jsonPath("$.start").value(start.toString()))
+                .andExpect(jsonPath("$.end").exists())
+                .andExpect(jsonPath("$.end").value(end.toString()));
     }
 }
