@@ -98,8 +98,22 @@ public interface TimeBlockSummaryRepositoryInterface extends JpaRepository<Calen
             UUID personId, Instant sDate, Instant eDate, UUID tenantId
     );
 
-//    @Query
-//    TimeBlockSummaryView findIndividualInternalTimeBlockSummaryInRange(
-//            UUID personId, Instant sDate, Instant eDate, UUID tenantId
-//    );
+    @Query(
+            "select email.user as firstName," +
+                    "   count(calendarEvent) as meetingCount, " +
+                    "   sum(timestampdiff(second, calendarEvent.start, calendarEvent.end)) as totalSeconds " +
+                    "from CalendarEventDao as calendarEvent " +
+                    "   inner join calendarEvent.participants as participants " +
+                    "   inner join participants.email as email " +
+                    "   inner join email.domain.organizations as organization " +
+                    "   inner join email.people as people " +
+                    "   inner join people.employee as employee " +
+                    "where employee.id = :personId " +
+                    "   and  organization.id = :tenantId " +
+                    "   and calendarEvent.start between :sDate and :eDate " +
+                    "group by email"
+    )
+    TimeBlockSummaryView findIndividualInternalTimeBlockSummaryInRange(
+            UUID personId, Instant sDate, Instant eDate, UUID tenantId
+    );
 }
