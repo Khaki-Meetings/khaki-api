@@ -80,6 +80,7 @@ public class TimeBlockSummaryPersistenceService implements TimeBlockSummaryPersi
                 timeBlockSummaryView = timeBlockSummaryRepositoryInterface.findIndividualInternalTimeBlockSummaryInRange(
                         employeeId, start, end, sessionTenant.getTenantId()
                 );
+
                 break;
             default:
                 throw new RuntimeException("invalid filter: " + filterDe);
