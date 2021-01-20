@@ -12,6 +12,7 @@ import org.assertj.core.util.Lists;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.stubbing.Answer;
+import org.modelmapper.ModelMapper;
 
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
@@ -38,20 +39,21 @@ public class CalendarEventServiceUnitTests {
     private OrganizationPersistenceInterface organizationPersistenceService;
     private CalendarProviderPersistenceFactory calendarProviderPersistenceFactory;
     private PersonPersistenceInterface personPersistenceInterface;
-
+    private ModelMapper modelMapper;
     @BeforeEach
     public void setup() {
         calendarEventPersistence = mock(CalendarEventPersistenceInterface.class);
         calendarProviderPersistenceFactory = mock(CalendarProviderPersistenceFactory.class);
         organizationPersistenceService = mock(OrganizationPersistenceInterface.class);
         personPersistenceInterface = mock(PersonPersistenceInterface.class);
+        modelMapper = mock(ModelMapper.class);
         CalendarEventService calendarEventService = new CalendarEventService(
                 calendarEventPersistence,
                 calendarProviderPersistenceFactory,
                 organizationPersistenceService,
-                personPersistenceInterface
+                personPersistenceInterface,
+                modelMapper
                 );
-
         underTest = spy(calendarEventService);
     }
 

@@ -8,6 +8,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.util.Set;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Service
@@ -42,7 +43,7 @@ public class PersonPersistenceService implements PersonPersistenceInterface {
     }
 
     @Override
-    public Set<PersonDm> getPersonsByCalendarEvent(String calendarEventId) {
+    public Set<PersonDm> getPersonsByCalendarEvent(UUID calendarEventId) {
         return this.personRepository.findDistinctByCalendarEvent(calendarEventId)
             .stream()
             .map(person -> modelMapper.map(person, PersonDm.class))
@@ -50,7 +51,8 @@ public class PersonPersistenceService implements PersonPersistenceInterface {
     }
 
     @Override
-    public PersonDm getOrganizerByCalendarEvent(String calendarEventId) {
+    // public PersonDm getOrganizerByCalendarEvent(String calendarEventId) {
+    public PersonDm getOrganizerByCalendarEvent(UUID calendarEventId) {
         PersonDao personDao = this.personRepository.findOrganizerByCalendarEvent(calendarEventId);
         if (personDao != null) {
             return this.modelMapper.map(personDao, PersonDm.class);

@@ -100,6 +100,9 @@ public class CalendarEventService {
     public static String getGuidFromByteArray(byte[] bytes) {
         StringBuilder buffer = new StringBuilder();
         for(int i=0; i<bytes.length; i++) {
+            if (i == 4 || i == 6 || i == 8 || i == 10) {
+                buffer.append("-");
+            }
             buffer.append(String.format("%02x", bytes[i]));
         }
         return buffer.toString();
@@ -121,12 +124,15 @@ public class CalendarEventService {
             dto.setCreated(event.getCreated());
             dto.setStart(event.getStart());
             dto.setEnd(event.getEnd());
-            PersonDm eventOrganizer = personPersistenceService.getOrganizerByCalendarEvent(eventId);
+            dto.setNumberInternalAttendees(event.getNumberInternalAttendees());
+            dto.setTotalSeconds(event.getTotalSeconds());
+            UUID eventUUID = UUID.fromString(eventId);
+            PersonDm eventOrganizer = personPersistenceService.getOrganizerByCalendarEvent(eventUUID);
             if (eventOrganizer != null) {
                 dto.setOrganizer(this.modelMapper.map(eventOrganizer, PersonDto.class));
             }
             dto.setParticipants(
-                    personPersistenceService.getPersonsByCalendarEvent(eventId)
+                    personPersistenceService.getPersonsByCalendarEvent(eventUUID)
                         .stream()
                         .map(person -> modelMapper.map(person, PersonDto.class))
                         .collect(Collectors.toList())

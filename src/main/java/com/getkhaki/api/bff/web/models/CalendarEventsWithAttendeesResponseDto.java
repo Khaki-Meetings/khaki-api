@@ -21,4 +21,6 @@ public class CalendarEventsWithAttendeesResponseDto {
     Instant end;
     List<PersonDto> participants;
     PersonDto organizer;
+    Integer numberInternalAttendees;
+    Integer totalSeconds;
 }

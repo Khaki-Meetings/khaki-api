@@ -27,10 +27,10 @@ public interface PersonRepositoryInterface extends JpaRepository<PersonDao, UUID
                     "        email_dao_people edp " +
                     "   where cepd.email_id = edp.emails_id " +
                     "   and edp.people_id = pd.id " +
-                    "   and cepd.calendar_event_id = unhex(:calendarEventId) )",
+                    "   and cepd.calendar_event_id = :calendarEventId )",
         nativeQuery = true
     )
-    List<PersonDao> findDistinctByCalendarEvent(String calendarEventId);
+    List<PersonDao> findDistinctByCalendarEvent(UUID calendarEventId);
 
     @Query(
             value = "select id as id, " +
@@ -44,9 +44,9 @@ public interface PersonRepositoryInterface extends JpaRepository<PersonDao, UUID
                     "   where cepd.email_id = edp.emails_id " +
                     "   and edp.people_id = pd.id " +
                     "   and cepd.organizer = true " +
-                    "   and cepd.calendar_event_id = unhex(:calendarEventId) )",
+                    "   and cepd.calendar_event_id = :calendarEventId )",
             nativeQuery = true
     )
-    PersonDao findOrganizerByCalendarEvent(String calendarEventId);
+    PersonDao findOrganizerByCalendarEvent(UUID calendarEventId);
 
 }
