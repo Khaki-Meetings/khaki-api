@@ -85,6 +85,10 @@ public class TimeBlockSummaryPersistenceService implements TimeBlockSummaryPersi
                 throw new RuntimeException("invalid filter: " + filterDe);
         }
 
+        if (timeBlockSummaryView == null) {
+            return new TimeBlockSummaryDm().setMeetingCount(0).setTotalSeconds(0L);
+        }
+
         val timeBlockSummaryDm = modelMapper.map(timeBlockSummaryView, TimeBlockSummaryDm.class);
         timeBlockSummaryDm.setEnd(end);
         timeBlockSummaryDm.setStart(start);
