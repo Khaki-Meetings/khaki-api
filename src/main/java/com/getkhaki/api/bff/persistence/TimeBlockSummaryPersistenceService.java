@@ -80,9 +80,14 @@ public class TimeBlockSummaryPersistenceService implements TimeBlockSummaryPersi
                 timeBlockSummaryView = timeBlockSummaryRepositoryInterface.findIndividualInternalTimeBlockSummaryInRange(
                         employeeId, start, end, sessionTenant.getTenantId()
                 );
+
                 break;
             default:
                 throw new RuntimeException("invalid filter: " + filterDe);
+        }
+
+        if (timeBlockSummaryView == null) {
+            return new TimeBlockSummaryDm().setMeetingCount(0).setTotalSeconds(0L);
         }
 
         val timeBlockSummaryDm = modelMapper.map(timeBlockSummaryView, TimeBlockSummaryDm.class);
