@@ -65,20 +65,20 @@ public class TimeBlockSummaryPersistenceService implements TimeBlockSummaryPersi
 
     @Override
     public TimeBlockSummaryDm getIndividualTimeBlockSummary(
-            UUID personId, Instant start, Instant end, StatisticsFilterDe filterDe
+            UUID employeeId, Instant start, Instant end, StatisticsFilterDe filterDe
     ) {
         TimeBlockSummaryView timeBlockSummaryView;
 
         switch (filterDe) {
             case External:
                 timeBlockSummaryView = timeBlockSummaryRepositoryInterface.findIndividualExternalTimeBlockSummaryInRange(
-                        personId, start, end, sessionTenant.getTenantId()
+                        employeeId, start, end, sessionTenant.getTenantId()
                 );
 
                 break;
             case Internal:
                 timeBlockSummaryView = timeBlockSummaryRepositoryInterface.findIndividualInternalTimeBlockSummaryInRange(
-                        personId, start, end, sessionTenant.getTenantId()
+                        employeeId, start, end, sessionTenant.getTenantId()
                 );
 
                 break;

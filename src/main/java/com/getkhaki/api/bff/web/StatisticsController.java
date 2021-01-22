@@ -117,9 +117,9 @@ public class StatisticsController {
         return ret;
     }
 
-    @GetMapping("/individual/{personId}/{start}/{end}")
+    @GetMapping("/individual/{employeeId}/{start}/{end}")
     public TimeBlockSummaryResponseDto getIndividualStatistics(
-            @PathVariable UUID personId,
+            @PathVariable UUID employeeId,
             @PathVariable Instant start,
             @PathVariable Instant end,
             @RequestParam(required = false) Optional<StatisticsFilterDte> filter
@@ -130,7 +130,7 @@ public class StatisticsController {
         );
 
         return modelMapper.map(
-                timeBlockSummaryPersistenceService.getIndividualTimeBlockSummary(personId, start, end, filterDe),
+                timeBlockSummaryPersistenceService.getIndividualTimeBlockSummary(employeeId, start, end, filterDe),
                 TimeBlockSummaryResponseDto.class
         );
     }
