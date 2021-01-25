@@ -57,42 +57,4 @@ public class CalendarEventControllerIntegrationTests extends BaseMvcIntegrationT
                 .andExpect(status().isOk())
                 .andReturn();
     }
-
-    /*
-    @GetMapping("/{start}/{end}")
-    public Page<CalendarEventsWithAttendeesResponseDto> getCalendarEventsAttendees(
-            @PathVariable Instant start,
-            @PathVariable Instant end,
-            @RequestParam(required = false) String organizer,
-            Pageable pageable) {
-        Page<CalendarEventsWithAttendeesResponseDto> calendarEventsWithAttendeesDmList = calendarEventService
-                .getCalendarEventsAttendees(start, end, organizer, pageable);
-        return calendarEventsWithAttendeesDmList.map(dm -> modelMapper.map(dm, CalendarEventsWithAttendeesResponseDto.class));
-    }*/
-
-    @Test
-    public void getCalendarEventsAttendees() throws Exception {
-       // var employeeId = UUID.fromString("f66d66d7-7b40-4ffe-a38a-aae70919a1ef");
-        String employeeId = "f66d66d7-7b40-4ffe-a38a-aae70919a1ef";
-        var start = Instant.parse("2020-11-01T00:00:00.000Z");
-        var end = Instant.parse("2020-11-08T00:00:00.000Z");
-//        var url = String.format("/statistics/individual/%s/%s/%s", employeeId, start, end);
-        var url = String.format("/calendar-events/%s/%s", start, end);
-// /calendar-events/2020-12-01T00:00:00Z/2021-12-25T23:59:59Z?count=20&page=0&sort=totalSeconds,DESC&organizer=
-        mvc.perform(MockMvcRequestBuilders.get(url)
-                .header(SessionTenant.HEADER_KEY, "s56_net")
-                .with(jwt().jwt(getJWT("bob@s56.net")).authorities(new SimpleGrantedAuthority("admin"))))
-                .andExpect(status().isOk());
-        /*
-                .andExpect(jsonPath("$.totalSeconds").exists())
-                .andExpect(jsonPath("$.totalSeconds").value(21600))
-                .andExpect(jsonPath("$.meetingCount").exists())
-                .andExpect(jsonPath("$.meetingCount").value(3))
-                .andExpect(jsonPath("$.start").exists())
-                .andExpect(jsonPath("$.start").value(start.toString()))
-                .andExpect(jsonPath("$.end").exists())
-                .andExpect(jsonPath("$.end").value(end.toString()));
-
-         */
-    }
 }
