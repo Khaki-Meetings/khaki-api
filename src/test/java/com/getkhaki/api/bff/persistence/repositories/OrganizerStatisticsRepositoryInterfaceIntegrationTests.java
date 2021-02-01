@@ -7,6 +7,8 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.domain.JpaSort;
 
 import javax.inject.Inject;
 import java.time.Instant;
@@ -23,7 +25,8 @@ public class OrganizerStatisticsRepositoryInterfaceIntegrationTests extends Base
     public void testFindExternal() {
         Instant start = Instant.parse("2020-11-01T00:00:00.000Z");
         Instant end = Instant.parse("2020-11-30T00:00:00.000Z");
-        Pageable pageable = PageRequest.of(0, 2);
+//        Pageable pageable = PageRequest.of(0, 2, Sort.by(Sort.Direction.ASC, "(totalMeetings)"));
+        Pageable pageable = PageRequest.of(0, 2, JpaSort.unsafe(Sort.Direction.DESC, "(totalMeetings)"));
         Page<OrganizerStatisticsView> stats = underTest.findExternalOrganizerStatistics(
                 start,
                 end,
@@ -31,9 +34,10 @@ public class OrganizerStatisticsRepositoryInterfaceIntegrationTests extends Base
                 pageable
         );
 
-        var totalEl = stats.getTotalElements();
-        var totalpage = stats.getTotalPages();
-        assertThat(stats.getTotalElements()).isEqualTo(2);
+        var array = stats.stream().toArray(OrganizerStatisticsView[]::new);
+        var bobEmail = array[0].getOrganizerEmail();
+        var bettyEmail = array[1].getOrganizerEmail();
+
         OrganizerStatisticsView bettyStats = stats
                 .stream()
                 .filter(stat -> {

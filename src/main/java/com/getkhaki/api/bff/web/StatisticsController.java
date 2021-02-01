@@ -11,7 +11,10 @@ import com.getkhaki.api.bff.web.models.*;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeToken;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.domain.JpaSort;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.Instant;
@@ -51,8 +54,20 @@ public class StatisticsController {
             @RequestParam(required = false) Optional<StatisticsFilterDte> filter,
             Pageable pageable
     ) {
+        var newSort = pageable.getSort().stream().findFirst().orElseThrow();
+        Pageable newPageable = PageRequest.of(
+                pageable.getPageNumber(),
+                pageable.getPageSize(),
+                JpaSort.unsafe(
+                        newSort.getDirection(),
+                        String.format(
+                                "(%s)",
+                                newSort.getProperty()
+                        )
+                )
+        );
         Page<OrganizerStatisticsDm> organizerStatisticsDmList = organizersStatisticsPersistenceService
-                .getOrganizersStatistics(start, end, pageable, modelMapper.map(
+                .getOrganizersStatistics(start, end, newPageable, modelMapper.map(
                         filter.orElse(StatisticsFilterDte.External), StatisticsFilterDe.class)
                 );
 
@@ -89,7 +104,8 @@ public class StatisticsController {
                         departmentStatisticsPersistenceService.getPerDepartmentStatistics(start, end, modelMapper.map(
                                 filter.orElse(StatisticsFilterDte.External), StatisticsFilterDe.class)
                         ),
-                        new TypeToken<List<DepartmentStatisticsResponseDto>>() {}.getType()
+                        new TypeToken<List<DepartmentStatisticsResponseDto>>() {
+                        }.getType()
                 )
         );
 
@@ -109,9 +125,9 @@ public class StatisticsController {
                 statisticsService.getTrailingStatistics(start, interval, count, modelMapper.map(
                         filter.orElse(StatisticsFilterDte.External), StatisticsFilterDe.class)
                 )
-                .stream()
-                .map(stat -> modelMapper.map(stat, TimeBlockSummaryResponseDto.class))
-                .collect(Collectors.toList())
+                        .stream()
+                        .map(stat -> modelMapper.map(stat, TimeBlockSummaryResponseDto.class))
+                        .collect(Collectors.toList())
         );
 
         return ret;
