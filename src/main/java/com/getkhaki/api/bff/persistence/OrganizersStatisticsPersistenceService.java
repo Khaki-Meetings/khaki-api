@@ -8,18 +8,18 @@ import com.getkhaki.api.bff.persistence.models.views.OrganizerStatisticsView;
 import com.getkhaki.api.bff.persistence.repositories.OrganizerStatisticsRepositoryInterface;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.domain.JpaSort;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
 
 @Service
 public class OrganizersStatisticsPersistenceService implements OrganizersStatisticsPersistenceInterface {
-
     private final ModelMapper modelMapper;
-
     private final OrganizerStatisticsRepositoryInterface organizerStatisticsRepository;
-
     private final SessionTenant sessionTenant;
 
     public OrganizersStatisticsPersistenceService(
@@ -40,6 +40,21 @@ public class OrganizersStatisticsPersistenceService implements OrganizersStatist
             StatisticsFilterDe filterDe
     ) {
         Page<OrganizerStatisticsView> organizerStatisticsViewList;
+
+        Sort sort = pageable.getSort();
+
+        if(sort.isSorted()) {
+            Sort.Order sortOrder = sort.stream().findFirst().orElseThrow();
+            pageable = PageRequest.of(
+                    pageable.getPageNumber(),
+                    pageable.getPageSize(),
+                    JpaSort.unsafe(
+                            sortOrder.getDirection(),
+                            String.format("(%s)", sortOrder.getProperty())
+                    )
+            );
+        }
+
         switch (filterDe) {
             case Internal:
                 organizerStatisticsViewList = organizerStatisticsRepository
@@ -53,8 +68,7 @@ public class OrganizersStatisticsPersistenceService implements OrganizersStatist
                 throw new RuntimeException("invalid filter: " + filterDe);
 
         }
+
         return organizerStatisticsViewList.map(dao -> modelMapper.map(dao, OrganizerStatisticsDm.class));
     }
-
-
 }
