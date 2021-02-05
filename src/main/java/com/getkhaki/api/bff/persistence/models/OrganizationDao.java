@@ -5,20 +5,16 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.Accessors;
 
-import javax.persistence.CascadeType;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.ManyToMany;
-import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
+import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
 @Entity
-@Accessors(chain = true)
 @Getter
 @Setter
+@Accessors(chain = true)
 public class OrganizationDao extends EntityBaseDao {
     String name;
 
@@ -29,8 +25,8 @@ public class OrganizationDao extends EntityBaseDao {
     Set<FlagDao> flags = new HashSet<>();
 
     @ManyToMany(mappedBy = "organizations")
-    List<DomainDao> domains;
+    List<DomainDao> domains = new ArrayList<>();
 
     @OneToMany(mappedBy = "organization")
-    List<DepartmentDao> departments;
+    List<DepartmentDao> departments = new ArrayList<>();
 }
