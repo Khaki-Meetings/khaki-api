@@ -146,6 +146,7 @@ public class StatisticsControllerUnitTests {
                 1L,
                 1L,
                 1L,
+                1L,
                 1L
         );
 
@@ -154,6 +155,7 @@ public class StatisticsControllerUnitTests {
         DepartmentStatisticsResponseDto departmentStatisticsResponseDto = new DepartmentStatisticsResponseDto(
                 UUID.randomUUID(),
                 "HR",
+                1L,
                 1L
         );
 

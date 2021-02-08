@@ -29,12 +29,14 @@ public class DepartmentStatisticsRepositoryIntegrationTests extends BaseJpaInteg
                 .orElseThrow();
         assertThat(hrStats.getDepartmentId()).isNotNull();
         assertThat(hrStats.getTotalSeconds()).isEqualTo(25200);
+        assertThat(hrStats.getNumberEmployees()).isEqualTo(1);
 
         DepartmentStatisticsView itStats = ret.stream().filter(item -> item.getDepartmentName().equals("IT"))
                 .findFirst()
                 .orElseThrow();
         assertThat(itStats.getDepartmentId()).isNotNull();
         assertThat(itStats.getTotalSeconds()).isEqualTo(32400);
+        assertThat(itStats.getNumberEmployees()).isEqualTo(2);
     }
 
     @Test
@@ -48,12 +50,14 @@ public class DepartmentStatisticsRepositoryIntegrationTests extends BaseJpaInteg
                 .orElseThrow();
         assertThat(hrStats.getDepartmentId()).isNotNull();
         assertThat(hrStats.getTotalSeconds()).isEqualTo(14400);
+        assertThat(hrStats.getNumberEmployees()).isEqualTo(1);
 
         DepartmentStatisticsView itStats = ret.stream().filter(item -> item.getDepartmentName().equals("IT"))
                 .findFirst()
                 .orElseThrow();
         assertThat(itStats.getDepartmentId()).isNotNull();
         assertThat(itStats.getTotalSeconds()).isEqualTo(25200);
+        assertThat(itStats.getNumberEmployees()).isEqualTo(2);
     }
 
     @Test

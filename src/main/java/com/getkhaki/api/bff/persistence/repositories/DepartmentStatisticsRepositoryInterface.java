@@ -20,7 +20,9 @@ public interface DepartmentStatisticsRepositoryInterface extends JpaRepository<D
                     "       calendarEvent.start," +
                     "       calendarEvent.end" +
                     "   )" +
-                    ") as totalSeconds " +
+                    ") as totalSeconds, " +
+                    "(select count(*) from EmployeeDao employee " +
+                    "   where employee.department = department) as numberEmployees " +
                     "from DepartmentDao department " +
                     "   inner join department.organization organization" +
                     "   inner join department.employees employees" +
@@ -49,7 +51,9 @@ public interface DepartmentStatisticsRepositoryInterface extends JpaRepository<D
                     "       calendarEvent.start," +
                     "       calendarEvent.end" +
                     "   )" +
-                    ") as totalSeconds " +
+                    ") as totalSeconds, " +
+                    "(select count(*) from EmployeeDao employee " +
+                    "   where employee.department = department) as numberEmployees " +
                     "from DepartmentDao department " +
                     "   inner join department.organization organization" +
                     "   inner join department.employees employees" +
