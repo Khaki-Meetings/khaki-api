@@ -12,9 +12,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Accessors(chain = true)
 @Getter
 @Setter
+@Accessors(chain = true)
 public class CalendarEventDao extends EntityBaseDao {
     @Column(unique = true)
     String googleCalendarId;

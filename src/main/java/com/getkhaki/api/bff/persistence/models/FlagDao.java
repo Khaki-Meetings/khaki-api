@@ -8,9 +8,9 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 
 @Entity
-@Accessors(chain = true)
 @Getter
 @Setter
+@Accessors(chain = true)
 public class FlagDao extends EntityBaseDao {
     public final static String CONTACTABLE = "Contactable";
 
