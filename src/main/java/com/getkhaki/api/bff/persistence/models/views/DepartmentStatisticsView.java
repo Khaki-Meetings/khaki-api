@@ -9,6 +9,6 @@ public interface DepartmentStatisticsView {
 
     Long getTotalSeconds();
 
-    Integer getNumberEmployees();
+    Long getInventorySecondsAvailable();
 
 }
