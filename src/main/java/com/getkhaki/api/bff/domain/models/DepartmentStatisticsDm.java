@@ -18,4 +18,5 @@ public class DepartmentStatisticsDm {
     Long totalSeconds;
     Long totalCost;
     Long averageCost;
+    Long inventorySecondsAvailable;
 }
