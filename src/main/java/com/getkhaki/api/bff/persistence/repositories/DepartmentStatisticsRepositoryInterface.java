@@ -24,9 +24,9 @@ public interface DepartmentStatisticsRepositoryInterface extends JpaRepository<D
                     " ( " +
                     "    SELECT count(*) " +
                     "       * 3600 * 8 * (" +
-                    "       5 * (TIMESTAMPDIFF(day, :sDate, :eDate) / 7) " +
+                    "       5 * (timestampdiff(day, :sDate, :eDate) / 7) " +
                     "       + SUBSTRING('0123444401233334012222340111123400001234000123440', " +
-                    "       7 * DAYOFWEEK(:sDate) + DAYOFWEEK(:eDate) + 1, 1) " +
+                    "       7 * dayofweek(:sDate) + dayofweek(:eDate) + 1, 1) " +
                     "    ) " +
                     "    from EmployeeDao employee " +
                     " where employee.department = department) " +
@@ -62,9 +62,9 @@ public interface DepartmentStatisticsRepositoryInterface extends JpaRepository<D
                     ") as totalSeconds, " +
                     " ( " +
                     "    SELECT count(*) * 3600 * 8 * (" +
-                    "       5 * (TIMESTAMPDIFF(day, :sDate, :eDate) / 7) " +
+                    "       5 * (timestampdiff(day, :sDate, :eDate) / 7) " +
                     "       + SUBSTRING('0123444401233334012222340111123400001234000123440', " +
-                    "       7 * DAYOFWEEK(:sDate) + DAYOFWEEK(:eDate) + 1, 1) " +
+                    "       7 * dayofweek(:sDate) + dayofweek(:eDate) + 1, 1) " +
                     "    ) " +
                     "    from EmployeeDao employee " +
                     "   where employee.department = department) " +
