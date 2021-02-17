@@ -20,8 +20,18 @@ public interface DepartmentStatisticsRepositoryInterface extends JpaRepository<D
                     "       calendarEvent.start," +
                     "       calendarEvent.end" +
                     "   )" +
-                    ") as totalSeconds " +
-                    "from DepartmentDao department " +
+                    ") as totalSeconds, " +
+                    " ( " +
+                    "    SELECT count(*) " +
+                    "       * 3600 * 8 * (" +
+                    "       5 * (timestampdiff(day, :sDate, :eDate) / 7) " +
+                    "       + SUBSTRING('0123444401233334012222340111123400001234000123440', " +
+                    "       7 * dayofweek(:sDate) + dayofweek(:eDate) + 1, 1) " +
+                    "    ) " +
+                    "    from EmployeeDao employee " +
+                    " where employee.department = department) " +
+                    "    as inventorySecondsAvailable " +
+                    " from DepartmentDao department " +
                     "   inner join department.organization organization" +
                     "   inner join department.employees employees" +
                     "   inner join employees.person person" +
@@ -49,7 +59,16 @@ public interface DepartmentStatisticsRepositoryInterface extends JpaRepository<D
                     "       calendarEvent.start," +
                     "       calendarEvent.end" +
                     "   )" +
-                    ") as totalSeconds " +
+                    ") as totalSeconds, " +
+                    " ( " +
+                    "    SELECT count(*) * 3600 * 8 * (" +
+                    "       5 * (timestampdiff(day, :sDate, :eDate) / 7) " +
+                    "       + SUBSTRING('0123444401233334012222340111123400001234000123440', " +
+                    "       7 * dayofweek(:sDate) + dayofweek(:eDate) + 1, 1) " +
+                    "    ) " +
+                    "    from EmployeeDao employee " +
+                    "   where employee.department = department) " +
+                    "   as inventorySecondsAvailable " +
                     "from DepartmentDao department " +
                     "   inner join department.organization organization" +
                     "   inner join department.employees employees" +
