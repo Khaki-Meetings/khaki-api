@@ -1,63 +1,104 @@
 package com.getkhaki.api.bff.persistence;
 
-
 import com.getkhaki.api.bff.config.interceptors.models.SessionTenant;
-import com.getkhaki.api.bff.persistence.models.DomainDao;
-import com.getkhaki.api.bff.persistence.models.EmailDao;
-import com.getkhaki.api.bff.persistence.models.PersonDao;
+import com.getkhaki.api.bff.domain.models.OrganizerStatisticsDm;
+import com.getkhaki.api.bff.domain.models.StatisticsFilterDe;
+import com.getkhaki.api.bff.persistence.models.views.OrganizerStatisticsView;
 import com.getkhaki.api.bff.persistence.repositories.OrganizerStatisticsRepositoryInterface;
-import com.getkhaki.api.bff.security.AuthenticationFacade;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.modelmapper.ModelMapper;
+import org.springframework.data.domain.*;
+import org.springframework.data.jpa.domain.JpaSort;
 
-import java.time.ZonedDateTime;
+import java.time.Instant;
+import java.util.List;
 import java.util.UUID;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 public class OrganizersStatisticsPersistenceServiceUnitTests {
     private OrganizersStatisticsPersistenceService underTest;
 
     @Mock
-    private OrganizerStatisticsRepositoryInterface OrganizerStatisticsRepositoryInterface;
+    private OrganizerStatisticsRepositoryInterface mockOrganizerStatisticsRepository;
     @Mock
-    private ModelMapper modelMapper;
-
+    private ModelMapper mockMapper;
     @Mock
-    private AuthenticationFacade mockAuthenticationFacade;
+    private SessionTenant mockSessionTenant;
 
     @BeforeEach
     public void setup() {
         underTest = new OrganizersStatisticsPersistenceService(
-                OrganizerStatisticsRepositoryInterface,
-                modelMapper,
-                new SessionTenant()
+                mockOrganizerStatisticsRepository,
+                mockMapper,
+                mockSessionTenant
         );
     }
 
     @Test
-    public void getOrganizersStatistics() {
+    public void getOrganizersStatistics_Internal() {
+        var start = Instant.now();
+        var end = Instant.now();
+        var tenantId = UUID.randomUUID();
+        var pageable = PageRequest.of(0, 2);
+        var mockOrganizerStatisticsView = mock(OrganizerStatisticsView.class);
+        var viewPage = new PageImpl<OrganizerStatisticsView>(List.of(mockOrganizerStatisticsView));
+        var mockOrganizerStatisticsDm = mock(OrganizerStatisticsDm.class);
+        var dmPage = new PageImpl<OrganizerStatisticsDm>(List.of(mockOrganizerStatisticsDm));
 
+        when(this.mockSessionTenant.getTenantId())
+                .thenReturn(tenantId);
 
-        ZonedDateTime startTest = ZonedDateTime.parse("2020-11-01T00:00:00.000000-07:00[America/Denver]");
-        ZonedDateTime endTest = ZonedDateTime.parse("2020-11-12T12:22:40.274456-07:00[America/Denver]");
-        int count = 5;
+        when(this.mockOrganizerStatisticsRepository.findInternalOrganizerStatistics(start, end, tenantId, pageable))
+                .thenReturn(viewPage);
 
-        EmailDao email = new EmailDao()
-                .setDomain(
-                        new DomainDao()
-                                .setName("bob.com")
-                )
-                .setPerson(
-                        new PersonDao()
-                                .setFirstName("Bob")
-                                .setLastName("Jones")
-                )
-                .setUser("bob");
-        email.setId(UUID.randomUUID());
-        email.getDomain().setId(UUID.randomUUID());
+        when(this.mockMapper.map(mockOrganizerStatisticsView, OrganizerStatisticsDm.class))
+                .thenReturn(mockOrganizerStatisticsDm);
+
+        Page<OrganizerStatisticsDm> result = this.underTest.getOrganizersStatistics(
+                start,
+                end,
+                pageable,
+                StatisticsFilterDe.Internal
+        );
+
+        assertThat(result).isEqualTo(dmPage);
+    }
+
+    @Test
+    public void getOrganizersStatistics_External() {
+        var start = Instant.now();
+        var end = Instant.now();
+        var tenantId = UUID.randomUUID();
+        var pageable = PageRequest.of(0, 2);
+        var mockOrganizerStatisticsView = mock(OrganizerStatisticsView.class);
+        var viewPage = new PageImpl<OrganizerStatisticsView>(List.of(mockOrganizerStatisticsView));
+        var mockOrganizerStatisticsDm = mock(OrganizerStatisticsDm.class);
+        var dmPage = new PageImpl<OrganizerStatisticsDm>(List.of(mockOrganizerStatisticsDm));
+
+        when(this.mockSessionTenant.getTenantId())
+                .thenReturn(tenantId);
+
+        when(this.mockOrganizerStatisticsRepository.findExternalOrganizerStatistics(start, end, tenantId, pageable))
+                .thenReturn(viewPage);
+
+        when(this.mockMapper.map(mockOrganizerStatisticsView, OrganizerStatisticsDm.class))
+                .thenReturn(mockOrganizerStatisticsDm);
+
+        Page<OrganizerStatisticsDm> result = this.underTest.getOrganizersStatistics(
+                start,
+                end,
+                pageable,
+                StatisticsFilterDe.External
+        );
+
+        assertThat(result).isEqualTo(dmPage);
     }
 }

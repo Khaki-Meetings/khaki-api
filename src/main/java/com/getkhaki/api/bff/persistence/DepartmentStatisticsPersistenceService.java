@@ -59,4 +59,5 @@ public class DepartmentStatisticsPersistenceService implements DepartmentStatist
                 }.getType()
         );
     }
+
 }

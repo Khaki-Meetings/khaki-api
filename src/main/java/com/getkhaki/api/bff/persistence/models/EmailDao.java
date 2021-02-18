@@ -13,9 +13,9 @@ import java.util.Optional;
 import java.util.Set;
 
 @Entity
-@Accessors(chain = true)
 @Getter
 @Setter
+@Accessors(chain = true)
 public class EmailDao extends EntityBaseDao {
     @Column(nullable = false)
     String user;
@@ -34,6 +34,7 @@ public class EmailDao extends EntityBaseDao {
     public EmailDao setPerson(PersonDao person) {
         this.getPeople().clear();
         this.getPeople().add(person);
+
         return this;
     }
 
