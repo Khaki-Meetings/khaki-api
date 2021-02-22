@@ -8,9 +8,12 @@ public class CustomH2Dialect extends H2Dialect {
     public CustomH2Dialect() {
         super();
 
-        registerFunction(
-                "timestampdiff",
+        registerFunction("timestampdiff",
                 new SQLFunctionTemplate(StandardBasicTypes.INTEGER, "datediff(?1, ?2, ?3)")
+        );
+
+        registerFunction("dayofweek",
+                new SQLFunctionTemplate(StandardBasicTypes.INTEGER, "DAY_OF_WEEK(?1) - 1")
         );
     }
 }

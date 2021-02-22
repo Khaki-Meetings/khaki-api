@@ -7,4 +7,5 @@ import java.util.Set;
 public interface OrganizationPersistenceInterface {
     OrganizationDm getOrganization();
     Set<OrganizationDm> getImportEnabledOrganizations();
+    OrganizationDm upsertOrganization(OrganizationDm organizationDm);
 }

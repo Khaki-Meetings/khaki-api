@@ -16,4 +16,5 @@ public class DepartmentStatisticsResponseDto {
     UUID id;
     String department;
     Long totalSeconds;
+    Long inventorySecondsAvailable;
 }

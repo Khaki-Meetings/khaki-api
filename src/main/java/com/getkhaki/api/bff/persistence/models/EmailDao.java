@@ -4,23 +4,13 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.Accessors;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
-import javax.persistence.ManyToOne;
-import javax.persistence.Transient;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
+import javax.persistence.*;
+import java.util.*;
 
 @Entity
-@Accessors(chain = true)
 @Getter
 @Setter
+@Accessors(chain = true)
 public class EmailDao extends EntityBaseDao {
     @Column(nullable = false)
     String user;
@@ -39,6 +29,7 @@ public class EmailDao extends EntityBaseDao {
     public EmailDao setPerson(PersonDao person) {
         this.getPeople().clear();
         this.getPeople().add(person);
+
         return this;
     }
 

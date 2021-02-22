@@ -91,6 +91,7 @@ public class StatisticsControllerIntegrationTests extends BaseMvcIntegrationTest
                 .orElseThrow();
 
         assertThat(itDepartment.getTotalSeconds()).isEqualTo(32400);
+        assertThat(itDepartment.getInventorySecondsAvailable()).isEqualTo(1152000);
 
         DepartmentStatisticsResponseDto hrDepartment = stats.getDepartmentsStatistics()
                 .stream()
@@ -99,6 +100,8 @@ public class StatisticsControllerIntegrationTests extends BaseMvcIntegrationTest
                 .orElseThrow();
 
         assertThat(hrDepartment.getTotalSeconds()).isEqualTo(25200);
+        assertThat(hrDepartment.getInventorySecondsAvailable()).isEqualTo(576000);
+
     }
 
     @Test
@@ -116,6 +119,7 @@ public class StatisticsControllerIntegrationTests extends BaseMvcIntegrationTest
                 .orElseThrow();
 
         assertThat(itDepartment.getTotalSeconds()).isEqualTo(25200);
+        assertThat(itDepartment.getInventorySecondsAvailable()).isEqualTo(1152000);
 
         DepartmentStatisticsResponseDto hrDepartment = stats.getDepartmentsStatistics()
                 .stream()
@@ -124,6 +128,8 @@ public class StatisticsControllerIntegrationTests extends BaseMvcIntegrationTest
                 .orElseThrow();
 
         assertThat(hrDepartment.getTotalSeconds()).isEqualTo(14400);
+        assertThat(hrDepartment.getInventorySecondsAvailable()).isEqualTo(576000);
+
     }
 
     @Test
