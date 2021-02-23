@@ -1,15 +1,9 @@
 package com.getkhaki.api.bff.domain.models;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import lombok.experimental.Accessors;
 
 import java.time.Instant;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.UUID;
 
 @Getter
@@ -18,7 +12,7 @@ import java.util.UUID;
 @AllArgsConstructor
 @Accessors(chain = true)
 @Builder(toBuilder = true)
-public class CalendarEventDm {
+public class CalendarEventDetailDm {
     UUID id;
 
     String googleCalendarId;
@@ -31,6 +25,13 @@ public class CalendarEventDm {
 
     Instant end;
 
-    @Builder.Default
-    List<CalendarEventParticipantDm> participants = new ArrayList<>();
+    String organizerEmail;
+
+    String organizerFirstName;
+
+    String organizerLastName;
+
+    Integer numberInternalAttendees;
+
+    Integer totalSeconds;
 }

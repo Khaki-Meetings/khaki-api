@@ -6,7 +6,6 @@ import com.getkhaki.api.bff.domain.persistence.CalendarEventPersistenceInterface
 import com.getkhaki.api.bff.domain.persistence.CalendarProviderPersistenceInterface;
 import com.getkhaki.api.bff.domain.persistence.OrganizationPersistenceInterface;
 import com.getkhaki.api.bff.domain.persistence.PersonPersistenceInterface;
-import com.getkhaki.api.bff.persistence.PersonPersistenceService;
 import lombok.val;
 import org.assertj.core.util.Lists;
 import org.junit.jupiter.api.BeforeEach;

@@ -2,13 +2,3 @@
 .idea
 .gradle
 build
-.env
-.classpath
-.DS_Store
-.metadata/
-.project
-.settings/
-bin/
-gradle/.DS_Store
-mariadb-java-client-2.7.1.jar
-staging.dump

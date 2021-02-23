@@ -1,6 +1,9 @@
 package com.getkhaki.api.bff.web;
 
+import com.getkhaki.api.bff.domain.models.CalendarEventDetailDm;
 import com.getkhaki.api.bff.domain.models.CalendarEventDm;
+import com.getkhaki.api.bff.domain.models.StatisticsFilterDe;
+import com.getkhaki.api.bff.persistence.CalendarEventPersistenceService;
 import com.getkhaki.api.bff.web.models.*;
 import com.getkhaki.api.bff.domain.services.CalendarEventService;
 import org.modelmapper.ModelMapper;
@@ -10,17 +13,22 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.Instant;
+import java.util.Optional;
 
 @RequestMapping("/calendar-events")
 @RestController
 @CrossOrigin(origins = "*")
 public class CalendarEventController {
     private final CalendarEventService calendarEventService;
+    private final CalendarEventPersistenceService calendarEventPersistenceService;
     private final ModelMapper modelMapper;
 
     @Autowired
-    public CalendarEventController(CalendarEventService calendarEventService, ModelMapper modelMapper) {
+    public CalendarEventController(CalendarEventService calendarEventService,
+                                   CalendarEventPersistenceService calendarEventPersistenceService,
+                                   ModelMapper modelMapper) {
         this.calendarEventService = calendarEventService;
+        this.calendarEventPersistenceService = calendarEventPersistenceService;
         this.modelMapper = modelMapper;
     }
 
@@ -32,13 +40,23 @@ public class CalendarEventController {
     }
 
     @GetMapping("/{start}/{end}")
-    public Page<CalendarEventsWithAttendeesResponseDto> getCalendarEventsAttendees(
+    public Page<CalendarEventsWithAttendeesResponseDto> getCalendarEvents(
         @PathVariable Instant start,
         @PathVariable Instant end,
-        @RequestParam(required = false) String organizer,
+        @RequestParam String organizer,
+        @RequestParam(required = false) Optional<StatisticsFilterDte> filter,
         Pageable pageable) {
-        Page<CalendarEventsWithAttendeesResponseDto> calendarEventsWithAttendeesDmList = calendarEventService
-                .getCalendarEventsAttendees(start, end, organizer, pageable);
+
+        StatisticsFilterDe filterDe = modelMapper.map(
+                filter.orElse(StatisticsFilterDte.External),
+                StatisticsFilterDe.class
+        );
+
+        Page<CalendarEventDetailDm> calendarEventsWithAttendeesDmList = calendarEventPersistenceService
+                .getCalendarEvents(start, end, organizer, filterDe, pageable);
+
         return calendarEventsWithAttendeesDmList.map(dm -> modelMapper.map(dm, CalendarEventsWithAttendeesResponseDto.class));
+
+
     }
 }

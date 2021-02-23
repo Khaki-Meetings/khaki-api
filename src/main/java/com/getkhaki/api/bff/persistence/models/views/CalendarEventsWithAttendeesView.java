@@ -8,14 +8,16 @@ import javax.persistence.Lob;
 import java.time.Instant;
 import java.util.List;
 
-public interface CalendarEventsWithAttendeesViewInterface {
+public interface CalendarEventsWithAttendeesView {
     byte[] getId();
     String getGoogleCalendarId();
     String getSummary();
     Instant getCreated();
     Instant getStart();
     Instant getEnd();
+    String getOrganizerEmail();
+    String getOrganizerFirstName();
+    String getOrganizerLastName();
     Integer getNumberInternalAttendees();
-    List<PersonDto> getParticipants();
     Integer getTotalSeconds();
 }

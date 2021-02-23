@@ -29,7 +29,7 @@ public class CalendarImportController {
 
     @PostMapping("/{adminEmail}")
     public void importAsync(@PathVariable String adminEmail) {
-        val timeAgo = Instant.now().minus(importMinutes * 100000, ChronoUnit.MINUTES);
+        val timeAgo = Instant.now().minus(importMinutes, ChronoUnit.MINUTES);
         this.calendarEventService.importAsync(adminEmail, timeAgo);
     }
 }

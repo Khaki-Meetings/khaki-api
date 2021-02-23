@@ -19,8 +19,9 @@ public class CalendarEventsWithAttendeesResponseDto {
     Instant created;
     Instant start;
     Instant end;
-    List<PersonDto> participants;
-    PersonDto organizer;
+    String organizerEmail;
+    String organizerFirstName;
+    String organizerLastName;
     Integer numberInternalAttendees;
     Integer totalSeconds;
 }

@@ -51,7 +51,6 @@ public class PersonPersistenceService implements PersonPersistenceInterface {
     }
 
     @Override
-    // public PersonDm getOrganizerByCalendarEvent(String calendarEventId) {
     public PersonDm getOrganizerByCalendarEvent(UUID calendarEventId) {
         PersonDao personDao = this.personRepository.findOrganizerByCalendarEvent(calendarEventId);
         if (personDao != null) {
