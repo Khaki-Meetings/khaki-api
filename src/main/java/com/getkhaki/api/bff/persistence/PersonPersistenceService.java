@@ -7,6 +7,8 @@ import com.getkhaki.api.bff.persistence.repositories.PersonRepositoryInterface;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -31,6 +33,12 @@ public class PersonPersistenceService implements PersonPersistenceInterface {
         assert result != null : String.format("Person with email of %s not found", email);
 
         return this.modelMapper.map(result, PersonDm.class);
+    }
+
+    @Override
+    public PersonDm getPersonById(UUID id) {
+        Optional<PersonDao> result = this.personRepository.findById(id);
+        return this.modelMapper.map(result.get(), PersonDm.class);
     }
 
     @Override

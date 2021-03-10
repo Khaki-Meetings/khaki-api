@@ -20,15 +20,12 @@ import java.util.Optional;
 @CrossOrigin(origins = "*")
 public class CalendarEventController {
     private final CalendarEventService calendarEventService;
-    private final CalendarEventPersistenceService calendarEventPersistenceService;
     private final ModelMapper modelMapper;
 
     @Autowired
     public CalendarEventController(CalendarEventService calendarEventService,
-                                   CalendarEventPersistenceService calendarEventPersistenceService,
                                    ModelMapper modelMapper) {
         this.calendarEventService = calendarEventService;
-        this.calendarEventPersistenceService = calendarEventPersistenceService;
         this.modelMapper = modelMapper;
     }
 
@@ -44,7 +41,7 @@ public class CalendarEventController {
         @PathVariable Instant start,
         @PathVariable Instant end,
         @RequestParam String organizer,
-        @RequestParam(required = false) Optional<StatisticsFilterDte> filter,
+        @RequestParam Optional<StatisticsFilterDte> filter,
         Pageable pageable) {
 
         StatisticsFilterDe filterDe = modelMapper.map(
@@ -52,7 +49,7 @@ public class CalendarEventController {
                 StatisticsFilterDe.class
         );
 
-        Page<CalendarEventDetailDm> calendarEventsWithAttendeesDmList = calendarEventPersistenceService
+        Page<CalendarEventDetailDm> calendarEventsWithAttendeesDmList = calendarEventService
                 .getCalendarEvents(start, end, organizer, filterDe, pageable);
 
         return calendarEventsWithAttendeesDmList.map(dm -> modelMapper.map(dm, CalendarEventsWithAttendeesResponseDto.class));

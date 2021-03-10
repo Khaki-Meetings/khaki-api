@@ -23,5 +23,6 @@ public class CalendarEventsWithAttendeesResponseDto {
     String organizerFirstName;
     String organizerLastName;
     Integer numberInternalAttendees;
+    Integer numberTotalAttendees;
     Integer totalSeconds;
 }

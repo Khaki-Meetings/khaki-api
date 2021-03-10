@@ -7,6 +7,8 @@ import java.util.UUID;
 public interface PersonPersistenceInterface {
     PersonDm getPerson(String email);
 
+    PersonDm getPersonById(UUID id);
+
     PersonDm updatePerson(PersonDm personDm);
 
     Set<PersonDm> getPersonsByCalendarEvent(UUID calendarEventId);

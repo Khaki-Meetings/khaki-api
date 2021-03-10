@@ -19,5 +19,6 @@ public interface CalendarEventsWithAttendeesView {
     String getOrganizerFirstName();
     String getOrganizerLastName();
     Integer getNumberInternalAttendees();
+    Integer getNumberTotalAttendees();
     Integer getTotalSeconds();
 }

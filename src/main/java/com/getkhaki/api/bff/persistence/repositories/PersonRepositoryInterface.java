@@ -48,5 +48,4 @@ public interface PersonRepositoryInterface extends JpaRepository<PersonDao, UUID
             nativeQuery = true
     )
     PersonDao findOrganizerByCalendarEvent(UUID calendarEventId);
-
 }

@@ -33,5 +33,7 @@ public class CalendarEventDetailDm {
 
     Integer numberInternalAttendees;
 
+    Integer numberTotalAttendees;
+
     Integer totalSeconds;
 }

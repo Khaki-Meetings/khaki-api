@@ -16,44 +16,8 @@ import java.util.UUID;
 public interface CalendarEventRepositoryInterface extends JpaRepository<CalendarEventDao, UUID> {
     Optional<CalendarEventDao> findDistinctByGoogleCalendarId(String googleCalendarId);
 
-    // Get all the calendar events where a person from this organization was an attendee
-    @Query(
-            value = "select ced.id as id," +
-                    "       google_calendar_id as googleCalendarId," +
-                    "       summary as summary, " +
-                    "       start as start, " +
-                    "       end as end, " +
-                    "       created as created, " +
-                    "       ( select count(*) " +
-                    "           from person_dao, " +
-                    "           email_dao_people edp2, " +
-                    "           email_dao ed2, " +
-                    "           calendar_event_participant_dao cepd2, " +
-                    "           domain_dao_organizations ddo " +
-                    "         where cepd2.calendar_event_id = ced.id " +
-                    "           and cepd2.email_id = ed2.id " +
-                    "           and ed2.domain_id = ddo.domains_id " +
-                    "           and ed2.id = edp2.emails_id " +
-                    "           and person_dao.id = edp2.people_id " +
-                    "           and ddo.organizations_id = :tenantId " +
-                    "       ) as numberInternalAttendees, " +
-                    "       ( select count(*) * (ced.end - ced.start)  " +
-                    "           from person_dao, " +
-                    "                email_dao_people edp2, " +
-                    "                email_dao ed2, " +
-                    "                domain_dao_organizations ddo    , " +
-                    "                calendar_event_participant_dao cepd2 " +
-                    "          where cepd2.calendar_event_id = ced.id " +
-                    "                and cepd2.email_id = ed2.id " +
-                    "                and ed2.domain_id = ddo.domains_id " +
-                    "                and ed2.id = edp2.emails_id " +
-                    "                and person_dao.id = edp2.people_id " +
-                    "                and ddo.organizations_id = :tenantId  " +
-                    "       ) as totalSeconds, " +
-                    "       pd.first_name as organizerFirstName, " +
-                    "       pd.last_name as organizerLastName, " +
-                    "       concat(ed.user, '@', dd.name) as organizerEmail " +
-                    "  from calendar_event_dao `ced`, person_dao pd, email_dao_people edp, " +
+    String internalCalendarEventsFromWhereClause =
+            "  from calendar_event_dao `ced`, person_dao pd, email_dao_people edp, " +
                     "       email_dao ed, calendar_event_participant_dao cepd, domain_dao dd " +
                     " where ced.start between :sDate and :eDate " +
                     "       and pd.id = :organizer " +
@@ -92,13 +56,9 @@ public interface CalendarEventRepositoryInterface extends JpaRepository<Calendar
                     "                   and cepd4.email_id = ed4.id " +
                     "                   and ed4.domain_id = dd4.id " +
                     "               having count(distinct dd4.name) = 1" +
-                    "   )" +
-                    " having numberInternalAttendees > 0 "
-            , nativeQuery = true
-    )
-    Page<CalendarEventsWithAttendeesView> getInternalCalendarEvents(
-            UUID tenantId, Instant sDate, Instant eDate, UUID organizer, Pageable pageable);
+                    "   )";
 
+    // Get all the calendar events where a person from this organization was an attendee
     @Query(
             value = "select ced.id as id," +
                     "       google_calendar_id as googleCalendarId," +
@@ -119,23 +79,49 @@ public interface CalendarEventRepositoryInterface extends JpaRepository<Calendar
                     "           and person_dao.id = edp2.people_id " +
                     "           and ddo.organizations_id = :tenantId " +
                     "       ) as numberInternalAttendees, " +
-                    "       ( select count(*) * (ced.end - ced.start)  " +
+
+                    "       ( select count(*) " +
                     "           from person_dao, " +
-                    "                email_dao_people edp2, " +
-                    "                email_dao ed2, " +
-                    "                domain_dao_organizations ddo    , " +
-                    "                calendar_event_participant_dao cepd2 " +
-                    "          where cepd2.calendar_event_id = ced.id " +
-                    "                and cepd2.email_id = ed2.id " +
-                    "                and ed2.domain_id = ddo.domains_id " +
-                    "                and ed2.id = edp2.emails_id " +
-                    "                and person_dao.id = edp2.people_id " +
-                    "                and ddo.organizations_id = :tenantId  " +
-                    "       ) as totalSeconds, " +
+                    "           email_dao_people edp2, " +
+                    "           email_dao ed2, " +
+                    "           calendar_event_participant_dao cepd2, " +
+                    "           domain_dao_organizations ddo " +
+                    "         where cepd2.calendar_event_id = ced.id " +
+                    "           and cepd2.email_id = ed2.id " +
+                    "           and ed2.domain_id = ddo.domains_id " +
+                    "           and ed2.id = edp2.emails_id " +
+                    "           and person_dao.id = edp2.people_id " +
+                    "       ) as numberTotalAttendees, " +
+                    "       (select numberInternalAttendees) * TIME_TO_SEC(TIMEDIFF(ced.end, ced.start)) as totalSeconds, " +
                     "       pd.first_name as organizerFirstName, " +
                     "       pd.last_name as organizerLastName, " +
                     "       concat(ed.user, '@', dd.name) as organizerEmail " +
-                    "  from calendar_event_dao `ced`, person_dao pd, email_dao_people edp, " +
+                    internalCalendarEventsFromWhereClause +
+                    " having numberInternalAttendees > 0 "
+            ,countQuery = "select ced.id as id," +
+                    "       ( select count(*) " +
+                    "           from person_dao, " +
+                    "           email_dao_people edp2, " +
+                    "           email_dao ed2, " +
+                    "           calendar_event_participant_dao cepd2, " +
+                    "           domain_dao_organizations ddo " +
+                    "         where cepd2.calendar_event_id = ced.id " +
+                    "           and cepd2.email_id = ed2.id " +
+                    "           and ed2.domain_id = ddo.domains_id " +
+                    "           and ed2.id = edp2.emails_id " +
+                    "           and person_dao.id = edp2.people_id " +
+                    "           and ddo.organizations_id = :tenantId " +
+                    "       ) as numberInternalAttendees, " +
+                    internalCalendarEventsFromWhereClause +
+                    " having numberInternalAttendees > 0 "
+            , nativeQuery = true
+    )
+    Page<CalendarEventsWithAttendeesView> getInternalCalendarEvents(
+            UUID tenantId, Instant sDate, Instant eDate, UUID organizer, Pageable pageable);
+
+
+    String externalCalendarEventsFromWhereClause =
+            "  from calendar_event_dao `ced`, person_dao pd, email_dao_people edp, " +
                     "       email_dao ed, calendar_event_participant_dao cepd, domain_dao dd " +
                     " where ced.start between :sDate and :eDate " +
                     "       and pd.id = :organizer " +
@@ -155,8 +141,57 @@ public interface CalendarEventRepositoryInterface extends JpaRepository<Calendar
                     "              and ed2.id = edp2.emails_id " +
                     "              and person_dao.id = edp2.people_id " +
                     "              and ddo2.organizations_id = :tenantId " +
-                    "       ) " +
+                    "       )" ;
+
+    @Query(
+            value = "select " +
+                    "       ced.id as id," +
+                    "       google_calendar_id as googleCalendarId," +
+                    "       summary as summary, " +
+                    "       start as start, " +
+                    "       end as end, " +
+                    "       created as created, " +
+                    "       ( select count(*) " +
+                    "           from person_dao, " +
+                    "           email_dao_people edp2, " +
+                    "           email_dao ed2, " +
+                    "           calendar_event_participant_dao cepd2, " +
+                    "           domain_dao_organizations ddo " +
+                    "         where cepd2.calendar_event_id = ced.id " +
+                    "           and cepd2.email_id = ed2.id " +
+                    "           and ed2.domain_id = ddo.domains_id " +
+                    "           and ed2.id = edp2.emails_id " +
+                    "           and person_dao.id = edp2.people_id " +
+                    "           and ddo.organizations_id = :tenantId " +
+                    "       ) as numberInternalAttendees, " +
+                    "       ( select count(*) " +
+                    "           from calendar_event_participant_dao " +
+                    "         where calendar_event_id = ced.id " +
+                    "       ) as numberTotalAttendees, " +
+                    "       (select numberInternalAttendees) * TIME_TO_SEC(TIMEDIFF(ced.end, ced.start)) as totalSeconds, " +
+                    "       pd.first_name as organizerFirstName, " +
+                    "       pd.last_name as organizerLastName, " +
+                    "       concat(ed.user, '@', dd.name) as organizerEmail " +
+                    externalCalendarEventsFromWhereClause +
                     " having numberInternalAttendees > 0 "
+
+            , countQuery =  "select " +
+            "       ced.id as id," +
+            "       ( select count(*) " +
+            "           from person_dao, " +
+            "           email_dao_people edp2, " +
+            "           email_dao ed2, " +
+            "           calendar_event_participant_dao cepd2, " +
+            "           domain_dao_organizations ddo " +
+            "         where cepd2.calendar_event_id = ced.id " +
+            "           and cepd2.email_id = ed2.id " +
+            "           and ed2.domain_id = ddo.domains_id " +
+            "           and ed2.id = edp2.emails_id " +
+            "           and person_dao.id = edp2.people_id " +
+            "           and ddo.organizations_id = :tenantId " +
+            "       ) as numberInternalAttendees " +
+            externalCalendarEventsFromWhereClause +
+            " having numberInternalAttendees > 0 "
             , nativeQuery = true
     )
     Page<CalendarEventsWithAttendeesView> getExternalCalendarEvents(

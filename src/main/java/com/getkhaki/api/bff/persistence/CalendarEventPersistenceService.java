@@ -81,7 +81,10 @@ public class CalendarEventPersistenceService implements CalendarEventPersistence
     public Page<CalendarEventDetailDm> getCalendarEvents(Instant sDate, Instant eDate,
             String organizer, StatisticsFilterDe filterDe, Pageable pageable) {
 
-        UUID organizerUUID = UUID.fromString(organizer);
+        UUID organizerUUID = new UUID(0L, 0L);
+        if (organizer != null && !organizer.trim().isEmpty()){
+            organizerUUID = UUID.fromString(organizer);
+        }
 
         Page<CalendarEventsWithAttendeesView> calendarEventsWithAttendeesViewList;
 
