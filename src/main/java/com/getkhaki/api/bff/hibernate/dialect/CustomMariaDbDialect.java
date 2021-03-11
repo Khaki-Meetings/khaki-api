@@ -15,5 +15,6 @@ public class CustomMariaDbDialect extends MariaDB103Dialect {
         registerFunction("dayofweek",
                 new SQLFunctionTemplate(StandardBasicTypes.INTEGER, "DAYOFWEEK(?1)")
         );
+
     }
 }
