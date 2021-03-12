@@ -2,8 +2,7 @@ package com.getkhaki.api.bff.web;
 
 import com.getkhaki.api.bff.BaseMvcIntegrationTest;
 import com.getkhaki.api.bff.config.interceptors.models.SessionTenant;
-import com.getkhaki.api.bff.web.models.CalendarEventDto;
-import com.getkhaki.api.bff.web.models.CalendarEventsWithAttendeesResponseDto;
+import com.getkhaki.api.bff.web.models.*;
 import io.restassured.module.mockmvc.RestAssuredMockMvc;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -20,8 +19,10 @@ import org.springframework.web.context.WebApplicationContext;
 
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
+import java.util.List;
 import java.util.UUID;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.jwt;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -57,4 +58,5 @@ public class CalendarEventControllerIntegrationTests extends BaseMvcIntegrationT
                 .andExpect(status().isOk())
                 .andReturn();
     }
+
 }

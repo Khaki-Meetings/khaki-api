@@ -79,7 +79,6 @@ public interface CalendarEventRepositoryInterface extends JpaRepository<Calendar
                     "           and person_dao.id = edp2.people_id " +
                     "           and ddo.organizations_id = :tenantId " +
                     "       ) as numberInternalAttendees, " +
-
                     "       ( select count(*) " +
                     "           from person_dao, " +
                     "           email_dao_people edp2, " +
@@ -92,7 +91,7 @@ public interface CalendarEventRepositoryInterface extends JpaRepository<Calendar
                     "           and ed2.id = edp2.emails_id " +
                     "           and person_dao.id = edp2.people_id " +
                     "       ) as numberTotalAttendees, " +
-                    "       (select numberInternalAttendees) * TIME_TO_SEC(TIMEDIFF(ced.end, ced.start)) as totalSeconds, " +
+                    "       (select numberInternalAttendees) * timestampdiff(second, ced.start, ced.end) as totalSeconds, " +
                     "       pd.first_name as organizerFirstName, " +
                     "       pd.last_name as organizerLastName, " +
                     "       concat(ed.user, '@', dd.name) as organizerEmail " +
@@ -168,7 +167,7 @@ public interface CalendarEventRepositoryInterface extends JpaRepository<Calendar
                     "           from calendar_event_participant_dao " +
                     "         where calendar_event_id = ced.id " +
                     "       ) as numberTotalAttendees, " +
-                    "       (select numberInternalAttendees) * TIME_TO_SEC(TIMEDIFF(ced.end, ced.start)) as totalSeconds, " +
+                    "       (select numberInternalAttendees) * timestampdiff(second, ced.start, ced.end) as totalSeconds, " +
                     "       pd.first_name as organizerFirstName, " +
                     "       pd.last_name as organizerLastName, " +
                     "       concat(ed.user, '@', dd.name) as organizerEmail " +
