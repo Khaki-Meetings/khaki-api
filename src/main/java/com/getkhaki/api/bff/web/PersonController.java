@@ -7,6 +7,8 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.UUID;
+
 @RequestMapping("/persons")
 @RestController
 @CrossOrigin(origins = "*")
@@ -35,4 +37,18 @@ public class PersonController {
                 ), PersonDto.class
         );
     }
+
+    @GetMapping("/id/{id}")
+    public PersonDto getPersonById(@PathVariable String id) {
+
+        UUID personUUID = new UUID(0L, 0L);
+        if (id != null && !id.trim().isEmpty()){
+            personUUID = UUID.fromString(id);
+        }
+
+        return this.modelMapper.map(
+                personService.getPersonById(personUUID), PersonDto.class
+        );
+    }
+
 }

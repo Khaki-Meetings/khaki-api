@@ -15,5 +15,14 @@ public class CustomH2Dialect extends H2Dialect {
         registerFunction("dayofweek",
                 new SQLFunctionTemplate(StandardBasicTypes.INTEGER, "DAY_OF_WEEK(?1) - 1")
         );
+
+        registerFunction("SUBSTR",
+                new SQLFunctionTemplate(StandardBasicTypes.STRING, "SUBSTRING(?1, ?2, ?3)")
+        );
+
+        registerFunction("HEX",
+                new SQLFunctionTemplate(StandardBasicTypes.STRING, "HEXTORAW(?1)")
+        );
+
     }
 }
