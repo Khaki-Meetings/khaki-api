@@ -12,6 +12,7 @@ import lombok.experimental.Accessors;
 @NoArgsConstructor
 @Accessors(chain = true)
 public class OrganizerStatisticsDm {
+    String organizerId;
     String organizerEmail;
     String organizerFirstName;
     String organizerLastName;
