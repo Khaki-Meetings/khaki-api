@@ -23,3 +23,7 @@ databaseChangeLog:
       file: liquibase/changelogs/20201222-summary-length.xml
   - include:
       file: liquibase/changelogs/20201229-not-null-google-id.xml
+  - include:
+      file: liquibase/changelogs/20210316-add-calendar-fields.xml
+  - include:
+      file: liquibase/changelogs/20210317-recurringeventid-length.xml

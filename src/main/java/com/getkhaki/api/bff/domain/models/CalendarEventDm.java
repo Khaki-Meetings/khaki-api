@@ -33,4 +33,12 @@ public class CalendarEventDm {
 
     @Builder.Default
     List<CalendarEventParticipantDm> participants = new ArrayList<>();
+
+    String description;
+
+    String recurringEventId;
+
+    String visibility;
+
+    Integer attachmentCount;
 }

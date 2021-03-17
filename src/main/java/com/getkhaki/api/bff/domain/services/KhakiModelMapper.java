@@ -21,6 +21,10 @@ public class KhakiModelMapper extends ModelMapper {
                 .created(Instant.ofEpochMilli(source.getCreated().getValue()))
                 .start(Instant.ofEpochMilli(source.getStart().getDateTime().getValue()))
                 .end(Instant.ofEpochMilli(source.getEnd().getDateTime().getValue()))
+                .description(source.getDescription())
+                .recurringEventId(source.getRecurringEventId())
+                .attachmentCount(0)
+                .visibility(source.getVisibility())
                 .build();
 
         List<CalendarEventParticipantDm> participants;
@@ -44,6 +48,11 @@ public class KhakiModelMapper extends ModelMapper {
                     )
                     .filter(Objects::nonNull)
                     .collect(Collectors.toList());
+        }
+
+        val attachments = source.getAttachments();
+        if (attachments != null) {
+            calendarEvent.setAttachmentCount(attachments.size());
         }
 
         calendarEvent.setParticipants(participants);
