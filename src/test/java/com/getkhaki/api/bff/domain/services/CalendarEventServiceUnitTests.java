@@ -5,11 +5,13 @@ import com.getkhaki.api.bff.domain.models.OrganizationDm;
 import com.getkhaki.api.bff.domain.persistence.CalendarEventPersistenceInterface;
 import com.getkhaki.api.bff.domain.persistence.CalendarProviderPersistenceInterface;
 import com.getkhaki.api.bff.domain.persistence.OrganizationPersistenceInterface;
+import com.getkhaki.api.bff.domain.persistence.PersonPersistenceInterface;
 import lombok.val;
 import org.assertj.core.util.Lists;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.stubbing.Answer;
+import org.modelmapper.ModelMapper;
 
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
@@ -35,18 +37,22 @@ public class CalendarEventServiceUnitTests {
     private CalendarEventPersistenceInterface calendarEventPersistence;
     private OrganizationPersistenceInterface organizationPersistenceService;
     private CalendarProviderPersistenceFactory calendarProviderPersistenceFactory;
-
+    private PersonPersistenceInterface personPersistenceInterface;
+    private ModelMapper modelMapper;
     @BeforeEach
     public void setup() {
         calendarEventPersistence = mock(CalendarEventPersistenceInterface.class);
         calendarProviderPersistenceFactory = mock(CalendarProviderPersistenceFactory.class);
         organizationPersistenceService = mock(OrganizationPersistenceInterface.class);
-        val calendarEventService = new CalendarEventService(
+        personPersistenceInterface = mock(PersonPersistenceInterface.class);
+        modelMapper = mock(ModelMapper.class);
+        CalendarEventService calendarEventService = new CalendarEventService(
                 calendarEventPersistence,
                 calendarProviderPersistenceFactory,
-                organizationPersistenceService
+                organizationPersistenceService,
+                personPersistenceInterface,
+                modelMapper
                 );
-
         underTest = spy(calendarEventService);
     }
 

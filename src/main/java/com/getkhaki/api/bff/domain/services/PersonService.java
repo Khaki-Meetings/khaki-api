@@ -5,6 +5,8 @@ import com.getkhaki.api.bff.domain.persistence.PersonPersistenceInterface;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.UUID;
+
 @Service
 public class PersonService {
     private final PersonPersistenceInterface personPersistenceService;
@@ -21,4 +23,10 @@ public class PersonService {
     public PersonDm updatePerson(PersonDm personDm) {
         return this.personPersistenceService.updatePerson(personDm);
     }
+
+    public PersonDm getPersonById(UUID id) {
+        PersonDm personDm = this.personPersistenceService.getPersonById(id);
+        return personDm;
+    }
+
 }
