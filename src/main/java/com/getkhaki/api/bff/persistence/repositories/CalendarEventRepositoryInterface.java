@@ -110,7 +110,7 @@ public interface CalendarEventRepositoryInterface extends JpaRepository<Calendar
                     "           and ed2.id = edp2.emails_id " +
                     "           and person_dao.id = edp2.people_id " +
                     "           and ddo.organizations_id = :tenantId " +
-                    "       ) as numberInternalAttendees, " +
+                    "       ) as numberInternalAttendees " +
                     internalCalendarEventsFromWhereClause +
                     " having numberInternalAttendees > 0 "
             , nativeQuery = true

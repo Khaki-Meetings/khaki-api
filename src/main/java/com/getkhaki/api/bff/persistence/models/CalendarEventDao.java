@@ -32,4 +32,12 @@ public class CalendarEventDao extends EntityBaseDao {
 
     @OneToMany(mappedBy = "calendarEvent")
     List<CalendarEventParticipantDao> participants = new ArrayList<>();
+
+    String description;
+
+    String recurringEventId;
+
+    String visibility;
+
+    Integer attachmentCount;
 }
