@@ -85,4 +85,5 @@ public class TimeBlockSummaryPersistenceServiceUnitTests {
 
         assertThat(externalResult).isEqualTo(timeBlockSummaryDm);
     }
+
 }

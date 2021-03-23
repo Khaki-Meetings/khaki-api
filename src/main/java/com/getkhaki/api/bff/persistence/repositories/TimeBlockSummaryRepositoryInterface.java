@@ -11,14 +11,14 @@ import java.util.UUID;
 
 public interface TimeBlockSummaryRepositoryInterface extends JpaRepository<CalendarEventDao, UUID> {
 
-    @Query(value =
-            "    SELECT (" +
+    @Query(
+            value = "select (" +
             "       5 * (timestampdiff(day, :sDate, :eDate) / 7) " +
             "       + SUBSTRING('0123444401233334012222340111123400001234000123440', " +
-            "       7 * dayofweek(:sDate) + dayofweek(:eDate) + 1, 1) " +
+            "       7 * (dayofweek(:sDate) - 1) + dayofweek(:eDate), 1) " +
             "    ) from dual "
             , nativeQuery = true)
-    Long findNumberOfWorkdaysBetweenDates(Instant sDate, Instant eDate);
+    Integer findNumberOfWorkdaysBetweenDates(Instant sDate, Instant eDate);
 
     @Query(
             "select " +
