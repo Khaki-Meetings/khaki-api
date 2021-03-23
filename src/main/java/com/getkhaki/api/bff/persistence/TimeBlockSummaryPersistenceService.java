@@ -59,6 +59,8 @@ public class TimeBlockSummaryPersistenceService implements TimeBlockSummaryPersi
         val timeBlockSummaryDm = modelMapper.map(timeBlockSummaryView, TimeBlockSummaryDm.class);
         timeBlockSummaryDm.setEnd(end);
         timeBlockSummaryDm.setStart(start);
+        Long numWorkdays = timeBlockSummaryRepositoryInterface.findNumberOfWorkdaysBetweenDates(start, end);
+        timeBlockSummaryDm.setNumWorkdays(numWorkdays);
 
         return timeBlockSummaryDm;
     }
