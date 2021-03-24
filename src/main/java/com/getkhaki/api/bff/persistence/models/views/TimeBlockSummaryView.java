@@ -9,5 +9,7 @@ public interface TimeBlockSummaryView {
     Long getMeetingCount();
     Long getNumEmployees();
     Long getNumWorkdays();
+    Long getTotalInternalMeetingAttendees();
     Long getTotalMeetingAttendees();
+    Long getMeetingLengthSeconds();
 }
