@@ -10,6 +10,16 @@ import java.util.List;
 import java.util.UUID;
 
 public interface TimeBlockSummaryRepositoryInterface extends JpaRepository<CalendarEventDao, UUID> {
+
+    @Query(
+            value = "select (" +
+            "       5 * (timestampdiff(day, :sDate, :eDate) / 7) " +
+            "       + SUBSTRING('0123444401233334012222340111123400001234000123440', " +
+            "       7 * (dayofweek(:sDate) - 1) + dayofweek(:eDate), 1) " +
+            "    ) from dual "
+            , nativeQuery = true)
+    Integer findNumberOfWorkdaysBetweenDates(Instant sDate, Instant eDate);
+
     @Query(
             "select " +
                     "sum(" +
@@ -24,7 +34,22 @@ public interface TimeBlockSummaryRepositoryInterface extends JpaRepository<Calen
                     "     where cap_count.calendarEvent = calendarEvent " +
                     "       and org_count.id = :tenantId" +
                     "     )" +
-                    ") as totalSeconds," +
+                    ") as totalSeconds, " +
+                    " sum((" +
+                    "     select count(*) " +
+                    "     from CalendarEventParticipantDao as cap_count " +
+                    "       inner join cap_count.email as email_count" +
+                    "       inner join email_count.domain as domain_count" +
+                    "       inner join domain_count.organizations as org_count" +
+                    "     where cap_count.calendarEvent = calendarEvent " +
+                    "       and org_count.id = :tenantId" +
+                    ") " +
+                    ") as totalMeetingAttendees, " +
+                    " ( select count(*) " +
+                    "   from OrganizationDao organization " +
+                    "   inner join organization.departments as departments " +
+                    "   inner join departments.employees as employees " +
+                    "   where organization.id = :tenantId ) as numEmployees, " +
                     "count(calendarEventParticipant.calendarEvent) as meetingCount " +
                     "from OrganizationDao organization " +
                     "   inner join organization.departments as departments " +
@@ -54,7 +79,22 @@ public interface TimeBlockSummaryRepositoryInterface extends JpaRepository<Calen
                     "     where cap_count.calendarEvent = calendarEvent " +
                     "       and org_count.id = :tenantId" +
                     "     )" +
-                    ") as totalSeconds," +
+                    ") as totalSeconds, " +
+                    " sum((" +
+                    "     select count(*) " +
+                    "     from CalendarEventParticipantDao as cap_count " +
+                    "       inner join cap_count.email as email_count" +
+                    "       inner join email_count.domain as domain_count" +
+                    "       inner join domain_count.organizations as org_count" +
+                    "     where cap_count.calendarEvent = calendarEvent " +
+                    "       and org_count.id = :tenantId" +
+                    ") " +
+                    ") as totalMeetingAttendees, " +
+                    " ( select count(*) " +
+                    "   from OrganizationDao organization " +
+                    "   inner join organization.departments as departments " +
+                    "   inner join departments.employees as employees " +
+                    "   where organization.id = :tenantId ) as numEmployees, " +
                     "count(calendarEventParticipant.calendarEvent) as meetingCount " +
                     "from OrganizationDao organization " +
                     "   inner join organization.departments as departments " +

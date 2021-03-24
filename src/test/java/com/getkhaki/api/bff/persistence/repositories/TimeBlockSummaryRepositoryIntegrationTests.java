@@ -73,4 +73,29 @@ public class TimeBlockSummaryRepositoryIntegrationTests extends BaseJpaIntegrati
         assertThat(view.getTotalSeconds()).isEqualTo(14400);
         assertThat(view.getMeetingCount()).isEqualTo(2);
     }
+
+    @Test
+    public void testFindNumberOfWorkdaysBetweenDates() {
+
+        Instant start = Instant.parse("2021-03-16T00:00:00.000Z");
+        Instant end = Instant.parse("2021-03-23T00:00:00.000Z");
+        Integer workdays = underTest.findNumberOfWorkdaysBetweenDates(start, end);
+        assertThat(workdays).isEqualTo(5);
+
+        start = Instant.parse("2021-03-09T00:00:00.000Z");
+        end = Instant.parse("2021-03-23T00:00:00.000Z");
+        workdays = underTest.findNumberOfWorkdaysBetweenDates(start, end);
+        assertThat(workdays).isEqualTo(10);
+
+        start = Instant.parse("2021-03-20T00:00:00.000Z");
+        end = Instant.parse("2021-03-23T00:00:00.000Z");
+        workdays = underTest.findNumberOfWorkdaysBetweenDates(start, end);
+        assertThat(workdays).isEqualTo(1);
+
+        start = Instant.parse("2021-03-19T00:00:00.000Z");
+        end = Instant.parse("2021-03-23T00:00:00.000Z");
+        workdays = underTest.findNumberOfWorkdaysBetweenDates(start, end);
+        assertThat(workdays).isEqualTo(2);
+
+    }
 }

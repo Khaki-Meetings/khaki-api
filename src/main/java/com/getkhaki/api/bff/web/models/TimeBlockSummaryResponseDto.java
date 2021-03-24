@@ -16,4 +16,7 @@ public class TimeBlockSummaryResponseDto {
     Integer meetingCount;
     Instant start;
     Instant end;
+    Integer numEmployees;
+    Integer numWorkdays;
+    Integer totalMeetingAttendees;
 }
