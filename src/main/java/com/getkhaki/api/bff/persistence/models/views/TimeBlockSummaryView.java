@@ -7,4 +7,7 @@ public interface TimeBlockSummaryView {
     String getFirstName();
     Long getTotalSeconds();
     Long getMeetingCount();
+    Long getNumEmployees();
+    Long getNumWorkdays();
+    Long getTotalMeetingAttendees();
 }
