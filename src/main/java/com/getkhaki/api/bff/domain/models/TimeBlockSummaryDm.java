@@ -16,4 +16,9 @@ public class TimeBlockSummaryDm {
     Integer meetingCount;
     Instant start;
     Instant end;
+    Integer numEmployees;
+    Integer numWorkdays;
+    Integer totalInternalMeetingAttendees;
+    Integer totalMeetingAttendees;
+    Long meetingLengthSeconds;
 }

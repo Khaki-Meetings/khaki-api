@@ -56,7 +56,7 @@ public class StatisticsServiceUnitTests {
                         eq(sessionTenant.getTenantId())
                 )
         )
-                .thenReturn(new TimeBlockSummaryDm(1L, 1, firstStart, firstEnd));
+                .thenReturn(new TimeBlockSummaryDm(1L, 1, firstStart, firstEnd, 1, 1, 1, 0, 0L));
 
         when(
                 timeBlockSummaryPersistenceService.getTimeBlockSummary(
@@ -66,7 +66,7 @@ public class StatisticsServiceUnitTests {
                         eq(sessionTenant.getTenantId())
                 )
         )
-                .thenReturn(new TimeBlockSummaryDm(1L, 1, secondStart, secondEnd));
+                .thenReturn(new TimeBlockSummaryDm(1L, 1, secondStart, secondEnd, 1, 1, 1, 0, 0L));
 
         val trailingStats = underTest.getTrailingStatistics(startTest, interval, count, StatisticsFilterDe.Internal);
 
