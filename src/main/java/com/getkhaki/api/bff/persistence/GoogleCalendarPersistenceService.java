@@ -50,6 +50,19 @@ public class GoogleCalendarPersistenceService implements CalendarProviderPersist
         List<User> users = this.googleDirectoryRepository.getUsers(adminEmail);
 
         for (User user : users) {
+
+            /* Update event information */
+
+            List<Event> events = this.googleCalendarRepository.getEvents(adminEmail, user.getPrimaryEmail(), timeAgo);
+            for (Event event : events) {
+                if (event.getStart().getDateTime() != null) {
+                    CalendarEventDm dm = this.modelMapper.mapEventToCalendarEventDm(event);
+                    calendarEventDms.add(dm);
+                }
+            }
+
+            /* Update user information */
+
             if (user.getPrimaryEmail() != null && user.getPrimaryEmail().split("@").length > 1) {
                 String username = user.getPrimaryEmail().split("@")[0];
                 String domain = user.getPrimaryEmail().split("@")[1];
@@ -71,19 +84,7 @@ public class GoogleCalendarPersistenceService implements CalendarProviderPersist
                     log.debug("FATAL ERROR - EMAIL: " + username + " , DOMAIN " + domainDao.getId());
                 }
             }
-        }
 
-        var totalEvents = 0;
-        for (User user : users) {
-            List<Event> events = this.googleCalendarRepository.getEvents(adminEmail, user.getPrimaryEmail(), timeAgo);
-            totalEvents += events.size();
-
-            for (Event event : events) {
-                if (event.getStart().getDateTime() != null) {
-                    CalendarEventDm dm = this.modelMapper.mapEventToCalendarEventDm(event);
-                    calendarEventDms.add(dm);
-                }
-            }
         }
 
         return calendarEventDms;
