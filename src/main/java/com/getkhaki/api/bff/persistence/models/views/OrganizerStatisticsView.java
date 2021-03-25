@@ -11,6 +11,8 @@ public interface OrganizerStatisticsView {
 
     String getOrganizerLastName();
 
+    String getOrganizerAvatarUrl();
+
     Long getTotalSeconds();
 
     Double getTotalCost();
