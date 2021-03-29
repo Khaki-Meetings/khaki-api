@@ -16,6 +16,7 @@ public class OrganizerStatisticsResponseDto {
     String organizerEmail;
     String organizerFirstName;
     String organizerLastName;
+    String organizerAvatarUrl;
     Integer totalMeetings;
     Long totalSeconds;
     Double totalCost;

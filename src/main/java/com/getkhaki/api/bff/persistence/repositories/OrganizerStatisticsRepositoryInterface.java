@@ -43,6 +43,7 @@ public interface OrganizerStatisticsRepositoryInterface extends JpaRepository<Ca
                     "   concat(organizerEmailDao.user, '@', organizerDomainDao.name) as organizerEmail, " +
                     "   concat(peopleDao.firstName) as organizerFirstName, " +
                     "   concat(peopleDao.lastName) as organizerLastName, " +
+                    "   concat(peopleDao.avatarUrl) as organizerAvatarUrl, " +
                     "   CONCAT(SUBSTR(hex(peopleDao.id), 1, 8), '-', SUBSTR(hex(peopleDao.id), 9, 4), '-', " +
                     "        SUBSTR(hex(peopleDao.id), 13, 4), '-', SUBSTR(hex(peopleDao.id), 17, 4), '-', SUBSTR(hex(peopleDao.id), 21, 12)) as organizerId " +
                     "from CalendarEventParticipantDao organizerCalendarEventParticipantDao " +
@@ -117,6 +118,7 @@ public interface OrganizerStatisticsRepositoryInterface extends JpaRepository<Ca
                     "   concat(organizerEmailDao.user, '@', organizerDomainDao.name) as organizerEmail, " +
                     "   concat(peopleDao.firstName) as organizerFirstName, " +
                     "   concat(peopleDao.lastName) as organizerLastName, " +
+                    "   concat(peopleDao.avatarUrl) as organizerAvatarUrl, " +
                     "   CONCAT(SUBSTR(hex(peopleDao.id), 1, 8), '-', SUBSTR(hex(peopleDao.id), 9, 4), '-', " +
                     "        SUBSTR(hex(peopleDao.id), 13, 4), '-', SUBSTR(hex(peopleDao.id), 17, 4), '-', SUBSTR(hex(peopleDao.id), 21, 12)) as organizerId " +
                     "from CalendarEventParticipantDao organizerCalendarEventParticipantDao " +
