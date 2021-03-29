@@ -18,6 +18,7 @@ import java.util.List;
 public class PersonDao extends EntityBaseDao {
     String firstName;
     String lastName;
+    String avatarUrl;
 
     @ManyToMany(mappedBy = "people")
     List<EmailDao> emails = new ArrayList<>();

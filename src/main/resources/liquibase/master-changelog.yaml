@@ -27,3 +27,5 @@ databaseChangeLog:
       file: liquibase/changelogs/20210316-add-calendar-fields.xml
   - include:
       file: liquibase/changelogs/20210317-recurringeventid-length.xml
+  - include:
+      file: liquibase/changelogs/20210324-add-avatar-to-person.xml

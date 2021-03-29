@@ -16,6 +16,7 @@ public class OrganizerStatisticsDm {
     String organizerEmail;
     String organizerFirstName;
     String organizerLastName;
+    String organizerAvatarUrl;
     Integer totalMeetings;
     Double totalCost;
     Long totalSeconds;
