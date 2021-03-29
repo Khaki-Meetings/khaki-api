@@ -35,6 +35,9 @@ public interface TimeBlockSummaryRepositoryInterface extends JpaRepository<Calen
                     "       and org_count.id = :tenantId" +
                     "     )" +
                     ") as totalSeconds, " +
+                    "sum(" +
+                    "   timestampdiff(second, calendarEvent.start, calendarEvent.end)" +
+                    ") as meetingLengthSeconds, " +
                     " sum((" +
                     "     select count(*) " +
                     "     from CalendarEventParticipantDao as cap_count " +
@@ -44,6 +47,11 @@ public interface TimeBlockSummaryRepositoryInterface extends JpaRepository<Calen
                     "     where cap_count.calendarEvent = calendarEvent " +
                     "       and org_count.id = :tenantId" +
                     ") " +
+                    ") as totalInternalMeetingAttendees, " +
+                    " sum(" +
+                    "     select count(*) " +
+                    "     from CalendarEventParticipantDao as cap_count " +
+                    "     where cap_count.calendarEvent = calendarEvent " +
                     ") as totalMeetingAttendees, " +
                     " ( select count(*) " +
                     "   from OrganizationDao organization " +
@@ -80,6 +88,14 @@ public interface TimeBlockSummaryRepositoryInterface extends JpaRepository<Calen
                     "       and org_count.id = :tenantId" +
                     "     )" +
                     ") as totalSeconds, " +
+                    "sum(" +
+                    "   timestampdiff(second, calendarEvent.start, calendarEvent.end)" +
+                    ") as meetingLengthSeconds, " +
+                    " sum(" +
+                    "     select count(*) " +
+                    "     from CalendarEventParticipantDao as cap_count " +
+                    "     where cap_count.calendarEvent = calendarEvent " +
+                    ") as totalMeetingAttendees, " +
                     " sum((" +
                     "     select count(*) " +
                     "     from CalendarEventParticipantDao as cap_count " +
@@ -89,7 +105,7 @@ public interface TimeBlockSummaryRepositoryInterface extends JpaRepository<Calen
                     "     where cap_count.calendarEvent = calendarEvent " +
                     "       and org_count.id = :tenantId" +
                     ") " +
-                    ") as totalMeetingAttendees, " +
+                    ") as totalInternalMeetingAttendees, " +
                     " ( select count(*) " +
                     "   from OrganizationDao organization " +
                     "   inner join organization.departments as departments " +
