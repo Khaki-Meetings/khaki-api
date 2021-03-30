@@ -1,8 +1,10 @@
 package com.getkhaki.api.bff.persistence;
 
 import com.getkhaki.api.bff.config.interceptors.models.SessionTenant;
+import com.getkhaki.api.bff.domain.models.OrganizerStatisticsAggregateDm;
 import com.getkhaki.api.bff.domain.models.OrganizerStatisticsDm;
 import com.getkhaki.api.bff.domain.models.StatisticsFilterDe;
+import com.getkhaki.api.bff.persistence.models.views.OrganizerStatisticsAggregateView;
 import com.getkhaki.api.bff.persistence.models.views.OrganizerStatisticsView;
 import com.getkhaki.api.bff.persistence.repositories.OrganizerStatisticsRepositoryInterface;
 import org.junit.jupiter.api.BeforeEach;
@@ -67,6 +69,35 @@ public class OrganizersStatisticsPersistenceServiceUnitTests {
                 end,
                 pageable,
                 StatisticsFilterDe.Internal
+        );
+
+        assertThat(result).isEqualTo(dmPage);
+    }
+
+    @Test
+    public void getOrganizersStatistics_All() {
+        var start = Instant.now();
+        var end = Instant.now();
+        var tenantId = UUID.randomUUID();
+        var pageable = PageRequest.of(0, 2);
+        var mockOrganizerStatisticsView = mock(OrganizerStatisticsAggregateView.class);
+        var viewPage = new PageImpl<OrganizerStatisticsAggregateView>(List.of(mockOrganizerStatisticsView));
+        var mockOrganizerStatisticsDm = mock(OrganizerStatisticsAggregateDm.class);
+        var dmPage = new PageImpl<OrganizerStatisticsAggregateDm>(List.of(mockOrganizerStatisticsDm));
+
+        when(this.mockSessionTenant.getTenantId())
+                .thenReturn(tenantId);
+
+        when(this.mockOrganizerStatisticsRepository.findAllOrganizerStatistics(start, end, tenantId, pageable))
+                .thenReturn(viewPage);
+
+        when(this.mockMapper.map(mockOrganizerStatisticsView, OrganizerStatisticsAggregateDm.class))
+                .thenReturn(mockOrganizerStatisticsDm);
+
+        Page<OrganizerStatisticsAggregateDm> result = this.underTest.getAggregateOrganizersStatistics(
+                start,
+                end,
+                pageable
         );
 
         assertThat(result).isEqualTo(dmPage);

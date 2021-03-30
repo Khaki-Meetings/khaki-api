@@ -1,6 +1,7 @@
 package com.getkhaki.api.bff.web;
 
 import com.getkhaki.api.bff.domain.models.IntervalDe;
+import com.getkhaki.api.bff.domain.models.OrganizerStatisticsAggregateDm;
 import com.getkhaki.api.bff.domain.models.OrganizerStatisticsDm;
 import com.getkhaki.api.bff.domain.models.StatisticsFilterDe;
 import com.getkhaki.api.bff.domain.persistence.DepartmentStatisticsPersistenceInterface;
@@ -57,6 +58,18 @@ public class StatisticsController {
                 );
 
         return organizerStatisticsDmList.map(dm -> modelMapper.map(dm, OrganizerStatisticsResponseDto.class));
+    }
+
+    @GetMapping("/organizers/aggregate/{start}/{end}")
+    public Page<OrganizerStatisticsAggregateResponseDto> getAggregateOrganizersStatistics(
+            @PathVariable Instant start,
+            @PathVariable Instant end,
+            Pageable pageable
+    ) {
+        Page<OrganizerStatisticsAggregateDm> organizerStatisticsDmList = organizersStatisticsPersistenceService
+                .getAggregateOrganizersStatistics(start, end, pageable);
+
+        return organizerStatisticsDmList.map(dm -> modelMapper.map(dm, OrganizerStatisticsAggregateResponseDto.class));
     }
 
     @GetMapping("/summary/{start}/{end}")
