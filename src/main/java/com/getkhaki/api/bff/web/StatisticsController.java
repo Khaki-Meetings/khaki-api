@@ -64,7 +64,6 @@ public class StatisticsController {
     public Page<OrganizerStatisticsAggregateResponseDto> getAggregateOrganizersStatistics(
             @PathVariable Instant start,
             @PathVariable Instant end,
-            @RequestParam(required = false) Optional<StatisticsFilterDte> filter,
             Pageable pageable
     ) {
         Page<OrganizerStatisticsAggregateDm> organizerStatisticsDmList = organizersStatisticsPersistenceService
