@@ -94,7 +94,7 @@ public class StatisticsControllerIntegrationTests extends BaseMvcIntegrationTest
                 .andExpect(jsonPath("$.content[?(@.organizerFirstName == 'Bob')]").exists())
                 .andExpect(jsonPath("$.content[?(@.organizerLastName == 'Jones')]").exists())
                 .andExpect(jsonPath("$.content[?(@.organizerFirstName == 'Bob')].externalMeetingSeconds").value(25200))
-                .andExpect(jsonPath("$.content[?(@.organizerFirstName == 'Bob')].externalMeetingCount").value(3));
+                .andExpect(jsonPath("$.content[?(@.organizerFirstName == 'Bob')].externalMeetingCount").value(2));
     }
 
     @Test
