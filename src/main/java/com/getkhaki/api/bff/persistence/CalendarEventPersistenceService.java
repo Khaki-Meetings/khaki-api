@@ -102,17 +102,23 @@ public class CalendarEventPersistenceService implements CalendarEventPersistence
             );
         }
 
-        switch (filterDe) {
-            case Internal:
-                calendarEventsWithAttendeesViewList = calendarEventRepository
-                        .getInternalCalendarEvents(sessionTenant.getTenantId(), sDate, eDate, organizerUUID, pageable);
-                break;
-            case External:
-                calendarEventsWithAttendeesViewList = calendarEventRepository
-                        .getExternalCalendarEvents(sessionTenant.getTenantId(), sDate, eDate, organizerUUID, pageable);
-                break;
-            default:
-                throw new RuntimeException("invalid filter: " + filterDe);
+        if (filterDe == null) {
+            calendarEventsWithAttendeesViewList = calendarEventRepository
+                    .getAllCalendarEvents(sessionTenant.getTenantId(), sDate, eDate, organizerUUID, pageable);
+        } else {
+            switch (filterDe) {
+                case Internal:
+                    calendarEventsWithAttendeesViewList = calendarEventRepository
+                            .getInternalCalendarEvents(sessionTenant.getTenantId(), sDate, eDate, organizerUUID, pageable);
+                    break;
+                case External:
+                    calendarEventsWithAttendeesViewList = calendarEventRepository
+                            .getExternalCalendarEvents(sessionTenant.getTenantId(), sDate, eDate, organizerUUID, pageable);
+                    break;
+                default:
+                    calendarEventsWithAttendeesViewList = calendarEventRepository
+                            .getAllCalendarEvents(sessionTenant.getTenantId(), sDate, eDate, organizerUUID, pageable);
+            }
         }
 
         return calendarEventsWithAttendeesViewList.map(dao -> modelMapper.map(dao, CalendarEventDetailDm.class));

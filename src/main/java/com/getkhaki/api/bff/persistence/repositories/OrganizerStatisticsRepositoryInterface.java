@@ -215,6 +215,15 @@ public interface OrganizerStatisticsRepositoryInterface extends JpaRepository<Ca
                     "       where organizerMeetSecondsCepD.email = organizerCalendarEventParticipantDao.email " +
                     "           and organizerMeetSecondsCepD.organizer = true " +
                     "           and organizerMeetSecondsCepD.calendarEvent.start between :sDate and :eDate" +
+                    "           and exists (" +
+                    "               select count(distinct domain.name)" +
+                    "               from CalendarEventDao innerCalendarEvent" +
+                    "               inner join innerCalendarEvent.participants innerParticipants" +
+                    "               inner join innerParticipants.email.domain domain" +
+                    "               where innerCalendarEvent = organizerMeetSecondsCepD.calendarEvent" +
+                    "               group by innerCalendarEvent" +
+                    "               having count(distinct domain.name) > 1" +
+                    "           ) " +
                     "   ) as externalMeetingCount," +
                     "   COALESCE(" +
                     "   (" +
