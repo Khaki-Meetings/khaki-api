@@ -13,6 +13,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.Instant;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 
 @RequestMapping("/calendar-events")
@@ -44,16 +45,16 @@ public class CalendarEventController {
         @RequestParam Optional<StatisticsFilterDte> filter,
         Pageable pageable) {
 
-        StatisticsFilterDe filterDe = modelMapper.map(
-                filter.orElse(StatisticsFilterDte.External),
-                StatisticsFilterDe.class
-        );
+        StatisticsFilterDe filterDe = null;
+        try {
+            filterDe = modelMapper.map(filter.get(), StatisticsFilterDe.class);
+        } catch (NoSuchElementException e) {
+
+        }
 
         Page<CalendarEventDetailDm> calendarEventsWithAttendeesDmList = calendarEventService
                 .getCalendarEvents(start, end, organizer, filterDe, pageable);
-
         return calendarEventsWithAttendeesDmList.map(dm -> modelMapper.map(dm, CalendarEventsWithAttendeesResponseDto.class));
-
 
     }
 }
