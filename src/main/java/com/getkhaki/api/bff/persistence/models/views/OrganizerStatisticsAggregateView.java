@@ -1,9 +1,7 @@
 package com.getkhaki.api.bff.persistence.models.views;
 
-public interface OrganizerStatisticsView {
+public interface OrganizerStatisticsAggregateView {
     String getOrganizerId();
-
-    Integer getTotalMeetings();
 
     String getOrganizerEmail();
 
@@ -13,7 +11,11 @@ public interface OrganizerStatisticsView {
 
     String getOrganizerAvatarUrl();
 
-    Long getTotalSeconds();
+    Integer getInternalMeetingCount();
 
-    Double getTotalCost();
+    Integer getInternalMeetingSeconds();
+
+    Integer getExternalMeetingCount();
+
+    Integer getExternalMeetingSeconds();
 }

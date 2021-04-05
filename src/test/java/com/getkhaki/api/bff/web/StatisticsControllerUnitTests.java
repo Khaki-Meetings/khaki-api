@@ -1,18 +1,11 @@
 package com.getkhaki.api.bff.web;
 
-import com.getkhaki.api.bff.domain.models.DepartmentStatisticsDm;
-import com.getkhaki.api.bff.domain.models.IntervalDe;
-import com.getkhaki.api.bff.domain.models.OrganizerStatisticsDm;
-import com.getkhaki.api.bff.domain.models.StatisticsFilterDe;
-import com.getkhaki.api.bff.domain.models.TimeBlockSummaryDm;
+import com.getkhaki.api.bff.domain.models.*;
 import com.getkhaki.api.bff.domain.persistence.DepartmentStatisticsPersistenceInterface;
 import com.getkhaki.api.bff.domain.persistence.OrganizersStatisticsPersistenceInterface;
 import com.getkhaki.api.bff.domain.persistence.TimeBlockSummaryPersistenceInterface;
 import com.getkhaki.api.bff.domain.services.StatisticsService;
-import com.getkhaki.api.bff.web.models.DepartmentStatisticsResponseDto;
-import com.getkhaki.api.bff.web.models.OrganizerStatisticsResponseDto;
-import com.getkhaki.api.bff.web.models.StatisticsFilterDte;
-import com.getkhaki.api.bff.web.models.TimeBlockSummaryResponseDto;
+import com.getkhaki.api.bff.web.models.*;
 import org.assertj.core.util.Lists;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -95,6 +88,45 @@ public class StatisticsControllerUnitTests {
 
         Page<OrganizerStatisticsResponseDto> response = underTest
                 .getOrganizersStatistics(startTest, endTest, Optional.of(StatisticsFilterDte.Internal), pageable);
+
+        assertThat(response).isNotNull();
+        assertThat(response.getTotalElements()).isEqualTo(1);
+        assertThat(response.get().findFirst().orElseThrow()).isEqualTo(dto);
+    }
+
+    @Test
+    public void getOrganizersStatisticsAggregate() {
+        Instant startTest = Instant.parse("2020-11-01T00:00:00.000Z");
+        Instant endTest = Instant.parse("2020-11-30T00:00:00.000Z");
+
+        OrganizerStatisticsAggregateDm mockDm = OrganizerStatisticsAggregateDm.builder()
+                .organizerEmail("bob@bob.com")
+                .internalMeetingSeconds(2000)
+                .internalMeetingCount(2)
+                .externalMeetingSeconds(3000)
+                .externalMeetingCount(3)
+                .build();
+
+        PageImpl<OrganizerStatisticsAggregateDm> dms = new PageImpl<>(Lists.list(mockDm));
+
+        var dto = OrganizerStatisticsAggregateResponseDto.builder()
+                .organizerEmail("bob@bob.com")
+                .internalMeetingSeconds(2000)
+                .internalMeetingCount(2)
+                .externalMeetingSeconds(3000)
+                .externalMeetingCount(3)
+                .build();
+
+        Pageable pageable = PageRequest.of(0, 2);
+        when(organizersStatisticsPersistenceService.getAggregateOrganizersStatistics(
+                eq(startTest), eq(endTest), eq(pageable))
+        ).thenReturn(dms);
+
+        when(modelMapper.map(mockDm, OrganizerStatisticsAggregateResponseDto.class))
+                .thenReturn(dto);
+
+        Page<OrganizerStatisticsAggregateResponseDto> response = underTest
+                .getAggregateOrganizersStatistics(startTest, endTest, pageable);
 
         assertThat(response).isNotNull();
         assertThat(response.getTotalElements()).isEqualTo(1);

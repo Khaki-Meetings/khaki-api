@@ -60,6 +60,7 @@ public class CalendarEventService {
                         timeAgo
                 )
         );
+
         val filteredEvents = this.calendarProviderPersistenceFactory.get()
                 .getEvents(adminEmail, timeAgo)
                 .stream()

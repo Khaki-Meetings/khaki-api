@@ -11,13 +11,14 @@ import lombok.experimental.Accessors;
 @AllArgsConstructor
 @Accessors(chain = true)
 @Builder(toBuilder = true)
-public class OrganizerStatisticsResponseDto {
+public class OrganizerStatisticsAggregateResponseDto {
     String organizerId;
     String organizerEmail;
     String organizerFirstName;
     String organizerLastName;
     String organizerAvatarUrl;
-    Integer totalMeetings;
-    Long totalSeconds;
-    Double totalCost;
+    Integer internalMeetingCount;
+    Integer internalMeetingSeconds;
+    Integer externalMeetingCount;
+    Integer externalMeetingSeconds;
 }

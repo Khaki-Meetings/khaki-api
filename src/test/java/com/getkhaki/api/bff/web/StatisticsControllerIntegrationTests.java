@@ -77,6 +77,27 @@ public class StatisticsControllerIntegrationTests extends BaseMvcIntegrationTest
     }
 
     @Test
+    public void testOrganizersStatisticsAll() throws Exception {
+        Instant start = Instant.parse("2020-11-01T00:00:00.000Z");
+        Instant end = Instant.parse("2020-11-30T00:00:00.000Z");
+        String url = String.format("/statistics/organizers/aggregate/%s/%s", start, end);
+
+        mvc.perform(MockMvcRequestBuilders.get(url)
+                .header(SessionTenant.HEADER_KEY, "s56_net")
+                .with(jwt().jwt(getJWT("bob@s56.net")).authorities(new SimpleGrantedAuthority("admin"))))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.content.length()").value(2))
+                .andExpect(jsonPath("$.content[?(@.organizerFirstName == 'Betty')]").exists())
+                .andExpect(jsonPath("$.content[?(@.organizerLastName == 'Smith')]").exists())
+                .andExpect(jsonPath("$.content[?(@.organizerFirstName == 'Betty')].internalMeetingSeconds").value(32400))
+                .andExpect(jsonPath("$.content[?(@.organizerFirstName == 'Betty')].internalMeetingCount").value(1))
+                .andExpect(jsonPath("$.content[?(@.organizerFirstName == 'Bob')]").exists())
+                .andExpect(jsonPath("$.content[?(@.organizerLastName == 'Jones')]").exists())
+                .andExpect(jsonPath("$.content[?(@.organizerFirstName == 'Bob')].externalMeetingSeconds").value(25200))
+                .andExpect(jsonPath("$.content[?(@.organizerFirstName == 'Bob')].externalMeetingCount").value(2));
+    }
+
+    @Test
     public void testDepartmentStatisticsDefault() throws Exception {
         Instant start = Instant.parse("2020-11-01T00:00:00.000Z");
         Instant end = Instant.parse("2020-11-30T00:00:00.000Z");

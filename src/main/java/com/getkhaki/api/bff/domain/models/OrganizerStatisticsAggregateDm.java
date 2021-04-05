@@ -1,4 +1,4 @@
-package com.getkhaki.api.bff.web.models;
+package com.getkhaki.api.bff.domain.models;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -7,17 +7,18 @@ import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
 
 @Data
-@NoArgsConstructor
+@Builder
 @AllArgsConstructor
+@NoArgsConstructor
 @Accessors(chain = true)
-@Builder(toBuilder = true)
-public class OrganizerStatisticsResponseDto {
+public class OrganizerStatisticsAggregateDm {
     String organizerId;
     String organizerEmail;
     String organizerFirstName;
     String organizerLastName;
     String organizerAvatarUrl;
-    Integer totalMeetings;
-    Long totalSeconds;
-    Double totalCost;
+    Integer internalMeetingCount;
+    Integer internalMeetingSeconds;
+    Integer externalMeetingCount;
+    Integer externalMeetingSeconds;
 }
