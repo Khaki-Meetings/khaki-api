@@ -30,16 +30,16 @@ public class GoalsController {
                 GoalDm.builder()
                     .id(UUID.randomUUID())
                     .measure(GoalMeasureDte.AttendeesPerMeeting)
-                    .lessThanOrEqualTo(10)
-                    .greaterThanOrEqualTo(8)
+                    .lessThanOrEqualTo(8)
+                    .greaterThanOrEqualTo(null)
                     .departmentName(null)
                     .build());
         goalDms.add(
                 GoalDm.builder()
                         .id(UUID.randomUUID())
                         .measure(GoalMeasureDte.AverageMeetingLength)
-                        .lessThanOrEqualTo(2500)
-                        .greaterThanOrEqualTo(0)
+                        .lessThanOrEqualTo(2100)
+                        .greaterThanOrEqualTo(null)
                         .departmentName(null)
                         .build());
 
