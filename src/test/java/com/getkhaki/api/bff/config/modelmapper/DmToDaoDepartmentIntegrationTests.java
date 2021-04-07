@@ -25,23 +25,21 @@ public class DmToDaoDepartmentIntegrationTests extends BaseModelMapperIntegratio
 
     private DepartmentDm buildDm() {
         return DepartmentDm.builder()
-                .name("IT")
-                .employees(
-                        List.of(
-                                EmployeeDm.builder()
-                                        .department("IT")
-                                        .firstName("Steve")
-                                        .lastName("Jones")
-                                        .email("steve@jones.com")
-                                        .build(),
-                                EmployeeDm.builder()
-                                        .department("IT")
-                                        .firstName("Bob")
-                                        .lastName("Jones")
-                                        .email("bob@jones.com")
-                                        .build()
-                        )
+            .name("IT")
+            .employees(List.of(
+                EmployeeDm.builder()
+                    .firstName("Steve")
+                    .lastName("Jones")
+                    .email("steve@jones.com")
+                    .build(),
+
+                EmployeeDm.builder()
+                    .firstName("Bob")
+                    .lastName("Jones")
+                    .email("bob@jones.com")
+                    .build()
                 )
-                .build();
+            )
+            .build();
     }
 }
