@@ -3,6 +3,7 @@ package com.getkhaki.api.bff.web;
 import com.getkhaki.api.bff.domain.models.GoalDm;
 import com.getkhaki.api.bff.web.models.GoalDto;
 import com.getkhaki.api.bff.web.models.GoalMeasureDte;
+import com.getkhaki.api.bff.web.models.GoalsResponseDto;
 import org.modelmapper.ModelMapper;
 import org.springframework.web.bind.annotation.*;
 
@@ -22,14 +23,14 @@ public class GoalsController {
     }
 
     @GetMapping
-    public List<GoalDto> getGoals() {
+    public GoalsResponseDto getGoals() {
 
         List<GoalDm> goalDms = new ArrayList<GoalDm>();
         goalDms.add(
                 GoalDm.builder()
                     .id(UUID.randomUUID())
                     .measure(GoalMeasureDte.AttendeesPerMeeting)
-                    .lessThanOrEqualTo(0)
+                    .lessThanOrEqualTo(10)
                     .greaterThanOrEqualTo(8)
                     .departmentName(null)
                     .build());
@@ -37,15 +38,17 @@ public class GoalsController {
                 GoalDm.builder()
                         .id(UUID.randomUUID())
                         .measure(GoalMeasureDte.AverageMeetingLength)
-                        .lessThanOrEqualTo(25)
-                        .greaterThanOrEqualTo(35)
+                        .lessThanOrEqualTo(2500)
+                        .greaterThanOrEqualTo(0)
                         .departmentName(null)
                         .build());
 
-        return goalDms
+        GoalsResponseDto goalsResponseDto = new GoalsResponseDto();
+        goalsResponseDto.setGoals(goalDms
                 .stream()
                 .map(element -> modelMapper.map(element, GoalDto.class))
-                .collect(Collectors.toList());
+                .collect(Collectors.toList()));
+        return goalsResponseDto;
     }
 
 }

@@ -67,9 +67,14 @@ public class CalendarEventPersistenceService implements CalendarEventPersistence
                     if (eventParticipantOp.isEmpty()) {
 
                         calendarEventParticipantDao.setCalendarEvent(calendarEventDao);
-                        calendarEventParticipantRepository.save(
-                                calendarEventParticipantDao
-                        );
+                        try {
+                            calendarEventParticipantRepository.save(
+                                    calendarEventParticipantDao
+                            );
+                        } catch (Exception e) {
+                            log.error("COULD NOT ADD EVENT PARTICIPANT: " + calendarEventParticipantDao.getEmail()
+                                + " to " + calendarEventDao.getGoogleCalendarId());
+                        }
                     }
                 }
         );
