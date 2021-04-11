@@ -147,7 +147,8 @@ public class StatisticsControllerUnitTests {
                 0,
                 0,
                 0,
-                0L
+                0L,
+                0
         );
 
         TimeBlockSummaryDm mockDm = new TimeBlockSummaryDm(
@@ -159,7 +160,8 @@ public class StatisticsControllerUnitTests {
                 0,
                 0,
                 0,
-                0L
+                0L,
+                0
         );
 
         when(modelMapper.map(StatisticsFilterDte.External, StatisticsFilterDe.class))
