@@ -21,4 +21,5 @@ public class TimeBlockSummaryResponseDto {
     Integer totalMeetingInternalAttendees;
     Integer totalMeetingAttendees;
     Long meetingLengthSeconds;
+    Integer numEmployeesOverTimeThreshold;
 }

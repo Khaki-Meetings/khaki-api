@@ -1,9 +1,11 @@
 package com.getkhaki.api.bff.persistence;
 
 import com.getkhaki.api.bff.config.interceptors.models.SessionTenant;
+import com.getkhaki.api.bff.domain.models.CalendarEventsEmployeeTimeDm;
 import com.getkhaki.api.bff.domain.models.StatisticsFilterDe;
 import com.getkhaki.api.bff.domain.models.TimeBlockSummaryDm;
 import com.getkhaki.api.bff.domain.persistence.TimeBlockSummaryPersistenceInterface;
+import com.getkhaki.api.bff.persistence.models.views.CalendarEventsEmployeeTimeView;
 import com.getkhaki.api.bff.persistence.models.views.TimeBlockSummaryView;
 import com.getkhaki.api.bff.persistence.repositories.TimeBlockSummaryRepositoryInterface;
 import lombok.val;
@@ -97,5 +99,15 @@ public class TimeBlockSummaryPersistenceService implements TimeBlockSummaryPersi
         timeBlockSummaryDm.setStart(start);
 
         return timeBlockSummaryDm;
+    }
+
+    @Override
+    public CalendarEventsEmployeeTimeDm getCalendarEventEmployeeTime(Instant sDate, Instant eDate,
+                                                                     Integer minThreshold) {
+
+        CalendarEventsEmployeeTimeView calendarEventsEmployeeTimeView = timeBlockSummaryRepositoryInterface
+                .getCalendarEventEmployeeTime(sessionTenant.getTenantId(), sDate, eDate, minThreshold);
+
+        return modelMapper.map(calendarEventsEmployeeTimeView, CalendarEventsEmployeeTimeDm.class);
     }
 }
