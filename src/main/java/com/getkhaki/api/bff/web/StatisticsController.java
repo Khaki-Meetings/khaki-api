@@ -80,7 +80,7 @@ public class StatisticsController {
                 StatisticsFilterDe.class
         );
 
-        CalendarEventsEmployeeTimeDm cal = timeBlockSummaryPersistenceService.getCalendarEventEmployeeTime(start, end, 10);
+        CalendarEventsEmployeeTimeDm cal = timeBlockSummaryPersistenceService.getCalendarEventEmployeeTime(start, end, 40);
 
         TimeBlockSummaryDm timeBlockSummaryDm = timeBlockSummaryPersistenceService.getTimeBlockSummary(start, end, filterDe);
 
