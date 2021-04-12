@@ -38,7 +38,7 @@ public class GoalsController {
                 GoalDm.builder()
                         .id(UUID.randomUUID())
                         .measure(GoalMeasureDte.AverageMeetingLength)
-                        .lessThanOrEqualTo(2100)
+                        .lessThanOrEqualTo(1500)
                         .greaterThanOrEqualTo(null)
                         .departmentName(null)
                         .build());
@@ -46,7 +46,7 @@ public class GoalsController {
                 GoalDm.builder()
                         .id(UUID.randomUUID())
                         .measure(GoalMeasureDte.StaffTimeInMeetings)
-                        .lessThanOrEqualTo(25)
+                        .lessThanOrEqualTo(40)
                         .greaterThanOrEqualTo(null)
                         .departmentName(null)
                         .build());
