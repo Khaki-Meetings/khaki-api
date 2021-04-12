@@ -1,9 +1,6 @@
 package com.getkhaki.api.bff.web;
 
-import com.getkhaki.api.bff.domain.models.IntervalDe;
-import com.getkhaki.api.bff.domain.models.OrganizerStatisticsAggregateDm;
-import com.getkhaki.api.bff.domain.models.OrganizerStatisticsDm;
-import com.getkhaki.api.bff.domain.models.StatisticsFilterDe;
+import com.getkhaki.api.bff.domain.models.*;
 import com.getkhaki.api.bff.domain.persistence.DepartmentStatisticsPersistenceInterface;
 import com.getkhaki.api.bff.domain.persistence.OrganizersStatisticsPersistenceInterface;
 import com.getkhaki.api.bff.domain.persistence.TimeBlockSummaryPersistenceInterface;
@@ -83,10 +80,14 @@ public class StatisticsController {
                 StatisticsFilterDe.class
         );
 
-        return modelMapper.map(
-                timeBlockSummaryPersistenceService.getTimeBlockSummary(start, end, filterDe),
-                TimeBlockSummaryResponseDto.class
-        );
+        CalendarEventsEmployeeTimeDm cal = timeBlockSummaryPersistenceService.getCalendarEventEmployeeTime(start, end, 40);
+
+        TimeBlockSummaryDm timeBlockSummaryDm = timeBlockSummaryPersistenceService.getTimeBlockSummary(start, end, filterDe);
+
+        if (cal != null) {
+            timeBlockSummaryDm.setNumEmployeesOverTimeThreshold(cal.getNumOverThreshold());
+        }
+        return modelMapper.map(timeBlockSummaryDm, TimeBlockSummaryResponseDto.class);
     }
 
     @GetMapping("/department/{start}/{end}")

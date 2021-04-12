@@ -42,6 +42,14 @@ public class GoalsController {
                         .greaterThanOrEqualTo(null)
                         .departmentName(null)
                         .build());
+        goalDms.add(
+                GoalDm.builder()
+                        .id(UUID.randomUUID())
+                        .measure(GoalMeasureDte.StaffTimeInMeetings)
+                        .lessThanOrEqualTo(25)
+                        .greaterThanOrEqualTo(null)
+                        .departmentName(null)
+                        .build());
 
         GoalsResponseDto goalsResponseDto = new GoalsResponseDto();
         goalsResponseDto.setGoals(goalDms
