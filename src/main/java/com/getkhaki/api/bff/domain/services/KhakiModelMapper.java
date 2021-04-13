@@ -2,6 +2,9 @@ package com.getkhaki.api.bff.domain.services;
 
 import com.getkhaki.api.bff.domain.models.CalendarEventDm;
 import com.getkhaki.api.bff.domain.models.CalendarEventParticipantDm;
+import com.getkhaki.api.bff.domain.models.GoalDm;
+import com.getkhaki.api.bff.persistence.models.GoalDao;
+import com.getkhaki.api.bff.web.models.GoalMeasureDte;
 import com.google.api.services.calendar.model.Event;
 import lombok.val;
 import org.modelmapper.ModelMapper;
@@ -58,5 +61,26 @@ public class KhakiModelMapper extends ModelMapper {
         calendarEvent.setParticipants(participants);
 
         return calendarEvent;
+    }
+
+    public GoalDm mapGoalToGoalDm(GoalDao source) {
+
+        GoalDm goalDm = this.map(source, GoalDm.class);
+        switch (source.getName()) {
+            case "AttendeesPerMeeting" :
+                goalDm.setMeasure(GoalMeasureDte.AttendeesPerMeeting);
+                break;
+            case "AverageMeetingLength" :
+                goalDm.setMeasure(GoalMeasureDte.AverageMeetingLength);
+                break;
+            case "StaffTimeInMeetings" :
+                goalDm.setMeasure(GoalMeasureDte.StaffTimeInMeetings);
+                break;
+            case "UninterruptedTime" :
+                goalDm.setMeasure(GoalMeasureDte.UninterruptedTime);
+                break;
+        }
+        return goalDm;
+
     }
 }
