@@ -29,3 +29,5 @@ databaseChangeLog:
       file: liquibase/changelogs/20210317-recurringeventid-length.xml
   - include:
       file: liquibase/changelogs/20210324-add-avatar-to-person.xml
+  - include:
+      file: liquibase/changelogs/20210412-create-goals.yaml
