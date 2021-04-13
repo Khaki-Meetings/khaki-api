@@ -83,6 +83,15 @@ databaseChangeLog:
   - property:
       name: 2112OrganizationId
       value: 03163307d51546ffbe572965f4ce58f3
+  - property:
+      name: goal1Id
+      value: 03163307d51546ffbe572965f4ce58f3
+  - property:
+      name: goal1LTE
+      value: 10
+  - property:
+      name: goal1Name
+      value: AttendeesPerMeeting
   - changeSet:
       id: test-data-1
       author: jacob (generated)
@@ -507,3 +516,16 @@ databaseChangeLog:
               - column:
                   name: salary_group_id
                   value: ${salaryGroup1Id}
+        - insert:
+            tableName: goal_dao
+            columns:
+              - column:
+                  name: id
+                  value: ${goal1Id}
+              - column:
+                  name: less_than_or_equal_to
+                  value: ${goal1LTE}
+              - column:
+                  name: name
+                  value: ${goal1Name}
+

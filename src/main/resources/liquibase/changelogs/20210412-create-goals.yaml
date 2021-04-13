@@ -1,0 +1,58 @@
+databaseChangeLog:
+  - changeSet:
+      id: 20210412-1
+      author: jeff
+      changes:
+        - createTable:
+            columns:
+              - column:
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                    primaryKeyName: goal_dao_pk
+                  name: id
+                  type: BINARY(16)
+              - column:
+                  name: organization_id
+                  type: BINARY(16)
+              - column:
+                  name: department_id
+                  type: BINARY(16)
+              - column:
+                  name: greater_than_or_equal_to
+                  type: int
+              - column:
+                  name: less_than_or_equal_to
+                  type: int
+              - column:
+                  constraints:
+                    nullable: false
+                  name: name
+                  type: VARCHAR(255)
+            tableName: goal_dao
+  - changeSet:
+      id: 20210412-2
+      author: jeff
+      changes:
+        - addForeignKeyConstraint:
+            baseColumnNames: organization_id
+            baseTableName: goal_dao
+            constraintName: goal_organization_fk
+            deferrable: false
+            initiallyDeferred: false
+            referencedColumnNames: id
+            referencedTableName: organization_dao
+            validate: true
+  - changeSet:
+      id: 20210412-3
+      author: jeff
+      changes:
+        - addForeignKeyConstraint:
+            baseColumnNames: department_id
+            baseTableName: goal_dao
+            constraintName: goal_department_fk
+            deferrable: false
+            initiallyDeferred: false
+            referencedColumnNames: id
+            referencedTableName: department_dao
+            validate: true
