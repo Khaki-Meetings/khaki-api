@@ -11,30 +11,17 @@ import java.util.UUID;
 public interface GoalRepositoryInterface extends JpaRepository<GoalDao, UUID> {
 
     @Query(
-            value = "select gd.id as id, " +
-                    "       gd.name as name, " +
-                    "       gd.greater_than_or_equal_to as greaterThanOrEqualTo, " +
-                    "       gd.less_than_or_equal_to as lessThanOrEqualTo, " +
-                    "       gd.department_id as departmentId, " +
-                    "       gd.organization_id as organizationId " +
-                    "  from goal_dao gd " +
-                    " where gd.organization_id is null " +
-                    "   and gd.department_id is null ",
-            nativeQuery = true
+            value = "select g from GoalDao g " +
+                    " where g.organization is null " +
+                    " and g.department is null "
     )
     List<GoalDao> findDefaultGoals();
 
     @Query(
-            value = "select gd.id as id, " +
-                    "       gd.name as name, " +
-                    "       gd.greater_than_or_equal_to as greaterThanOrEqualTo, " +
-                    "       gd.less_than_or_equal_to as lessThanOrEqualTo, " +
-                    "       gd.department_id as departmentId, " +
-                    "       gd.organization_id as organizationId " +
-                    "  from goal_dao gd " +
-                    " where gd.organization_id = :tenantId " +
-                    "   and gd.department_id is null ",
-            nativeQuery = true
+            value = "select g from GoalDao g " +
+                    "   inner join g.organization organization" +
+                    " where organization.id = :tenantId  " +
+                    " and g.department is null "
     )
     List<GoalDao> findDefaultOrganizationGoals(UUID tenantId);
 
