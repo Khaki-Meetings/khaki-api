@@ -11,29 +11,29 @@ import java.util.UUID;
 public interface GoalRepositoryInterface extends JpaRepository<GoalDao, UUID> {
 
     @Query(
-            value = "select id as id, " +
-                    "       name as name, " +
-                    "       greater_than_or_equal_to as greaterThanOrEqualTo, " +
-                    "       less_than_or_equal_to as lessThanOrEqualTo, " +
-                    "      department_id as departmentId, " +
-                    "      organization_id as organizationId " +
+            value = "select gd.id as id, " +
+                    "       gd.name as name, " +
+                    "       gd.greater_than_or_equal_to as greaterThanOrEqualTo, " +
+                    "       gd.less_than_or_equal_to as lessThanOrEqualTo, " +
+                    "       gd.department_id as departmentId, " +
+                    "       gd.organization_id as organizationId " +
                     "  from goal_dao gd " +
-                    " where organization_id is null " +
-                    "   and department_id is null ",
+                    " where gd.organization_id is null " +
+                    "   and gd.department_id is null ",
             nativeQuery = true
     )
     List<GoalDao> findDefaultGoals();
 
     @Query(
-            value = "select id as id, " +
-                    "       name as name, " +
-                    "       greater_than_or_equal_to as greaterThanOrEqualTo, " +
-                    "       less_than_or_equal_to as lessThanOrEqualTo, " +
-                    "      department_id as departmentId, " +
-                    "      organization_id as organizationId " +
+            value = "select gd.id as id, " +
+                    "       gd.name as name, " +
+                    "       gd.greater_than_or_equal_to as greaterThanOrEqualTo, " +
+                    "       gd.less_than_or_equal_to as lessThanOrEqualTo, " +
+                    "       gd.department_id as departmentId, " +
+                    "       gd.organization_id as organizationId " +
                     "  from goal_dao gd " +
-                    " where organization_id = :tenantId " +
-                    "   and department_id is null ",
+                    " where gd.organization_id = :tenantId " +
+                    "   and gd.department_id is null ",
             nativeQuery = true
     )
     List<GoalDao> findDefaultOrganizationGoals(UUID tenantId);
