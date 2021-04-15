@@ -2,6 +2,7 @@ package com.getkhaki.api.bff.persistence;
 
 import com.getkhaki.api.bff.domain.services.KhakiModelMapper;
 import com.getkhaki.api.bff.persistence.repositories.GoalRepositoryInterface;
+import com.getkhaki.api.bff.persistence.repositories.OrganizationRepositoryInterface;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -14,6 +15,8 @@ public class GoalsPersistenceServiceUnitTests {
     @Mock
     private GoalRepositoryInterface goalRepository;
     @Mock
+    private OrganizationRepositoryInterface organizationRepository;
+    @Mock
     private KhakiModelMapper modelMapper;
 
     @InjectMocks
@@ -21,7 +24,7 @@ public class GoalsPersistenceServiceUnitTests {
 
     @BeforeEach
     public void setup() {
-        underTest = new GoalPersistenceService(goalRepository, modelMapper);
+        underTest = new GoalPersistenceService(goalRepository, organizationRepository, modelMapper);
     }
 
     @Test

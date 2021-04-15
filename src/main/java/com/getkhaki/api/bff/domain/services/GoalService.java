@@ -26,4 +26,8 @@ public class GoalService {
         return this.goalPersistenceService.getGoals(tenantId).stream().collect(Collectors.toList());
     }
 
+    public GoalDm addGoal(GoalDm goalDm) {
+        UUID tenantId = sessionTenant.getTenantId();
+        return this.goalPersistenceService.addGoal(goalDm, tenantId);
+    }
 }
