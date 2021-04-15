@@ -50,7 +50,7 @@ public class StatisticsControllerUnitTests {
                 organizersStatisticsPersistenceService,
                 timeBlockSummaryPersistenceService,
                 departmentStatisticsPersistenceService,
-                this.modelMapper
+                goalPersistenceService, this.modelMapper
         );
     }
 
