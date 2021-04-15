@@ -83,4 +83,25 @@ public class KhakiModelMapper extends ModelMapper {
         return goalDm;
 
     }
+
+    public GoalDao mapGoalDmToGoal(GoalDm source) {
+
+        GoalDao goalDao = this.map(source, GoalDao.class);
+        switch (source.getMeasure()) {
+            case AttendeesPerMeeting :
+                goalDao.setName("AttendeesPerMeeting");
+                break;
+            case AverageMeetingLength :
+                goalDao.setName("AverageMeetingLength");
+                break;
+            case StaffTimeInMeetings :
+                goalDao.setName("StaffTimeInMeetings");
+                break;
+            case UninterruptedTime :
+                goalDao.setName("UninterruptedTime");
+                break;
+        }
+        return goalDao;
+
+    }
 }
