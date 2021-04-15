@@ -12,6 +12,5 @@ public interface TimeBlockSummaryPersistenceInterface {
     TimeBlockSummaryDm getTimeBlockSummary(Instant start, Instant end, StatisticsFilterDe filterDe, UUID tenantId);
     TimeBlockSummaryDm getIndividualTimeBlockSummary(UUID employeeId, Instant start, Instant end, StatisticsFilterDe statsFilter);
 
-    CalendarEventsEmployeeTimeDm getCalendarEventEmployeeTime(Instant sDate, Instant eDate,
-                                                              Integer minThreshold);
+    CalendarEventsEmployeeTimeDm getCalendarEventEmployeeTime(Instant sDate, Instant eDate);
 }

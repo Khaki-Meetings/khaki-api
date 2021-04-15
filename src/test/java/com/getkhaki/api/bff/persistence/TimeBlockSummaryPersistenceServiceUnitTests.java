@@ -33,8 +33,8 @@ public class TimeBlockSummaryPersistenceServiceUnitTests {
     @BeforeEach
     public void setup() {
         underTest = new TimeBlockSummaryPersistenceService(
-                modelMapper, timeBlockSummaryRepositoryInterface, sessionTenant
-        );
+                modelMapper, timeBlockSummaryRepositoryInterface, sessionTenant,
+                goalRepositoryInterface);
     }
 
     @Test
