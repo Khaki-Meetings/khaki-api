@@ -11,6 +11,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
@@ -66,41 +67,32 @@ public class KhakiModelMapper extends ModelMapper {
     public GoalDm mapGoalToGoalDm(GoalDao source) {
 
         GoalDm goalDm = this.map(source, GoalDm.class);
-        switch (source.getName()) {
-            case "AttendeesPerMeeting" :
-                goalDm.setMeasure(GoalMeasureDte.AttendeesPerMeeting);
-                break;
-            case "AverageMeetingLength" :
-                goalDm.setMeasure(GoalMeasureDte.AverageMeetingLength);
-                break;
-            case "StaffTimeInMeetings" :
-                goalDm.setMeasure(GoalMeasureDte.StaffTimeInMeetings);
-                break;
-            case "UninterruptedTime" :
-                goalDm.setMeasure(GoalMeasureDte.UninterruptedTime);
-                break;
-        }
-        return goalDm;
 
+        GoalMeasureDte gmd = Arrays.asList(GoalMeasureDte.values())
+            .stream()
+            .filter(g -> source.getName().equals(g.label))
+            .findAny()
+            .orElse(null);
+        if (gmd != null) {
+            goalDm.setMeasure(gmd);
+        }
+
+        return goalDm;
     }
 
     public GoalDao mapGoalDmToGoal(GoalDm source) {
 
         GoalDao goalDao = this.map(source, GoalDao.class);
-        switch (source.getMeasure()) {
-            case AttendeesPerMeeting :
-                goalDao.setName("AttendeesPerMeeting");
-                break;
-            case AverageMeetingLength :
-                goalDao.setName("AverageMeetingLength");
-                break;
-            case StaffTimeInMeetings :
-                goalDao.setName("StaffTimeInMeetings");
-                break;
-            case UninterruptedTime :
-                goalDao.setName("UninterruptedTime");
-                break;
+
+        GoalMeasureDte gmd = Arrays.asList(GoalMeasureDte.values())
+                .stream()
+                .filter(g -> source.getMeasure().equals(g))
+                .findAny()
+                .orElse(null);
+        if (gmd != null) {
+            goalDao.setName(gmd.label);
         }
+
         return goalDao;
 
     }

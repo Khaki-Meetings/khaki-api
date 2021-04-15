@@ -2,17 +2,22 @@ package com.getkhaki.api.bff.persistence;
 
 import com.getkhaki.api.bff.config.interceptors.models.SessionTenant;
 import com.getkhaki.api.bff.domain.models.CalendarEventsEmployeeTimeDm;
+import com.getkhaki.api.bff.domain.models.GoalDm;
 import com.getkhaki.api.bff.domain.models.StatisticsFilterDe;
 import com.getkhaki.api.bff.domain.models.TimeBlockSummaryDm;
 import com.getkhaki.api.bff.domain.persistence.TimeBlockSummaryPersistenceInterface;
+import com.getkhaki.api.bff.domain.services.GoalService;
 import com.getkhaki.api.bff.persistence.models.views.CalendarEventsEmployeeTimeView;
 import com.getkhaki.api.bff.persistence.models.views.TimeBlockSummaryView;
+import com.getkhaki.api.bff.persistence.repositories.GoalRepositoryInterface;
 import com.getkhaki.api.bff.persistence.repositories.TimeBlockSummaryRepositoryInterface;
+import com.getkhaki.api.bff.web.models.GoalMeasureDte;
 import lombok.val;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
+import java.util.Arrays;
 import java.util.UUID;
 
 @Service
@@ -20,15 +25,17 @@ public class TimeBlockSummaryPersistenceService implements TimeBlockSummaryPersi
     private final ModelMapper modelMapper;
     private final TimeBlockSummaryRepositoryInterface timeBlockSummaryRepositoryInterface;
     private final SessionTenant sessionTenant;
+    private final GoalService goalService;
 
     public TimeBlockSummaryPersistenceService(
             ModelMapper modelMapper,
             TimeBlockSummaryRepositoryInterface timeBlockSummaryRepositoryInterface,
-            SessionTenant sessionTenant
-    ) {
+            SessionTenant sessionTenant,
+            GoalService goalService) {
         this.modelMapper = modelMapper;
         this.timeBlockSummaryRepositoryInterface = timeBlockSummaryRepositoryInterface;
         this.sessionTenant = sessionTenant;
+        this.goalService = goalService;
     }
 
     @Override
@@ -102,11 +109,17 @@ public class TimeBlockSummaryPersistenceService implements TimeBlockSummaryPersi
     }
 
     @Override
-    public CalendarEventsEmployeeTimeDm getCalendarEventEmployeeTime(Instant sDate, Instant eDate,
-                                                                     Integer minThreshold) {
+    public CalendarEventsEmployeeTimeDm getCalendarEventEmployeeTime(Instant sDate, Instant eDate) {
+
+        GoalDm systemGoalDm = new GoalDm();
+        systemGoalDm.setGreaterThanOrEqualTo(40);
+
+        GoalDm goalDm = goalService.getGoals().stream().filter(g -> GoalMeasureDte.MeetingPercentageThreshold.equals(g.getMeasure()))
+            .findAny()
+            .orElse(systemGoalDm);
 
         CalendarEventsEmployeeTimeView calendarEventsEmployeeTimeView = timeBlockSummaryRepositoryInterface
-                .getCalendarEventEmployeeTime(sessionTenant.getTenantId(), sDate, eDate, minThreshold);
+                .getCalendarEventEmployeeTime(sessionTenant.getTenantId(), sDate, eDate, goalDm.getGreaterThanOrEqualTo());
 
         return modelMapper.map(calendarEventsEmployeeTimeView, CalendarEventsEmployeeTimeDm.class);
     }
