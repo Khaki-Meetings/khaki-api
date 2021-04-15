@@ -6,4 +6,5 @@ import java.util.UUID;
 
 public interface GoalPersistenceInterface {
     Set<GoalDm> getGoals(UUID tenantId);
+    GoalDm addGoal(GoalDm goalDm, UUID tenantId);
 }

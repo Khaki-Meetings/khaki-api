@@ -10,4 +10,6 @@ import java.util.UUID;
 @Repository
 public interface OrganizationRepositoryInterface extends JpaRepository<OrganizationDao, UUID> {
     Optional<OrganizationDao> findDistinctByName(String name);
+
+    Optional<OrganizationDao> findById(UUID id);
 }
