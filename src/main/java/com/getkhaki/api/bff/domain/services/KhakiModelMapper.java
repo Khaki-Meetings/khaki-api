@@ -2,12 +2,16 @@ package com.getkhaki.api.bff.domain.services;
 
 import com.getkhaki.api.bff.domain.models.CalendarEventDm;
 import com.getkhaki.api.bff.domain.models.CalendarEventParticipantDm;
+import com.getkhaki.api.bff.domain.models.GoalDm;
+import com.getkhaki.api.bff.persistence.models.GoalDao;
+import com.getkhaki.api.bff.web.models.GoalMeasureDte;
 import com.google.api.services.calendar.model.Event;
 import lombok.val;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
@@ -58,5 +62,38 @@ public class KhakiModelMapper extends ModelMapper {
         calendarEvent.setParticipants(participants);
 
         return calendarEvent;
+    }
+
+    public GoalDm mapGoalToGoalDm(GoalDao source) {
+
+        GoalDm goalDm = this.map(source, GoalDm.class);
+
+        GoalMeasureDte gmd = Arrays.asList(GoalMeasureDte.values())
+            .stream()
+            .filter(g -> source.getName().equals(g.label))
+            .findAny()
+            .orElse(null);
+        if (gmd != null) {
+            goalDm.setMeasure(gmd);
+        }
+
+        return goalDm;
+    }
+
+    public GoalDao mapGoalDmToGoal(GoalDm source) {
+
+        GoalDao goalDao = this.map(source, GoalDao.class);
+
+        GoalMeasureDte gmd = Arrays.asList(GoalMeasureDte.values())
+                .stream()
+                .filter(g -> source.getMeasure().equals(g))
+                .findAny()
+                .orElse(null);
+        if (gmd != null) {
+            goalDao.setName(gmd.label);
+        }
+
+        return goalDao;
+
     }
 }

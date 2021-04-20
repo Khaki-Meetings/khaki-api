@@ -2,6 +2,7 @@ package com.getkhaki.api.bff.web;
 
 import com.getkhaki.api.bff.domain.models.*;
 import com.getkhaki.api.bff.domain.persistence.DepartmentStatisticsPersistenceInterface;
+import com.getkhaki.api.bff.domain.persistence.GoalPersistenceInterface;
 import com.getkhaki.api.bff.domain.persistence.OrganizersStatisticsPersistenceInterface;
 import com.getkhaki.api.bff.domain.persistence.TimeBlockSummaryPersistenceInterface;
 import com.getkhaki.api.bff.domain.services.StatisticsService;
@@ -80,7 +81,7 @@ public class StatisticsController {
                 StatisticsFilterDe.class
         );
 
-        CalendarEventsEmployeeTimeDm cal = timeBlockSummaryPersistenceService.getCalendarEventEmployeeTime(start, end, 40);
+        CalendarEventsEmployeeTimeDm cal = timeBlockSummaryPersistenceService.getCalendarEventEmployeeTime(start, end);
 
         TimeBlockSummaryDm timeBlockSummaryDm = timeBlockSummaryPersistenceService.getTimeBlockSummary(start, end, filterDe);
 
