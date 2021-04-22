@@ -1,15 +1,26 @@
 package com.getkhaki.api.bff.persistence.repositories;
 
-import com.getkhaki.api.bff.persistence.models.CalendarEventDao;
+import com.getkhaki.api.bff.persistence.models.TimeBlockSummaryDao;
 import com.getkhaki.api.bff.persistence.models.views.CalendarEventsEmployeeTimeView;
 import com.getkhaki.api.bff.persistence.models.views.TimeBlockSummaryView;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
 import java.time.Instant;
+import java.util.Optional;
 import java.util.UUID;
 
-public interface TimeBlockSummaryRepositoryInterface extends JpaRepository<CalendarEventDao, UUID> {
+public interface TimeBlockSummaryRepositoryInterface extends JpaRepository<TimeBlockSummaryDao, UUID> {
+
+    @Query(
+            value = "select t from TimeBlockSummaryDao t " +
+                    " where t.organizationId = :organizationId " +
+                    " and t.start = :sStartDate " +
+                    " and t.end = :sEndDate " +
+                    " and t.filter = :filter "
+    )
+    Optional<TimeBlockSummaryDao> findDistinctByOrganizationAndStartAndFilter(UUID organizationId,
+         Instant sStartDate, Instant sEndDate, String filter);
 
     @Query(
             value = "select (" +

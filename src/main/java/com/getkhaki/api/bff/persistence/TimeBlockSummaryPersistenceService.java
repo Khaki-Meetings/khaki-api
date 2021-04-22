@@ -1,41 +1,43 @@
 package com.getkhaki.api.bff.persistence;
 
 import com.getkhaki.api.bff.config.interceptors.models.SessionTenant;
-import com.getkhaki.api.bff.domain.models.CalendarEventsEmployeeTimeDm;
-import com.getkhaki.api.bff.domain.models.GoalDm;
-import com.getkhaki.api.bff.domain.models.StatisticsFilterDe;
-import com.getkhaki.api.bff.domain.models.TimeBlockSummaryDm;
+import com.getkhaki.api.bff.domain.models.*;
 import com.getkhaki.api.bff.domain.persistence.TimeBlockSummaryPersistenceInterface;
 import com.getkhaki.api.bff.domain.services.GoalService;
+import com.getkhaki.api.bff.persistence.models.OrganizationDao;
+import com.getkhaki.api.bff.persistence.models.TimeBlockSummaryDao;
 import com.getkhaki.api.bff.persistence.models.views.CalendarEventsEmployeeTimeView;
 import com.getkhaki.api.bff.persistence.models.views.TimeBlockSummaryView;
-import com.getkhaki.api.bff.persistence.repositories.GoalRepositoryInterface;
+import com.getkhaki.api.bff.persistence.repositories.OrganizationRepositoryInterface;
 import com.getkhaki.api.bff.persistence.repositories.TimeBlockSummaryRepositoryInterface;
 import com.getkhaki.api.bff.web.models.GoalMeasureDte;
+import lombok.extern.apachecommons.CommonsLog;
 import lombok.val;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
-import java.util.Arrays;
 import java.util.UUID;
 
+@CommonsLog
 @Service
 public class TimeBlockSummaryPersistenceService implements TimeBlockSummaryPersistenceInterface {
     private final ModelMapper modelMapper;
     private final TimeBlockSummaryRepositoryInterface timeBlockSummaryRepositoryInterface;
     private final SessionTenant sessionTenant;
     private final GoalService goalService;
+    private final OrganizationRepositoryInterface organizationRepositoryInterface;
 
     public TimeBlockSummaryPersistenceService(
             ModelMapper modelMapper,
             TimeBlockSummaryRepositoryInterface timeBlockSummaryRepositoryInterface,
             SessionTenant sessionTenant,
-            GoalService goalService) {
+            GoalService goalService, OrganizationRepositoryInterface organizationRepositoryInterface) {
         this.modelMapper = modelMapper;
         this.timeBlockSummaryRepositoryInterface = timeBlockSummaryRepositoryInterface;
         this.sessionTenant = sessionTenant;
         this.goalService = goalService;
+        this.organizationRepositoryInterface = organizationRepositoryInterface;
     }
 
     @Override
@@ -70,7 +72,8 @@ public class TimeBlockSummaryPersistenceService implements TimeBlockSummaryPersi
         timeBlockSummaryDm.setStart(start);
         Integer numWorkdays = timeBlockSummaryRepositoryInterface.findNumberOfWorkdaysBetweenDates(start, end);
         timeBlockSummaryDm.setNumWorkdays(numWorkdays);
-
+        timeBlockSummaryDm.setOrganizationId(tenantId);
+        timeBlockSummaryDm.setFilterDe(filterDe);
         return timeBlockSummaryDm;
     }
 
@@ -122,5 +125,38 @@ public class TimeBlockSummaryPersistenceService implements TimeBlockSummaryPersi
                 .getCalendarEventEmployeeTime(sessionTenant.getTenantId(), sDate, eDate, goalDm.getGreaterThanOrEqualTo());
 
         return modelMapper.map(calendarEventsEmployeeTimeView, CalendarEventsEmployeeTimeDm.class);
+    }
+
+    @Override
+    public TimeBlockSummaryDm upsert(TimeBlockSummaryDm timeBlockSummary) {
+
+        TimeBlockSummaryDao timeBlockSummaryDao = this.modelMapper.map(timeBlockSummary, TimeBlockSummaryDao.class);
+
+        OrganizationDao organizationDao = organizationRepositoryInterface
+                .findById(timeBlockSummary.getOrganizationId()).orElseThrow(() -> new RuntimeException("Organization required"));
+
+        log.info("Searching for timeblock: " + organizationDao.getName() + " " + organizationDao.getId() + " " +
+                timeBlockSummary.getStart() + " " + timeBlockSummary.getFilterDe().toString());
+
+        val timeBlockSummaryDaoOp = timeBlockSummaryRepositoryInterface
+                .findDistinctByOrganizationAndStartAndFilter(organizationDao.getId(),
+                        timeBlockSummary.getStart(), timeBlockSummary.getEnd(),
+                        timeBlockSummary.getFilterDe().toString());
+
+        timeBlockSummaryDaoOp.ifPresentOrElse(
+                dao -> {
+                    timeBlockSummaryDao.setId(timeBlockSummaryDaoOp.get().getId());
+                    timeBlockSummaryDao.setOrganizationId(organizationDao.getId());
+                    timeBlockSummaryDao.setFilter(timeBlockSummary.getFilterDe().toString());
+
+                },
+                () -> {
+                    timeBlockSummaryDao.setOrganizationId(organizationDao.getId());
+                })
+        ;
+        timeBlockSummaryRepositoryInterface.save(timeBlockSummaryDao);
+
+
+        return this.modelMapper.map(timeBlockSummary, TimeBlockSummaryDm.class);
     }
 }
