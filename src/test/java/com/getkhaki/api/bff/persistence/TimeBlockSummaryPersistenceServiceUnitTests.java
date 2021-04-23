@@ -3,7 +3,10 @@ package com.getkhaki.api.bff.persistence;
 import com.getkhaki.api.bff.config.interceptors.models.SessionTenant;
 import com.getkhaki.api.bff.domain.models.StatisticsFilterDe;
 import com.getkhaki.api.bff.domain.models.TimeBlockSummaryDm;
+import com.getkhaki.api.bff.domain.services.GoalService;
+import com.getkhaki.api.bff.domain.services.KhakiModelMapper;
 import com.getkhaki.api.bff.persistence.models.views.TimeBlockSummaryView;
+import com.getkhaki.api.bff.persistence.repositories.OrganizationRepositoryInterface;
 import com.getkhaki.api.bff.persistence.repositories.TimeBlockSummaryRepositoryInterface;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -26,15 +29,19 @@ public class TimeBlockSummaryPersistenceServiceUnitTests {
     @Mock
     private TimeBlockSummaryRepositoryInterface timeBlockSummaryRepositoryInterface;
     @Mock
-    private ModelMapper modelMapper;
+    private KhakiModelMapper modelMapper;
     @Mock
     private SessionTenant sessionTenant;
+    @Mock
+    private GoalService goalService;
+    @Mock
+    private OrganizationRepositoryInterface organizationRepositoryInterface;
 
     @BeforeEach
     public void setup() {
         underTest = new TimeBlockSummaryPersistenceService(
                 modelMapper, timeBlockSummaryRepositoryInterface, sessionTenant,
-                goalRepositoryInterface);
+                goalService, organizationRepositoryInterface);
     }
 
     @Test

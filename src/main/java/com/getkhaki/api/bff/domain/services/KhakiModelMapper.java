@@ -1,9 +1,8 @@
 package com.getkhaki.api.bff.domain.services;
 
-import com.getkhaki.api.bff.domain.models.CalendarEventDm;
-import com.getkhaki.api.bff.domain.models.CalendarEventParticipantDm;
-import com.getkhaki.api.bff.domain.models.GoalDm;
+import com.getkhaki.api.bff.domain.models.*;
 import com.getkhaki.api.bff.persistence.models.GoalDao;
+import com.getkhaki.api.bff.persistence.models.TimeBlockSummaryDao;
 import com.getkhaki.api.bff.web.models.GoalMeasureDte;
 import com.google.api.services.calendar.model.Event;
 import lombok.val;
@@ -96,4 +95,17 @@ public class KhakiModelMapper extends ModelMapper {
         return goalDao;
 
     }
+
+    public TimeBlockSummaryDao mapTimeBlockSummaryDmToDao(TimeBlockSummaryDm source) {
+        TimeBlockSummaryDao timeBlockSummaryDao = this.map(source, TimeBlockSummaryDao.class);
+        timeBlockSummaryDao.setFilter(source.getFilterDe().toString());
+        return timeBlockSummaryDao;
+    }
+
+    public TimeBlockSummaryDm mapTimeBlockSummaryDaoToDm(TimeBlockSummaryDao source) {
+        TimeBlockSummaryDm timeBlockSummaryDm = this.map(source, TimeBlockSummaryDm.class);
+        timeBlockSummaryDm.setFilterDe(StatisticsFilterDe.valueOf(source.getFilter()));
+        return timeBlockSummaryDm;
+    }
+
 }

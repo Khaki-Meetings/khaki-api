@@ -5,6 +5,7 @@ import com.getkhaki.api.bff.domain.models.IntervalDe;
 import com.getkhaki.api.bff.domain.models.StatisticsFilterDe;
 import com.getkhaki.api.bff.domain.models.TimeBlockSummaryDm;
 import com.getkhaki.api.bff.domain.persistence.TimeBlockSummaryPersistenceInterface;
+import com.getkhaki.api.bff.persistence.repositories.OrganizationRepositoryInterface;
 import lombok.val;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -23,17 +24,20 @@ public class StatisticsServiceUnitTests {
     private TimeBlockSummaryPersistenceInterface timeBlockSummaryPersistenceService;
     private TimeBlockGeneratorFactory timeBlockGeneratorFactory;
     private SessionTenant sessionTenant;
+    private TimeBlockSummaryService timeBlockSummaryService;
+    private OrganizationRepositoryInterface organizationRepository;
 
     @BeforeEach
     public void setup() {
-        timeBlockSummaryPersistenceService = mock(TimeBlockSummaryPersistenceInterface.class);
+
         timeBlockGeneratorFactory = mock(TimeBlockGeneratorFactory.class);
+        timeBlockSummaryService = mock(TimeBlockSummaryService.class);
+        organizationRepository = mock(OrganizationRepositoryInterface.class);
         sessionTenant = new SessionTenant().setTenantId(UUID.randomUUID());
         underTest = new StatisticsService(
-                timeBlockSummaryPersistenceService,
-                timeBlockGeneratorFactory,
-                sessionTenant
-        );
+                timeBlockSummaryService, timeBlockGeneratorFactory,
+                sessionTenant, organizationRepository);
+        timeBlockSummaryPersistenceService = mock(TimeBlockSummaryPersistenceInterface.class);
     }
 
     @Test
@@ -49,24 +53,26 @@ public class StatisticsServiceUnitTests {
         val secondEnd = Instant.parse("2020-10-30T23:59:59.000Z");
         val filter = StatisticsFilterDe.Internal;
         when(
-                timeBlockSummaryPersistenceService.getTimeBlockSummary(
+                timeBlockSummaryService.getTimeBlockSummary(
                         eq(firstStart),
                         eq(firstEnd),
                         eq(filter),
                         eq(sessionTenant.getTenantId())
                 )
         )
-                .thenReturn(new TimeBlockSummaryDm(1L, 1, firstStart, firstEnd, 1, 1, 1, 0, 0L, 0));
+                .thenReturn(new TimeBlockSummaryDm(UUID.randomUUID(), StatisticsFilterDe.Internal,
+                        1L, 1, firstStart, firstEnd, 1, 1, 1, 0, 0L, 0));
 
         when(
-                timeBlockSummaryPersistenceService.getTimeBlockSummary(
+                timeBlockSummaryService.getTimeBlockSummary(
                         eq(secondStart),
                         eq(secondEnd),
                         eq(filter),
                         eq(sessionTenant.getTenantId())
                 )
         )
-                .thenReturn(new TimeBlockSummaryDm(1L, 1, secondStart, secondEnd, 1, 1, 1, 0, 0L, 0));
+                .thenReturn(new TimeBlockSummaryDm(UUID.randomUUID(), StatisticsFilterDe.Internal,
+                        1L, 1, secondStart, secondEnd, 1, 1, 1, 0, 0L, 0));
 
         val trailingStats = underTest.getTrailingStatistics(startTest, interval, count, StatisticsFilterDe.Internal);
 
@@ -81,4 +87,5 @@ public class StatisticsServiceUnitTests {
         assertThat(secondTimeBlockSummary.getStart()).isEqualTo(secondStart);
         assertThat(secondTimeBlockSummary.getEnd()).isEqualTo(secondEnd);
     }
+
 }
