@@ -87,4 +87,5 @@ public class StatisticsServiceUnitTests {
         assertThat(secondTimeBlockSummary.getStart()).isEqualTo(secondStart);
         assertThat(secondTimeBlockSummary.getEnd()).isEqualTo(secondEnd);
     }
+
 }

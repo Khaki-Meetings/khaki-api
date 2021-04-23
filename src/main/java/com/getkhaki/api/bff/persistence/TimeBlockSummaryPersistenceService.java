@@ -4,6 +4,7 @@ import com.getkhaki.api.bff.config.interceptors.models.SessionTenant;
 import com.getkhaki.api.bff.domain.models.*;
 import com.getkhaki.api.bff.domain.persistence.TimeBlockSummaryPersistenceInterface;
 import com.getkhaki.api.bff.domain.services.GoalService;
+import com.getkhaki.api.bff.domain.services.KhakiModelMapper;
 import com.getkhaki.api.bff.persistence.models.OrganizationDao;
 import com.getkhaki.api.bff.persistence.models.TimeBlockSummaryDao;
 import com.getkhaki.api.bff.persistence.models.views.CalendarEventsEmployeeTimeView;
@@ -22,14 +23,14 @@ import java.util.UUID;
 @CommonsLog
 @Service
 public class TimeBlockSummaryPersistenceService implements TimeBlockSummaryPersistenceInterface {
-    private final ModelMapper modelMapper;
+    private final KhakiModelMapper modelMapper;
     private final TimeBlockSummaryRepositoryInterface timeBlockSummaryRepositoryInterface;
     private final SessionTenant sessionTenant;
     private final GoalService goalService;
     private final OrganizationRepositoryInterface organizationRepositoryInterface;
 
     public TimeBlockSummaryPersistenceService(
-            ModelMapper modelMapper,
+            KhakiModelMapper modelMapper,
             TimeBlockSummaryRepositoryInterface timeBlockSummaryRepositoryInterface,
             SessionTenant sessionTenant,
             GoalService goalService, OrganizationRepositoryInterface organizationRepositoryInterface) {
@@ -146,9 +147,6 @@ public class TimeBlockSummaryPersistenceService implements TimeBlockSummaryPersi
         timeBlockSummaryDaoOp.ifPresentOrElse(
                 dao -> {
                     timeBlockSummaryDao.setId(timeBlockSummaryDaoOp.get().getId());
-                    timeBlockSummaryDao.setOrganizationId(organizationDao.getId());
-                    timeBlockSummaryDao.setFilter(timeBlockSummary.getFilterDe().toString());
-
                 },
                 () -> {
                     timeBlockSummaryDao.setOrganizationId(organizationDao.getId());
@@ -157,6 +155,6 @@ public class TimeBlockSummaryPersistenceService implements TimeBlockSummaryPersi
         timeBlockSummaryRepositoryInterface.save(timeBlockSummaryDao);
 
 
-        return this.modelMapper.map(timeBlockSummary, TimeBlockSummaryDm.class);
+        return this.modelMapper.map(timeBlockSummaryDao, TimeBlockSummaryDm.class);
     }
 }
