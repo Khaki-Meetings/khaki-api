@@ -26,8 +26,8 @@ public class TimeBlockSummaryRepositoryIntegrationTests extends BaseJpaIntegrati
         Long seconds = view.getTotalSeconds();
         Long count = view.getMeetingCount();
 
-        assertThat(seconds).isEqualTo(57600);
-        assertThat(count).isEqualTo(4);
+        assertThat(seconds).isEqualTo(18000);
+        assertThat(count).isEqualTo(2);
     }
 
     @Test
