@@ -80,7 +80,16 @@ public interface TimeBlockSummaryRepositoryInterface extends JpaRepository<TimeB
                     "           and calendarEventParticipant.organizer = true " +
                     "   inner join calendarEventParticipant.calendarEvent as calendarEvent " +
                     "where organization.id = :tenantId " +
-                    "   and calendarEvent.start between :sDate and :eDate"
+                    "   and calendarEvent.start between :sDate and :eDate" +
+                    "   and exists (" +
+                    "       select count(distinct domain.name)" +
+                    "       from CalendarEventDao innerCalendarEvent" +
+                    "       inner join innerCalendarEvent.participants innerParticipants" +
+                    "       inner join innerParticipants.email.domain domain" +
+                    "       where innerCalendarEvent = calendarEvent" +
+                    "       group by innerCalendarEvent" +
+                    "       having count(distinct domain.name) > 1" +
+                    "   )"
     )
     TimeBlockSummaryView findExternalTimeBlockSummaryInRange(Instant sDate, Instant eDate, UUID tenantId);
 
