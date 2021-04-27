@@ -52,29 +52,40 @@ public class TimeBlockSummaryPersistenceService implements TimeBlockSummaryPersi
         TimeBlockSummaryView timeBlockSummaryView;
         TimeBlockSummaryDm timeBlockSummaryDm;
 
+        Optional<TimeBlockSummaryDao> timeBlockSummaryDao =
+                timeBlockSummaryRepositoryInterface.findDistinctByOrganizationAndStartAndFilter(
+                        tenantId, start, end, filterDe.toString());
+
         switch (filterDe) {
             case External:
-                timeBlockSummaryView = timeBlockSummaryRepositoryInterface.findExternalTimeBlockSummaryInRange(
-                        start, end, tenantId
-                );
-                timeBlockSummaryDm = modelMapper.map(timeBlockSummaryView, TimeBlockSummaryDm.class);
-                break;
-            case Internal:
-                Optional<TimeBlockSummaryDao> timeBlockSummaryDao =
-                        timeBlockSummaryRepositoryInterface.findDistinctByOrganizationAndStartAndFilter(
-                                tenantId, start, end, filterDe.toString());
 
                 if (timeBlockSummaryDao.isPresent()) {
                     timeBlockSummaryDm = modelMapper.map(timeBlockSummaryDao.get(), TimeBlockSummaryDm.class);
                     log.info("Using serialized data for " + start +  " " + filterDe.toString());
                     break;
                 }
+
+                timeBlockSummaryView = timeBlockSummaryRepositoryInterface.findExternalTimeBlockSummaryInRange(
+                        start, end, tenantId
+                );
+                timeBlockSummaryDm = modelMapper.map(timeBlockSummaryView, TimeBlockSummaryDm.class);
+                break;
+
+            case Internal:
+
+                if (timeBlockSummaryDao.isPresent()) {
+                    timeBlockSummaryDm = modelMapper.map(timeBlockSummaryDao.get(), TimeBlockSummaryDm.class);
+                    log.info("Using serialized data for " + start +  " " + filterDe.toString());
+                    break;
+                }
+
                 timeBlockSummaryView = timeBlockSummaryRepositoryInterface.findInternalTimeBlockSummaryInRange(
                         start, end, tenantId
                 );
                 timeBlockSummaryDm = modelMapper.map(timeBlockSummaryView, TimeBlockSummaryDm.class);
                 log.info("Using live query for " + start +  " " + filterDe.toString());
                 break;
+
             default:
                 throw new RuntimeException("invalid filter: " + filterDe);
         }
