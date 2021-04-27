@@ -14,10 +14,10 @@ import com.getkhaki.api.bff.persistence.repositories.TimeBlockSummaryRepositoryI
 import com.getkhaki.api.bff.web.models.GoalMeasureDte;
 import lombok.extern.apachecommons.CommonsLog;
 import lombok.val;
-import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
+import java.util.Optional;
 import java.util.UUID;
 
 @CommonsLog
@@ -50,25 +50,46 @@ public class TimeBlockSummaryPersistenceService implements TimeBlockSummaryPersi
     @Override
     public TimeBlockSummaryDm getTimeBlockSummary(Instant start, Instant end, StatisticsFilterDe filterDe, UUID tenantId) {
         TimeBlockSummaryView timeBlockSummaryView;
+        TimeBlockSummaryDm timeBlockSummaryDm;
+
+        Optional<TimeBlockSummaryDao> timeBlockSummaryDao =
+                timeBlockSummaryRepositoryInterface.findDistinctByOrganizationAndStartAndFilter(
+                        tenantId, start, end, filterDe.toString());
 
         switch (filterDe) {
             case External:
+
+                if (timeBlockSummaryDao.isPresent()) {
+                    timeBlockSummaryDm = modelMapper.map(timeBlockSummaryDao.get(), TimeBlockSummaryDm.class);
+                    log.info("Using serialized data for " + start +  " " + filterDe.toString());
+                    break;
+                }
+
                 timeBlockSummaryView = timeBlockSummaryRepositoryInterface.findExternalTimeBlockSummaryInRange(
                         start, end, tenantId
                 );
-
+                timeBlockSummaryDm = modelMapper.map(timeBlockSummaryView, TimeBlockSummaryDm.class);
                 break;
+
             case Internal:
+
+                if (timeBlockSummaryDao.isPresent()) {
+                    timeBlockSummaryDm = modelMapper.map(timeBlockSummaryDao.get(), TimeBlockSummaryDm.class);
+                    log.info("Using serialized data for " + start +  " " + filterDe.toString());
+                    break;
+                }
+
                 timeBlockSummaryView = timeBlockSummaryRepositoryInterface.findInternalTimeBlockSummaryInRange(
                         start, end, tenantId
                 );
-
+                timeBlockSummaryDm = modelMapper.map(timeBlockSummaryView, TimeBlockSummaryDm.class);
+                log.info("Using live query for " + start +  " " + filterDe.toString());
                 break;
+
             default:
                 throw new RuntimeException("invalid filter: " + filterDe);
         }
 
-        val timeBlockSummaryDm = modelMapper.map(timeBlockSummaryView, TimeBlockSummaryDm.class);
         timeBlockSummaryDm.setEnd(end);
         timeBlockSummaryDm.setStart(start);
         Integer numWorkdays = timeBlockSummaryRepositoryInterface.findNumberOfWorkdaysBetweenDates(start, end);
