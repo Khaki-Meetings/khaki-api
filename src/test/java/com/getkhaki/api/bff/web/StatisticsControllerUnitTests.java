@@ -50,7 +50,7 @@ public class StatisticsControllerUnitTests {
                 organizersStatisticsPersistenceService,
                 timeBlockSummaryPersistenceService,
                 departmentStatisticsPersistenceService,
-                goalPersistenceService, this.modelMapper
+                this.modelMapper
         );
     }
 
@@ -152,6 +152,8 @@ public class StatisticsControllerUnitTests {
         );
 
         TimeBlockSummaryDm mockDm = new TimeBlockSummaryDm(
+                UUID.randomUUID(),
+                StatisticsFilterDe.Internal,
                 1L,
                 1,
                 Instant.now(),

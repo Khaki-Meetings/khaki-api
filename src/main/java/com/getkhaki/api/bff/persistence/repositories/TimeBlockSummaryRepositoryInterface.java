@@ -1,15 +1,26 @@
 package com.getkhaki.api.bff.persistence.repositories;
 
-import com.getkhaki.api.bff.persistence.models.CalendarEventDao;
+import com.getkhaki.api.bff.persistence.models.TimeBlockSummaryDao;
 import com.getkhaki.api.bff.persistence.models.views.CalendarEventsEmployeeTimeView;
 import com.getkhaki.api.bff.persistence.models.views.TimeBlockSummaryView;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
 import java.time.Instant;
+import java.util.Optional;
 import java.util.UUID;
 
-public interface TimeBlockSummaryRepositoryInterface extends JpaRepository<CalendarEventDao, UUID> {
+public interface TimeBlockSummaryRepositoryInterface extends JpaRepository<TimeBlockSummaryDao, UUID> {
+
+    @Query(
+            value = "select t from TimeBlockSummaryDao t " +
+                    " where t.organizationId = :organizationId " +
+                    " and t.start = :sStartDate " +
+                    " and t.end = :sEndDate " +
+                    " and t.filter = :filter "
+    )
+    Optional<TimeBlockSummaryDao> findDistinctByOrganizationAndStartAndFilter(UUID organizationId,
+         Instant sStartDate, Instant sEndDate, String filter);
 
     @Query(
             value = "select (" +
@@ -69,7 +80,16 @@ public interface TimeBlockSummaryRepositoryInterface extends JpaRepository<Calen
                     "           and calendarEventParticipant.organizer = true " +
                     "   inner join calendarEventParticipant.calendarEvent as calendarEvent " +
                     "where organization.id = :tenantId " +
-                    "   and calendarEvent.start between :sDate and :eDate"
+                    "   and calendarEvent.start between :sDate and :eDate" +
+                    "   and exists (" +
+                    "       select count(distinct domain.name)" +
+                    "       from CalendarEventDao innerCalendarEvent" +
+                    "       inner join innerCalendarEvent.participants innerParticipants" +
+                    "       inner join innerParticipants.email.domain domain" +
+                    "       where innerCalendarEvent = calendarEvent" +
+                    "       group by innerCalendarEvent" +
+                    "       having count(distinct domain.name) > 1" +
+                    "   )"
     )
     TimeBlockSummaryView findExternalTimeBlockSummaryInRange(Instant sDate, Instant eDate, UUID tenantId);
 

@@ -1,0 +1,91 @@
+databaseChangeLog:
+  - changeSet:
+      id: 20210421-1
+      author: jeff
+      changes:
+        - createTable:
+            columns:
+              - column:
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                    primaryKeyName: time_block_summary_pk
+                  name: id
+                  type: BINARY(16)
+              - column:
+                  name: organization_id
+                  type: BINARY(16)
+              - column:
+                  name: department_id
+                  type: BINARY(16)
+              - column:
+                  name: total_seconds
+                  type: int
+              - column:
+                  name: meeting_count
+                  type: int
+              - column:
+                  name: start
+                  type: datetime(6)
+              - column:
+                  name: end
+                  type: datetime(6)
+              - column:
+                  name: num_employees
+                  type: int
+              - column:
+                  name: num_workdays
+                  type: int
+              - column:
+                  name: total_meeting_internal_attendees
+                  type: int
+              - column:
+                  name: total_meeting_attendees
+                  type: int
+              - column:
+                  name: meeting_length_seconds
+                  type: int
+              - column:
+                  name: num_employees_over_time_threshold
+                  type: int
+              - column:
+                  constraints:
+                    nullable: false
+                  name: name
+                  type: VARCHAR(255)
+            tableName: time_block_summary_dao
+        - addForeignKeyConstraint:
+            baseColumnNames: organization_id
+            baseTableName: time_block_summary_dao
+            constraintName: time_block_summary_dao_organization_fk
+            deferrable: false
+            initiallyDeferred: false
+            referencedColumnNames: id
+            referencedTableName: organization_dao
+            validate: true
+        - addForeignKeyConstraint:
+            baseColumnNames: department_id
+            baseTableName: time_block_summary_dao
+            constraintName: time_block_summary_dao_department_fk
+            deferrable: false
+            initiallyDeferred: false
+            referencedColumnNames: id
+            referencedTableName: department_dao
+            validate: true
+  - changeSet:
+      id: 2021-04-22
+      author: jeff
+      changes:
+        - addColumn:
+            columns:
+              - column:
+                  name: filter
+                  type: VARCHAR(255)
+            tableName: time_block_summary_dao
+  - changeSet:
+      id: 2021-04-22-2
+      author: jeff
+      changes:
+        - dropColumn:
+            columnName: name
+            tableName: time_block_summary_dao
