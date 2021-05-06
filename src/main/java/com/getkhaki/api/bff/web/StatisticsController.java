@@ -74,20 +74,47 @@ public class StatisticsController {
     public TimeBlockSummaryResponseDto getTimeBlockSummary(
             @PathVariable Instant start,
             @PathVariable Instant end,
-            @RequestParam(required = false) Optional<StatisticsFilterDte> filter
+            @RequestParam(required = false) Optional<StatisticsFilterDte> filter,
+            @RequestParam(required = false) Optional<String> department
     ) {
         StatisticsFilterDe filterDe = modelMapper.map(
                 filter.orElse(StatisticsFilterDte.External),
                 StatisticsFilterDe.class
         );
 
-        CalendarEventsEmployeeTimeDm cal = timeBlockSummaryPersistenceService.getCalendarEventEmployeeTime(start, end);
+        String departmentName = department.orElse("");
+
+        if (!departmentName.isEmpty()) {
+
+            TimeBlockSummaryDm timeBlockSummaryDm = timeBlockSummaryPersistenceService.getDepartmentTimeBlockSummary(start, end, filterDe, departmentName);
+
+            CalendarMeetingEfficacyDm calendarMeetingEfficacyDm = timeBlockSummaryPersistenceService.getDepartmentMeetingEfficacyAverages(start, end, filterDe, departmentName);
+            if (calendarMeetingEfficacyDm != null)  {
+                timeBlockSummaryDm.setAverageMeetingLength(calendarMeetingEfficacyDm.getAverageMeetingLength());
+                timeBlockSummaryDm.setAverageStaffTimePerMeeting(calendarMeetingEfficacyDm.getAverageStaffTimePerMeeting());
+            }
+
+            CalendarEventsEmployeeTimeDm cal = timeBlockSummaryPersistenceService.getCalendarEventEmployeeTime(start, end, departmentName);
+            if (cal != null) {
+                timeBlockSummaryDm.setNumEmployeesOverTimeThreshold(cal.getNumOverThreshold());
+            }
+
+            return modelMapper.map(timeBlockSummaryDm, TimeBlockSummaryResponseDto.class);
+        }
 
         TimeBlockSummaryDm timeBlockSummaryDm = timeBlockSummaryPersistenceService.getTimeBlockSummary(start, end, filterDe);
 
+        CalendarMeetingEfficacyDm calendarMeetingEfficacyDm = timeBlockSummaryPersistenceService.getMeetingEfficacyAverages(start, end, filterDe);
+        if (calendarMeetingEfficacyDm != null)  {
+            timeBlockSummaryDm.setAverageMeetingLength(calendarMeetingEfficacyDm.getAverageMeetingLength());
+            timeBlockSummaryDm.setAverageStaffTimePerMeeting(calendarMeetingEfficacyDm.getAverageStaffTimePerMeeting());
+        }
+
+        CalendarEventsEmployeeTimeDm cal = timeBlockSummaryPersistenceService.getCalendarEventEmployeeTime(start, end);
         if (cal != null) {
             timeBlockSummaryDm.setNumEmployeesOverTimeThreshold(cal.getNumOverThreshold());
         }
+
         return modelMapper.map(timeBlockSummaryDm, TimeBlockSummaryResponseDto.class);
     }
 

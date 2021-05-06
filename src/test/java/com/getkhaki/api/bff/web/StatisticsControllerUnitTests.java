@@ -175,7 +175,8 @@ public class StatisticsControllerUnitTests {
         TimeBlockSummaryResponseDto timeBlockSummaryResponseDto = underTest.getTimeBlockSummary(
                 startTest,
                 endTest,
-                Optional.of(StatisticsFilterDte.External)
+                Optional.of(StatisticsFilterDte.External),
+                Optional.of("")
         );
         assertThat(timeBlockSummaryResponseDto).isNotNull();
     }
