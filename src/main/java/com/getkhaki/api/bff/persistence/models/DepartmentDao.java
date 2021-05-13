@@ -15,6 +15,7 @@ import java.util.List;
 @Table(uniqueConstraints = @UniqueConstraint(columnNames = {"name", "organization_id"}))
 public class DepartmentDao extends EntityBaseDao {
     String name;
+
     @ManyToOne(optional = false)
     OrganizationDao organization;
 

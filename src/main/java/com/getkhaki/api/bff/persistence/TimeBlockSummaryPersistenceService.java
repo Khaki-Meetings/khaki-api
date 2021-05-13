@@ -78,8 +78,8 @@ public class TimeBlockSummaryPersistenceService implements TimeBlockSummaryPersi
                 timeBlockSummaryDm = modelMapper.map(timeBlockSummaryView, TimeBlockSummaryDm.class);
 
                 timeBlockSummaryDm.setMeetingLengthSeconds(extTimeBlockAggregateSummaryView.getMeetingLengthSeconds());
-                timeBlockSummaryDm.setTotalInternalMeetingAttendees(extTimeBlockAggregateSummaryView.getTotalInternalMeetingAttendees().intValue());
-                timeBlockSummaryDm.setTotalMeetingAttendees(extTimeBlockAggregateSummaryView.getTotalMeetingAttendees().intValue());
+                timeBlockSummaryDm.setTotalInternalMeetingAttendees(extTimeBlockAggregateSummaryView.getTotalInternalMeetingAttendees());
+                timeBlockSummaryDm.setTotalMeetingAttendees(extTimeBlockAggregateSummaryView.getTotalMeetingAttendees());
 
                 break;
 
@@ -103,8 +103,8 @@ public class TimeBlockSummaryPersistenceService implements TimeBlockSummaryPersi
                 timeBlockSummaryDm = modelMapper.map(timeBlockSummaryView, TimeBlockSummaryDm.class);
 
                 timeBlockSummaryDm.setMeetingLengthSeconds(timeBlockAggregateSummaryView.getMeetingLengthSeconds());
-                timeBlockSummaryDm.setTotalInternalMeetingAttendees(timeBlockAggregateSummaryView.getTotalInternalMeetingAttendees().intValue());
-                timeBlockSummaryDm.setTotalMeetingAttendees(timeBlockAggregateSummaryView.getTotalMeetingAttendees().intValue());
+                timeBlockSummaryDm.setTotalInternalMeetingAttendees(timeBlockAggregateSummaryView.getTotalInternalMeetingAttendees());
+                timeBlockSummaryDm.setTotalMeetingAttendees(timeBlockAggregateSummaryView.getTotalMeetingAttendees());
 
                 log.info("Using live query for " + start +  " " + filterDe.toString());
                 break;

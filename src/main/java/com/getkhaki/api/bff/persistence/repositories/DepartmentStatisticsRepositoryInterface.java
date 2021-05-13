@@ -53,13 +53,47 @@ public interface DepartmentStatisticsRepositoryInterface extends JpaRepository<D
             "select " +
                     "department.id as departmentId," +
                     "department.name as departmentName," +
+                    /*
                     "sum(" +
                     "   timestampdiff(" +
                     "       second," +
                     "       calendarEvent.start," +
                     "       calendarEvent.end" +
                     "   )" +
+                    ") as totalSeconds, " + */
+
+                    // New totalSeconds calculation
+
+                  //  "sum(" +
+                  //  "   timestampdiff(second, calendarEvent.start, calendarEvent.end)" +
+                  //  "*" +
+                    " (" +
+                    "     select sum(timestampdiff(second, calendarEvent.start, calendarEvent.end)) " +
+                    "       from CalendarEventDao calendarEvent" +
+                    "       inner join calendarEvent.participants cap_count" +
+                    "       inner join cap_count.email as email_count" +
+                    "       inner join email_count.domain as domain_count" +
+                    "       inner join domain_count.organizations as org_count" +
+                    "       inner join email_count.people as persons " +
+                    "       inner join persons.employee as employee " +
+                    "       inner join employee.department as departments " +
+                    "     where org_count.id = :tenantId" +
+                    "       and departments.id = department.id " +
+                    "       and calendarEvent.start between :sDate and :eDate " +
+
+                    "   and exists (" +
+                    "       select count(distinct domain.name)" +
+                    "       from CalendarEventDao innerCalendarEvent" +
+                    "       inner join innerCalendarEvent.participants innerParticipants" +
+                    "       inner join innerParticipants.email.domain domain" +
+                    "       where innerCalendarEvent = calendarEvent" +
+                    "       group by innerCalendarEvent" +
+                    "       having count(distinct domain.name) = 1" +
+                    "   )" +
+                    "    " +
                     ") as totalSeconds, " +
+
+
                     " ( " +
                     "    SELECT count(*) * 3600 * 8 * (" +
                     "       5 * (timestampdiff(day, :sDate, :eDate) / 7) " +

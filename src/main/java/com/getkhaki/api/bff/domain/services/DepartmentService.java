@@ -30,4 +30,5 @@ public class DepartmentService {
     public Page<DepartmentDm> getDepartments(Pageable pageable) {
         return departmentPersistenceService.getDepartments(pageable);
     }
+
 }
