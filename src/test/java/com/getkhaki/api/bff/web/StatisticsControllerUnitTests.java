@@ -148,6 +148,8 @@ public class StatisticsControllerUnitTests {
                 0,
                 0,
                 0L,
+                0,
+                0,
                 0
         );
 
@@ -163,6 +165,8 @@ public class StatisticsControllerUnitTests {
                 0,
                 0,
                 0L,
+                0,
+                0,
                 0
         );
 

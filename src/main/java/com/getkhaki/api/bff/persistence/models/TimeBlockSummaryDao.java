@@ -30,7 +30,7 @@ public class TimeBlockSummaryDao extends EntityBaseDao {
 
     UUID departmentId;
 
-    String filter;
+    String internalExternal;
 
     Long totalSeconds;
 

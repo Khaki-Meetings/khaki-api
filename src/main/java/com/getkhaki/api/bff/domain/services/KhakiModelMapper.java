@@ -98,13 +98,13 @@ public class KhakiModelMapper extends ModelMapper {
 
     public TimeBlockSummaryDao mapTimeBlockSummaryDmToDao(TimeBlockSummaryDm source) {
         TimeBlockSummaryDao timeBlockSummaryDao = this.map(source, TimeBlockSummaryDao.class);
-        timeBlockSummaryDao.setFilter(source.getFilterDe().toString());
+        timeBlockSummaryDao.setInternalExternal(source.getFilterDe().toString());
         return timeBlockSummaryDao;
     }
 
     public TimeBlockSummaryDm mapTimeBlockSummaryDaoToDm(TimeBlockSummaryDao source) {
         TimeBlockSummaryDm timeBlockSummaryDm = this.map(source, TimeBlockSummaryDm.class);
-        timeBlockSummaryDm.setFilterDe(StatisticsFilterDe.valueOf(source.getFilter()));
+        timeBlockSummaryDm.setFilterDe(StatisticsFilterDe.valueOf(source.getInternalExternal()));
         return timeBlockSummaryDm;
     }
 
