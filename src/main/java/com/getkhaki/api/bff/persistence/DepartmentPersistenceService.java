@@ -7,16 +7,19 @@ import com.getkhaki.api.bff.persistence.models.DepartmentDao;
 import com.getkhaki.api.bff.persistence.repositories.DepartmentRepositoryInterface;
 import com.getkhaki.api.bff.persistence.repositories.EmployeeRepositoryInterface;
 import com.getkhaki.api.bff.persistence.repositories.OrganizationRepositoryInterface;
+import lombok.extern.apachecommons.CommonsLog;
 import lombok.val;
-import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-
+import org.modelmapper.ModelMapper;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+@CommonsLog
 @Service
 public class DepartmentPersistenceService implements DepartmentPersistenceInterface {
     private final DepartmentRepositoryInterface departmentRepository;
@@ -72,10 +75,23 @@ public class DepartmentPersistenceService implements DepartmentPersistenceInterf
 
     @Override
     public Page<DepartmentDm> getDepartments(Pageable pageable) {
-        return departmentRepository
-                .findDistinctByOrganizationId(
-                        sessionTenant.getTenantId(), pageable)
-                .map(departmentDao ->
-                        modelMapper.map(departmentDao, DepartmentDm.class));
+
+        List<DepartmentDao> departmentDaoList = departmentRepository
+            .findDistinctByOrganizationId(sessionTenant.getTenantId())
+            .stream().collect(Collectors.toList());
+
+        // Build this list manually so as to avoid hibernate making a
+        // bunch of unnecessary db calls when /departments is requested
+        List<DepartmentDm> departmentDmList = new ArrayList<DepartmentDm>();
+        for (DepartmentDao departmentDao : departmentDaoList) {
+            DepartmentDm departmentDm = new DepartmentDm();
+            departmentDm.setId(departmentDao.getId());
+            departmentDm.setName(departmentDao.getName());
+            departmentDmList.add(departmentDm);
+        }
+
+        Page<DepartmentDm> page = new PageImpl<DepartmentDm>(departmentDmList);
+        return page;
+
     }
 }
