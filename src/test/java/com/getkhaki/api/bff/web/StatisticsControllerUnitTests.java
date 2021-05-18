@@ -98,6 +98,7 @@ public class StatisticsControllerUnitTests {
     public void getOrganizersStatisticsAggregate() {
         Instant startTest = Instant.parse("2020-11-01T00:00:00.000Z");
         Instant endTest = Instant.parse("2020-11-30T00:00:00.000Z");
+        String department = "";
 
         OrganizerStatisticsAggregateDm mockDm = OrganizerStatisticsAggregateDm.builder()
                 .organizerEmail("bob@bob.com")
@@ -119,14 +120,14 @@ public class StatisticsControllerUnitTests {
 
         Pageable pageable = PageRequest.of(0, 2);
         when(organizersStatisticsPersistenceService.getAggregateOrganizersStatistics(
-                eq(startTest), eq(endTest), eq(pageable))
+                eq(startTest), eq(endTest), eq(department), eq(pageable))
         ).thenReturn(dms);
 
         when(modelMapper.map(mockDm, OrganizerStatisticsAggregateResponseDto.class))
                 .thenReturn(dto);
 
         Page<OrganizerStatisticsAggregateResponseDto> response = underTest
-                .getAggregateOrganizersStatistics(startTest, endTest, pageable);
+                .getAggregateOrganizersStatistics(startTest, endTest, pageable, Optional.of(""));
 
         assertThat(response).isNotNull();
         assertThat(response.getTotalElements()).isEqualTo(1);
@@ -229,7 +230,7 @@ public class StatisticsControllerUnitTests {
         when(statisticsService.getTrailingStatistics(startTest, IntervalDe.Month, 1, StatisticsFilterDe.External))
                 .thenReturn(timeBlockSummaryDmList);
 
-        underTest.getTrailingStatistics(startTest, IntervalDe.Month, 1, Optional.of(StatisticsFilterDte.External));
+        underTest.getTrailingStatistics(startTest, IntervalDe.Month, 1, Optional.of(StatisticsFilterDte.External), Optional.of(""));
 
         verify(
                 statisticsService, times(1)

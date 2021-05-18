@@ -97,6 +97,7 @@ public class OrganizersStatisticsPersistenceServiceUnitTests {
         Page<OrganizerStatisticsAggregateDm> result = this.underTest.getAggregateOrganizersStatistics(
                 start,
                 end,
+                "",
                 pageable
         );
 
