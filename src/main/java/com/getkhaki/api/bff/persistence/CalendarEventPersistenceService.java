@@ -48,6 +48,7 @@ public class CalendarEventPersistenceService implements CalendarEventPersistence
 
     @Override
     public CalendarEventDm upsert(CalendarEventDm calendarEventDm) {
+        log.debug("Upsert " + calendarEventDm.getGoogleCalendarId());
         val calendarEventDao = modelMapper.map(calendarEventDm, CalendarEventDao.class);
         val calendarEventDaoOp = calendarEventRepository
                 .findDistinctByGoogleCalendarId(calendarEventDm.getGoogleCalendarId());
@@ -59,21 +60,21 @@ public class CalendarEventPersistenceService implements CalendarEventPersistence
         calendarEventDao.getParticipants().forEach(
                 calendarEventParticipantDao -> {
                     if (calendarEventParticipantDao.getEmail() == null) {
-                        log.debug("lame");
-                    }
-                    val savedEmail = emailDaoService.upsert(calendarEventParticipantDao.getEmail());
-                    val eventParticipantOp = calendarEventParticipantRepository
-                            .findDistinctByCalendarEventAndEmail(calendarEventDao, savedEmail);
-                    if (eventParticipantOp.isEmpty()) {
-
-                        calendarEventParticipantDao.setCalendarEvent(calendarEventDao);
-                        try {
-                            calendarEventParticipantRepository.save(
-                                    calendarEventParticipantDao
-                            );
-                        } catch (Exception e) {
-                            log.error("COULD NOT ADD EVENT PARTICIPANT: " + calendarEventParticipantDao.getEmail()
-                                + " to " + calendarEventDao.getGoogleCalendarId());
+                        log.debug("Email is null" + calendarEventParticipantDao.getId().toString());
+                    } else {
+                        log.debug("Adding " + calendarEventParticipantDao.getEmail() + " to event "
+                            + calendarEventDao.getGoogleCalendarId());
+                        val savedEmail = emailDaoService.upsert(calendarEventParticipantDao.getEmail());
+                        val eventParticipantOp = calendarEventParticipantRepository
+                                .findDistinctByCalendarEventAndEmail(calendarEventDao, savedEmail);
+                        if (eventParticipantOp.isEmpty()) {
+                            calendarEventParticipantDao.setCalendarEvent(calendarEventDao);
+                            try {
+                                calendarEventParticipantRepository.save(calendarEventParticipantDao);
+                            } catch (Exception e) {
+                                log.error("Could not add event participant " + calendarEventParticipantDao.getId().toString()
+                                        + " to " + calendarEventDao.getGoogleCalendarId());
+                            }
                         }
                     }
                 }
