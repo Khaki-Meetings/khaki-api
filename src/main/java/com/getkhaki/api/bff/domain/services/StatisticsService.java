@@ -94,6 +94,36 @@ public class StatisticsService {
                 .collect(Collectors.toList());
     }
 
+    public List<TimeBlockSummaryDm> getDepartmentTrailingStatistics(
+            Instant start,
+            IntervalDe interval,
+            int count,
+            StatisticsFilterDe filterDe,
+            String departmentName
+    ) {
+        TimeBlockGeneratorInterface timeBlockGenerator = timeBlockGeneratorFactory.get(interval);
+        List<TimeBlockRangeDm> timeBlockRangeList = timeBlockGenerator.generate(start, count);
+
+        UUID tenantId = sessionTenant.getTenantId();
+        var futures = timeBlockRangeList
+                .stream()
+                .map(
+                        range -> supplyAsync(() -> timeBlockSummaryService
+                                .getDepartmentTimeBlockSummary(
+                                        range.getStart(),
+                                        range.getEnd(),
+                                        filterDe,
+                                        tenantId,
+                                        departmentName
+                                ))
+                )
+                .collect(Collectors.toList());
+
+        return futures.stream()
+                .map(CompletableFuture::join)
+                .collect(Collectors.toList());
+    }
+
     @Scheduled(cron = "0 1 0 * * *")
     public void buildTrailingStatistics() {
         log.info("Building Trailing Statistics");
@@ -132,6 +162,7 @@ public class StatisticsService {
                         getTrailingStatistics(monthsStart, IntervalDe.Month, 12,
                                 statisticsFilterDe, organizationId));
                 for (TimeBlockSummaryDm timeBlockSummaryDm : statistics) {
+                    timeBlockSummaryDm.setFilterDe(statisticsFilterDe);
                     timeBlockSummaryService.updateTimeBlockSummary(timeBlockSummaryDm);
                 }
             }

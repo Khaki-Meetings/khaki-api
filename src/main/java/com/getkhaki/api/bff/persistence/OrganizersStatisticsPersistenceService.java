@@ -78,6 +78,7 @@ public class OrganizersStatisticsPersistenceService implements OrganizersStatist
     public Page<OrganizerStatisticsAggregateDm> getAggregateOrganizersStatistics(
             Instant start,
             Instant end,
+            String department,
             Pageable pageable
     ) {
         Page<OrganizerStatisticsAggregateView> organizerStatisticsViewList;
@@ -96,9 +97,13 @@ public class OrganizersStatisticsPersistenceService implements OrganizersStatist
             );
         }
 
-        organizerStatisticsViewList = organizerStatisticsRepository
-                .findAllOrganizerStatistics(start, end, sessionTenant.getTenantId(), pageable);
-
+        if (department.isEmpty()) {
+            organizerStatisticsViewList = organizerStatisticsRepository
+                    .findAllOrganizerStatistics(start, end, sessionTenant.getTenantId(), pageable);
+        } else {
+            organizerStatisticsViewList = organizerStatisticsRepository
+                    .findAllDepartmentOrganizerStatistics(start, end, sessionTenant.getTenantId(), department, pageable);
+        }
         return organizerStatisticsViewList.map(dao -> modelMapper.map(dao, OrganizerStatisticsAggregateDm.class));
     }
 }

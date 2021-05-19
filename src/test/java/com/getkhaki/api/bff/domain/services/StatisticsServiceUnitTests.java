@@ -61,7 +61,7 @@ public class StatisticsServiceUnitTests {
                 )
         )
                 .thenReturn(new TimeBlockSummaryDm(UUID.randomUUID(), StatisticsFilterDe.Internal,
-                        1L, 1, firstStart, firstEnd, 1, 1, 1, 0, 0L, 0));
+                        1L, 1, firstStart, firstEnd, 1, 1, 1, 0, 0L, 0, 0, 0));
 
         when(
                 timeBlockSummaryService.getTimeBlockSummary(
@@ -72,7 +72,7 @@ public class StatisticsServiceUnitTests {
                 )
         )
                 .thenReturn(new TimeBlockSummaryDm(UUID.randomUUID(), StatisticsFilterDe.Internal,
-                        1L, 1, secondStart, secondEnd, 1, 1, 1, 0, 0L, 0));
+                        1L, 1, secondStart, secondEnd, 1, 1, 1, 0, 0L, 0, 0, 0));
 
         val trailingStats = underTest.getTrailingStatistics(startTest, interval, count, StatisticsFilterDe.Internal);
 

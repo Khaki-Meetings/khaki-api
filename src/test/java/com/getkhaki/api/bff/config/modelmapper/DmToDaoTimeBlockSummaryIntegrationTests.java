@@ -35,7 +35,7 @@ public class DmToDaoTimeBlockSummaryIntegrationTests  extends BaseModelMapperInt
                 underTest.mapTimeBlockSummaryDmToDao(timeBlockSummaryDm);
 
         assertThat(timeBlockSummaryDao.getOrganizationId()).isEqualTo(organizationId);
-        assertThat(timeBlockSummaryDao.getFilter()).isEqualTo(StatisticsFilterDe.Internal.toString());
+        assertThat(timeBlockSummaryDao.getInternalExternal()).isEqualTo(StatisticsFilterDe.Internal.toString());
         assertThat(timeBlockSummaryDao.getMeetingLengthSeconds()).isEqualTo(meetingLengthSeconds);
 
     }

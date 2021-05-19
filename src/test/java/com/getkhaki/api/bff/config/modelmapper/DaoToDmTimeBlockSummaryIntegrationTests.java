@@ -28,7 +28,7 @@ public class DaoToDmTimeBlockSummaryIntegrationTests extends BaseModelMapperInte
 
         val timeBlockSummaryDao = new TimeBlockSummaryDao()
                 .setOrganizationId(organizationId)
-                .setFilter(StatisticsFilterDe.Internal.toString())
+                .setInternalExternal(StatisticsFilterDe.Internal.toString())
                 .setMeetingLengthSeconds(meetingLengthSeconds);
 
         val timeBlockSummaryDm =
