@@ -37,9 +37,9 @@ public class PropertiesLogger implements ApplicationListener<ApplicationPrepared
                 String resolvedProperty = environment.getProperty(propertyName);
                 String sourceProperty = propertySource.getProperty(propertyName).toString();
                 if(resolvedProperty.equals(sourceProperty)) {
-                    log.info("{}={}", propertyName, resolvedProperty);
+                    log.info("[{}]=[{}]", propertyName, resolvedProperty);
                 }else {
-                    log.info("{}={} OVERRIDDEN to {}", propertyName, sourceProperty, resolvedProperty);
+                    log.info("[{}]=[{}] OVERRIDDEN to [{}]", propertyName, sourceProperty, resolvedProperty);
                 }
             }
         }
