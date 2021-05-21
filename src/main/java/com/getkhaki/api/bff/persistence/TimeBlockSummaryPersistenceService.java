@@ -81,6 +81,14 @@ public class TimeBlockSummaryPersistenceService implements TimeBlockSummaryPersi
                 timeBlockSummaryDm.setTotalInternalMeetingAttendees(extTimeBlockAggregateSummaryView.getTotalInternalMeetingAttendees());
                 timeBlockSummaryDm.setTotalMeetingAttendees(extTimeBlockAggregateSummaryView.getTotalMeetingAttendees());
 
+                log.info("Using live query for " + start +  " " + filterDe.toString());
+
+                timeBlockSummaryDm.setOrganizationId(tenantId);
+                timeBlockSummaryDm.setStart(start);
+                timeBlockSummaryDm.setEnd(end);
+                timeBlockSummaryDm.setFilterDe(filterDe);
+                upsert(timeBlockSummaryDm);
+
                 break;
 
             case Internal:
@@ -107,6 +115,13 @@ public class TimeBlockSummaryPersistenceService implements TimeBlockSummaryPersi
                 timeBlockSummaryDm.setTotalMeetingAttendees(timeBlockAggregateSummaryView.getTotalMeetingAttendees());
 
                 log.info("Using live query for " + start +  " " + filterDe.toString());
+
+                timeBlockSummaryDm.setOrganizationId(tenantId);
+                timeBlockSummaryDm.setStart(start);
+                timeBlockSummaryDm.setEnd(end);
+                timeBlockSummaryDm.setFilterDe(filterDe);
+                upsert(timeBlockSummaryDm);
+
                 break;
 
             default:
@@ -152,6 +167,8 @@ public class TimeBlockSummaryPersistenceService implements TimeBlockSummaryPersi
                 timeBlockSummaryDm.setMeetingLengthSeconds(extTimeBlockAggregateSummaryView.getMeetingLengthSeconds());
                 timeBlockSummaryDm.setTotalInternalMeetingAttendees(extTimeBlockAggregateSummaryView.getTotalInternalMeetingAttendees());
                 timeBlockSummaryDm.setTotalMeetingAttendees(extTimeBlockAggregateSummaryView.getTotalMeetingAttendees());
+
+                log.info("Using live query for " + start +  " " + filterDe.toString());
 
                 break;
 
@@ -302,7 +319,7 @@ public class TimeBlockSummaryPersistenceService implements TimeBlockSummaryPersi
     @Override
     public TimeBlockSummaryDm upsert(TimeBlockSummaryDm timeBlockSummary) {
 
-        TimeBlockSummaryDao timeBlockSummaryDao = this.modelMapper.map(timeBlockSummary, TimeBlockSummaryDao.class);
+        TimeBlockSummaryDao timeBlockSummaryDao = this.modelMapper.mapTimeBlockSummaryDmToDao(timeBlockSummary);
 
         OrganizationDao organizationDao = organizationRepositoryInterface
                 .findById(timeBlockSummary.getOrganizationId()).orElseThrow(() -> new RuntimeException("Organization required"));
