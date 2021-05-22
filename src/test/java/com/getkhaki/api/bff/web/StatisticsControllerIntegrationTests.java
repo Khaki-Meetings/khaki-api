@@ -165,8 +165,8 @@ public class StatisticsControllerIntegrationTests extends BaseMvcIntegrationTest
 
         List<TimeBlockSummaryResponseDto> summaries = stats.getTimeBlockSummaries();
 
-        assertThat(summaries.get(0).getTotalSeconds()).isEqualTo(32400L);
-        assertThat(summaries.get(0).getMeetingCount()).isEqualTo(1);
+        assertThat(summaries.get(0).getNumEmployees()).isEqualTo(3);
+        assertThat(summaries.get(0).getMeetingCount()).isEqualTo(0);
         assertThat(summaries.get(1).getTotalSeconds()).isEqualTo(18000L);
         assertThat(summaries.get(1).getMeetingCount()).isEqualTo(2);
     }
@@ -198,8 +198,8 @@ public class StatisticsControllerIntegrationTests extends BaseMvcIntegrationTest
 
         val stats = getTypedResult(url, TimeBlockSummaryResponseDto.class);
 
-        assertThat(stats.getMeetingCount()).isEqualTo(4);
-        assertThat(stats.getTotalSeconds()).isEqualTo(57600);
+        assertThat(stats.getMeetingCount()).isEqualTo(2);
+        assertThat(stats.getTotalSeconds()).isEqualTo(18000);
     }
 
     @Test

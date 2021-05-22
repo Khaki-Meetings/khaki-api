@@ -23,8 +23,14 @@ public class TimeBlockSummaryService {
     }
 
     public TimeBlockSummaryDm getTimeBlockSummary(Instant start, Instant end, StatisticsFilterDe filterDe,
-                                                  UUID organizationId) {
+                                                       UUID organizationId) {
         return timeBlockSummaryPersistenceInterface.getTimeBlockSummary(
-            start, end, filterDe, organizationId);
+                start, end, filterDe, organizationId);
+    }
+
+    public TimeBlockSummaryDm getDepartmentTimeBlockSummary(Instant start, Instant end, StatisticsFilterDe filterDe,
+                                                  UUID organizationId, String departmentName) {
+            return timeBlockSummaryPersistenceInterface.getDepartmentTimeBlockSummary(
+                    start, end, filterDe, departmentName, organizationId);
     }
 }

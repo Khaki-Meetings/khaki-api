@@ -25,4 +25,6 @@ public class TimeBlockSummaryDm {
     Integer totalMeetingAttendees;
     Long meetingLengthSeconds;
     Integer numEmployeesOverTimeThreshold;
+    Integer averageMeetingLength;
+    Integer averageStaffTimePerMeeting;
 }

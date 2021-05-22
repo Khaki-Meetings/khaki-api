@@ -65,11 +65,15 @@ public class CalendarEventService {
                 .getEvents(adminEmail, timeAgo)
                 .stream()
                 .filter(calendarEventDm -> calendarEventDm.getParticipants().size() > 1);
-
+        
         AtomicInteger count = new AtomicInteger();
         filteredEvents.forEach(event -> {
             count.getAndIncrement();
-            calendarEventPersistence.upsert(event);
+            try {
+                calendarEventPersistence.upsert(event);
+            } catch (Exception e) {
+                log.error("Caught an exception during " + adminEmail + " import: " + e.getMessage());
+            }
         });
         log.info(
                 String.format(
@@ -84,12 +88,19 @@ public class CalendarEventService {
 
     @Scheduled(fixedDelay = 3600000)
     public void importCron() {
-        log.info("RUNNING IMPORT");
+        log.info("Starting import cronjob");
         val timeAgo = Instant.now().minus(importCronMinutes, ChronoUnit.MINUTES);
         organizationPersistenceService
                 .getImportEnabledOrganizations()
                 .forEach(
-                        organizationDm -> importAsync(organizationDm.getAdminEmail(), timeAgo)
+                    organizationDm -> {
+                        log.info("Importing " + organizationDm.getName() + " with admin email " + organizationDm.getAdminEmail());
+                        try {
+                            importAsync(organizationDm.getAdminEmail(), timeAgo);
+                        } catch (Exception e) {
+                            log.error("Caught an exception during " + organizationDm.getName() + " import: " + e.getMessage());
+                        }
+                    }
                 );
     }
 

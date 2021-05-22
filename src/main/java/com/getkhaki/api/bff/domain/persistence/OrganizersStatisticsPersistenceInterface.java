@@ -13,5 +13,5 @@ import java.util.OptionalInt;
 public interface OrganizersStatisticsPersistenceInterface {
     Page<OrganizerStatisticsDm> getOrganizersStatistics(Instant start, Instant end, Pageable pageable, StatisticsFilterDe filterDe);
 
-    Page<OrganizerStatisticsAggregateDm> getAggregateOrganizersStatistics(Instant start, Instant end, Pageable pageable);
+    Page<OrganizerStatisticsAggregateDm> getAggregateOrganizersStatistics(Instant start, Instant end, String department, Pageable pageable);
 }
