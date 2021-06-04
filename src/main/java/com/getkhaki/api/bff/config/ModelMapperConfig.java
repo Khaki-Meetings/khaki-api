@@ -1,11 +1,9 @@
 package com.getkhaki.api.bff.config;
 
+import com.getkhaki.api.bff.domain.models.AliasDm;
 import com.getkhaki.api.bff.domain.models.CalendarEventParticipantDm;
 import com.getkhaki.api.bff.domain.models.EmployeeDm;
-import com.getkhaki.api.bff.persistence.models.CalendarEventParticipantDao;
-import com.getkhaki.api.bff.persistence.models.DomainDao;
-import com.getkhaki.api.bff.persistence.models.EmailDao;
-import com.getkhaki.api.bff.persistence.models.EmployeeDao;
+import com.getkhaki.api.bff.persistence.models.*;
 import org.modelmapper.Converter;
 import org.modelmapper.ModelMapper;
 import org.springframework.context.annotation.Bean;
@@ -19,11 +17,35 @@ public class ModelMapperConfig {
     public ModelMapper modelMapper() {
         ModelMapper modelMapper = new ModelMapper();
 
+        daoToDmAlias(modelMapper);
+        dmToDaoAlias(modelMapper);
         daoToDmEmployee(modelMapper);
         dmToDaoEmployee(modelMapper);
         dmToDaoCalendarEventParticipant(modelMapper);
 
         return modelMapper;
+    }
+
+    private void daoToDmAlias(ModelMapper modelMapper) {
+        modelMapper.typeMap(AliasDao.class, AliasDm.class)
+                .addMappings(
+                        mapper -> {
+                            mapper.map(src -> src.getEmail().getEmailString(), AliasDm::setEmail);
+                        }
+                );
+    }
+
+    private void dmToDaoAlias(ModelMapper modelMapper) {
+        modelMapper.typeMap(AliasDm.class, AliasDao.class)
+                .addMappings(
+                        mapper -> {
+                            mapper.using(stringToEmailConverter())
+                                .map(
+                                    AliasDm::getEmail,
+                                    AliasDao::setEmail
+                                );
+                        }
+                );
     }
 
     private void daoToDmEmployee(ModelMapper modelMapper) {

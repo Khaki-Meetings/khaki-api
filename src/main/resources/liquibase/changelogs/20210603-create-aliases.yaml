@@ -1,0 +1,36 @@
+databaseChangeLog:
+  - changeSet:
+      id: 20210603-1
+      author: jeff
+      changes:
+        - createTable:
+            columns:
+              - column:
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                    primaryKeyName: alias_dao_pk
+                  name: id
+                  type: BINARY(16)
+              - column:
+                  name: email_id
+                  type: BINARY(16)
+              - column:
+                  constraints:
+                    nullable: false
+                  name: alias
+                  type: VARCHAR(255)
+            tableName: alias_dao
+  - changeSet:
+      id: 20210412-2
+      author: jeff
+      changes:
+        - addForeignKeyConstraint:
+            baseColumnNames: email_id
+            baseTableName: alias_dao
+            constraintName: alias_email_fk
+            deferrable: false
+            initiallyDeferred: false
+            referencedColumnNames: id
+            referencedTableName: email_dao
+            validate: true
