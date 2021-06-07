@@ -87,7 +87,10 @@ public class TimeBlockSummaryPersistenceService implements TimeBlockSummaryPersi
                 timeBlockSummaryDm.setStart(start);
                 timeBlockSummaryDm.setEnd(end);
                 timeBlockSummaryDm.setFilterDe(filterDe);
-                upsert(timeBlockSummaryDm);
+
+                if (Instant.now().isAfter(end)) {
+                    upsert(timeBlockSummaryDm);
+                }
 
                 break;
 
@@ -120,7 +123,10 @@ public class TimeBlockSummaryPersistenceService implements TimeBlockSummaryPersi
                 timeBlockSummaryDm.setStart(start);
                 timeBlockSummaryDm.setEnd(end);
                 timeBlockSummaryDm.setFilterDe(filterDe);
-                upsert(timeBlockSummaryDm);
+
+                if (Instant.now().isAfter(end)) {
+                    upsert(timeBlockSummaryDm);
+                }
 
                 break;
 

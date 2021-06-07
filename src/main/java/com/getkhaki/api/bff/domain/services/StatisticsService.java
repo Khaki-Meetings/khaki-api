@@ -161,10 +161,6 @@ public class StatisticsService {
                 statistics.addAll(
                         getTrailingStatistics(monthsStart, IntervalDe.Month, 12,
                                 statisticsFilterDe, organizationId));
-                for (TimeBlockSummaryDm timeBlockSummaryDm : statistics) {
-                    timeBlockSummaryDm.setFilterDe(statisticsFilterDe);
-                    timeBlockSummaryService.updateTimeBlockSummary(timeBlockSummaryDm);
-                }
             }
         }
     }
