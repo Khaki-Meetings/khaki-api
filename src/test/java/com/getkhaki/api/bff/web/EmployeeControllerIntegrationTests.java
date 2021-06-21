@@ -44,6 +44,20 @@ public class EmployeeControllerIntegrationTests extends BaseMvcIntegrationTest {
     }
 
     @Test
+    public void getEmployeesForDepartment() throws Exception {
+        MvcResult result = getMvcResult("/employees?department=HR");
+
+        mvc.perform(MockMvcRequestBuilders.get("/employees?department=HR")
+                .header(SessionTenant.HEADER_KEY, "s56_net")
+                .with(jwt().jwt(getJWT("bob@s56.net")).authorities(new SimpleGrantedAuthority("admin"))))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.content.length()").value(1))
+                .andExpect(jsonPath("$.content[?(@.firstName == 'Bob')]").exists())
+                .andExpect(jsonPath("$.content[?(@.firstName == 'Bob')].lastName").value("Jones"))
+                .andExpect(jsonPath("$.content[?(@.firstName == 'Bob')].department").value("HR"));
+    }
+
+    @Test
     @SneakyThrows
     public void success_getEmployee() {
         String url = "/employees/userProfile";

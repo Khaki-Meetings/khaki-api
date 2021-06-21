@@ -8,4 +8,7 @@ public interface EmployeePersistenceInterface {
     Page<EmployeeDm> getEmployees(Pageable pageable);
 
     EmployeeDm getAuthedEmployee();
+
+    Page<EmployeeDm> getEmployeesByDepartment(String department, Pageable pageable);
+
 }

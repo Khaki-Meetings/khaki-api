@@ -34,14 +34,13 @@ public class ModelMapperConfig {
                             mapper.map(src -> src.getPerson().getFirstName(), EmployeeDm::setFirstName);
                             mapper.map(src -> src.getPerson().getLastName(), EmployeeDm::setLastName);
                             mapper.map(src -> src.getPerson().getNotify(), EmployeeDm::setNotify);
+                            mapper.map(src -> src.getPerson().getAvatarUrl(), EmployeeDm::setAvatarUrl);
                             mapper.map(src -> src.getDepartment().getOrganization().getName(), EmployeeDm::setCompanyName);
 
                             mapper.map(
                                     src -> src.getPerson().getPrimaryEmail().getEmailString(),
                                     EmployeeDm::setEmail
                             );
-
-                            mapper.skip(EmployeeDm::setAvatarUrl);
                         }
                 );
     }

@@ -19,4 +19,8 @@ public class EmployeeService {
     public Page<EmployeeDm> getEmployees(Pageable pageable) {
         return employeePersistenceService.getEmployees(pageable);
     }
+
+    public Page<EmployeeDm> getEmployeesByDepartment(String department, Pageable pageable) {
+        return employeePersistenceService.getEmployeesByDepartment(department, pageable);
+    }
 }
