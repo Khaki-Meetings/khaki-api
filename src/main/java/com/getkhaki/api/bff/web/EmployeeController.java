@@ -29,10 +29,19 @@ public class EmployeeController {
     }
 
     @GetMapping()
-    public Page<EmployeeDto> getEmployees(Pageable pageable) {
+    public Page<EmployeeDto> getEmployees(Pageable pageable,
+                  @RequestParam(required = false) String department) {
+
+        if (department == null || department.length() == 0) {
+            return this.employeeService
+                    .getEmployees(pageable)
+                    .map(employeeDm -> this.modelMapper.map(employeeDm, EmployeeDto.class));
+        }
+
         return this.employeeService
-                .getEmployees(pageable)
+                .getEmployeesByDepartment(department, pageable)
                 .map(employeeDm -> this.modelMapper.map(employeeDm, EmployeeDto.class));
+
     }
 
     @GetMapping("/userProfile")
