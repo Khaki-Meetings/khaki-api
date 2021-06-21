@@ -56,7 +56,7 @@ public class EmployeePersistenceService implements EmployeePersistenceInterface 
 
     @Override
     public Page<EmployeeDm> getEmployeesByDepartment(String department, Pageable pageable) {
-        return this.employeeRepository
+       return this.employeeRepository
                 .findEmployeesByDepartment(sessionTenant.getTenantId(), department, pageable)
                 .map(employeeDao -> modelMapper.map(employeeDao, EmployeeDm.class));
     }
