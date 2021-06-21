@@ -19,6 +19,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Service
@@ -50,6 +51,13 @@ public class EmployeePersistenceService implements EmployeePersistenceInterface 
     public Page<EmployeeDm> getEmployees(Pageable pageable) {
         return this.employeeRepository
                 .findDistinctByDepartment_OrganizationId(sessionTenant.getTenantId(), pageable)
+                .map(employeeDao -> modelMapper.map(employeeDao, EmployeeDm.class));
+    }
+
+    @Override
+    public Page<EmployeeDm> getEmployeesByDepartment(String department, Pageable pageable) {
+       return this.employeeRepository
+                .findEmployeesByDepartment(sessionTenant.getTenantId(), department, pageable)
                 .map(employeeDao -> modelMapper.map(employeeDao, EmployeeDm.class));
     }
 
