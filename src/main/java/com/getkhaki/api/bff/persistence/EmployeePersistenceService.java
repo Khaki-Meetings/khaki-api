@@ -2,6 +2,7 @@ package com.getkhaki.api.bff.persistence;
 
 import com.getkhaki.api.bff.config.interceptors.models.SessionTenant;
 import com.getkhaki.api.bff.domain.models.EmployeeDm;
+import com.getkhaki.api.bff.domain.models.EmployeeWithStatisticsDm;
 import com.getkhaki.api.bff.domain.persistence.EmployeePersistenceInterface;
 import com.getkhaki.api.bff.persistence.models.DepartmentDao;
 import com.getkhaki.api.bff.persistence.models.EmployeeDao;
@@ -13,14 +14,16 @@ import com.getkhaki.api.bff.security.AuthenticationFacade;
 import lombok.val;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.domain.JpaSort;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.stereotype.Service;
 
+import java.time.Instant;
 import java.util.List;
 import java.util.Optional;
-import java.util.UUID;
-import java.util.stream.Collectors;
 
 @Service
 public class EmployeePersistenceService implements EmployeePersistenceInterface {
@@ -59,6 +62,37 @@ public class EmployeePersistenceService implements EmployeePersistenceInterface 
        return this.employeeRepository
                 .findEmployeesByDepartment(sessionTenant.getTenantId(), department, pageable)
                 .map(employeeDao -> modelMapper.map(employeeDao, EmployeeDm.class));
+    }
+
+    @Override
+    public Page<EmployeeWithStatisticsDm> getEmployeesWithStatistics(
+            Instant sDate, Instant eDate, String department, Pageable pageable) {
+
+        Sort sort = pageable.getSort();
+
+        if(sort.isSorted()) {
+            Sort.Order sortOrder = sort.stream().findFirst().orElseThrow();
+            pageable = PageRequest.of(
+                    pageable.getPageNumber(),
+                    pageable.getPageSize(),
+                    JpaSort.unsafe(
+                            sortOrder.getDirection(),
+                            String.format("(%s)", sortOrder.getProperty())
+                    )
+            );
+        }
+
+        if (department == null || department.length() == 0) {
+            return this.employeeRepository
+                    .findEmployeesWithStatistics(sessionTenant.getTenantId(),
+                            sDate, eDate, pageable)
+                    .map(employeeWithStatisticsView -> modelMapper.map(employeeWithStatisticsView, EmployeeWithStatisticsDm.class));
+        }
+
+        return this.employeeRepository
+                .findEmployeesWithStatistics(sessionTenant.getTenantId(),
+                        sDate, eDate, department, pageable)
+                .map(employeeWithStatisticsView -> modelMapper.map(employeeWithStatisticsView, EmployeeWithStatisticsDm.class));
     }
 
     @Override

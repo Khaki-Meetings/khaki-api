@@ -1,12 +1,13 @@
 package com.getkhaki.api.bff.domain.services;
 
 import com.getkhaki.api.bff.domain.models.EmployeeDm;
+import com.getkhaki.api.bff.domain.models.EmployeeWithStatisticsDm;
 import com.getkhaki.api.bff.domain.persistence.EmployeePersistenceInterface;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
+import java.time.Instant;
 
 @Service
 public class EmployeeService {
@@ -22,5 +23,11 @@ public class EmployeeService {
 
     public Page<EmployeeDm> getEmployeesByDepartment(String department, Pageable pageable) {
         return employeePersistenceService.getEmployeesByDepartment(department, pageable);
+    }
+
+    public Page<EmployeeWithStatisticsDm> getEmployeesWithStatistics(
+            Instant sDate, Instant eDate, String department, Pageable pageable) {
+        return employeePersistenceService.getEmployeesWithStatistics(
+                sDate, eDate, department, pageable);
     }
 }
