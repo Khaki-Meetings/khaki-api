@@ -2,10 +2,12 @@ package com.getkhaki.api.bff.config;
 
 import com.getkhaki.api.bff.domain.models.CalendarEventParticipantDm;
 import com.getkhaki.api.bff.domain.models.EmployeeDm;
+import com.getkhaki.api.bff.domain.models.EmployeeWithStatisticsDm;
 import com.getkhaki.api.bff.persistence.models.CalendarEventParticipantDao;
 import com.getkhaki.api.bff.persistence.models.DomainDao;
 import com.getkhaki.api.bff.persistence.models.EmailDao;
 import com.getkhaki.api.bff.persistence.models.EmployeeDao;
+import com.getkhaki.api.bff.persistence.models.views.EmployeeWithStatisticsView;
 import org.modelmapper.Converter;
 import org.modelmapper.ModelMapper;
 import org.springframework.context.annotation.Bean;
@@ -22,6 +24,7 @@ public class ModelMapperConfig {
         daoToDmEmployee(modelMapper);
         dmToDaoEmployee(modelMapper);
         dmToDaoCalendarEventParticipant(modelMapper);
+        viewToDmEmployeeWithStatistics(modelMapper);
 
         return modelMapper;
     }
@@ -34,14 +37,30 @@ public class ModelMapperConfig {
                             mapper.map(src -> src.getPerson().getFirstName(), EmployeeDm::setFirstName);
                             mapper.map(src -> src.getPerson().getLastName(), EmployeeDm::setLastName);
                             mapper.map(src -> src.getPerson().getNotify(), EmployeeDm::setNotify);
+                            mapper.map(src -> src.getPerson().getAvatarUrl(), EmployeeDm::setAvatarUrl);
                             mapper.map(src -> src.getDepartment().getOrganization().getName(), EmployeeDm::setCompanyName);
 
                             mapper.map(
                                     src -> src.getPerson().getPrimaryEmail().getEmailString(),
                                     EmployeeDm::setEmail
                             );
+                        }
+                );
+    }
 
-                            mapper.skip(EmployeeDm::setAvatarUrl);
+    private void viewToDmEmployeeWithStatistics(ModelMapper modelMapper) {
+        modelMapper.typeMap(EmployeeWithStatisticsView.class, EmployeeWithStatisticsDm.class)
+                .addMappings(
+                        mapper -> {
+                            mapper.map(src -> src.getEmployee().getDepartment().getName(), EmployeeWithStatisticsDm::setDepartment);
+                            mapper.map(src -> src.getEmployee().getPerson().getFirstName(), EmployeeWithStatisticsDm::setFirstName);
+                            mapper.map(src -> src.getEmployee().getPerson().getLastName(), EmployeeWithStatisticsDm::setLastName);
+                            mapper.map(src -> src.getEmployee().getPerson().getAvatarUrl(), EmployeeWithStatisticsDm::setAvatarUrl);
+
+                            mapper.map(
+                                    src -> src.getEmployee().getPerson().getPrimaryEmail().getEmailString(),
+                                    EmployeeWithStatisticsDm::setEmail
+                            );
                         }
                 );
     }
