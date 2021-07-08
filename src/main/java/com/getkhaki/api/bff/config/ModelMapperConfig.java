@@ -56,7 +56,7 @@ public class ModelMapperConfig {
                             mapper.map(src -> src.getEmployee().getPerson().getFirstName(), EmployeeWithStatisticsDm::setFirstName);
                             mapper.map(src -> src.getEmployee().getPerson().getLastName(), EmployeeWithStatisticsDm::setLastName);
                             mapper.map(src -> src.getEmployee().getPerson().getAvatarUrl(), EmployeeWithStatisticsDm::setAvatarUrl);
-
+                            mapper.map(src -> src.getEmployee().getPerson().getId(), EmployeeWithStatisticsDm::setId);
                             mapper.map(
                                     src -> src.getEmployee().getPerson().getPrimaryEmail().getEmailString(),
                                     EmployeeWithStatisticsDm::setEmail

@@ -8,6 +8,7 @@ import com.getkhaki.api.bff.domain.persistence.OrganizationPersistenceInterface;
 import com.getkhaki.api.bff.domain.persistence.PersonPersistenceInterface;
 import lombok.extern.apachecommons.CommonsLog;
 import lombok.val;
+import org.h2.util.StringUtils;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
@@ -119,11 +120,12 @@ public class CalendarEventService {
             Instant start,
             Instant end,
             String organizer,
+            String attendee,
             StatisticsFilterDe filter,
             Pageable pageable) {
 
-        Page<CalendarEventDetailDm> calendarEventsWithAttendeesDmList = calendarEventPersistence
-                .getCalendarEvents(start, end, organizer, filter, pageable);
-        return calendarEventsWithAttendeesDmList;
+            Page<CalendarEventDetailDm> calendarEventsWithAttendeesDmList = calendarEventPersistence
+                    .getCalendarEvents(start, end, organizer, attendee, filter, pageable);
+            return calendarEventsWithAttendeesDmList;
     }
 }

@@ -8,6 +8,7 @@ import com.getkhaki.api.bff.persistence.models.DepartmentDao;
 import com.getkhaki.api.bff.persistence.models.EmployeeDao;
 import com.getkhaki.api.bff.persistence.models.OrganizationDao;
 import com.getkhaki.api.bff.persistence.models.PersonDao;
+import com.getkhaki.api.bff.persistence.models.views.EmployeeWithStatisticsView;
 import com.getkhaki.api.bff.persistence.repositories.EmailRepositoryInterface;
 import com.getkhaki.api.bff.persistence.repositories.EmployeeRepositoryInterface;
 import com.getkhaki.api.bff.security.AuthenticationFacade;
