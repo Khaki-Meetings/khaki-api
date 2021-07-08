@@ -3,6 +3,8 @@ package com.getkhaki.api.bff.domain.models;
 import lombok.*;
 import lombok.experimental.Accessors;
 
+import java.util.UUID;
+
 @Data
 @Builder
 @AllArgsConstructor
@@ -11,6 +13,7 @@ import lombok.experimental.Accessors;
 @Setter
 @Accessors(chain = true)
 public class EmployeeWithStatisticsDm {
+    UUID id;
     String email;
     String firstName;
     String lastName;

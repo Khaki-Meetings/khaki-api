@@ -85,18 +85,13 @@ public class CalendarEventPersistenceService implements CalendarEventPersistence
 
     @Override
     public Page<CalendarEventDetailDm> getCalendarEvents(Instant sDate, Instant eDate,
-            String organizer, StatisticsFilterDe filterDe, Pageable pageable) {
-
-        UUID organizerUUID = new UUID(0L, 0L);
-        if (organizer != null && !organizer.trim().isEmpty()){
-            organizerUUID = UUID.fromString(organizer);
-        }
+            String organizer, String attendee, StatisticsFilterDe filterDe, Pageable pageable) {
 
         Page<CalendarEventsWithAttendeesView> calendarEventsWithAttendeesViewList;
 
         Sort sort = pageable.getSort();
 
-        if(sort.isSorted()) {
+        if (sort.isSorted()) {
             Sort.Order sortOrder = sort.stream().findFirst().orElseThrow();
             pageable = PageRequest.of(
                     pageable.getPageNumber(),
@@ -108,25 +103,59 @@ public class CalendarEventPersistenceService implements CalendarEventPersistence
             );
         }
 
-        if (filterDe == null) {
-            calendarEventsWithAttendeesViewList = calendarEventRepository
-                    .getAllCalendarEvents(sessionTenant.getTenantId(), sDate, eDate, organizerUUID, pageable);
-        } else {
-            switch (filterDe) {
-                case Internal:
-                    calendarEventsWithAttendeesViewList = calendarEventRepository
-                            .getInternalCalendarEvents(sessionTenant.getTenantId(), sDate, eDate, organizerUUID, pageable);
-                    break;
-                case External:
-                    calendarEventsWithAttendeesViewList = calendarEventRepository
-                            .getExternalCalendarEvents(sessionTenant.getTenantId(), sDate, eDate, organizerUUID, pageable);
-                    break;
-                default:
-                    calendarEventsWithAttendeesViewList = calendarEventRepository
-                            .getAllCalendarEvents(sessionTenant.getTenantId(), sDate, eDate, organizerUUID, pageable);
+        if (organizer != null && !organizer.trim().isEmpty()) {
+            UUID organizerUUID = new UUID(0L, 0L);
+            organizerUUID = UUID.fromString(organizer);
+
+            if (filterDe == null) {
+                calendarEventsWithAttendeesViewList = calendarEventRepository
+                        .getAllCalendarEvents(sessionTenant.getTenantId(), sDate, eDate, organizerUUID, pageable);
+            } else {
+                switch (filterDe) {
+                    case Internal:
+                        calendarEventsWithAttendeesViewList = calendarEventRepository
+                                .getInternalCalendarEvents(sessionTenant.getTenantId(), sDate, eDate, organizerUUID, pageable);
+                        break;
+                    case External:
+                        calendarEventsWithAttendeesViewList = calendarEventRepository
+                                .getExternalCalendarEvents(sessionTenant.getTenantId(), sDate, eDate, organizerUUID, pageable);
+                        break;
+                    default:
+                        calendarEventsWithAttendeesViewList = calendarEventRepository
+                                .getAllCalendarEvents(sessionTenant.getTenantId(), sDate, eDate, organizerUUID, pageable);
+                }
             }
+
+            return calendarEventsWithAttendeesViewList.map(dao -> modelMapper.map(dao, CalendarEventDetailDm.class));
         }
 
-        return calendarEventsWithAttendeesViewList.map(dao -> modelMapper.map(dao, CalendarEventDetailDm.class));
+        if (attendee != null && !attendee.trim().isEmpty()) {
+            UUID attendeeUUID = new UUID(0L, 0L);
+            attendeeUUID = UUID.fromString(attendee);
+
+            if (filterDe == null) {
+                calendarEventsWithAttendeesViewList = calendarEventRepository
+                        .getAllCalendarEventsForAttendee(sessionTenant.getTenantId(), sDate, eDate, attendeeUUID, pageable);
+            } else {
+                switch (filterDe) {
+                    case Internal:
+                        calendarEventsWithAttendeesViewList = calendarEventRepository
+                                .getInternalCalendarEventsForAttendee(sessionTenant.getTenantId(), sDate, eDate, attendeeUUID, pageable);
+                        break;
+                    case External:
+                        calendarEventsWithAttendeesViewList = calendarEventRepository
+                                .getExternalCalendarEventsForAttendee(sessionTenant.getTenantId(), sDate, eDate, attendeeUUID, pageable);
+                        break;
+                    default:
+                        calendarEventsWithAttendeesViewList = calendarEventRepository
+                                .getAllCalendarEventsForAttendee(sessionTenant.getTenantId(), sDate, eDate, attendeeUUID, pageable);
+                }
+            }
+
+            return calendarEventsWithAttendeesViewList.map(dao -> modelMapper.map(dao, CalendarEventDetailDm.class));
+
+        }
+
+        return null;
     }
 }

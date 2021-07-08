@@ -114,13 +114,22 @@ public class CalendarEventControllerUnitTests {
 
         when(modelMapper.map(internalCalendarEventDetailDm, CalendarEventDm.class)).thenReturn(calendarEventDmMapped);
 
-        when(calendarEventService.getCalendarEvents(start, end, employeeId, externalFilterDe, pageable))
+        when(calendarEventService.getCalendarEvents(start, end, employeeId, "", externalFilterDe, pageable))
                 .thenReturn(externalDms);
 
-        when(calendarEventService.getCalendarEvents(start, end, employeeId, internalFilterDe, pageable))
+        when(calendarEventService.getCalendarEvents(start, end, employeeId, "", internalFilterDe, pageable))
                 .thenReturn(internalDms);
 
-        when(calendarEventService.getCalendarEvents(start, end, employeeId, null, pageable))
+        when(calendarEventService.getCalendarEvents(start, end, employeeId, "", null, pageable))
+                .thenReturn(allDms);
+
+        when(calendarEventService.getCalendarEvents(start, end, "", employeeId, externalFilterDe, pageable))
+                .thenReturn(externalDms);
+
+        when(calendarEventService.getCalendarEvents(start, end, "", employeeId, internalFilterDe, pageable))
+                .thenReturn(internalDms);
+
+        when(calendarEventService.getCalendarEvents(start, end, "", employeeId, null, pageable))
                 .thenReturn(allDms);
 
         when(modelMapper.map(externalCalendarEventDetailDm, CalendarEventsWithAttendeesResponseDto.class))
@@ -130,19 +139,35 @@ public class CalendarEventControllerUnitTests {
                 .thenReturn(internalCalendarEventsResponseDto);
 
         Page<CalendarEventsWithAttendeesResponseDto> externalResult = this.underTest.getCalendarEvents(
-                start, end, employeeId, externalFilterDte, pageable);
+                start, end, employeeId, "", externalFilterDte, pageable);
 
         assertThat(externalResult).isEqualTo(externalDtos);
 
+        Page<CalendarEventsWithAttendeesResponseDto> externalResultAttendees = this.underTest.getCalendarEvents(
+                start, end, "", employeeId, externalFilterDte, pageable);
+
+        assertThat(externalResultAttendees).isEqualTo(externalDtos);
+
         Page<CalendarEventsWithAttendeesResponseDto> internalResult = this.underTest.getCalendarEvents(
-                start, end, employeeId, internalFilterDte, pageable);
+                start, end, employeeId, "", internalFilterDte, pageable);
 
         assertThat(internalResult).isEqualTo(internalDtos);
 
+        Page<CalendarEventsWithAttendeesResponseDto> internalResultAttendees = this.underTest.getCalendarEvents(
+                start, end, "", employeeId, internalFilterDte, pageable);
+
+        assertThat(internalResultAttendees).isEqualTo(internalDtos);
+
         Page<CalendarEventsWithAttendeesResponseDto> allResult = this.underTest.getCalendarEvents(
-                start, end, employeeId, Optional.empty(), pageable);
+                start, end, employeeId, "", Optional.empty(), pageable);
 
         assertThat(allResult).isEqualTo(allDtos);
+
+        Page<CalendarEventsWithAttendeesResponseDto> allResultAttendees = this.underTest.getCalendarEvents(
+                start, end, "", employeeId, Optional.empty(), pageable);
+
+        assertThat(allResultAttendees).isEqualTo(allDtos);
+
     }
 
 }

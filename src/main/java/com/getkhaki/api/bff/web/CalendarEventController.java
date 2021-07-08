@@ -42,6 +42,7 @@ public class CalendarEventController {
         @PathVariable Instant start,
         @PathVariable Instant end,
         @RequestParam String organizer,
+        @RequestParam String attendee,
         @RequestParam Optional<StatisticsFilterDte> filter,
         Pageable pageable) {
 
@@ -53,7 +54,7 @@ public class CalendarEventController {
         }
 
         Page<CalendarEventDetailDm> calendarEventsWithAttendeesDmList = calendarEventService
-                .getCalendarEvents(start, end, organizer, filterDe, pageable);
+                .getCalendarEvents(start, end, organizer, attendee, filterDe, pageable);
         return calendarEventsWithAttendeesDmList.map(dm -> modelMapper.map(dm, CalendarEventsWithAttendeesResponseDto.class));
 
     }
