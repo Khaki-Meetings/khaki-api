@@ -13,5 +13,7 @@ public interface CalendarEventPersistenceInterface {
     CalendarEventDm upsert(CalendarEventDm calendarEventDm);
 
     Page<CalendarEventDetailDm> getCalendarEvents(
-            Instant sDate, Instant eDate, String organizer, StatisticsFilterDe filterDe, Pageable pageable);
+            Instant sDate, Instant eDate, String organizer,
+            String attendee, StatisticsFilterDe filterDe, Pageable pageable);
+
 }
