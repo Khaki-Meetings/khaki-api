@@ -455,27 +455,17 @@ public interface CalendarEventRepositoryInterface extends JpaRepository<Calendar
 
     String allCalendarEventsForAttendeeFromWhereClause =
             "  from calendar_event_dao `ced`, person_dao pd, email_dao_people edp, " +
-                    "       email_dao ed, calendar_event_participant_dao cepd, domain_dao dd " +
+                    "       email_dao ed, calendar_event_participant_dao cepd, domain_dao dd, " +
+                    "       domain_dao_organizations ddo2 " +
                     " where ced.start between :sDate and :eDate " +
                     "       and pd.id = :organizer " +
                     "       and pd.id = edp.people_id " +
                     "       and edp.emails_id = ed.id " +
                     "       and cepd.email_id = ed.id " +
                     "       and cepd.calendar_event_id = ced.id " +
-                    "       and ed.domain_id = dd.id ";
-    /*
-                    "   and exists ( " +
-                    "           select 'x' " +
-                    "             from person_dao, email_dao_people edp2, email_dao ed2," +
-                    "                  calendar_event_participant_dao cepd2, domain_dao_organizations ddo2 " +
-                    "            where cepd2.calendar_event_id = ced.id " +
-                    "              and cepd2.email_id = ed2.id " +
-                    "              and ed2.domain_id = ddo2.domains_id " +
-                    "              and ed2.id = edp2.emails_id " +
-                    "              and person_dao.id = edp2.people_id " +
-                    "              and ddo2.organizations_id = :tenantId " +
-                    "       )" ;*/
-
+                    "       and ed.domain_id = dd.id " +
+                    "       and dd.id = ddo2.domains_id " +
+                    "       and ddo2.organizations_id = :tenantId ";
     @Query(
             value = "select " +
                     "       ced.id as id," +
@@ -508,21 +498,8 @@ public interface CalendarEventRepositoryInterface extends JpaRepository<Calendar
                     allCalendarEventsForAttendeeFromWhereClause
 
             , countQuery =  "select " +
-            "       ced.id as id ," +
-            "       ( select count(*) " +
-            "           from person_dao, " +
-            "           email_dao_people edp2, " +
-            "           email_dao ed2, " +
-            "           calendar_event_participant_dao cepd2, " +
-            "           domain_dao_organizations ddo " +
-            "         where cepd2.calendar_event_id = ced.id " +
-            "           and cepd2.email_id = ed2.id " +
-            "           and ed2.domain_id = ddo.domains_id " +
-            "           and ed2.id = edp2.emails_id " +
-            "           and person_dao.id = edp2.people_id " +
-            "           and ddo.organizations_id = :tenantId " +
-            "       ) as numberInternalAttendees " +
-            allCalendarEventsFromWhereClause
+                    "   count(ced.id) " +
+            allCalendarEventsForAttendeeFromWhereClause
             , nativeQuery = true
     )
     Page<CalendarEventsWithAttendeesView> getAllCalendarEventsForAttendee(
