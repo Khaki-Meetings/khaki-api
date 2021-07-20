@@ -13,14 +13,12 @@ import lombok.extern.apachecommons.CommonsLog;
 import lombok.val;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.*;
 import org.springframework.data.jpa.domain.JpaSort;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
+import java.util.ArrayList;
 import java.util.UUID;
 
 @Service
@@ -156,6 +154,6 @@ public class CalendarEventPersistenceService implements CalendarEventPersistence
 
         }
 
-        return null;
+        return new PageImpl<CalendarEventDetailDm>(new ArrayList<CalendarEventDetailDm>());
     }
 }
