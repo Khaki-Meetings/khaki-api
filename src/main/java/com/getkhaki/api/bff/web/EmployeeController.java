@@ -87,12 +87,13 @@ public class EmployeeController {
                 id, this.modelMapper.map(userProfileResponseDto, EmployeeDm.class)
         );
 
-        EmployeeDao result = this.employeePersistenceService.getEmployee(id);
-        return modelMapper.map(
-                result,
+        EmployeeDao employeeDao = this.employeePersistenceService.getEmployee(id);
+        UserProfileResponseDto result = modelMapper.map(
+                employeeDao,
                 UserProfileResponseDto.class
         );
 
+        return result;
     }
 }
 
