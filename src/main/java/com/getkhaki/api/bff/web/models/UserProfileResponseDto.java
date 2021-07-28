@@ -9,4 +9,5 @@ import lombok.experimental.Accessors;
 @Accessors(chain = true)
 public class UserProfileResponseDto extends PersonDto {
     private String companyName;
+    private String department;
 }

@@ -1,9 +1,14 @@
 package com.getkhaki.api.bff.web;
 
+import com.getkhaki.api.bff.domain.models.EmployeeDm;
+import com.getkhaki.api.bff.domain.models.PersonDm;
 import com.getkhaki.api.bff.domain.persistence.EmployeePersistenceInterface;
 import com.getkhaki.api.bff.domain.services.EmployeeService;
+import com.getkhaki.api.bff.domain.services.PersonService;
+import com.getkhaki.api.bff.persistence.models.EmployeeDao;
 import com.getkhaki.api.bff.web.models.EmployeeDto;
 import com.getkhaki.api.bff.web.models.EmployeeWithStatisticsDto;
+import com.getkhaki.api.bff.web.models.PersonDto;
 import com.getkhaki.api.bff.web.models.UserProfileResponseDto;
 import lombok.val;
 import org.modelmapper.ModelMapper;
@@ -12,6 +17,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.Instant;
+import java.util.UUID;
 
 @RequestMapping("/employees")
 @RestController
@@ -19,15 +25,18 @@ import java.time.Instant;
 public class EmployeeController {
     private final ModelMapper modelMapper;
     private final EmployeeService employeeService;
+    private final PersonService personService;
     private final EmployeePersistenceInterface employeePersistenceService;
 
     public EmployeeController(
             ModelMapper modelMapper,
             EmployeeService employeeService,
+            PersonService personService,
             EmployeePersistenceInterface employeePersistenceService
     ) {
         this.modelMapper = modelMapper;
         this.employeeService = employeeService;
+        this.personService = personService;
         this.employeePersistenceService = employeePersistenceService;
     }
 
@@ -67,6 +76,23 @@ public class EmployeeController {
                 employeeDm,
                 UserProfileResponseDto.class
         );
+    }
+
+    @PutMapping("/userProfile/{id}")
+    public UserProfileResponseDto setUserProfile(
+            @RequestBody UserProfileResponseDto userProfileResponseDto,
+            @PathVariable UUID id) {
+
+        this.employeePersistenceService.updateEmployee(
+                id, this.modelMapper.map(userProfileResponseDto, EmployeeDm.class)
+        );
+
+        EmployeeDao result = this.employeePersistenceService.getEmployee(id);
+        return modelMapper.map(
+                result,
+                UserProfileResponseDto.class
+        );
+
     }
 }
 
