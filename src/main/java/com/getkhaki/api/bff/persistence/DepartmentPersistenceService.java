@@ -17,6 +17,7 @@ import org.springframework.stereotype.Service;
 import org.modelmapper.ModelMapper;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @CommonsLog
@@ -92,6 +93,16 @@ public class DepartmentPersistenceService implements DepartmentPersistenceInterf
 
         Page<DepartmentDm> page = new PageImpl<DepartmentDm>(departmentDmList);
         return page;
+
+    }
+
+    public DepartmentDao getDepartmentByOrganizationDepartmentName(UUID organizationId, String departmentName) {
+
+        val organizationDao = organizationRepository
+                .findById(organizationId).orElseThrow(() -> new RuntimeException("Organization required"));
+        val departmentDaoOp = this.departmentRepository
+                .findDistinctByNameAndOrganization(departmentName, organizationDao);
+        return departmentDaoOp.orElseThrow();
 
     }
 }

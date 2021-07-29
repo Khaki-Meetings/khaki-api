@@ -9,6 +9,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
+import org.springframework.http.MediaType;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
@@ -129,5 +130,32 @@ public class EmployeeControllerIntegrationTests extends BaseMvcIntegrationTest {
 
         assertThat(userProfileResponseDto.getFirstName()).isNullOrEmpty();
 //        assertThat(userProfileResponseDto.getEmail()).isEqualTo("john@news.com");
+    }
+
+    @Test
+    public void setUserProfile() throws Exception {
+
+        String personId = "f66d66d7-7b40-4ffe-a38a-aae70919a1ef";
+        String url = String.format("/employees/userProfile/%s", personId);
+
+        UserProfileResponseDto userProfileResponseDto = new UserProfileResponseDto();
+        userProfileResponseDto.setFirstName("NewBobFirst");
+        userProfileResponseDto.setLastName("NewBobLast");
+        userProfileResponseDto.setDepartment("IT");
+
+        String content = asJsonString(userProfileResponseDto);
+
+        mvc.perform(MockMvcRequestBuilders.put(url)
+                .header(SessionTenant.HEADER_KEY, "s56_net")
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON)
+                .characterEncoding("UTF-8")
+                .content(content)
+                .with(jwt().jwt(getJWT("bob@s56.net")).authorities(new SimpleGrantedAuthority("admin"))))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.firstName").value("NewBobFirst"))
+                .andExpect(jsonPath("$.lastName").value("NewBobLast"))
+                .andExpect(jsonPath("$.department").value("IT"));
+
     }
 }
