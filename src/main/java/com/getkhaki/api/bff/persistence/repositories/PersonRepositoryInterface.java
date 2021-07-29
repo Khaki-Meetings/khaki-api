@@ -14,6 +14,8 @@ import java.util.UUID;
 public interface PersonRepositoryInterface extends JpaRepository<PersonDao, UUID> {
     PersonDao findDistinctByEmailsUserAndEmailsDomainName(String userName, String domainName);
 
+    PersonDao findDistinctByEmployeeId(UUID id);
+
     Optional<PersonDao> findDistinctByEmails(EmailDao emailDao);
 
     @Query(
