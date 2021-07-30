@@ -78,7 +78,7 @@ public class DepartmentPersistenceService implements DepartmentPersistenceInterf
     public Page<DepartmentDm> getDepartments(Pageable pageable) {
 
         List<DepartmentDao> departmentDaoList = departmentRepository
-            .findDistinctByOrganizationId(sessionTenant.getTenantId())
+            .findDistinctByOrganizationId(sessionTenant.getTenantId(), pageable)
             .stream().collect(Collectors.toList());
 
         // Build this list manually so as to avoid hibernate making a
@@ -91,7 +91,7 @@ public class DepartmentPersistenceService implements DepartmentPersistenceInterf
             departmentDmList.add(departmentDm);
         }
 
-        Page<DepartmentDm> page = new PageImpl<DepartmentDm>(departmentDmList);
+        Page<DepartmentDm> page = new PageImpl<DepartmentDm>(departmentDmList, pageable, departmentDmList.size());
         return page;
 
     }
