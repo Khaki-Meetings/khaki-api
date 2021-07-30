@@ -1,6 +1,7 @@
 package com.getkhaki.api.bff.persistence.repositories;
 
 import com.getkhaki.api.bff.persistence.models.DepartmentDao;
+import com.getkhaki.api.bff.persistence.models.EmployeeDao;
 import com.getkhaki.api.bff.persistence.models.OrganizationDao;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -22,7 +23,7 @@ public interface DepartmentRepositoryInterface extends JpaRepository<DepartmentD
         " where organization_id = :organizationId ",
          nativeQuery = true
      )
-    List<DepartmentDao> findDistinctByOrganizationId(UUID organizationId);
+    Page<DepartmentDao> findDistinctByOrganizationId(UUID organizationId, Pageable pageable);
 
     Optional<DepartmentDao> findDistinctByNameAndOrganization(String name, OrganizationDao organizationDao);
 }
