@@ -18,8 +18,8 @@ import java.util.UUID;
 public interface DepartmentRepositoryInterface extends JpaRepository<DepartmentDao, UUID> {
 
      @Query(value =
-        " select dd.id, dd.name as name, organization_id " +
-        " from department_dao dd " +
+        " select id, name, organization_id " +
+        " from department_dao " +
         " where organization_id = :organizationId ",
          nativeQuery = true
      )
