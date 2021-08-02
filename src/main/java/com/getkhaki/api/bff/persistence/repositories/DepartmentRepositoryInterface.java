@@ -18,10 +18,13 @@ import java.util.UUID;
 public interface DepartmentRepositoryInterface extends JpaRepository<DepartmentDao, UUID> {
 
      @Query(value =
-        " select id, name, organization_id " +
-        " from department_dao " +
+        " select dd.id, dd.name as name, dd.organization_id " +
+        " from department_dao dd " +
         " where organization_id = :organizationId ",
-         nativeQuery = true
+        countQuery = "select count(*) " +
+             " from department_dao dd " +
+             " where organization_id = :organizationId ",
+        nativeQuery = true
      )
     Page<DepartmentDao> findDistinctByOrganizationId(UUID organizationId, Pageable pageable);
 
