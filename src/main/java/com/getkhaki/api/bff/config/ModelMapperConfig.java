@@ -8,6 +8,7 @@ import com.getkhaki.api.bff.persistence.models.DomainDao;
 import com.getkhaki.api.bff.persistence.models.EmailDao;
 import com.getkhaki.api.bff.persistence.models.EmployeeDao;
 import com.getkhaki.api.bff.persistence.models.views.EmployeeWithStatisticsView;
+import com.getkhaki.api.bff.web.models.UserProfileResponseDto;
 import org.modelmapper.Converter;
 import org.modelmapper.ModelMapper;
 import org.springframework.context.annotation.Bean;
@@ -25,6 +26,7 @@ public class ModelMapperConfig {
         dmToDaoEmployee(modelMapper);
         dmToDaoCalendarEventParticipant(modelMapper);
         viewToDmEmployeeWithStatistics(modelMapper);
+        employeeDaoToUserProfileResponseDto(modelMapper);
 
         return modelMapper;
     }
@@ -103,6 +105,24 @@ public class ModelMapperConfig {
                                         CalendarEventParticipantDm::getEmail,
                                         CalendarEventParticipantDao::setEmail
                                 )
+                );
+    }
+
+    private void employeeDaoToUserProfileResponseDto(ModelMapper modelMapper) {
+        modelMapper.typeMap(EmployeeDao.class, UserProfileResponseDto.class)
+                .addMappings(
+                        mapper -> {
+                            mapper.map(src -> src.getDepartment().getName(), UserProfileResponseDto::setDepartment);
+                            mapper.map(src -> src.getDepartment().getOrganization().getName(), UserProfileResponseDto::setCompanyName);
+                            mapper.map(src -> src.getPerson().getFirstName(), UserProfileResponseDto::setFirstName);
+                            mapper.map(src -> src.getPerson().getLastName(), UserProfileResponseDto::setLastName);
+                            mapper.map(src -> src.getPerson().getAvatarUrl(), UserProfileResponseDto::setAvatarUrl);
+                            mapper.map(src -> src.getPerson().getNotify(), UserProfileResponseDto::setNotify);
+                            mapper.map(
+                                    src -> src.getPerson().getPrimaryEmail().getEmailString(),
+                                    UserProfileResponseDto::setEmail
+                            );
+                        }
                 );
     }
 

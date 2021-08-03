@@ -17,6 +17,7 @@ import org.springframework.stereotype.Service;
 import org.modelmapper.ModelMapper;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @CommonsLog
@@ -76,22 +77,32 @@ public class DepartmentPersistenceService implements DepartmentPersistenceInterf
     @Override
     public Page<DepartmentDm> getDepartments(Pageable pageable) {
 
-        List<DepartmentDao> departmentDaoList = departmentRepository
-            .findDistinctByOrganizationId(sessionTenant.getTenantId())
-            .stream().collect(Collectors.toList());
+        Page<DepartmentDao> departmentDaoPage = departmentRepository
+                .findDistinctByOrganizationId(sessionTenant.getTenantId(), pageable);
 
         // Build this list manually so as to avoid hibernate making a
         // bunch of unnecessary db calls when /departments is requested
         List<DepartmentDm> departmentDmList = new ArrayList<DepartmentDm>();
-        for (DepartmentDao departmentDao : departmentDaoList) {
+        for (DepartmentDao departmentDao : departmentDaoPage) {
             DepartmentDm departmentDm = new DepartmentDm();
             departmentDm.setId(departmentDao.getId());
             departmentDm.setName(departmentDao.getName());
             departmentDmList.add(departmentDm);
         }
 
-        Page<DepartmentDm> page = new PageImpl<DepartmentDm>(departmentDmList);
+        Page<DepartmentDm> page = new PageImpl<DepartmentDm>(departmentDmList, pageable,
+                departmentDaoPage.getTotalElements());
         return page;
+
+    }
+
+    public DepartmentDao getDepartmentByOrganizationDepartmentName(UUID organizationId, String departmentName) {
+
+        val organizationDao = organizationRepository
+                .findById(organizationId).orElseThrow(() -> new RuntimeException("Organization required"));
+        val departmentDaoOp = this.departmentRepository
+                .findDistinctByNameAndOrganization(departmentName, organizationDao);
+        return departmentDaoOp.orElseThrow();
 
     }
 }

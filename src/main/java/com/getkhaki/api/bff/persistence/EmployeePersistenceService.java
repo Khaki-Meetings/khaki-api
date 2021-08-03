@@ -4,11 +4,11 @@ import com.getkhaki.api.bff.config.interceptors.models.SessionTenant;
 import com.getkhaki.api.bff.domain.models.EmployeeDm;
 import com.getkhaki.api.bff.domain.models.EmployeeWithStatisticsDm;
 import com.getkhaki.api.bff.domain.persistence.EmployeePersistenceInterface;
+import com.getkhaki.api.bff.domain.services.PersonService;
 import com.getkhaki.api.bff.persistence.models.DepartmentDao;
 import com.getkhaki.api.bff.persistence.models.EmployeeDao;
 import com.getkhaki.api.bff.persistence.models.OrganizationDao;
 import com.getkhaki.api.bff.persistence.models.PersonDao;
-import com.getkhaki.api.bff.persistence.models.views.EmployeeWithStatisticsView;
 import com.getkhaki.api.bff.persistence.repositories.EmailRepositoryInterface;
 import com.getkhaki.api.bff.persistence.repositories.EmployeeRepositoryInterface;
 import com.getkhaki.api.bff.security.AuthenticationFacade;
@@ -25,6 +25,7 @@ import org.springframework.stereotype.Service;
 import java.time.Instant;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 @Service
 public class EmployeePersistenceService implements EmployeePersistenceInterface {
@@ -34,6 +35,9 @@ public class EmployeePersistenceService implements EmployeePersistenceInterface 
     private final SessionTenant sessionTenant;
     private final AuthenticationFacade authenticationFacade;
     private final EmailDaoService emailDaoService;
+    private PersonService personService;
+    private PersonDaoService personDaoService;
+    private DepartmentPersistenceService departmentPersistenceService;
 
     public EmployeePersistenceService(
             EmployeeRepositoryInterface employeeRepository,
@@ -41,14 +45,26 @@ public class EmployeePersistenceService implements EmployeePersistenceInterface 
             ModelMapper modelMapper,
             SessionTenant sessionTenant,
             AuthenticationFacade authenticationFacade,
-            EmailDaoService emailDaoService
-    ) {
+            EmailDaoService emailDaoService,
+            PersonService personService,
+            PersonDaoService personDaoService,
+            DepartmentPersistenceService departmentPersistenceService) {
         this.employeeRepository = employeeRepository;
         this.emailRepository = emailRepository;
         this.modelMapper = modelMapper;
         this.sessionTenant = sessionTenant;
         this.authenticationFacade = authenticationFacade;
         this.emailDaoService = emailDaoService;
+        this.personService = personService;
+        this.personDaoService = personDaoService;
+        this.departmentPersistenceService = departmentPersistenceService;
+    }
+
+    @Override
+    public EmployeeDao getEmployee(UUID id) {
+        EmployeeDao employeeDao = this.employeeRepository.findById(id)
+                .orElseThrow();
+        return employeeDao;
     }
 
     @Override
@@ -130,4 +146,22 @@ public class EmployeePersistenceService implements EmployeePersistenceInterface 
         return modelMapper.map(emailDao.getPerson().orElseThrow().getEmployee(), EmployeeDm.class);
     }
 
+    public EmployeeDm updateEmployee(UUID id, EmployeeDm employeeDm) {
+
+        EmployeeDao employeeDao = this.getEmployee(id);
+        employeeDao.getPerson().setFirstName(employeeDm.getFirstName());
+        employeeDao.getPerson().setLastName(employeeDm.getLastName());
+
+        val savedPersonDao = this.personDaoService.upsert(employeeDao.getPerson());
+        employeeDao.setPerson(savedPersonDao);
+
+        DepartmentDao departmentDao = this.departmentPersistenceService.getDepartmentByOrganizationDepartmentName(
+                sessionTenant.getTenantId(), employeeDm.getDepartment()
+        );
+
+        employeeDao.setDepartment(departmentDao);
+        EmployeeDao updatedEmployeeDao = employeeRepository.saveAndFlush(employeeDao);
+
+        return modelMapper.map(updatedEmployeeDao, EmployeeDm.class);
+    }
 }
