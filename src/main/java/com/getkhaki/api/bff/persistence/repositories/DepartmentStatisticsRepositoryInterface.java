@@ -14,8 +14,8 @@ public interface DepartmentStatisticsRepositoryInterface extends JpaRepository<D
             "select " +
             "   department.id as departmentId, " +
             "   department.name as departmentName, " +
-            "   sum(timestampdiff(second, calendarEvent.start, calendarEvent.end)) as totalSeconds, " +
-            "   ( " +
+            "   coalesce(sum(timestampdiff(second, calendarEvent.start, calendarEvent.end)), 0) as totalSeconds, " +
+            "   coalesce(( " +
             "       SELECT count(*) * 3600 * 8 * (" +
             "           5 * (timestampdiff(day, :sDate, :eDate) / 7) " +
             "           + SUBSTRING('0123444401233334012222340111123400001234000123440', " +
@@ -23,7 +23,7 @@ public interface DepartmentStatisticsRepositoryInterface extends JpaRepository<D
             "       ) " +
             "       from EmployeeDao employee " +
             "       where employee.department = department " +
-            "   ) as inventorySecondsAvailable " +
+            "   ), 0) as inventorySecondsAvailable " +
             "from DepartmentDao department " +
             "inner join department.organization organization " +
             "inner join department.employees employees " +
@@ -46,7 +46,7 @@ public interface DepartmentStatisticsRepositoryInterface extends JpaRepository<D
             "select " +
             "   department.id as departmentId, " +
             "   department.name as departmentName, " +
-            "   (" +
+            "   coalesce((" +
             "     select sum(timestampdiff(second, calendarEvent.start, calendarEvent.end)) " +
             "       from CalendarEventDao calendarEvent" +
             "       inner join calendarEvent.participants cap_count" +
@@ -68,8 +68,8 @@ public interface DepartmentStatisticsRepositoryInterface extends JpaRepository<D
             "           group by innerCalendarEvent " +
             "           having count(distinct domain.name) = 1 " +
             "       )" +
-            "   ) as totalSeconds, " +
-            "   ( " +
+            "   ), 0) as totalSeconds, " +
+            "   coalesce(( " +
             "       SELECT count(*) * 3600 * 8 * (" +
             "           5 * (timestampdiff(day, :sDate, :eDate) / 7) " +
             "           + SUBSTRING('0123444401233334012222340111123400001234000123440', " +
@@ -77,7 +77,7 @@ public interface DepartmentStatisticsRepositoryInterface extends JpaRepository<D
             "       ) " +
             "       from EmployeeDao employee " +
             "       where employee.department = department" +
-            "   ) as inventorySecondsAvailable " +
+            "   ), 0) as inventorySecondsAvailable " +
             "from DepartmentDao department " +
             "inner join department.organization organization " +
             "where organization.id = :tenantId " +
