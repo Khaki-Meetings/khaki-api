@@ -31,4 +31,9 @@ public class DepartmentService {
         return departmentPersistenceService.getDepartments(pageable);
     }
 
+    public DepartmentDm upsertDepartment(String name) {
+        DepartmentDm departmentDm = new DepartmentDm();
+        departmentDm.setName(name);
+        return departmentPersistenceService.upsert(departmentDm);
+    }
 }
