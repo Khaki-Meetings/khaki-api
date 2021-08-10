@@ -1,7 +1,9 @@
 package com.getkhaki.api.bff.web;
 
+import com.getkhaki.api.bff.domain.models.DepartmentDm;
 import com.getkhaki.api.bff.domain.services.DepartmentService;
 import com.getkhaki.api.bff.web.models.DepartmentDto;
+import com.getkhaki.api.bff.web.models.UserProfileResponseDto;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -34,5 +36,11 @@ public class DepartmentController {
         return this.departmentService
                 .getDepartments(pageable)
                 .map(departmentDm -> modelMapper.map(departmentDm, DepartmentDto.class));
+    }
+
+    @PostMapping
+    public DepartmentDto createDepartment(@RequestBody String name) {
+        DepartmentDm departmentDm = this.departmentService.upsertDepartment(name);
+        return this.modelMapper.map(departmentDm, DepartmentDto.class);
     }
 }

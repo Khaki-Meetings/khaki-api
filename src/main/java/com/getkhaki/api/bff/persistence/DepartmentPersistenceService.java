@@ -59,17 +59,19 @@ public class DepartmentPersistenceService implements DepartmentPersistenceInterf
         departmentDaoOp.ifPresent(department -> departmentDao.setId(department.getId()));
         departmentRepository.save(departmentDao);
 
-        departmentDao.getEmployees()
-                .forEach(
-                        employeeDao -> {
-                            val savedPersonDao = personDaoService.upsert(employeeDao.getPerson());
-                            employeeDao.setPerson(savedPersonDao);
-                            employeeDao.setDepartment(departmentDao);
+        if (departmentDao.getEmployees() != null) {
+            departmentDao.getEmployees()
+                    .forEach(
+                            employeeDao -> {
+                                val savedPersonDao = personDaoService.upsert(employeeDao.getPerson());
+                                employeeDao.setPerson(savedPersonDao);
+                                employeeDao.setDepartment(departmentDao);
 
-                            employeeRepository.findDistinctByPerson(savedPersonDao)
-                                    .orElseGet(() -> employeeRepository.save(employeeDao));
-                        }
-                );
+                                employeeRepository.findDistinctByPerson(savedPersonDao)
+                                        .orElseGet(() -> employeeRepository.save(employeeDao));
+                            }
+                    );
+        }
 
         return this.modelMapper.map(departmentDao, DepartmentDm.class);
     }
