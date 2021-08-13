@@ -95,6 +95,26 @@ public class EmployeeController {
 
         return result;
     }
+
+    @PostMapping("/userProfile")
+    public UserProfileResponseDto createUserProfile(
+            @RequestBody UserProfileResponseDto userProfileResponseDto) {
+
+        EmployeeDao employeeDao = this.employeePersistenceService.createEmployee(
+            userProfileResponseDto.getFirstName(),
+            userProfileResponseDto.getLastName(),
+            userProfileResponseDto.getEmail(),
+            userProfileResponseDto.getDepartment()
+        );
+
+        UserProfileResponseDto result = modelMapper.map(
+                employeeDao,
+                UserProfileResponseDto.class
+        );
+
+        return result;
+
+    }
 }
 
 

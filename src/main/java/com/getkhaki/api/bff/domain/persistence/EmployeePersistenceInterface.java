@@ -23,4 +23,8 @@ public interface EmployeePersistenceInterface {
             Instant sDate, Instant eDate, String department, Pageable pageable);
 
     EmployeeDm updateEmployee(UUID id, EmployeeDm employeeDm);
+
+    EmployeeDao createEmployee(String firstName, String lastName,
+                               String email, String departmentName);
+
 }
