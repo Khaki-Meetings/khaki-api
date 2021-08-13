@@ -5,12 +5,10 @@ import com.getkhaki.api.bff.domain.models.EmployeeDm;
 import com.getkhaki.api.bff.domain.models.EmployeeWithStatisticsDm;
 import com.getkhaki.api.bff.domain.persistence.EmployeePersistenceInterface;
 import com.getkhaki.api.bff.domain.services.PersonService;
-import com.getkhaki.api.bff.persistence.models.DepartmentDao;
-import com.getkhaki.api.bff.persistence.models.EmployeeDao;
-import com.getkhaki.api.bff.persistence.models.OrganizationDao;
-import com.getkhaki.api.bff.persistence.models.PersonDao;
+import com.getkhaki.api.bff.persistence.models.*;
 import com.getkhaki.api.bff.persistence.repositories.EmailRepositoryInterface;
 import com.getkhaki.api.bff.persistence.repositories.EmployeeRepositoryInterface;
+import com.getkhaki.api.bff.persistence.repositories.OrganizationRepositoryInterface;
 import com.getkhaki.api.bff.security.AuthenticationFacade;
 import lombok.val;
 import org.modelmapper.ModelMapper;
@@ -23,6 +21,7 @@ import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -38,6 +37,8 @@ public class EmployeePersistenceService implements EmployeePersistenceInterface 
     private PersonService personService;
     private PersonDaoService personDaoService;
     private DepartmentPersistenceService departmentPersistenceService;
+    private OrganizationPersistenceService organizationPersistenceService;
+    private OrganizationRepositoryInterface organizationRepositoryInterface;
 
     public EmployeePersistenceService(
             EmployeeRepositoryInterface employeeRepository,
@@ -48,7 +49,9 @@ public class EmployeePersistenceService implements EmployeePersistenceInterface 
             EmailDaoService emailDaoService,
             PersonService personService,
             PersonDaoService personDaoService,
-            DepartmentPersistenceService departmentPersistenceService) {
+            DepartmentPersistenceService departmentPersistenceService,
+            OrganizationPersistenceService organizationPersistenceService,
+            OrganizationRepositoryInterface organizationRepositoryInterface) {
         this.employeeRepository = employeeRepository;
         this.emailRepository = emailRepository;
         this.modelMapper = modelMapper;
@@ -58,6 +61,8 @@ public class EmployeePersistenceService implements EmployeePersistenceInterface 
         this.personService = personService;
         this.personDaoService = personDaoService;
         this.departmentPersistenceService = departmentPersistenceService;
+        this.organizationPersistenceService = organizationPersistenceService;
+        this.organizationRepositoryInterface = organizationRepositoryInterface;
     }
 
     @Override
@@ -163,5 +168,48 @@ public class EmployeePersistenceService implements EmployeePersistenceInterface 
         EmployeeDao updatedEmployeeDao = employeeRepository.saveAndFlush(employeeDao);
 
         return modelMapper.map(updatedEmployeeDao, EmployeeDm.class);
+    }
+
+    public EmployeeDao createEmployee(String firstName, String lastName,
+                                      String email, String departmentName) {
+
+        UUID tenantId = sessionTenant.getTenantId();
+
+        DepartmentDao departmentDao = departmentPersistenceService.getDepartmentByOrganizationDepartmentName(tenantId, departmentName);
+
+        EmailDao emailDao = new EmailDao();
+        String user = email.split("@")[0];
+
+        OrganizationDao organizationDao = organizationRepositoryInterface
+                .findById(tenantId).orElseThrow(() -> new RuntimeException("Organization required"));
+
+        String domain = email.split("@")[1];
+        DomainDao domainDao = new DomainDao();
+        domainDao.setName(domain);
+        domainDao.setOrganization(organizationDao);
+
+        emailDao.setUser(user);
+        emailDao.setDomain(domainDao);
+
+        List<EmailDao> emails = new ArrayList<>();
+        emails.add(emailDao);
+
+        PersonDao personDao = new PersonDao();
+        personDao.setFirstName(firstName);
+        personDao.setLastName(lastName);
+        personDao.setEmails(emails);
+
+        val savedPersonDao = personDaoService.upsert(personDao);
+
+        EmployeeDao employeeDao = new EmployeeDao();
+        employeeDao.setDepartment(departmentDao);
+        employeeDao.setPerson(savedPersonDao);
+        employeeDao.setDepartment(departmentDao);
+
+        EmployeeDao result = employeeRepository.findDistinctByPerson(savedPersonDao)
+                .orElseGet(() -> employeeRepository.save(employeeDao));
+
+        return result;
+
     }
 }

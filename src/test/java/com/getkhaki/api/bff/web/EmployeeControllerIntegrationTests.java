@@ -158,4 +158,32 @@ public class EmployeeControllerIntegrationTests extends BaseMvcIntegrationTest {
                 .andExpect(jsonPath("$.department").value("IT"));
 
     }
+
+    @Test
+    public void createUserProfile() throws Exception {
+
+        String url = String.format("/employees/userProfile");
+
+        UserProfileResponseDto userProfileResponseDto = new UserProfileResponseDto();
+        userProfileResponseDto.setFirstName("NewBobFirst");
+        userProfileResponseDto.setLastName("NewBobLast");
+        userProfileResponseDto.setEmail("NewBobLast@s56.net");
+        userProfileResponseDto.setDepartment("IT");
+
+        String content = asJsonString(userProfileResponseDto);
+
+        mvc.perform(MockMvcRequestBuilders.post(url)
+                .header(SessionTenant.HEADER_KEY, "s56_net")
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON)
+                .characterEncoding("UTF-8")
+                .content(content)
+                .with(jwt().jwt(getJWT("bob@s56.net")).authorities(new SimpleGrantedAuthority("admin"))))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.firstName").value("NewBobFirst"))
+                .andExpect(jsonPath("$.lastName").value("NewBobLast"))
+                .andExpect(jsonPath("$.department").value("IT"));
+
+    }
+
 }
