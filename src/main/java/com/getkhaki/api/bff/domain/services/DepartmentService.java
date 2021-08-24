@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import java.io.InputStream;
 import java.util.List;
+import java.util.UUID;
 
 @Service
 public class DepartmentService {
@@ -31,4 +32,10 @@ public class DepartmentService {
         return departmentPersistenceService.getDepartments(pageable);
     }
 
+    public DepartmentDm upsertDepartment(UUID id, String name) {
+        DepartmentDm departmentDm = new DepartmentDm();
+        departmentDm.setId(id);
+        departmentDm.setName(name);
+        return departmentPersistenceService.upsert(departmentDm);
+    }
 }

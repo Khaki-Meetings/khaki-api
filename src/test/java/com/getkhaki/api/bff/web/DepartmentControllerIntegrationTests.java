@@ -6,9 +6,11 @@ import io.restassured.module.mockmvc.RestAssuredMockMvc;
 import lombok.val;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.test.web.servlet.MvcResult;
+import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
@@ -71,4 +73,40 @@ public class DepartmentControllerIntegrationTests extends BaseMvcIntegrationTest
                         either(is("HR")).or(is("IT")))
                 );
     }
+
+    @Test
+    public void createDepartment() throws Exception {
+
+        mvc.perform(MockMvcRequestBuilders.get("/departments")
+                .header(SessionTenant.HEADER_KEY, "s56_net")
+                .with(jwt().jwt(getJWT("bob@s56.net")).authorities(new SimpleGrantedAuthority("admin"))))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.content.length()").value(2))
+                .andExpect(jsonPath("$.content[0].name").value(
+                        either(is("HR")).or(is("IT")))
+                );
+
+        String name = "newDept";
+        String content = asJsonString(name);
+
+        mvc.perform(MockMvcRequestBuilders.post("/departments")
+                .header(SessionTenant.HEADER_KEY, "s56_net")
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON)
+                .characterEncoding("UTF-8")
+                .content(content)
+                .with(jwt().jwt(getJWT("bob@s56.net")).authorities(new SimpleGrantedAuthority("admin"))))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.name").value("\"newDept\""));
+
+        mvc.perform(MockMvcRequestBuilders.get("/departments")
+                .header(SessionTenant.HEADER_KEY, "s56_net")
+                .with(jwt().jwt(getJWT("bob@s56.net")).authorities(new SimpleGrantedAuthority("admin"))))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.content.length()").value(3))
+                .andExpect(jsonPath("$.content[0].name").value(
+                        either(is("HR")).or(is("IT")))
+                );
+    }
+
 }
