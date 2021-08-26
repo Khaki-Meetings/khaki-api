@@ -9,6 +9,7 @@ import lombok.val;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
+import java.util.UUID;
 
 @Service
 public class EmailDaoService {
@@ -50,4 +51,10 @@ public class EmailDaoService {
         });
         return emailRepository.save(email);
     }
+
+    Optional<EmailDao> findDistinctByUserAndDomainId(String user, UUID domainId) {
+        return emailRepository.findDistinctByUserAndDomain_Id(user, domainId);
+    }
+
+
 }

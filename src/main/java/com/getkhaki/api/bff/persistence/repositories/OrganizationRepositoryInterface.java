@@ -4,6 +4,7 @@ import com.getkhaki.api.bff.persistence.models.OrganizationDao;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -12,4 +13,7 @@ public interface OrganizationRepositoryInterface extends JpaRepository<Organizat
     Optional<OrganizationDao> findDistinctByName(String name);
 
     Optional<OrganizationDao> findById(UUID id);
+
+    List<OrganizationDao> findByAdminEmailId(UUID id);
+
 }
