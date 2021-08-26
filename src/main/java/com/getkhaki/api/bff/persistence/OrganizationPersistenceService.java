@@ -4,24 +4,24 @@ import com.getkhaki.api.bff.config.interceptors.models.SessionTenant;
 import com.getkhaki.api.bff.domain.models.FlagDe;
 import com.getkhaki.api.bff.domain.models.OrganizationDm;
 import com.getkhaki.api.bff.domain.persistence.OrganizationPersistenceInterface;
-import com.getkhaki.api.bff.persistence.models.DepartmentDao;
+import com.getkhaki.api.bff.persistence.models.DomainDao;
 import com.getkhaki.api.bff.persistence.models.EmailDao;
 import com.getkhaki.api.bff.persistence.models.OrganizationDao;
+import com.getkhaki.api.bff.persistence.repositories.DomainRepositoryInterface;
 import com.getkhaki.api.bff.persistence.repositories.OrganizationRepositoryInterface;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Collection;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 @Service
 public class OrganizationPersistenceService implements OrganizationPersistenceInterface {
     private final OrganizationRepositoryInterface organizationRepository;
+    private final DomainRepositoryInterface domainRepository;
     private final EmailDaoService emailDaoService;
     private final ModelMapper modelMapper;
     private final SessionTenant sessionTenant;
@@ -29,11 +29,12 @@ public class OrganizationPersistenceService implements OrganizationPersistenceIn
     @Autowired
     public OrganizationPersistenceService(
             OrganizationRepositoryInterface organizationRepository,
-            EmailDaoService emailDaoService,
+            DomainRepositoryInterface domainRepository, EmailDaoService emailDaoService,
             ModelMapper modelMapper,
             SessionTenant sessionTenant
     ) {
         this.organizationRepository = organizationRepository;
+        this.domainRepository = domainRepository;
         this.emailDaoService = emailDaoService;
         this.modelMapper = modelMapper;
         this.sessionTenant = sessionTenant;
@@ -96,5 +97,30 @@ public class OrganizationPersistenceService implements OrganizationPersistenceIn
         var mappedOrganizationDm = this.modelMapper.map(result, OrganizationDm.class);
 
         return mappedOrganizationDm;
+    }
+
+    @Override
+    public List<OrganizationDm> getOrganizationsByAdminEmail(String email) {
+        String[] emailParts = email.split("@");
+        assert emailParts.length == 2 : "Email could not be split";
+
+        List<OrganizationDao> organizationDaos = new ArrayList<OrganizationDao>();
+
+        Optional<DomainDao> domainDaoOptional = this.domainRepository.findDistinctByName(emailParts[1]);
+        if (domainDaoOptional.isPresent()) {
+            DomainDao domainDao = domainDaoOptional.get();
+            Optional<EmailDao> emailDaoOptional = this.emailDaoService.findDistinctByUserAndDomainId(emailParts[0], domainDao.getId());
+            if (emailDaoOptional.isPresent()) {
+                EmailDao emailDao = emailDaoOptional.get();
+                organizationDaos.addAll(this.organizationRepository.findByAdminEmailId(emailDao.getId()));
+            }
+        }
+
+        List<OrganizationDm> organizationDms = organizationDaos.stream()
+                .map(org -> modelMapper.map(org, OrganizationDm.class))
+                .collect(Collectors.toList());
+
+        return organizationDms;
+
     }
 }

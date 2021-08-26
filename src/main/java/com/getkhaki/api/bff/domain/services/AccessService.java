@@ -4,6 +4,9 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.getkhaki.api.bff.domain.models.Auth0.Auth0User;
 import com.getkhaki.api.bff.domain.models.Auth0.Tenant;
+import com.getkhaki.api.bff.domain.models.OrganizationDm;
+import com.getkhaki.api.bff.persistence.OrganizationPersistenceService;
+import com.getkhaki.api.bff.persistence.repositories.EmailRepositoryInterface;
 import lombok.extern.apachecommons.CommonsLog;
 import org.apache.http.client.utils.URIBuilder;
 import org.apache.tomcat.util.json.JSONParser;
@@ -18,6 +21,14 @@ import java.util.*;
 @CommonsLog
 @Service
 public class AccessService {
+
+    private final EmailRepositoryInterface emailRepository;
+    private final OrganizationPersistenceService organizationPersistenceService;
+
+    public AccessService(EmailRepositoryInterface emailRepository, OrganizationPersistenceService organizationPersistenceService) {
+        this.emailRepository = emailRepository;
+        this.organizationPersistenceService = organizationPersistenceService;
+    }
 
     public List<Auth0User> getUsers(String accessToken, String email) {
 
@@ -66,6 +77,10 @@ public class AccessService {
             return user.getUser_metadata().getTenantIdObjects();
         }
         return new ArrayList<Tenant>();
+    }
+
+    public List<OrganizationDm> getOrganizationsByAdminEmail(String email) {
+        return this.organizationPersistenceService.getOrganizationsByAdminEmail(email);
     }
 
     public String getAccessToken() {
