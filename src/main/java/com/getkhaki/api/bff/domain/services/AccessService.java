@@ -10,6 +10,8 @@ import com.getkhaki.api.bff.persistence.repositories.EmailRepositoryInterface;
 import lombok.extern.apachecommons.CommonsLog;
 import org.apache.http.client.utils.URIBuilder;
 import org.apache.tomcat.util.json.JSONParser;
+import org.json.JSONObject;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import javax.net.ssl.HttpsURLConnection;
@@ -21,6 +23,24 @@ import java.util.*;
 @CommonsLog
 @Service
 public class AccessService {
+
+    @Value("${auth0.accessToken.url}")
+    private String auth0AccessTokenUrl;
+
+    @Value("${auth0.accessToken.audience}")
+    private String auth0AccessTokenAudience;
+
+    @Value("${auth0.accessToken.clientId}")
+    private String auth0AccessTokenClientId;
+
+    @Value("${auth0.accessToken.clientSecret}")
+    private String auth0AccessTokenClientSecret;
+
+    @Value("${auth0.users.url}")
+    private String auth0UsersUrl;
+
+    @Value("${auth0.host}")
+    private String auth0Host;
 
     private final EmailRepositoryInterface emailRepository;
     private final OrganizationPersistenceService organizationPersistenceService;
@@ -36,7 +56,7 @@ public class AccessService {
 
         try {
 
-            URIBuilder b = new URIBuilder("https://khaki.us.auth0.com/api/v2/users");
+            URIBuilder b = new URIBuilder(auth0UsersUrl);
             if (email != null && email.length() > 0) {
                 b.addParameter("q", "email=" + email);
             }
@@ -44,7 +64,7 @@ public class AccessService {
 
             HttpsURLConnection con = (HttpsURLConnection) myurl.openConnection();
             con.setRequestProperty("Content-Type", "application/json; charset=UTF-8");
-            con.setRequestProperty("Host", "khaki.us.auth0.com");
+            con.setRequestProperty("Host", auth0Host);
             con.setRequestProperty("Authorization","Bearer " + accessToken);
             con.setRequestMethod("GET");
             con.setDoOutput(true);
@@ -85,16 +105,16 @@ public class AccessService {
 
     public String getAccessToken() {
         try {
-            URL myurl = new URL("https://khaki.us.auth0.com/oauth/token");
+            URL myurl = new URL(auth0AccessTokenUrl);
             HttpsURLConnection con = (HttpsURLConnection) myurl.openConnection();
-            String audience = "https://khaki.us.auth0.com/api/v2/";
-            String clientId = "HWADegY2pFzzXNo7tP57cjKPI8bYhXAc";
-            String clientSecret = "ueUpVMNdJCOGRi0Sxl0F3hvs24G1iCsmX6af_g6Vg6z2oNGbuGOyXO4o4xVqizbV";
-            String out = "{\"audience\": \"" + audience + "\","
-                    + "\"grant_type\": \"client_credentials\","
-                    + "\"client_id\": \"" + clientId + "\","
-                    + "\"client_secret\": \"" + clientSecret + "\"}"
-                    ;
+
+            JSONObject outJson = new JSONObject();
+            outJson.put("audience", auth0AccessTokenAudience);
+            outJson.put("grant_type", "client_credentials");
+            outJson.put("client_id", auth0AccessTokenClientId);
+            outJson.put("client_secret", auth0AccessTokenClientSecret);
+
+            String out = outJson.toString();
             int length = out.length();
 
             con.setFixedLengthStreamingMode(length);
