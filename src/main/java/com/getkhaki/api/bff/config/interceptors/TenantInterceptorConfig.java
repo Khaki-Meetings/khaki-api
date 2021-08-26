@@ -24,6 +24,6 @@ public class TenantInterceptorConfig implements WebMvcConfigurer {
 
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
-        registry.addInterceptor(tenantHandler());
+        registry.addInterceptor(tenantHandler()).excludePathPatterns("/access/**");
     }
 }
