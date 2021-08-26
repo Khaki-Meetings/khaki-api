@@ -5,11 +5,7 @@ import com.getkhaki.api.bff.persistence.repositories.GoogleDirectoryRepository;
 import com.google.api.services.directory.model.User;
 import lombok.val;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.inject.Inject;
 import java.time.Instant;
@@ -43,5 +39,10 @@ public class CalendarImportController {
     @PostMapping("/userDirectory")
     public List<User> getUserDirectory() {
         return this.googleDirectoryRepository.getUsers();
+    }
+
+    @GetMapping("/{adminEmail}")
+    public boolean isValidGoogleAdminEmail(@PathVariable String adminEmail) {
+        return this.googleDirectoryRepository.isValidGoogleAdminEmail(adminEmail);
     }
 }
